@@ -216,7 +216,7 @@ export default function ParentingPlan() {
               
               {/* Section 4 - Parental Responsibility */}
               <div 
-                className={`border border-gray-200 rounded-md p-6 my-6 transition-all ${activeSection === 'section-4a' ? 'ring-2 ring-primary' : 'hover:border-primary cursor-pointer'}`}
+                className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-4a' ? 'active' : ''}`}
                 onClick={() => handleSectionClick('section-4a', 'Shared Decision-Making')}
               >
                 <div className="flex justify-between items-center">
@@ -251,7 +251,7 @@ export default function ParentingPlan() {
               
               {/* Section 4B - Disagreements */}
               <div 
-                className={`border border-gray-200 rounded-md p-6 my-6 transition-all ${activeSection === 'section-4b' ? 'ring-2 ring-primary' : 'hover:border-primary cursor-pointer'}`}
+                className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-4b' ? 'active' : ''}`}
                 onClick={() => handleSectionClick('section-4b', 'Resolving Disagreements')}
               >
                 <div className="flex justify-between items-center">
@@ -283,8 +283,123 @@ export default function ParentingPlan() {
                 </div>
               </div>
               
-              {/* Additional sections would be added here */}
-              {/* I'm adding a truncated version for demonstration */}
+              {/* Section 4C - Day-to-Day Decisions */}
+              <div 
+                className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-4c' ? 'active' : ''}`}
+                onClick={() => handleSectionClick('section-4c', 'Day-to-Day Decisions')}
+              >
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                    {getSectionStatusIcon('section-4c')}
+                    <span className="ml-2">C. Day-to-Day Decision-Making.</span>
+                  </h2>
+                  <Edit2 className="h-5 w-5 text-primary" />
+                </div>
+                
+                <div className="mt-4 space-y-4">
+                  <p className="text-gray-700">
+                    Nothing here is intended to interfere with our respective rights to make decisions regarding the day-to-day care 
+                    and control of our child(ren) while the child(ren) are with us. Similarly, we both are allowed to make emergency 
+                    decisions affecting the health or safety of the child(ren) if such a decision is ever necessary. If there is ever 
+                    such an emergency, then we both commit to notify each other of the situation as soon as reasonably possible.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Mother's Initials</div>
+                      <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Father's Initials</div>
+                      <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Section 4D - Extra-curricular Activities */}
+              <div 
+                className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-4d' ? 'active' : ''}`}
+                onClick={() => handleSectionClick('section-4d', 'Extra-curricular Activities')}
+              >
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                    {getSectionStatusIcon('section-4d')}
+                    <span className="ml-2">D. Extra-curricular Activities.</span>
+                  </h2>
+                  <Edit2 className="h-5 w-5 text-primary" />
+                </div>
+                
+                <div className="mt-4 space-y-4">
+                  <p className="text-gray-700">
+                    We agree that extracurricular activities are very important for the development of our child(ren) in many respects. 
+                    We will discuss all proposed extracurricular activities with each other, and these are the things we agree are important to consider:
+                  </p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">The child's preference</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Geography</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Practicality of schedule</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Cost</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Required Equipment</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Academic performance</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Travel schedule</div>
+                    <div className="border border-gray-200 p-2 rounded text-center text-sm">Other</div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Mother's Initials</div>
+                      <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Father's Initials</div>
+                      <div className="ml-4 parenting-plan-incomplete">Not initialed</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Section 5 - Time Sharing Schedule */}
+              <div 
+                className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-5a' ? 'active' : ''}`}
+                onClick={() => handleSectionClick('section-5a', 'Time Sharing Schedule')}
+              >
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                    {getSectionStatusIcon('section-5a')}
+                    <span className="ml-2">SECTION 5 - TIME SHARING SCHEDULE</span>
+                  </h2>
+                  <Edit2 className="h-5 w-5 text-primary" />
+                </div>
+                
+                <div className="mt-4 space-y-4">
+                  <h3 className="font-semibold text-gray-800">A. Scheduling and Our Calendar</h3>
+                  <p className="text-gray-700">
+                    We will exchange any school and extracurricular activity calendars as soon as we are able to after receiving them. 
+                    We both acknowledge how important it is for us both to understand our child(ren)'s schedules. We are going to follow 
+                    the dates set forth on our child(ren)'s school calendars when it comes to understanding academic breaks from school.
+                  </p>
+                  
+                  <p className="text-gray-700">
+                    We agree that some flexibility will be required of both of us and that it is very important that we show each other 
+                    respect both in asking for flexibility and in granting flexibility. We also understand that maintaining a routine is 
+                    the best possible thing for our child(ren), so we will each do our best to avoid asking for schedule changes on a regular 
+                    basis just to accommodate our own personal needs.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Mother's Initials</div>
+                      <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-20 font-medium text-sm">Father's Initials</div>
+                      <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
               {/* Signatures section */}
               <div className="border-t-2 border-gray-300 mt-12 pt-8">
