@@ -17,8 +17,8 @@ const Header: FC<HeaderProps> = ({
   onMenuClick
 }) => {
   return (
-    <header className="bg-app py-4 px-6 flex items-center justify-between sticky top-0 z-10">
-      <div className="flex items-center">
+    <header className="bg-app py-4 px-0 flex items-center justify-between sticky top-0 z-10 w-full">
+      <div className="flex items-center ml-4">
         <button 
           className="md:hidden mr-4 text-white"
           onClick={onMenuClick}
@@ -39,7 +39,7 @@ const Header: FC<HeaderProps> = ({
         </div>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center mr-6">
         <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary font-bold">
           E
         </div>
