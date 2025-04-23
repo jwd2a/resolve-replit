@@ -50,14 +50,16 @@ export default function ParentingPlan() {
   ];
 
   // Status of section completion (which sections have both parents' initials)
-  const sectionStatus = {
+  const [sectionStatus, setSectionStatus] = useState({
+    "section-1": { mother: true, father: true },
+    "section-2": { mother: true, father: true },
     "section-3": { mother: true, father: true },
     "section-4a": { mother: true, father: true },
     "section-4b": { mother: true, father: false },
     "section-4c": { mother: true, father: true },
     "section-4d": { mother: true, father: false },
     "section-5a": { mother: true, father: true },
-  };
+  });
 
   const getSectionStatus = (sectionId: string) => {
     const status = sectionStatus[sectionId as keyof typeof sectionStatus];
@@ -124,16 +126,20 @@ export default function ParentingPlan() {
     setCompareVersionIndex(null);
     
     // Initialize version history if it doesn't exist
-    if (!sectionVersions[sectionId]) {
-      setSectionVersions(prev => ({
-        ...prev,
-        [sectionId]: [{
-          content,
-          timestamp: new Date(),
-          author: "System",
-          note: "Original version"
-        }]
-      }));
+    if (!sectionVersions[sectionId] || sectionVersions[sectionId]?.length === 0) {
+      const initialVersion = {
+        content,
+        timestamp: new Date(),
+        author: "System",
+        note: "Original version"
+      };
+
+      setSectionVersions(prev => {
+        // Create a new object to trigger React to recognize the change
+        const updatedVersions = { ...prev };
+        updatedVersions[sectionId] = [initialVersion];
+        return updatedVersions;
+      });
     }
   };
   
@@ -170,19 +176,26 @@ export default function ParentingPlan() {
         note: "AI-assisted update"
       };
       
+      // Create a new array if it doesn't exist yet
+      const existingVersions = prev[activeSection] || [];
+      
       return {
         ...prev,
-        [activeSection]: [...(prev[activeSection] || []), newVersion]
+        [activeSection]: [...existingVersions, newVersion]
       };
     });
     
     // Update initials status (remove father's initials)
-    if (sectionStatus[activeSection as keyof typeof sectionStatus]) {
-      const updatedStatus = {
-        ...sectionStatus,
-        [activeSection]: { mother: true, father: false }
-      };
-      // In a real app, this would update the database
+    if (activeSection) {
+      setSectionStatus(prev => {
+        // First ensure the section exists in status
+        const currentStatus = prev[activeSection as keyof typeof prev] || { mother: false, father: false };
+        
+        return {
+          ...prev,
+          [activeSection]: { mother: true, father: false }
+        };
+      });
     }
     
     setAiMessage("Your changes have been proposed. The other parent will need to review and initial this section again.");
