@@ -196,6 +196,7 @@ export default function ParentingPlan() {
         newStatus[activeSection] = { mother: true, father: false };
         
         console.log('Updated section status:', activeSection, newStatus[activeSection]);
+        console.log('Full status after update:', newStatus);
         
         return newStatus;
       });
@@ -237,7 +238,9 @@ export default function ParentingPlan() {
   
   // Helper component for parent initials
   const ParentInitials = ({ sectionId, parentType }: { sectionId: string; parentType: 'mother' | 'father' }) => {
-    const isInitialed = sectionStatus[sectionId as keyof typeof sectionStatus]?.[parentType];
+    const sectionStatusObj = sectionStatus[sectionId as keyof typeof sectionStatus];
+    console.log(`Checking initials for ${parentType} in section ${sectionId}:`, sectionStatusObj);
+    const isInitialed = sectionStatusObj?.[parentType];
     const parentInfo = parentType === 'mother' ? parents.mother : parents.father;
     const label = parentType === 'mother' ? "Mother's Initials" : "Father's Initials";
     
@@ -598,14 +601,8 @@ export default function ParentingPlan() {
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
-                      </div>
+                      <ParentInitials sectionId="section-4c" parentType="mother" />
+                      <ParentInitials sectionId="section-4c" parentType="father" />
                     </div>
                   </div>
                 </div>
@@ -659,14 +656,8 @@ export default function ParentingPlan() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 text-gray-400 italic">Not initialed</div>
-                      </div>
+                      <ParentInitials sectionId="section-4d" parentType="mother" />
+                      <ParentInitials sectionId="section-4d" parentType="father" />
                     </div>
                   </div>
                 </div>
@@ -718,14 +709,8 @@ export default function ParentingPlan() {
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
-                      </div>
+                      <ParentInitials sectionId="section-5a" parentType="mother" />
+                      <ParentInitials sectionId="section-5a" parentType="father" />
                     </div>
                   </div>
                 </div>
