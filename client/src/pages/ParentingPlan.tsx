@@ -187,14 +187,17 @@ export default function ParentingPlan() {
     
     // Update initials status (remove father's initials)
     if (activeSection) {
+      // Create a new object to avoid mutating state directly
       setSectionStatus(prev => {
-        // First ensure the section exists in status
-        const currentStatus = prev[activeSection as keyof typeof prev] || { mother: false, father: false };
+        // Create a deep copy of the previous state
+        const newStatus = JSON.parse(JSON.stringify(prev));
         
-        return {
-          ...prev,
-          [activeSection]: { mother: true, father: false }
-        };
+        // Update the status for the active section
+        newStatus[activeSection] = { mother: true, father: false };
+        
+        console.log('Updated section status:', activeSection, newStatus[activeSection]);
+        
+        return newStatus;
       });
     }
     
@@ -456,14 +459,8 @@ export default function ParentingPlan() {
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
-                      </div>
+                      <ParentInitials sectionId="section-3" parentType="mother" />
+                      <ParentInitials sectionId="section-3" parentType="father" />
                     </div>
                   </div>
                 </div>
@@ -509,14 +506,8 @@ export default function ParentingPlan() {
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.father.initials}</div>
-                      </div>
+                      <ParentInitials sectionId="section-4a" parentType="mother" />
+                      <ParentInitials sectionId="section-4a" parentType="father" />
                     </div>
                   </div>
                 </div>
@@ -561,14 +552,8 @@ export default function ParentingPlan() {
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Mother's Initials</div>
-                        <div className="ml-4 font-bold text-primary">{parents.mother.initials}</div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-20 font-medium text-sm">Father's Initials</div>
-                        <div className="ml-4 text-gray-400 italic">Not initialed</div>
-                      </div>
+                      <ParentInitials sectionId="section-4b" parentType="mother" />
+                      <ParentInitials sectionId="section-4b" parentType="father" />
                     </div>
                   </div>
                 </div>
