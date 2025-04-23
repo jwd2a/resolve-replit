@@ -495,7 +495,7 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-3').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <p className="text-gray-700">
                       The United States is the country of habitual residence of the child(ren).
                     </p>
@@ -505,11 +505,11 @@ export default function ParentingPlan() {
                       the International Child Abduction Remedies Act, 42 U.S.C. Sections 11601 et seq., the Parental Kidnapping Prevention Act, and the Convention on the Civil Aspects 
                       of International Child Abduction.
                     </p>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-3" parentType="mother" />
-                      <ParentInitials sectionId="section-3" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-3" parentType="mother" />
+                    <ParentInitials sectionId="section-3" parentType="father" />
                   </div>
                 </div>
                 
@@ -544,7 +544,7 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-4a').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <h3 className="font-semibold text-gray-800">A. Shared Decision-Making for Major Decisions.</h3>
                     <p className="text-gray-700">
                       We are going to make decisions about our children as co-parents, together, and always with our child(ren)'s best interests as the most important guiding concern. 
@@ -552,11 +552,11 @@ export default function ParentingPlan() {
                       mental health and life-enriching activities. Neither of us will have a superior right or authority when it comes to co-parenting our children. 
                       We will treat each other with respect and cooperate in an effort to raise our child(ren) in the most loving, caring environment possible.
                     </p>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-4a" parentType="mother" />
-                      <ParentInitials sectionId="section-4a" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-4a" parentType="mother" />
+                    <ParentInitials sectionId="section-4a" parentType="father" />
                   </div>
                 </div>
                 
@@ -591,18 +591,18 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-4b').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <p className="text-gray-700">
                       If we are ever unable to resolve a disagreement then we will immediately seek professional advice from the most qualified person 
                       that is reasonably available to us. This could be a doctor, educator, mental health professional, or someone else that can assist 
                       us in properly and diligently considering all of the information that is relevant to any decision. We will try to always keep open 
                       minds and respect each other, even when we disagree.
                     </p>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-4b" parentType="mother" />
-                      <ParentInitials sectionId="section-4b" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-4b" parentType="mother" />
+                    <ParentInitials sectionId="section-4b" parentType="father" />
                   </div>
                 </div>
                 
@@ -637,18 +637,18 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-4c').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <p className="text-gray-700">
                       Nothing here is intended to interfere with our respective rights to make decisions regarding the day-to-day care 
                       and control of our child(ren) while the child(ren) are with us. Similarly, we both are allowed to make emergency 
                       decisions affecting the health or safety of the child(ren) if such a decision is ever necessary. If there is ever 
                       such an emergency, then we both commit to notify each other of the situation as soon as reasonably possible.
                     </p>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-4c" parentType="mother" />
-                      <ParentInitials sectionId="section-4c" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-4c" parentType="mother" />
+                    <ParentInitials sectionId="section-4c" parentType="father" />
                   </div>
                 </div>
                 
@@ -683,7 +683,7 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-4d').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <p className="text-gray-700">
                       We agree that extracurricular activities are very important for the development of our child(ren) in many respects. 
                       We will discuss all proposed extracurricular activities with each other, and these are the things we agree are important to consider:
@@ -699,11 +699,11 @@ export default function ParentingPlan() {
                       <div className="border border-gray-200 p-2 rounded text-center text-sm">Travel schedule</div>
                       <div className="border border-gray-200 p-2 rounded text-center text-sm">Other</div>
                     </div>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-4d" parentType="mother" />
-                      <ParentInitials sectionId="section-4d" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-4d" parentType="mother" />
+                    <ParentInitials sectionId="section-4d" parentType="father" />
                   </div>
                 </div>
                 
@@ -738,7 +738,7 @@ export default function ParentingPlan() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-4">
+                  <div className={`mt-4 space-y-4 ${getSectionStatus('section-5a').hasProposedChanges ? 'proposed-content' : ''}`}>
                     <h3 className="font-semibold text-gray-800">A. Scheduling and Our Calendar</h3>
                     <p className="text-gray-700">
                       We will exchange any school and extracurricular activity calendars as soon as we are able to after receiving them. 
@@ -752,11 +752,11 @@ export default function ParentingPlan() {
                       the best possible thing for our child(ren), so we will each do our best to avoid asking for schedule changes on a regular 
                       basis just to accommodate our own personal needs.
                     </p>
+                  </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
-                      <ParentInitials sectionId="section-5a" parentType="mother" />
-                      <ParentInitials sectionId="section-5a" parentType="father" />
-                    </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md">
+                    <ParentInitials sectionId="section-5a" parentType="mother" />
+                    <ParentInitials sectionId="section-5a" parentType="father" />
                   </div>
                 </div>
                 
