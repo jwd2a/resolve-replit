@@ -7,6 +7,13 @@ export default function ParentingPlan() {
   const { openMenu } = useMobileMenu();
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [activeSectionTitle, setActiveSectionTitle] = useState<string>("");
+  const [activeSectionContent, setActiveSectionContent] = useState<string>("");
+  const [aiMessage, setAiMessage] = useState<string>("");
+  const [userMessage, setUserMessage] = useState<string>("");
+  const [aiSuggestion, setAiSuggestion] = useState<string>("");
+  const [showProposalOption, setShowProposalOption] = useState<boolean>(false);
+  const [sectionVersions, setSectionVersions] = useState<Record<string, string[]>>({});
+  const [showVersionHistory, setShowVersionHistory] = useState<boolean>(false);
 
   // Mock data for parent information
   const parents = {
@@ -55,9 +62,90 @@ export default function ParentingPlan() {
     }
   };
 
+  // Mock section content storage
+  const [sectionContents, setSectionContents] = useState<Record<string, string>>({
+    "section-3": "The United States is the country of habitual residence of the child(ren). The State of Florida is the child(ren)'s home state for the purposes of the Uniform Child Custody Jurisdiction and Enforcement Act. This document is intended to be the basis of a child custody determination for the purposes of the Uniform Child Custody Jurisdiction and Enforcement Act, the International Child Abduction Remedies Act, 42 U.S.C. Sections 11601 et seq., the Parental Kidnapping Prevention Act, and the Convention on the Civil Aspects of International Child Abduction.",
+    "section-4a": "We are going to make decisions about our children as co-parents, together, and always with our child(ren)'s best interests as the most important guiding concern. These decisions include all important decisions affecting the welfare of our child(ren), such as decisions about the child(ren)'s education, healthcare, mental health and life-enriching activities. Neither of us will have a superior right or authority when it comes to co-parenting our children. We will treat each other with respect and cooperate in an effort to raise our child(ren) in the most loving, caring environment possible.",
+    "section-4b": "If we are ever unable to resolve a disagreement then we will immediately seek professional advice from the most qualified person that is reasonably available to us. This could be a doctor, educator, mental health professional, or someone else that can assist us in properly and diligently considering all of the information that is relevant to any decision. We will try to always keep open minds and respect each other, even when we disagree.",
+    "section-4c": "Nothing here is intended to interfere with our respective rights to make decisions regarding the day-to-day care and control of our child(ren) while the child(ren) are with us. Similarly, we both are allowed to make emergency decisions affecting the health or safety of the child(ren) if such a decision is ever necessary. If there is ever such an emergency, then we both commit to notify each other of the situation as soon as reasonably possible.",
+    "section-4d": "We agree that extracurricular activities are very important for the development of our child(ren) in many respects. We will discuss all proposed extracurricular activities with each other, and these are the things we agree are important to consider: The child's preference, Geography, Practicality of schedule, Cost, Required Equipment, Academic performance, Travel schedule, and Other factors as they arise.",
+    "section-5a": "We will exchange any school and extracurricular activity calendars as soon as we are able to after receiving them. We both acknowledge how important it is for us both to understand our child(ren)'s schedules. We are going to follow the dates set forth on our child(ren)'s school calendars when it comes to understanding academic breaks from school. We agree that some flexibility will be required of both of us and that it is very important that we show each other respect both in asking for flexibility and in granting flexibility. We also understand that maintaining a routine is the best possible thing for our child(ren), so we will each do our best to avoid asking for schedule changes on a regular basis just to accommodate our own personal needs."
+  });
+
+  const extractSectionContent = (sectionId: string) => {
+    return sectionContents[sectionId] || "";
+  };
+
   const handleSectionClick = (sectionId: string, title: string) => {
     setActiveSection(sectionId);
     setActiveSectionTitle(title);
+    const content = extractSectionContent(sectionId);
+    setActiveSectionContent(content);
+    
+    // Reset the AI interaction state
+    setAiMessage("What modifications would you like to make to this section?");
+    setUserMessage("");
+    setAiSuggestion("");
+    setShowProposalOption(false);
+    
+    // Initialize version history if it doesn't exist
+    if (!sectionVersions[sectionId]) {
+      setSectionVersions(prev => ({
+        ...prev,
+        [sectionId]: [content]
+      }));
+    }
+  };
+  
+  const handleUserMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserMessage(e.target.value);
+  };
+  
+  const generateAiResponse = () => {
+    if (!userMessage.trim()) return;
+    
+    // Simulate AI generating a response
+    setTimeout(() => {
+      const suggestion = activeSectionContent + "\n\n" + userMessage;
+      setAiSuggestion(suggestion);
+      setShowProposalOption(true);
+    }, 1000);
+  };
+  
+  const proposeUpdate = () => {
+    if (!activeSection || !aiSuggestion) return;
+    
+    // Update section content
+    setSectionContents(prev => ({
+      ...prev,
+      [activeSection]: aiSuggestion
+    }));
+    
+    // Add to version history
+    setSectionVersions(prev => ({
+      ...prev,
+      [activeSection]: [...(prev[activeSection] || []), aiSuggestion]
+    }));
+    
+    // Update initials status (remove father's initials)
+    if (sectionStatus[activeSection as keyof typeof sectionStatus]) {
+      const updatedStatus = {
+        ...sectionStatus,
+        [activeSection]: { mother: true, father: false }
+      };
+      // In a real app, this would update the database
+    }
+    
+    setAiMessage("Your changes have been proposed. The other parent will need to review and initial this section again.");
+    setShowProposalOption(false);
+  };
+  
+  const viewVersionHistory = () => {
+    setShowVersionHistory(true);
+  };
+  
+  const closeVersionHistory = () => {
+    setShowVersionHistory(false);
   };
 
   return (
@@ -434,41 +522,71 @@ export default function ParentingPlan() {
             <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
               {activeSection ? (
                 <>
-                  <div className="p-4 border-b border-gray-200">
+                  <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                     <h2 className="text-lg font-semibold text-gray-800">Editing: {activeSectionTitle}</h2>
+                    {sectionVersions[activeSection] && sectionVersions[activeSection].length > 1 && (
+                      <button 
+                        onClick={viewVersionHistory}
+                        className="text-xs text-primary hover:text-primary-dark flex items-center"
+                      >
+                        Version History
+                      </button>
+                    )}
                   </div>
                   
                   <div className="flex-1 p-4 overflow-y-auto">
+                    {/* Current section content */}
                     <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                      <p className="text-sm text-gray-600">
-                        This AI assistant can help you craft the perfect wording for your parenting plan. 
-                        Write your questions or explain what you're looking for, and I'll provide suggestions.
+                      <h3 className="text-sm font-medium text-gray-800 mb-2">Current Language:</h3>
+                      <p className="text-sm text-gray-600 whitespace-pre-wrap">
+                        {activeSectionContent}
                       </p>
                     </div>
                     
-                    <div className="space-y-4">
-                      <div className="bg-primary-light rounded-lg p-3">
+                    {/* AI messages */}
+                    {aiMessage && (
+                      <div className="bg-primary-light rounded-lg p-3 mb-4">
                         <p className="text-sm text-gray-800">
-                          I need help clarifying who will make healthcare decisions in emergencies when we can't reach each other.
+                          {aiMessage}
                         </p>
                       </div>
-                      
-                      <div className="bg-gray-100 rounded-lg p-3">
-                        <p className="text-sm text-gray-800">
-                          You could add this language: "In emergency situations where immediate medical decisions are required and we cannot reach each other, the parent who is with the child at that time has full authority to make necessary healthcare decisions. The other parent must be informed as soon as possible."
+                    )}
+                    
+                    {/* AI suggestion */}
+                    {aiSuggestion && (
+                      <div className="bg-gray-100 rounded-lg p-3 mb-4">
+                        <h3 className="text-sm font-medium text-gray-800 mb-2">Suggested Language:</h3>
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                          {aiSuggestion}
                         </p>
+                        
+                        {showProposalOption && (
+                          <div className="mt-4">
+                            <button 
+                              onClick={proposeUpdate}
+                              className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-primary-dark text-sm font-medium"
+                            >
+                              Propose This Update
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </div>
                   
                   <div className="p-4 border-t border-gray-200">
                     <div className="flex items-center">
                       <input 
                         type="text" 
-                        placeholder="Type your question..."
+                        value={userMessage}
+                        onChange={handleUserMessageChange}
+                        placeholder="Type your modifications..."
                         className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       />
-                      <button className="ml-2 bg-primary text-white p-2 rounded-md hover:bg-primary-dark">
+                      <button 
+                        onClick={generateAiResponse}
+                        className="ml-2 bg-primary text-white p-2 rounded-md hover:bg-primary-dark"
+                      >
                         <Send className="h-5 w-5" />
                       </button>
                     </div>
@@ -497,6 +615,52 @@ export default function ParentingPlan() {
               )}
             </div>
           </div>
+          
+          {/* Version History Modal */}
+          {showVersionHistory && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+                <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                  <h2 className="text-lg font-semibold text-gray-800">Version History: {activeSectionTitle}</h2>
+                  <button onClick={closeVersionHistory} className="text-gray-500 hover:text-gray-700">
+                    <span className="sr-only">Close</span>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                
+                <div className="flex-1 p-4 overflow-y-auto">
+                  {activeSection && sectionVersions[activeSection]?.map((version, index) => (
+                    <div key={index} className="mb-4 border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-sm font-medium text-gray-800">
+                          Version {index + 1}
+                          {index === 0 && <span className="ml-2 text-xs text-gray-500">(Original)</span>}
+                          {index === (sectionVersions[activeSection]?.length || 0) - 1 && index > 0 && (
+                            <span className="ml-2 text-xs text-green-500">(Current)</span>
+                          )}
+                        </h3>
+                        <span className="text-xs text-gray-500">
+                          {new Date().toLocaleDateString()} {/* In a real app, store and display actual timestamps */}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 whitespace-pre-wrap">{version}</p>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="p-4 border-t border-gray-200">
+                  <button
+                    onClick={closeVersionHistory}
+                    className="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-medium"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
