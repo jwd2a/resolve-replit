@@ -12,8 +12,18 @@ export default function ParentingPlan() {
   const [userMessage, setUserMessage] = useState<string>("");
   const [aiSuggestion, setAiSuggestion] = useState<string>("");
   const [showProposalOption, setShowProposalOption] = useState<boolean>(false);
-  const [sectionVersions, setSectionVersions] = useState<Record<string, string[]>>({});
+  // Enhanced version history with timestamps
+  const [sectionVersions, setSectionVersions] = useState<Record<string, Array<{
+    content: string;
+    timestamp: Date;
+    author: string;
+    note?: string;
+  }>>>({});
+  
   const [showVersionHistory, setShowVersionHistory] = useState<boolean>(false);
+  const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
+  const [compareMode, setCompareMode] = useState<boolean>(false);
+  const [compareVersionIndex, setCompareVersionIndex] = useState<number | null>(null);
 
   // Mock data for parent information
   const parents = {
@@ -109,12 +119,20 @@ export default function ParentingPlan() {
     setUserMessage("");
     setAiSuggestion("");
     setShowProposalOption(false);
+    setSelectedVersionIndex(null);
+    setCompareMode(false);
+    setCompareVersionIndex(null);
     
     // Initialize version history if it doesn't exist
     if (!sectionVersions[sectionId]) {
       setSectionVersions(prev => ({
         ...prev,
-        [sectionId]: [content]
+        [sectionId]: [{
+          content,
+          timestamp: new Date(),
+          author: "System",
+          note: "Original version"
+        }]
       }));
     }
   };
@@ -143,11 +161,20 @@ export default function ParentingPlan() {
       [activeSection]: aiSuggestion
     }));
     
-    // Add to version history
-    setSectionVersions(prev => ({
-      ...prev,
-      [activeSection]: [...(prev[activeSection] || []), aiSuggestion]
-    }));
+    // Add to version history with metadata
+    setSectionVersions(prev => {
+      const newVersion = {
+        content: aiSuggestion,
+        timestamp: new Date(),
+        author: parents.mother.name, // Assuming the mother is making changes
+        note: "AI-assisted update"
+      };
+      
+      return {
+        ...prev,
+        [activeSection]: [...(prev[activeSection] || []), newVersion]
+      };
+    });
     
     // Update initials status (remove father's initials)
     if (sectionStatus[activeSection as keyof typeof sectionStatus]) {
@@ -160,14 +187,36 @@ export default function ParentingPlan() {
     
     setAiMessage("Your changes have been proposed. The other parent will need to review and initial this section again.");
     setShowProposalOption(false);
+    setActiveSectionContent(aiSuggestion);
   };
   
   const viewVersionHistory = () => {
     setShowVersionHistory(true);
   };
   
+  // Helper for converting string to versioned content format
+  const stringToVersionedContent = (content: string, author: string, note?: string) => {
+    return {
+      content,
+      timestamp: new Date(),
+      author,
+      note
+    };
+  };
+
+  // Helper to extract content from versioned content
+  const getContentFromVersion = (version: any): string => {
+    if (typeof version === 'string') {
+      return version;
+    }
+    return version.content || '';
+  };
+  
   const closeVersionHistory = () => {
     setShowVersionHistory(false);
+    setSelectedVersionIndex(null);
+    setCompareMode(false);
+    setCompareVersionIndex(null);
   };
 
   return (
@@ -227,10 +276,12 @@ export default function ParentingPlan() {
                       <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-1').badge}`}>
                         {getSectionStatus('section-1').label}
                       </div>
-                      {sectionVersions['section-1'] && sectionVersions['section-1'].length > 1 && (
+                      {sectionVersions['section-1'] && sectionVersions['section-1']?.length > 1 && (
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();
+                            setActiveSection('section-1');
+                            setActiveSectionTitle('Parents');
                             viewVersionHistory();
                           }}
                           className="text-primary hover:text-primary-dark"
@@ -288,10 +339,12 @@ export default function ParentingPlan() {
                       <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-2').badge}`}>
                         {getSectionStatus('section-2').label}
                       </div>
-                      {sectionVersions['section-2'] && sectionVersions['section-2'].length > 1 && (
+                      {sectionVersions['section-2'] && sectionVersions['section-2']?.length > 1 && (
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();
+                            setActiveSection('section-2');
+                            setActiveSectionTitle('Children');
                             viewVersionHistory();
                           }}
                           className="text-primary hover:text-primary-dark"
@@ -341,10 +394,12 @@ export default function ParentingPlan() {
                       <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-3').badge}`}>
                         {getSectionStatus('section-3').label}
                       </div>
-                      {sectionVersions['section-3'] && sectionVersions['section-3'].length > 1 && (
+                      {sectionVersions['section-3'] && sectionVersions['section-3']?.length > 1 && (
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();
+                            setActiveSection('section-3');
+                            setActiveSectionTitle('Jurisdiction');
                             viewVersionHistory();
                           }}
                           className="text-primary hover:text-primary-dark"
@@ -783,46 +838,183 @@ export default function ParentingPlan() {
           </div>
           
           {/* Version History Modal */}
-          {showVersionHistory && (
+          {showVersionHistory && activeSection && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+              <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col">
                 <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                   <h2 className="text-lg font-semibold text-gray-800">Version History: {activeSectionTitle}</h2>
-                  <button onClick={closeVersionHistory} className="text-gray-500 hover:text-gray-700">
-                    <span className="sr-only">Close</span>
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center space-x-4">
+                    {compareMode && (
+                      <button 
+                        onClick={() => setCompareMode(false)}
+                        className="text-sm text-primary hover:text-primary-dark"
+                      >
+                        Exit Comparison Mode
+                      </button>
+                    )}
+                    <button onClick={closeVersionHistory} className="text-gray-500 hover:text-gray-700">
+                      <span className="sr-only">Close</span>
+                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
                 
-                <div className="flex-1 p-4 overflow-y-auto">
-                  {activeSection && sectionVersions[activeSection]?.map((version, index) => (
-                    <div key={index} className="mb-4 border border-gray-200 rounded-lg p-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-sm font-medium text-gray-800">
-                          Version {index + 1}
-                          {index === 0 && <span className="ml-2 text-xs text-gray-500">(Original)</span>}
-                          {index === (sectionVersions[activeSection]?.length || 0) - 1 && index > 0 && (
-                            <span className="ml-2 text-xs text-green-500">(Current)</span>
+                {!compareMode ? (
+                  // List view of all versions
+                  <div className="flex-1 p-4 overflow-y-auto">
+                    {sectionVersions[activeSection]?.map((version, index) => (
+                      <div 
+                        key={index} 
+                        className={`mb-4 border rounded-lg p-4 ${
+                          selectedVersionIndex === index ? 'border-primary bg-primary-light/10' : 'border-gray-200'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="text-sm font-medium text-gray-800">
+                            Version {index + 1}
+                            {index === 0 && <span className="ml-2 text-xs text-gray-500">(Original)</span>}
+                            {index === (sectionVersions[activeSection]?.length || 0) - 1 && index > 0 && (
+                              <span className="ml-2 text-xs text-green-500">(Current)</span>
+                            )}
+                          </h3>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs text-gray-500">
+                              {version.timestamp.toLocaleDateString()} {version.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                            <span className="text-xs font-medium text-gray-700">
+                              by {version.author}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        {version.note && (
+                          <div className="bg-gray-50 text-xs text-gray-600 p-2 rounded mb-2">
+                            {version.note}
+                          </div>
+                        )}
+                        
+                        <p className="text-sm text-gray-600 whitespace-pre-wrap">{version.content}</p>
+                        
+                        <div className="mt-4 flex justify-between">
+                          <div className="space-x-2">
+                            {index !== (sectionVersions[activeSection]?.length || 0) - 1 && (
+                              <button 
+                                onClick={() => {
+                                  // Update to this version
+                                  setActiveSectionContent(version.content);
+                                  setSectionContents(prev => ({
+                                    ...prev,
+                                    [activeSection]: version.content
+                                  }));
+                                  closeVersionHistory();
+                                }}
+                                className="text-xs px-2 py-1 border border-primary text-primary rounded hover:bg-primary hover:text-white"
+                              >
+                                Restore This Version
+                              </button>
+                            )}
+                            
+                            {selectedVersionIndex === index ? (
+                              <button 
+                                onClick={() => setSelectedVersionIndex(null)}
+                                className="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                              >
+                                Deselect
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => setSelectedVersionIndex(index)}
+                                className="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                              >
+                                Select
+                              </button>
+                            )}
+                          </div>
+                          
+                          {selectedVersionIndex !== null && selectedVersionIndex !== index && (
+                            <button 
+                              onClick={() => {
+                                setCompareMode(true);
+                                setCompareVersionIndex(index);
+                              }}
+                              className="text-xs px-2 py-1 bg-primary text-white rounded hover:bg-primary-dark"
+                            >
+                              Compare with Selected
+                            </button>
                           )}
-                        </h3>
-                        <span className="text-xs text-gray-500">
-                          {new Date().toLocaleDateString()} {/* In a real app, store and display actual timestamps */}
-                        </span>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600 whitespace-pre-wrap">{version}</p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  // Comparison view between two versions
+                  <div className="flex-1 p-4 overflow-y-auto">
+                    {selectedVersionIndex !== null && compareVersionIndex !== null && (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-sm font-medium text-gray-800">
+                              Version {selectedVersionIndex + 1}
+                              {selectedVersionIndex === 0 && <span className="ml-2 text-xs text-gray-500">(Original)</span>}
+                            </h3>
+                            <div>
+                              <span className="text-xs text-gray-500">
+                                {sectionVersions[activeSection][selectedVersionIndex].timestamp.toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-xs text-gray-500 mb-2">
+                            Author: {sectionVersions[activeSection][selectedVersionIndex].author}
+                          </div>
+                          <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 p-3 rounded max-h-[400px] overflow-y-auto">
+                            {sectionVersions[activeSection][selectedVersionIndex].content}
+                          </p>
+                        </div>
+                        
+                        <div className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-sm font-medium text-gray-800">
+                              Version {compareVersionIndex + 1}
+                              {compareVersionIndex === (sectionVersions[activeSection]?.length || 0) - 1 && (
+                                <span className="ml-2 text-xs text-green-500">(Current)</span>
+                              )}
+                            </h3>
+                            <div>
+                              <span className="text-xs text-gray-500">
+                                {sectionVersions[activeSection][compareVersionIndex].timestamp.toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-xs text-gray-500 mb-2">
+                            Author: {sectionVersions[activeSection][compareVersionIndex].author}
+                          </div>
+                          <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 p-3 rounded max-h-[400px] overflow-y-auto">
+                            {sectionVersions[activeSection][compareVersionIndex].content}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
-                <div className="p-4 border-t border-gray-200">
+                <div className="p-4 border-t border-gray-200 flex justify-between">
                   <button
                     onClick={closeVersionHistory}
-                    className="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-medium"
+                    className="py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-medium"
                   >
                     Close
                   </button>
+                  
+                  {compareMode && (
+                    <button
+                      onClick={() => setCompareMode(false)}
+                      className="py-2 px-4 bg-primary text-white rounded-md hover:bg-primary-dark font-medium"
+                    >
+                      Back to All Versions
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
