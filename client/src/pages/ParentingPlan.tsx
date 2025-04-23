@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send } from "lucide-react";
+import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download } from "lucide-react";
 import Header from "@/components/Header";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
@@ -75,10 +75,20 @@ export default function ParentingPlan() {
             <div className="bg-white rounded-lg shadow-lg p-6 m-4">
               <div className="flex justify-between items-center mb-6 sticky top-0 bg-white z-10 py-2">
                 <h1 className="text-2xl font-bold text-gray-800">Parenting Partnership Agreement</h1>
-                <button className="flex items-center text-primary hover:text-primary-dark">
-                  <Printer className="h-5 w-5 mr-1" />
-                  <span>Print</span>
-                </button>
+                <div className="flex space-x-4">
+                  <button className="flex items-center text-primary hover:text-primary-dark">
+                    <Share2 className="h-5 w-5 mr-1" />
+                    <span>Share</span>
+                  </button>
+                  <button className="flex items-center text-primary hover:text-primary-dark">
+                    <Download className="h-5 w-5 mr-1" />
+                    <span>Download</span>
+                  </button>
+                  <button className="flex items-center text-primary hover:text-primary-dark">
+                    <Printer className="h-5 w-5 mr-1" />
+                    <span>Print</span>
+                  </button>
+                </div>
               </div>
             
               <div className="prose max-w-none">
