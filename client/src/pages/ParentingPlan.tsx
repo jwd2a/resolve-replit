@@ -518,8 +518,8 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - always visible */}
-          <div className="lg:w-96 m-4 lg:h-[calc(100vh-100px)] flex flex-col">
-            <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
+          <div className="lg:w-96 m-4 lg:h-[calc(100vh-100px)] flex flex-col overflow-hidden">
+            <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
                   <div className="p-4 border-b border-gray-200 flex justify-between items-center">
@@ -556,7 +556,7 @@ export default function ParentingPlan() {
                     {aiSuggestion && (
                       <div className="bg-gray-100 rounded-lg p-3 mb-4">
                         <h3 className="text-sm font-medium text-gray-800 mb-2">Suggested Language:</h3>
-                        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap overflow-y-auto max-h-60">
                           {aiSuggestion}
                         </p>
                         
@@ -585,9 +585,9 @@ export default function ParentingPlan() {
                       />
                       <button 
                         onClick={generateAiResponse}
-                        className="ml-2 bg-primary text-white p-2 rounded-md hover:bg-primary-dark"
+                        className="ml-2 bg-primary text-white px-3 py-2 rounded-md hover:bg-primary-dark"
                       >
-                        <Send className="h-5 w-5" />
+                        Regenerate
                       </button>
                     </div>
                   </div>
