@@ -101,6 +101,25 @@
   background-color: #5540c0;
 }
 
+/* Parenting Plan Styles */
+.parenting-plan-section {
+  transition: all 0.2s ease-in-out;
+}
+
+.parenting-plan-section:hover {
+  border-color: #6c54da;
+}
+
+.parenting-plan-section.active {
+  border-color: #6c54da;
+  box-shadow: 0 0 0 2px rgba(108, 84, 218, 0.2);
+}
+
+.parenting-plan-incomplete {
+  color: #d97706;
+  font-style: italic;
+}
+
 /* Video container styling */
 .video-container {
   position: relative;
