@@ -68,30 +68,53 @@ export default function ParentingPlan() {
         icon: <Circle className="h-4 w-4 text-gray-300" />,
         label: "Not Started",
         color: "text-gray-500",
-        badge: "bg-gray-100 text-gray-500"
+        badge: "bg-gray-100 text-gray-500",
+        hasProposedChanges: false,
+        missingInitials: false
       };
     }
+    
+    // Check if there are proposed changes (assuming the most recent version is not the initial one)
+    const hasProposedChanges = sectionVersions[sectionId] && sectionVersions[sectionId].length > 1;
+    
+    // Missing initials when one parent has initialed but the other hasn't
+    const missingInitials = (status.mother && !status.father) || (!status.mother && status.father);
     
     if (status.mother && status.father) {
       return {
         icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
         label: "Approved",
         color: "text-green-600",
-        badge: "bg-green-50 text-green-600"
+        badge: "bg-green-50 text-green-600",
+        hasProposedChanges,
+        missingInitials: false
       };
-    } else if (status.mother || status.father) {
+    } else if (hasProposedChanges) {
       return {
         icon: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
         label: "Needs Review",
         color: "text-yellow-600",
-        badge: "bg-yellow-50 text-yellow-600"
+        badge: "bg-yellow-50 text-yellow-600",
+        hasProposedChanges,
+        missingInitials
+      };
+    } else if (missingInitials) {
+      return {
+        icon: <AlertTriangle className="h-4 w-4 text-red-400" />,
+        label: "Missing Initials",
+        color: "text-red-500",
+        badge: "missing-initials-alert",
+        hasProposedChanges: false,
+        missingInitials: true
       };
     } else {
       return {
         icon: <Circle className="h-4 w-4 text-gray-300" />,
         label: "Not Approved",
         color: "text-gray-500", 
-        badge: "bg-gray-100 text-gray-500"
+        badge: "bg-gray-100 text-gray-500",
+        hasProposedChanges: false,
+        missingInitials: false
       };
     }
   };
@@ -236,6 +259,25 @@ export default function ParentingPlan() {
     setCompareVersionIndex(null);
   };
   
+  // Function to handle adding initials
+  const handleInitialsClick = (sectionId: string, parentType: 'mother' | 'father') => {
+    // Only allow adding initials if there's no active section with pending changes
+    if (!aiSuggestion) {
+      setSectionStatus(prev => {
+        const newStatus = JSON.parse(JSON.stringify(prev));
+        // Toggle the initials status
+        const currentStatus = newStatus[sectionId] || { mother: false, father: false };
+        currentStatus[parentType] = !currentStatus[parentType];
+        newStatus[sectionId] = currentStatus;
+        
+        console.log(`Updated initials for ${parentType} in section ${sectionId}:`, currentStatus);
+        return newStatus;
+      });
+    } else {
+      setAiMessage("Please complete or cancel the current proposed changes before adding initials.");
+    }
+  };
+
   // Helper component for parent initials
   const ParentInitials = ({ sectionId, parentType }: { sectionId: string; parentType: 'mother' | 'father' }) => {
     const sectionStatusObj = sectionStatus[sectionId as keyof typeof sectionStatus];
@@ -247,11 +289,14 @@ export default function ParentingPlan() {
     return (
       <div className="flex items-center">
         <div className="w-20 font-medium text-sm">{label}</div>
-        {isInitialed ? (
-          <div className="ml-4 font-bold text-primary">{parentInfo.initials}</div>
-        ) : (
-          <div className="ml-4 text-gray-400 italic">Not initialed</div>
-        )}
+        <div 
+          onClick={() => handleInitialsClick(sectionId, parentType)}
+          className={`ml-4 ${isInitialed 
+            ? 'font-bold text-primary cursor-pointer' 
+            : 'missing-initials'}`}
+        >
+          {isInitialed ? parentInfo.initials : "Click to initial"}
+        </div>
       </div>
     );
   };

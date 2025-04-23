@@ -120,6 +120,32 @@
   font-style: italic;
 }
 
+/* New proposed content background */
+.proposed-content {
+  background-color: rgba(255, 236, 153, 0.2);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+/* Missing initials highlight */
+.missing-initials {
+  background-color: rgba(247, 191, 190, 0.3);
+  border: 1px solid rgba(247, 191, 190, 0.5);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/* Missing initials alert */
+.missing-initials-alert {
+  background-color: rgba(247, 191, 190, 0.3);
+  color: #b71c1c;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
 /* Video container styling */
 .video-container {
   position: relative;
