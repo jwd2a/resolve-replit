@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download } from "lucide-react";
+import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download, AlertTriangle, History, FileText } from "lucide-react";
 import Header from "@/components/Header";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
@@ -49,16 +49,38 @@ export default function ParentingPlan() {
     "section-5a": { mother: true, father: true },
   };
 
-  const getSectionStatusIcon = (sectionId: string) => {
+  const getSectionStatus = (sectionId: string) => {
     const status = sectionStatus[sectionId as keyof typeof sectionStatus];
-    if (!status) return <Circle className="h-4 w-4 text-gray-300" />;
+    if (!status) {
+      return {
+        icon: <Circle className="h-4 w-4 text-gray-300" />,
+        label: "Not Started",
+        color: "text-gray-500",
+        badge: "bg-gray-100 text-gray-500"
+      };
+    }
     
     if (status.mother && status.father) {
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return {
+        icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
+        label: "Approved",
+        color: "text-green-600",
+        badge: "bg-green-50 text-green-600"
+      };
     } else if (status.mother || status.father) {
-      return <HelpCircle className="h-4 w-4 text-yellow-500" />;
+      return {
+        icon: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
+        label: "Needs Review",
+        color: "text-yellow-600",
+        badge: "bg-yellow-50 text-yellow-600"
+      };
     } else {
-      return <Circle className="h-4 w-4 text-gray-300" />;
+      return {
+        icon: <Circle className="h-4 w-4 text-gray-300" />,
+        label: "Not Approved",
+        color: "text-gray-500", 
+        badge: "bg-gray-100 text-gray-500"
+      };
     }
   };
 
@@ -198,10 +220,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-1')}
+                      {getSectionStatus('section-1').icon}
                       <span className="ml-2">SECTION 1 - PARENTS</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-1').badge}`}>
+                        {getSectionStatus('section-1').label}
+                      </div>
+                      {sectionVersions['section-1'] && sectionVersions['section-1'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -241,10 +281,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-2')}
+                      {getSectionStatus('section-2').icon}
                       <span className="ml-2">SECTION 2 - CHILDREN</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-2').badge}`}>
+                        {getSectionStatus('section-2').label}
+                      </div>
+                      {sectionVersions['section-2'] && sectionVersions['section-2'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 overflow-x-auto">
@@ -276,10 +334,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-3')}
+                      {getSectionStatus('section-3').icon}
                       <span className="ml-2">SECTION 3 - JURISDICTION</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-3').badge}`}>
+                        {getSectionStatus('section-3').label}
+                      </div>
+                      {sectionVersions['section-3'] && sectionVersions['section-3'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
@@ -313,10 +389,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-4a')}
+                      {getSectionStatus('section-4a').icon}
                       <span className="ml-2">SECTION 4 - PARENTAL RESPONSIBILITY & DECISION MAKING</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4a').badge}`}>
+                        {getSectionStatus('section-4a').label}
+                      </div>
+                      {sectionVersions['section-4a'] && sectionVersions['section-4a'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
@@ -348,10 +442,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-4b')}
+                      {getSectionStatus('section-4b').icon}
                       <span className="ml-2">B. How We Will Resolve Disagreements.</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4b').badge}`}>
+                        {getSectionStatus('section-4b').label}
+                      </div>
+                      {sectionVersions['section-4b'] && sectionVersions['section-4b'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
@@ -382,10 +494,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-4c')}
+                      {getSectionStatus('section-4c').icon}
                       <span className="ml-2">C. Day-to-Day Decision-Making.</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4c').badge}`}>
+                        {getSectionStatus('section-4c').label}
+                      </div>
+                      {sectionVersions['section-4c'] && sectionVersions['section-4c'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
@@ -416,10 +546,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-4d')}
+                      {getSectionStatus('section-4d').icon}
                       <span className="ml-2">D. Extra-curricular Activities.</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4d').badge}`}>
+                        {getSectionStatus('section-4d').label}
+                      </div>
+                      {sectionVersions['section-4d'] && sectionVersions['section-4d'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
@@ -459,10 +607,28 @@ export default function ParentingPlan() {
                 >
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatusIcon('section-5a')}
+                      {getSectionStatus('section-5a').icon}
                       <span className="ml-2">SECTION 5 - TIME SHARING SCHEDULE</span>
                     </h2>
-                    <Edit2 className="h-5 w-5 text-primary" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-5a').badge}`}>
+                        {getSectionStatus('section-5a').label}
+                      </div>
+                      {sectionVersions['section-5a'] && sectionVersions['section-5a'].length > 1 && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            viewVersionHistory();
+                          }}
+                          className="text-primary hover:text-primary-dark"
+                        >
+                          <History className="h-5 w-5" />
+                        </button>
+                      )}
+                      <button className="text-primary hover:text-primary-dark">
+                        <Edit2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="mt-4 space-y-4">
