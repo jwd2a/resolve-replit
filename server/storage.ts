@@ -1,7 +1,10 @@
 import { 
   User, InsertUser, Module, InsertModule, 
-  Section, InsertSection, Progress, InsertProgress 
+  Section, InsertSection, Progress, InsertProgress,
+  users, modules, sections, progress 
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -25,61 +28,136 @@ export interface IStorage {
   updateProgress(progress: InsertProgress): Promise<Progress>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private modules: Map<number, Module>;
-  private sections: Map<number, Section>;
-  private progresses: Map<string, Progress>;
-  private currentUserId: number;
-  private currentModuleId: number;
-  private currentSectionId: number;
-  private currentProgressId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.modules = new Map();
-    this.sections = new Map();
-    this.progresses = new Map();
-    this.currentUserId = 1;
-    this.currentModuleId = 1;
-    this.currentSectionId = 1;
-    this.currentProgressId = 1;
-    
-    // Initialize with sample data
-    this.initializeData();
+/**
+ * Database Storage Implementation
+ */
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
-  private initializeData() {
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async getModules(): Promise<Module[]> {
+    const result = await db.select().from(modules).orderBy(modules.order);
+    return result;
+  }
+
+  async getModule(id: number): Promise<Module | undefined> {
+    const [module] = await db.select().from(modules).where(eq(modules.id, id));
+    return module || undefined;
+  }
+
+  async createModule(insertModule: InsertModule): Promise<Module> {
+    const [module] = await db.insert(modules).values(insertModule).returning();
+    return module;
+  }
+
+  async getSections(moduleId?: number): Promise<Section[]> {
+    if (moduleId) {
+      return db.select().from(sections).where(eq(sections.moduleId, moduleId)).orderBy(sections.order);
+    }
+    return db.select().from(sections).orderBy(sections.order);
+  }
+
+  async getSection(id: number): Promise<Section | undefined> {
+    const [section] = await db.select().from(sections).where(eq(sections.id, id));
+    return section || undefined;
+  }
+
+  async getSectionBySlug(slug: string): Promise<Section | undefined> {
+    const [section] = await db.select().from(sections).where(eq(sections.slug, slug));
+    return section || undefined;
+  }
+
+  async createSection(insertSection: InsertSection): Promise<Section> {
+    const [section] = await db.insert(sections).values(insertSection).returning();
+    return section;
+  }
+
+  async getProgress(userId: number): Promise<Progress[]> {
+    return db.select().from(progress).where(eq(progress.userId, userId));
+  }
+
+  async updateProgress(insertProgress: InsertProgress): Promise<Progress> {
+    // Check if progress already exists
+    const [existing] = await db.select().from(progress).where(
+      and(
+        eq(progress.userId, insertProgress.userId),
+        eq(progress.moduleId, insertProgress.moduleId),
+        eq(progress.sectionId, insertProgress.sectionId)
+      )
+    );
+
+    if (existing) {
+      // Update existing progress
+      const [updated] = await db.update(progress)
+        .set(insertProgress)
+        .where(eq(progress.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      // Create new progress
+      const [newProgress] = await db.insert(progress)
+        .values(insertProgress)
+        .returning();
+      return newProgress;
+    }
+  }
+}
+
+// Initialize the database with sample data
+async function seedDatabase() {
+  try {
+    // First check if we already have data
+    const existingModules = await db.select().from(modules);
+    if (existingModules.length > 0) {
+      console.log("Database already seeded, skipping");
+      return;
+    }
+
+    console.log("Seeding database with initial data...");
+    
     // Create a demo user
-    const demoUser: User = {
-      id: this.currentUserId++,
+    const demoUser: InsertUser = {
       username: "johndoe",
       password: "password123",
       displayName: "John Doe",
       role: "student"
     };
-    this.users.set(demoUser.id, demoUser);
+    
+    const [user] = await db.insert(users).values(demoUser).returning();
 
     // Create modules
-    const modules: InsertModule[] = [
+    const moduleData: InsertModule[] = [
       { title: "Introduction", order: 1, description: "Introduction to the course" },
       { title: "Design Thinking", order: 2, description: "Learn about design thinking methodology" },
       { title: "Technical Implementation", order: 3, description: "Implement solutions with best practices" },
       { title: "Project Management", order: 4, description: "Manage projects efficiently" },
       { title: "Final Assessment", order: 5, description: "Final course assessment" }
     ];
-
-    modules.forEach(mod => {
-      const module: Module = { ...mod, id: this.currentModuleId++ };
-      this.modules.set(module.id, module);
-    });
+    
+    const insertedModules = await db.insert(modules).values(moduleData).returning();
+    
+    // Find Technical Implementation module
+    const techModule = insertedModules.find((m: Module) => m.title === "Technical Implementation");
+    if (!techModule) {
+      throw new Error("Failed to find Technical Implementation module");
+    }
 
     // Create sections for the Technical Implementation module
-    const techModuleId = 3; // Assuming it's the third module
-    
-    const sections: InsertSection[] = [
+    const sectionData: InsertSection[] = [
       {
-        moduleId: techModuleId,
+        moduleId: techModule.id,
         title: "Overview",
         slug: "3.0",
         order: 1,
@@ -260,7 +338,7 @@ export default DataTable;`
         difficulty: "Intermediate"
       },
       {
-        moduleId: techModuleId,
+        moduleId: techModule.id,
         title: "Implementation Strategy",
         slug: "3.1",
         order: 2,
@@ -274,7 +352,7 @@ export default DataTable;`
         difficulty: "Intermediate"
       },
       {
-        moduleId: techModuleId,
+        moduleId: techModule.id,
         title: "Code Examples",
         slug: "3.2",
         order: 3,
@@ -288,7 +366,7 @@ export default DataTable;`
         difficulty: "Advanced"
       },
       {
-        moduleId: techModuleId,
+        moduleId: techModule.id,
         title: "Testing Protocol",
         slug: "3.3",
         order: 4,
@@ -302,7 +380,7 @@ export default DataTable;`
         difficulty: "Intermediate"
       },
       {
-        moduleId: techModuleId,
+        moduleId: techModule.id,
         title: "Deployment",
         slug: "3.4",
         order: 5,
@@ -316,100 +394,17 @@ export default DataTable;`
         difficulty: "Intermediate"
       }
     ];
-
-    sections.forEach(sec => {
-      const section: Section = { ...sec, id: this.currentSectionId++ };
-      this.sections.set(section.id, section);
-    });
-  }
-
-  // User methods
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
-  }
-
-  // Module methods
-  async getModules(): Promise<Module[]> {
-    return Array.from(this.modules.values()).sort((a, b) => a.order - b.order);
-  }
-
-  async getModule(id: number): Promise<Module | undefined> {
-    return this.modules.get(id);
-  }
-
-  async createModule(insertModule: InsertModule): Promise<Module> {
-    const id = this.currentModuleId++;
-    const module: Module = { ...insertModule, id };
-    this.modules.set(id, module);
-    return module;
-  }
-
-  // Section methods
-  async getSections(moduleId?: number): Promise<Section[]> {
-    let sections = Array.from(this.sections.values());
     
-    if (moduleId) {
-      sections = sections.filter(section => section.moduleId === moduleId);
-    }
+    await db.insert(sections).values(sectionData);
     
-    return sections.sort((a, b) => a.order - b.order);
-  }
-
-  async getSection(id: number): Promise<Section | undefined> {
-    return this.sections.get(id);
-  }
-
-  async getSectionBySlug(slug: string): Promise<Section | undefined> {
-    return Array.from(this.sections.values()).find(
-      (section) => section.slug === slug
-    );
-  }
-
-  async createSection(insertSection: InsertSection): Promise<Section> {
-    const id = this.currentSectionId++;
-    const section: Section = { ...insertSection, id };
-    this.sections.set(id, section);
-    return section;
-  }
-
-  // Progress methods
-  async getProgress(userId: number): Promise<Progress[]> {
-    return Array.from(this.progresses.values()).filter(
-      (progress) => progress.userId === userId
-    );
-  }
-
-  async updateProgress(insertProgress: InsertProgress): Promise<Progress> {
-    const key = `${insertProgress.userId}-${insertProgress.moduleId}-${insertProgress.sectionId}`;
-    const existingProgress = this.progresses.get(key);
-    
-    if (existingProgress) {
-      const updatedProgress: Progress = {
-        ...existingProgress,
-        ...insertProgress
-      };
-      this.progresses.set(key, updatedProgress);
-      return updatedProgress;
-    } else {
-      const id = this.currentProgressId++;
-      const newProgress: Progress = { ...insertProgress, id };
-      this.progresses.set(key, newProgress);
-      return newProgress;
-    }
+    console.log("Database seeded successfully");
+  } catch (error) {
+    console.error("Error seeding database:", error);
   }
 }
 
-export const storage = new MemStorage();
+// Export database storage
+export const storage = new DatabaseStorage();
+
+// Seed the database when this file is imported
+seedDatabase();
