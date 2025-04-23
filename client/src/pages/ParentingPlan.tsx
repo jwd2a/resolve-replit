@@ -231,6 +231,24 @@ export default function ParentingPlan() {
     setCompareMode(false);
     setCompareVersionIndex(null);
   };
+  
+  // Helper component for parent initials
+  const ParentInitials = ({ sectionId, parentType }: { sectionId: string; parentType: 'mother' | 'father' }) => {
+    const isInitialed = sectionStatus[sectionId as keyof typeof sectionStatus]?.[parentType];
+    const parentInfo = parentType === 'mother' ? parents.mother : parents.father;
+    const label = parentType === 'mother' ? "Mother's Initials" : "Father's Initials";
+    
+    return (
+      <div className="flex items-center">
+        <div className="w-20 font-medium text-sm">{label}</div>
+        {isInitialed ? (
+          <div className="ml-4 font-bold text-primary">{parentInfo.initials}</div>
+        ) : (
+          <div className="ml-4 text-gray-400 italic">Not initialed</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-app flex flex-col w-full overflow-hidden">
