@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({
 }) => {
   return (
     <div className="sticky top-0 z-10 w-full">
-      <header className="bg-[#2e1a87] py-2 px-6 flex items-center justify-between w-full">
+      <header className="bg-[#2e1a87] py-0 px-6 flex items-center justify-between w-full" style={{ height: '70px' }}>
         <div className="flex items-center">
           <button 
             className="md:hidden mr-4 text-white"
@@ -31,7 +31,7 @@ const Header: FC<HeaderProps> = ({
           </button>
           <Link href="/">
             <div className="flex items-center cursor-pointer">
-              <img src={ResolveLogo} alt="Resolve Logo" className="h-16" />
+              <img src={ResolveLogo} alt="Resolve Logo" className="h-28" />
             </div>
           </Link>
           
