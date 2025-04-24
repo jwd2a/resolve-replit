@@ -342,7 +342,7 @@ export default function ParentingPlan() {
                 </div>
               </div>
             
-              <div className="prose max-w-none overflow-y-auto flex-1">
+              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
                 <p className="text-gray-600">
                   This is an agreement between the parents named below that is intended to address all of our legal rights and obligations 
                   relating to the child(ren) identified below. We, the parents, agree that it is best for our child(ren) that we determine 
@@ -795,7 +795,7 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - always visible */}
-          <div className="lg:w-[420px] m-2 lg:h-[calc(100vh-90px)] flex flex-col overflow-hidden">
+          <div className="lg:w-[420px] m-2 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 90px)' }}>
             <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
