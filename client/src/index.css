@@ -4,6 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .modern-icon-button {
+    @apply rounded-full p-1.5 bg-[#f5f3ff] text-[#2e1a87] hover:bg-[#e9e3ff] transition-colors duration-200;
+  }
+  
+  .history-button {
+    @apply rounded-full p-1.5 bg-[#f0f7ff] text-[#2563eb] hover:bg-[#e0f2fe] transition-colors duration-200;
+  }
+  
+  .section-status-badge {
+    @apply text-xs font-medium px-2 py-1 rounded-full;
+  }
+}
+
 :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

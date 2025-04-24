@@ -317,7 +317,7 @@ export default function ParentingPlan() {
                 {/* Document header with prominent title */}
                 <div className="border-b border-gray-100 pb-3">
                   {/* Large, prominent title */}
-                  <h1 className="text-4xl font-bold text-[#2e1a87] py-4">
+                  <h1 className="text-4xl font-bold text-[#2e1a87] py-4" style={{ letterSpacing: "-0.025em" }}>
                     Parenting Partnership Agreement
                   </h1>
                   
@@ -370,7 +370,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">SECTION 1 - PARENTS</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-1').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-1').badge}`}>
                         {getSectionStatus('section-1').label}
                       </div>
                       {sectionVersions['section-1'] && sectionVersions['section-1']?.length > 1 && (
@@ -381,13 +381,13 @@ export default function ParentingPlan() {
                             setActiveSectionTitle('Parents');
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
