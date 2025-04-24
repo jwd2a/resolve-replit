@@ -310,10 +310,10 @@ export default function ParentingPlan() {
       />
       
       <div className="flex flex-1">
-        <div className="w-full h-full flex flex-col lg:flex-row max-w-[98%] mx-auto px-2">
+        <div className="w-full h-full flex flex-col lg:flex-row max-w-[99%] mx-auto">
           {/* Main document - scrollable */}
-          <div className="flex-1 lg:pr-3 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
-            <div className="bg-white rounded-lg shadow-lg p-6 m-1 h-full flex flex-col">
+          <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
+            <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
               <div className="bg-white z-10 pb-4 mb-2" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 {/* Action buttons in the top right */}
                 <div className="flex justify-end py-2 mb-3">
@@ -794,9 +794,9 @@ export default function ParentingPlan() {
             </div>
           </div>
           
-          {/* AI Assistant sidebar - always visible */}
-          <div className="lg:w-[450px] m-1 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 90px)' }}>
-            <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col overflow-hidden">
+          {/* AI Assistant sidebar - connected with a divider */}
+          <div className="lg:w-[450px] border-l border-gray-300 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 84px)' }}>
+            <div className="bg-white rounded-r-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
                   <div className="p-4 border-b border-gray-200 flex justify-between items-center">
