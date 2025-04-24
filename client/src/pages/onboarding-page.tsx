@@ -297,7 +297,7 @@ export default function OnboardingPage() {
                         )}
                       />
                       
-                      <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="grid grid-cols-3 gap-4 mb-4">
                         <FormItem>
                           <FormLabel className="text-sm text-gray-600">City</FormLabel>
                           <Input placeholder="" className="h-12" />
@@ -318,12 +318,12 @@ export default function OnboardingPage() {
                             </SelectContent>
                           </Select>
                         </FormItem>
+                        
+                        <FormItem>
+                          <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
+                          <Input placeholder="" className="h-12" />
+                        </FormItem>
                       </div>
-                      
-                      <FormItem>
-                        <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
-                        <Input placeholder="" className="h-12" />
-                      </FormItem>
                     </div>
                     
                     <FormField
@@ -422,7 +422,7 @@ export default function OnboardingPage() {
                         </div>
                       </FormItem>
                       
-                      <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="grid grid-cols-3 gap-4 mb-4">
                         <FormItem>
                           <FormLabel className="text-sm text-gray-600">City</FormLabel>
                           <Input placeholder="" className="h-12" />
@@ -443,12 +443,12 @@ export default function OnboardingPage() {
                             </SelectContent>
                           </Select>
                         </FormItem>
+                        
+                        <FormItem>
+                          <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
+                          <Input placeholder="" className="h-12" />
+                        </FormItem>
                       </div>
-                      
-                      <FormItem>
-                        <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
-                        <Input placeholder="" className="h-12" />
-                      </FormItem>
                     </div>
                     
                     <FormField
@@ -620,7 +620,8 @@ export default function OnboardingPage() {
                                     <SelectContent>
                                       <SelectItem value="male">Male</SelectItem>
                                       <SelectItem value="female">Female</SelectItem>
-                                      <SelectItem value="other">Other/Non-binary</SelectItem>
+                                      <SelectItem value="non_binary">Non-binary</SelectItem>
+                                      <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </FormControl>
@@ -636,7 +637,7 @@ export default function OnboardingPage() {
                               <FormItem>
                                 <FormLabel>Special Needs (Optional)</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Any special needs or requirements" {...field} />
+                                  <Textarea placeholder="Any special needs or considerations" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -649,8 +650,8 @@ export default function OnboardingPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full"
                       onClick={() => append(emptyChild)}
+                      className="w-full"
                     >
                       Add Another Child
                     </Button>
@@ -683,7 +684,7 @@ export default function OnboardingPage() {
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium">Jurisdiction Information</h3>
                     <p className="text-sm text-gray-500">
-                      This helps us ensure your parenting plan complies with local laws and regulations.
+                      This information helps ensure your parenting plan complies with the laws of your jurisdiction.
                     </p>
                     
                     <FormField
@@ -691,13 +692,13 @@ export default function OnboardingPage() {
                       name="jurisdiction"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>State/Jurisdiction</FormLabel>
+                          <FormLabel>Jurisdiction</FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select state or jurisdiction" />
+                                <SelectValue placeholder="Select your jurisdiction" />
                               </SelectTrigger>
-                              <SelectContent className="max-h-[240px]">
+                              <SelectContent>
                                 {US_STATES.map((state) => (
                                   <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
                                     {state}
@@ -707,7 +708,7 @@ export default function OnboardingPage() {
                             </Select>
                           </FormControl>
                           <FormDescription>
-                            Select the state where your case is being or will be processed.
+                            Select the state or territory where your case is or will be filed.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -721,10 +722,10 @@ export default function OnboardingPage() {
                         <FormItem>
                           <FormLabel>Case Number (Optional)</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., FAM-2023-12345" {...field} />
+                            <Input placeholder="e.g. FAM-2023-12345" {...field} />
                           </FormControl>
                           <FormDescription>
-                            If you already have a case number from the court, enter it here.
+                            If you have an existing court case, enter the case number.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -738,10 +739,10 @@ export default function OnboardingPage() {
                         <FormItem>
                           <FormLabel>Court Name (Optional)</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g., Superior Court of California, County of Los Angeles" {...field} />
+                            <Input placeholder="e.g. Superior Court of California, County of Los Angeles" {...field} />
                           </FormControl>
                           <FormDescription>
-                            If known, enter the court where your case is being or will be processed.
+                            Enter the name of the court where your case is or will be filed.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -762,29 +763,31 @@ export default function OnboardingPage() {
                       className="bg-[#2e1a87] hover:bg-[#25156d]"
                       disabled={isLoading}
                     >
-                      Complete Setup
+                      Complete Onboarding
                     </Button>
                   </div>
                 </form>
               </Form>
             )}
             
-            {/* Completion message */}
+            {/* Completion Screen */}
             {completed && (
-              <div className="text-center py-6">
-                <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+              <div className="text-center py-8">
+                <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
                   <FaCheck className="h-10 w-10 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Setup Complete!</h3>
-                <p className="text-gray-600 mb-8">
-                  You've successfully completed your profile setup. You're ready to start creating your parenting plan.
+                <h3 className="mt-6 text-2xl font-medium">Onboarding Complete!</h3>
+                <p className="mt-2 text-gray-500">
+                  Thank you for providing the information needed to create your parenting plan. You'll now be redirected to your dashboard.
                 </p>
-                <Button 
-                  className="bg-[#2e1a87] hover:bg-[#25156d]"
-                  onClick={() => window.location.href = '/dashboard'}
-                >
-                  Go to Dashboard
-                </Button>
+                <div className="mt-8">
+                  <Button
+                    onClick={() => window.location.href = "/dashboard"}
+                    className="bg-[#2e1a87] hover:bg-[#25156d]"
+                  >
+                    Go to Dashboard
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
