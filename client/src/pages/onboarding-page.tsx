@@ -174,6 +174,12 @@ export default function OnboardingPage() {
   const onJurisdictionSubmit = (data: JurisdictionFormValues) => {
     console.log("Jurisdiction info submitted:", data);
     // In a real app, this would save all the collected data
+    
+    // Update the user's onboarding status
+    if (user) {
+      user.onboardingComplete = true;
+    }
+    
     setCompleted(true);
   };
 
