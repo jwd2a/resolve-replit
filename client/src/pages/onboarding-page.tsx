@@ -91,11 +91,8 @@ export default function OnboardingPage() {
   // Auto-redirect after completion
   useEffect(() => {
     if (completed && user) {
-      const timer = setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 2000);
-      
-      return () => clearTimeout(timer);
+      // Immediately navigate to dashboard without delay
+      window.location.href = "/dashboard";
     }
   }, [completed, user]);
   
@@ -685,26 +682,7 @@ export default function OnboardingPage() {
               </Form>
             )}
             
-            {/* Completion Screen */}
-            {completed && (
-              <div className="text-center py-8">
-                <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-                  <FaCheck className="h-10 w-10 text-green-600" />
-                </div>
-                <h3 className="mt-6 text-2xl font-medium">Onboarding Complete!</h3>
-                <p className="mt-2 text-gray-500">
-                  Thank you for providing the information needed to create your parenting plan. You'll be automatically redirected to your dashboard in 2 seconds.
-                </p>
-                <div className="mt-8">
-                  <Button
-                    onClick={() => { window.location.href = "/dashboard"; }}
-                    className="bg-[#2e1a87] hover:bg-[#25156d]"
-                  >
-                    Go to Dashboard
-                  </Button>
-                </div>
-              </div>
-            )}
+            {/* No completion screen - immediate redirect */}
           </CardContent>
         </Card>
       </div>
