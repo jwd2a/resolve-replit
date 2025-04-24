@@ -85,7 +85,7 @@ export default function AuthPage() {
             Welcome to Resolve
           </h2>
           <p className="text-sm text-gray-600 text-center">
-            Creating parenting agreements made simple
+            A new path forward for you and your child(ren)
           </p>
         </div>
 
