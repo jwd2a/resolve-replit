@@ -304,8 +304,7 @@ export default function ParentingPlan() {
   return (
     <div className="min-h-screen bg-app flex flex-col w-full overflow-hidden">
       <Header 
-        title="Resolve"
-        sectionTitle="Parenting Plan"
+        title="Parenting Plan"
         onMenuClick={openMenu}
       />
       

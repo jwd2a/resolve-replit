@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Menu, ChevronRight } from "lucide-react";
 import TopNavbar from "@/components/TopNavbar";
+import { Link } from "wouter";
 
 interface HeaderProps {
   title: string;
@@ -19,40 +20,37 @@ const Header: FC<HeaderProps> = ({
 }) => {
   return (
     <div className="sticky top-0 z-10 w-full">
-      <header className="bg-app py-4 px-0 flex items-center justify-between w-full">
-        <div className="flex items-center ml-4">
+      <header className="bg-[#2e1a87] py-3 px-4 flex items-center justify-between w-full">
+        <div className="flex items-center">
           <button 
             className="md:hidden mr-4 text-white"
             onClick={onMenuClick}
           >
             <Menu className="h-5 w-5" />
           </button>
-          <div className="flex items-center">
-            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center mr-3">
-              <span className="text-white font-bold">R</span>
+          <Link href="/">
+            <div className="flex items-center cursor-pointer">
+              <img src="/resolve-logo.png" alt="Resolve Logo" className="h-8 mr-3" />
+              <h1 className="text-lg font-semibold text-white">Resolve</h1>
             </div>
-            <h1 className="text-lg font-semibold text-white">Resolve</h1>
-          </div>
+          </Link>
           
-          <div className="hidden md:flex ml-6 items-center">
-            <span className="text-white font-medium">{title}</span>
-            {sectionTitle && (
-              <>
-                <ChevronRight className="text-white mx-2 h-4 w-4"/>
-                <span className="text-white">{sectionTitle}</span>
-              </>
-            )}
+          <div className="flex mx-8 space-x-6">
+            <Link href="/course">
+              <span className="text-white cursor-pointer font-medium">Resolve Course</span>
+            </Link>
+            <Link href="/parenting-plan">
+              <span className="text-white cursor-pointer font-medium">Parenting Plan</span>
+            </Link>
           </div>
         </div>
         
-        <div className="flex items-center mr-6">
-          <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary font-bold">
+        <div className="flex items-center">
+          <div className="h-8 w-8 bg-[#e94caf] rounded-full flex items-center justify-center text-white font-bold">
             E
           </div>
         </div>
       </header>
-      
-      <TopNavbar />
     </div>
   );
 };
