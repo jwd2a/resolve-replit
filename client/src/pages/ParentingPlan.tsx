@@ -314,8 +314,18 @@ export default function ParentingPlan() {
           <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
               <div className="bg-white z-10 pb-4 mb-2" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-                {/* Action buttons in the top right */}
-                <div className="flex justify-end py-2 mb-3">
+                {/* Document header with title and actions side by side */}
+                <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                  {/* Title, left-justified */}
+                  <div className="relative">
+                    <h1 className="text-3xl font-bold text-[#2e1a87] relative inline-block">
+                      Parenting Partnership Agreement
+                      <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#2e1a87]"></span>
+                    </h1>
+                    <p className="text-gray-500 text-sm mt-2">Last updated: April 24, 2025</p>
+                  </div>
+                  
+                  {/* Action buttons on the right */}
                   <div className="flex space-x-4">
                     <button className="flex items-center px-4 py-2 text-[#2e1a87] bg-white border border-[#2e1a87] text-sm rounded-full hover:bg-[#f5f3ff] hover:shadow transition-all duration-200">
                       <Share2 className="h-4 w-4 mr-2" />
@@ -332,14 +342,8 @@ export default function ParentingPlan() {
                   </div>
                 </div>
                 
-                {/* Title below, left-justified */}
-                <div className="relative pt-2 pb-4">
-                  <h1 className="text-3xl font-bold text-[#2e1a87] relative inline-block">
-                    Parenting Partnership Agreement
-                    <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#2e1a87]"></span>
-                  </h1>
-                  <p className="text-gray-500 text-sm mt-2">Last updated: April 24, 2025</p>
-                </div>
+                {/* Clear break for AI Assistant */}
+                <div className="my-4 border-t border-gray-100"></div>
               </div>
             
               <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
