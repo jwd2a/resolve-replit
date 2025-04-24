@@ -433,7 +433,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">SECTION 2 - CHILDREN</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-2').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-2').badge}`}>
                         {getSectionStatus('section-2').label}
                       </div>
                       {sectionVersions['section-2'] && sectionVersions['section-2']?.length > 1 && (
@@ -444,13 +444,13 @@ export default function ParentingPlan() {
                             setActiveSectionTitle('Children');
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -488,7 +488,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">SECTION 3 - JURISDICTION</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-3').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-3').badge}`}>
                         {getSectionStatus('section-3').label}
                       </div>
                       {sectionVersions['section-3'] && sectionVersions['section-3']?.length > 1 && (
@@ -499,13 +499,13 @@ export default function ParentingPlan() {
                             setActiveSectionTitle('Jurisdiction');
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -539,7 +539,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">SECTION 4 - PARENTAL RESPONSIBILITY & DECISION MAKING</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4a').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-4a').badge}`}>
                         {getSectionStatus('section-4a').label}
                       </div>
                       {sectionVersions['section-4a'] && sectionVersions['section-4a'].length > 1 && (
@@ -548,13 +548,13 @@ export default function ParentingPlan() {
                             e.stopPropagation();
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -586,7 +586,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">B. How We Will Resolve Disagreements.</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4b').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-4b').badge}`}>
                         {getSectionStatus('section-4b').label}
                       </div>
                       {sectionVersions['section-4b'] && sectionVersions['section-4b'].length > 1 && (
@@ -595,13 +595,13 @@ export default function ParentingPlan() {
                             e.stopPropagation();
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -632,7 +632,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">C. Day-to-Day Decision-Making.</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4c').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-4c').badge}`}>
                         {getSectionStatus('section-4c').label}
                       </div>
                       {sectionVersions['section-4c'] && sectionVersions['section-4c'].length > 1 && (
@@ -641,13 +641,13 @@ export default function ParentingPlan() {
                             e.stopPropagation();
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -678,7 +678,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">D. Extra-curricular Activities.</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-4d').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-4d').badge}`}>
                         {getSectionStatus('section-4d').label}
                       </div>
                       {sectionVersions['section-4d'] && sectionVersions['section-4d'].length > 1 && (
@@ -687,13 +687,13 @@ export default function ParentingPlan() {
                             e.stopPropagation();
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -733,7 +733,7 @@ export default function ParentingPlan() {
                       <span className="ml-2">SECTION 5 - TIME SHARING SCHEDULE</span>
                     </h2>
                     <div className="flex items-center space-x-3">
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${getSectionStatus('section-5a').badge}`}>
+                      <div className={`section-status-badge ${getSectionStatus('section-5a').badge}`}>
                         {getSectionStatus('section-5a').label}
                       </div>
                       {sectionVersions['section-5a'] && sectionVersions['section-5a'].length > 1 && (
@@ -742,13 +742,13 @@ export default function ParentingPlan() {
                             e.stopPropagation();
                             viewVersionHistory();
                           }}
-                          className="text-primary hover:text-primary-dark"
+                          className="history-button"
                         >
-                          <History className="h-5 w-5" />
+                          <History className="h-4 w-4" />
                         </button>
                       )}
-                      <button className="text-primary hover:text-primary-dark">
-                        <Edit2 className="h-5 w-5" />
+                      <button className="modern-icon-button">
+                        <Edit2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -812,7 +812,7 @@ export default function ParentingPlan() {
                       {sectionVersions[activeSection] && sectionVersions[activeSection].length > 1 && (
                         <button 
                           onClick={viewVersionHistory}
-                          className="text-xs text-primary hover:text-primary-dark flex items-center"
+                          className="text-xs px-2.5 py-1 rounded-full bg-[#f0f7ff] text-blue-600 hover:bg-[#e0f2fe] transition-colors flex items-center"
                         >
                           <History className="h-4 w-4 mr-1" />
                           Version History
@@ -920,7 +920,7 @@ export default function ParentingPlan() {
                     {compareMode && (
                       <button 
                         onClick={() => setCompareMode(false)}
-                        className="text-sm text-primary hover:text-primary-dark"
+                        className="text-xs px-2.5 py-1 rounded-full bg-[#f0f7ff] text-blue-600 hover:bg-[#e0f2fe] transition-colors"
                       >
                         Exit Comparison Mode
                       </button>
