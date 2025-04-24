@@ -51,6 +51,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 interface CourseDate {
   scheduledDate: Date | null;
   proposedDate: Date | null;
+  proposedTime?: string; // Time in "HH:MM" format
   proposedBy: string | null;
   approved: boolean;
 }
@@ -134,12 +135,14 @@ export default function DashboardPage() {
   const [courseDate, setCourseDate] = useState<CourseDate>({
     scheduledDate: null,
     proposedDate: null,
+    proposedTime: "10:00",
     proposedBy: null,
     approved: false,
   });
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     addDays(new Date(), 7)
   );
+  const [selectedTime, setSelectedTime] = useState<string>("10:00");
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [coParentSignupStatus, setCoParentSignupStatus] = useState("pending"); // "pending", "completed"
   const [completedWaivers, setCompletedWaivers] = useState(1); // Number of signed waivers
@@ -161,6 +164,7 @@ export default function DashboardPage() {
     setCourseDate({
       ...courseDate,
       proposedDate: selectedDate || null,
+      proposedTime: selectedTime,
       proposedBy: "You",
       approved: false,
     });
@@ -207,6 +211,12 @@ export default function DashboardPage() {
   const courseDateStatus = getCourseDateStatus();
   const waiversProgress = (completedWaivers / waivers.length) * 100;
   const resourcesProgress = (completedResources / resources.length) * 100;
+
+  // Function to format the date and time together
+  const formatDateTime = (date: Date | null, time: string = "10:00") => {
+    if (!date) return "";
+    return `${format(date, "MMMM d, yyyy")} at ${time}`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -329,19 +339,19 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-gray-700">No date scheduled</p>
                         <p className="text-sm text-gray-600 mt-1">
-                          Please propose a date for your course session with your co-parent.
+                          Please propose a date and time for your course session with your co-parent.
                         </p>
                         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
                           <DialogTrigger asChild>
                             <Button className="mt-3" size="sm">
-                              Schedule Course Date
+                              Schedule Course
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Select Course Date</DialogTitle>
+                              <DialogTitle>Select Course Date and Time</DialogTitle>
                               <DialogDescription>
-                                Choose a date for your co-parenting course session. Your co-parent will need to confirm this date.
+                                Choose a date and time for your co-parenting course session. Your co-parent will need to confirm this.
                               </DialogDescription>
                             </DialogHeader>
                             <div className="py-4">
@@ -352,10 +362,29 @@ export default function DashboardPage() {
                                 disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
                                 className="rounded-md border mx-auto"
                               />
+                              <div className="mt-4">
+                                <div className="text-sm font-medium mb-2">Select Time</div>
+                                <div className="flex flex-wrap gap-2">
+                                  {["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"].map((time) => (
+                                    <button
+                                      key={time}
+                                      type="button"
+                                      onClick={() => setSelectedTime(time)}
+                                      className={`px-3 py-1.5 rounded-md text-sm ${
+                                        selectedTime === time
+                                          ? "bg-[#2e1a87] text-white"
+                                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                      }`}
+                                    >
+                                      {time}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
                             </div>
                             <DialogFooter>
                               <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
-                              <Button onClick={proposeDate}>Propose Date</Button>
+                              <Button onClick={proposeDate}>Propose Date & Time</Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
@@ -371,20 +400,20 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-blue-700">Awaiting Response</p>
                         <p className="text-sm text-blue-600 mt-1">
-                          You proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
+                          You proposed {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your course session.
                           Waiting for your co-parent to accept.
                         </p>
                         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
                           <DialogTrigger asChild>
                             <Button className="mt-3" size="sm" variant="outline">
-                              Change Proposed Date
+                              Change Proposed Time
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Select Course Date</DialogTitle>
+                              <DialogTitle>Select Course Date and Time</DialogTitle>
                               <DialogDescription>
-                                Choose a date for your co-parenting course session. Your co-parent will need to confirm this date.
+                                Choose a date and time for your co-parenting course session. Your co-parent will need to confirm this.
                               </DialogDescription>
                             </DialogHeader>
                             <div className="py-4">
@@ -395,10 +424,29 @@ export default function DashboardPage() {
                                 disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
                                 className="rounded-md border mx-auto"
                               />
+                              <div className="mt-4">
+                                <div className="text-sm font-medium mb-2">Select Time</div>
+                                <div className="flex flex-wrap gap-2">
+                                  {["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"].map((time) => (
+                                    <button
+                                      key={time}
+                                      type="button"
+                                      onClick={() => setSelectedTime(time)}
+                                      className={`px-3 py-1.5 rounded-md text-sm ${
+                                        selectedTime === time
+                                          ? "bg-[#2e1a87] text-white"
+                                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                      }`}
+                                    >
+                                      {time}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
                             </div>
                             <DialogFooter>
                               <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
-                              <Button onClick={proposeDate}>Propose Date</Button>
+                              <Button onClick={proposeDate}>Propose Date & Time</Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
@@ -412,9 +460,9 @@ export default function DashboardPage() {
                     <div className="flex gap-3 items-start">
                       <Info className="h-5 w-5 text-blue-500 mt-0.5" />
                       <div>
-                        <p className="font-medium text-blue-700">Date Proposed</p>
+                        <p className="font-medium text-blue-700">Date & Time Proposed</p>
                         <p className="text-sm text-blue-600 mt-1">
-                          Your co-parent proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
+                          Your co-parent proposed {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your course session.
                         </p>
                         <div className="mt-3 flex gap-2">
                           <Button size="sm" onClick={acceptProposedDate}>Accept</Button>
@@ -432,7 +480,7 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-green-700">Course Scheduled</p>
                         <p className="text-sm text-green-600 mt-1">
-                          Your course is scheduled for {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
+                          Your course is scheduled for {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}.
                         </p>
                       </div>
                     </div>
@@ -446,7 +494,7 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-purple-700">Course Is Today!</p>
                         <p className="text-sm text-purple-600 mt-1">
-                          Your course is scheduled for today. Please join 5 minutes before your scheduled time.
+                          Your course is scheduled for today at {courseDate.proposedTime}. Please join 5 minutes before your scheduled time.
                         </p>
                         <Button className="mt-3 bg-purple-600 hover:bg-purple-700">
                           Join Session
@@ -463,7 +511,7 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-medium text-gray-700">Course Completed</p>
                         <p className="text-sm text-gray-600 mt-1">
-                          You completed your course on {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
+                          You completed your course on {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}.
                         </p>
                       </div>
                     </div>
