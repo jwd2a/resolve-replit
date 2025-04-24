@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Menu, ChevronRight } from "lucide-react";
 import TopNavbar from "@/components/TopNavbar";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import ResolveLogo from "../assets/resolve-logo.png";
 
 interface HeaderProps {
@@ -19,6 +19,8 @@ const Header: FC<HeaderProps> = ({
   sectionTitle,
   onMenuClick
 }) => {
+  const [location] = useLocation();
+  
   return (
     <div className="sticky top-0 z-10 w-full">
       <header className="bg-[#2e1a87] py-0 px-0 flex items-center justify-between w-full" style={{ height: '70px' }}>
@@ -37,13 +39,25 @@ const Header: FC<HeaderProps> = ({
           
           <div className="flex ml-10 space-x-8">
             <Link href="/dashboard">
-              <span className="text-white cursor-pointer text-base">HOME</span>
+              <span className={`cursor-pointer text-base font-medium ${location === '/dashboard' 
+                ? 'text-white border-b-2 border-white pb-1' 
+                : 'text-gray-300 hover:text-white'}`}>
+                HOME
+              </span>
             </Link>
             <Link href="/course">
-              <span className="text-white cursor-pointer text-base">COURSE</span>
+              <span className={`cursor-pointer text-base font-medium ${location.startsWith('/course') 
+                ? 'text-white border-b-2 border-white pb-1' 
+                : 'text-gray-300 hover:text-white'}`}>
+                COURSE
+              </span>
             </Link>
             <Link href="/parenting-plan">
-              <span className="text-white cursor-pointer text-base">PARENTING PLAN</span>
+              <span className={`cursor-pointer text-base font-medium ${location.startsWith('/parenting-plan') 
+                ? 'text-white border-b-2 border-white pb-1' 
+                : 'text-gray-300 hover:text-white'}`}>
+                PARENTING PLAN
+              </span>
             </Link>
           </div>
         </div>
