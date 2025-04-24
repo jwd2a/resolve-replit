@@ -1,8 +1,19 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { User } from "@shared/schema";
 
+// Create a simplified mock user type for our auth context
+// This doesn't need to match the exact schema since we're just mocking for design
+type MockUser = Partial<User> & {
+  id: number;
+  username: string;
+  email: string;
+  displayName: string;
+  role: string;
+  onboardingComplete: boolean;
+};
+
 type AuthContextType = {
-  user: User | null;
+  user: MockUser | null;
   isLoading: boolean;
   error: Error | null;
   loginWithEmail: (email: string, password: string) => Promise<void>;
@@ -16,7 +27,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MockUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -30,14 +41,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Logging in with email:", email);
       
       // Mock user data
-      const mockUser: User = {
+      const mockUser: MockUser = {
         id: 1,
         username: email.split('@')[0],
         email: email,
         displayName: email.split('@')[0],
         role: "parent",
         onboardingComplete: false,
-        createdAt: new Date()
+        createdAt: new Date(),
+        password: null,
+        phone: null,
+        address: null,
+        authProvider: null,
+        providerId: null
       };
       
       setUser(mockUser);
@@ -57,14 +73,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Registering user:", { email, username, displayName });
       
       // Mock user data
-      const mockUser: User = {
+      const mockUser: MockUser = {
         id: 1,
         username,
         email,
         displayName,
         role: "parent",
         onboardingComplete: false,
-        createdAt: new Date()
+        createdAt: new Date(),
+        password: null,
+        phone: null,
+        address: null,
+        authProvider: null,
+        providerId: null
       };
       
       setUser(mockUser);
@@ -83,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Logging in with Google");
       
       // Mock user data
-      const mockUser: User = {
+      const mockUser: MockUser = {
         id: 1,
         username: "googleuser",
         email: "user@gmail.com",
@@ -91,7 +112,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: "parent",
         onboardingComplete: false,
         createdAt: new Date(),
-        authProvider: "google"
+        authProvider: "google",
+        password: null,
+        phone: null,
+        address: null,
+        providerId: null
       };
       
       setUser(mockUser);
@@ -110,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Logging in with Apple");
       
       // Mock user data
-      const mockUser: User = {
+      const mockUser: MockUser = {
         id: 1,
         username: "appleuser",
         email: "user@icloud.com",
@@ -118,7 +143,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: "parent",
         onboardingComplete: false,
         createdAt: new Date(),
-        authProvider: "apple"
+        authProvider: "apple",
+        password: null,
+        phone: null,
+        address: null,
+        providerId: null
       };
       
       setUser(mockUser);
@@ -137,7 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("Logging in with Facebook");
       
       // Mock user data
-      const mockUser: User = {
+      const mockUser: MockUser = {
         id: 1,
         username: "fbuser",
         email: "user@facebook.com",
@@ -145,7 +174,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role: "parent",
         onboardingComplete: false,
         createdAt: new Date(),
-        authProvider: "facebook"
+        authProvider: "facebook",
+        password: null,
+        phone: null,
+        address: null,
+        providerId: null
       };
       
       setUser(mockUser);
