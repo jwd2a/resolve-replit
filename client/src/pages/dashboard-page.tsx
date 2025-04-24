@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format, addDays, isBefore, isToday, isSameDay } from "date-fns";
 import logoSrc from "@assets/@Resolve Primary Logo - Main Color 02.png";
+import Header from "@/components/Header";
 
 // UI components
 import {
