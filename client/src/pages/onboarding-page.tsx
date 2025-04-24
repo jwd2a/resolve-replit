@@ -251,60 +251,121 @@ export default function OnboardingPage() {
             {currentStep === 1 && (
               <Form {...personalInfoForm}>
                 <form onSubmit={personalInfoForm.handleSubmit(onPersonalInfoSubmit)} className="space-y-6">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Your Personal Information</h3>
-                    <p className="text-sm text-gray-500">
-                      This information will be used for your parenting plan documentation.
-                    </p>
+                  <div className="space-y-6">
+                    <div>
+                      <FormField
+                        control={personalInfoForm.control}
+                        name="displayName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-base font-medium">Your Name</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input placeholder="" {...field} className="h-12" />
+                                {field.value && (
+                                  <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                    ✓
+                                  </div>
+                                )}
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
-                    <FormField
-                      control={personalInfoForm.control}
-                      name="displayName"
-                      render={({ field }) => (
+                    <div>
+                      <FormLabel className="text-base font-medium">Your Legal Address</FormLabel>
+                      
+                      <FormField
+                        control={personalInfoForm.control}
+                        name="address"
+                        render={({ field }) => (
+                          <FormItem className="mb-4">
+                            <FormLabel className="text-sm text-gray-600">Address</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input placeholder="" {...field} className="h-12" />
+                                <div className="absolute left-3 top-3 text-gray-400">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </div>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-4">
                         <FormItem>
-                          <FormLabel>Full Legal Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Michael Doe" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            Enter your complete legal name as it would appear on official documents.
-                          </FormDescription>
-                          <FormMessage />
+                          <FormLabel className="text-sm text-gray-600">City</FormLabel>
+                          <Input placeholder="" className="h-12" />
                         </FormItem>
-                      )}
-                    />
+                        
+                        <FormItem>
+                          <FormLabel className="text-sm text-gray-600">State / Province</FormLabel>
+                          <Select>
+                            <SelectTrigger className="h-12">
+                              <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {US_STATES.map((state) => (
+                                <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
+                                  {state}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      </div>
+                      
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
+                        <Input placeholder="" className="h-12" />
+                      </FormItem>
+                    </div>
                     
                     <FormField
                       control={personalInfoForm.control}
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
+                          <FormLabel className="text-base font-medium">Phone number</FormLabel>
                           <FormControl>
-                            <Input placeholder="(555) 123-4567" {...field} />
+                            <div className="relative">
+                              <div className="absolute left-0 top-0 h-12 w-14 flex items-center justify-center border-r">
+                                <div className="flex items-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
+                                    <rect y="0" width="24" height="18" fill="#fff"/>
+                                    <rect y="0" width="8" height="18" fill="#002868"/>
+                                    <rect x="16" y="0" width="8" height="18" fill="#bf0a30"/>
+                                  </svg>
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-1" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </div>
+                              </div>
+                              <Input placeholder="" {...field} className="h-12 pl-16" />
+                              {field.value && (
+                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                  ✓
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     
-                    <FormField
-                      control={personalInfoForm.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Home Address</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="123 Main St, Apt 4B&#10;Anytown, CA 12345" 
-                              className="min-h-[100px]"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <FormItem>
+                      <FormLabel className="text-base font-medium">Email</FormLabel>
+                      <div className="relative">
+                        <div className="absolute left-3 top-3 text-gray-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <Input placeholder="" className="h-12 pl-10" />
+                      </div>
+                    </FormItem>
                   </div>
                   
                   <div className="flex justify-end">
@@ -324,20 +385,97 @@ export default function OnboardingPage() {
             {currentStep === 2 && (
               <Form {...coParentForm}>
                 <form onSubmit={coParentForm.handleSubmit(onCoParentSubmit)} className="space-y-6">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Co-Parent Information</h3>
-                    <p className="text-sm text-gray-500">
-                      This information helps us create a comprehensive parenting plan that includes both parents.
-                    </p>
+                  <div className="space-y-6">
+                    <div>
+                      <FormField
+                        control={coParentForm.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-base font-medium">Co-Parent's Name</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input placeholder="" {...field} className="h-12" />
+                                {field.value && (
+                                  <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                    ✓
+                                  </div>
+                                )}
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    <div>
+                      <FormLabel className="text-base font-medium">Co-Parent's Legal Address</FormLabel>
+                      
+                      <FormItem className="mb-4">
+                        <FormLabel className="text-sm text-gray-600">Address</FormLabel>
+                        <div className="relative">
+                          <Input placeholder="" className="h-12" />
+                          <div className="absolute left-3 top-3 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                          </div>
+                        </div>
+                      </FormItem>
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <FormItem>
+                          <FormLabel className="text-sm text-gray-600">City</FormLabel>
+                          <Input placeholder="" className="h-12" />
+                        </FormItem>
+                        
+                        <FormItem>
+                          <FormLabel className="text-sm text-gray-600">State / Province</FormLabel>
+                          <Select>
+                            <SelectTrigger className="h-12">
+                              <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {US_STATES.map((state) => (
+                                <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
+                                  {state}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      </div>
+                      
+                      <FormItem>
+                        <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
+                        <Input placeholder="" className="h-12" />
+                      </FormItem>
+                    </div>
                     
                     <FormField
                       control={coParentForm.control}
-                      name="fullName"
+                      name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Co-Parent's Full Name</FormLabel>
+                          <FormLabel className="text-base font-medium">Phone number</FormLabel>
                           <FormControl>
-                            <Input placeholder="Jane Alice Smith" {...field} />
+                            <div className="relative">
+                              <div className="absolute left-0 top-0 h-12 w-14 flex items-center justify-center border-r">
+                                <div className="flex items-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
+                                    <rect y="0" width="24" height="18" fill="#fff"/>
+                                    <rect y="0" width="8" height="18" fill="#002868"/>
+                                    <rect x="16" y="0" width="8" height="18" fill="#bf0a30"/>
+                                  </svg>
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-1" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </div>
+                              </div>
+                              <Input placeholder="" {...field} className="h-12 pl-16" />
+                              {field.value && (
+                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                  ✓
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -349,26 +487,19 @@ export default function OnboardingPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Co-Parent's Email</FormLabel>
+                          <FormLabel className="text-base font-medium">Email</FormLabel>
                           <FormControl>
-                            <Input placeholder="jane.smith@example.com" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            We'll use this to invite them to collaborate on the parenting plan.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={coParentForm.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Co-Parent's Phone Number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="(555) 987-6543" {...field} />
+                            <div className="relative">
+                              <div className="absolute left-3 top-3 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                              </div>
+                              <Input placeholder="" {...field} className="h-12 pl-10" />
+                              {field.value && (
+                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                  ✓
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -380,10 +511,10 @@ export default function OnboardingPage() {
                       name="relationship"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Relationship Status</FormLabel>
+                          <FormLabel className="text-base font-medium">Relationship Status</FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <SelectTrigger>
+                              <SelectTrigger className="h-12">
                                 <SelectValue placeholder="Select your relationship status" />
                               </SelectTrigger>
                               <SelectContent>
