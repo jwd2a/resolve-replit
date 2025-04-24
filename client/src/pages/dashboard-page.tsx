@@ -151,15 +151,17 @@ export default function DashboardPage() {
   const [completedWaivers, setCompletedWaivers] = useState(1); // Number of signed waivers
   const [completedResources, setCompletedResources] = useState(1); // Number of completed resources
 
-  // If user is not logged in, redirect to auth page
+  // For demonstration purposes, we've temporarily disabled these auth checks
+  // In production, these redirects would be active
+  /*
   if (!user) {
     return <Redirect to="/auth" />;
   }
 
-  // If user hasn't completed onboarding, redirect to onboarding
   if (!user.onboardingComplete) {
     return <Redirect to="/onboarding" />;
   }
+  */
 
   const proposeDate = () => {
     setCourseDate({
@@ -236,7 +238,7 @@ export default function DashboardPage() {
               <Avatar className="h-10 w-10 ml-4">
                 <AvatarImage src="" />
                 <AvatarFallback className="bg-purple-300">
-                  {user.displayName ? user.displayName.charAt(0).toUpperCase() : "U"}
+                  {user?.displayName ? user?.displayName.charAt(0).toUpperCase() : "U"}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -252,7 +254,7 @@ export default function DashboardPage() {
             {/* Welcome card */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Welcome, {user.displayName || "User"}!</CardTitle>
+                <CardTitle className="text-2xl">Welcome, {user?.displayName || "User"}!</CardTitle>
                 <CardDescription>
                   Here's your parenting partnership dashboard. Let's make positive progress together.
                 </CardDescription>

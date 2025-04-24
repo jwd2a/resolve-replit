@@ -20,9 +20,9 @@ function Router() {
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />
-      <ProtectedRoute path="/dashboard" component={DashboardPage} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
+      <Route path="/dashboard" component={DashboardPage} />
       <Route path="/" component={Course} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
