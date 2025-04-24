@@ -310,11 +310,11 @@ export default function ParentingPlan() {
       />
       
       <div className="flex flex-1">
-        <div className="w-full h-full flex flex-col lg:flex-row max-w-7xl mx-auto">
+        <div className="w-full h-full flex flex-col lg:flex-row max-w-[95%] mx-auto">
           {/* Main document - scrollable */}
-          <div className="flex-1 lg:pr-6 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 84px)' }}>
-            <div className="bg-white rounded-lg shadow-lg p-6 m-4">
-              <div className="sticky top-0 bg-white z-10 pb-4">
+          <div className="flex-1 lg:pr-3 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 84px)' }}>
+            <div className="bg-white rounded-lg shadow-lg p-6 m-2">
+              <div className="sticky top-0 bg-white z-10 pb-4 mb-2"  style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 {/* Action buttons in the top right */}
                 <div className="flex justify-end py-2 mb-3">
                   <div className="flex space-x-3">
@@ -795,7 +795,7 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - always visible */}
-          <div className="lg:w-96 m-4 lg:h-[calc(100vh-100px)] flex flex-col overflow-hidden">
+          <div className="lg:w-[420px] m-2 lg:h-[calc(100vh-90px)] flex flex-col overflow-hidden">
             <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
