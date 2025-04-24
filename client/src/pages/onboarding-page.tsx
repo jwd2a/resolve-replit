@@ -195,63 +195,55 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#6c54da]">
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-4">
-          <img 
-            src={logoSrc}
-            alt="Resolve Logo" 
-            className="h-32"
-          />
-        </div>
-
-        <Card className="w-full max-w-4xl mx-auto">
-          <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl font-bold">Complete Your Profile</CardTitle>
-            <CardDescription>
-              Let's gather the information we need to create your parenting plan
+    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8]">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-3xl mx-auto shadow-xl">
+          <CardHeader className="text-center pb-3">
+            <CardTitle className="text-lg font-bold">Complete Your Profile</CardTitle>
+            <CardDescription className="text-sm">
+              A few more details to create your parenting plan
             </CardDescription>
             
             {/* Step indicators */}
-            <div className="flex justify-center mt-6">
-              <div className="flex items-center w-full max-w-3xl">
-                <div className={`flex flex-col items-center ${currentStep >= 1 ? "text-primary" : "text-gray-400"}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep > 1 ? "bg-primary text-white" : currentStep === 1 ? "border-2 border-primary" : "border-2 border-gray-300"
+            <div className="flex justify-center mt-3">
+              <div className="flex items-center w-full max-w-md">
+                <div className={`flex flex-col items-center ${currentStep >= 1 ? "text-[#2e1a87]" : "text-gray-400"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    currentStep > 1 ? "bg-[#2e1a87] text-white" : currentStep === 1 ? "border-2 border-[#2e1a87]" : "border-2 border-gray-300"
                   }`}>
-                    {currentStep > 1 ? <FaCheck size={16} /> : <FaHome size={16} />}
+                    {currentStep > 1 ? <FaCheck size={12} /> : <FaHome size={12} />}
                   </div>
-                  <span className="text-xs mt-1">Your Info</span>
+                  <span className="text-[10px] mt-1">Your Info</span>
                 </div>
-                <div className={`flex-1 h-1 mx-2 ${currentStep > 1 ? "bg-primary" : "bg-gray-300"}`}></div>
+                <div className={`flex-1 h-0.5 mx-1 ${currentStep > 1 ? "bg-[#2e1a87]" : "bg-gray-300"}`}></div>
                 
-                <div className={`flex flex-col items-center ${currentStep >= 2 ? "text-primary" : "text-gray-400"}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep > 2 ? "bg-primary text-white" : currentStep === 2 ? "border-2 border-primary" : "border-2 border-gray-300"
+                <div className={`flex flex-col items-center ${currentStep >= 2 ? "text-[#2e1a87]" : "text-gray-400"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    currentStep > 2 ? "bg-[#2e1a87] text-white" : currentStep === 2 ? "border-2 border-[#2e1a87]" : "border-2 border-gray-300"
                   }`}>
-                    {currentStep > 2 ? <FaCheck size={16} /> : <FaUserFriends size={16} />}
+                    {currentStep > 2 ? <FaCheck size={12} /> : <FaUserFriends size={12} />}
                   </div>
-                  <span className="text-xs mt-1">Co-Parent</span>
+                  <span className="text-[10px] mt-1">Co-Parent</span>
                 </div>
-                <div className={`flex-1 h-1 mx-2 ${currentStep > 2 ? "bg-primary" : "bg-gray-300"}`}></div>
+                <div className={`flex-1 h-0.5 mx-1 ${currentStep > 2 ? "bg-[#2e1a87]" : "bg-gray-300"}`}></div>
                 
-                <div className={`flex flex-col items-center ${currentStep >= 3 ? "text-primary" : "text-gray-400"}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    currentStep > 3 ? "bg-primary text-white" : currentStep === 3 ? "border-2 border-primary" : "border-2 border-gray-300"
+                <div className={`flex flex-col items-center ${currentStep >= 3 ? "text-[#2e1a87]" : "text-gray-400"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    currentStep > 3 ? "bg-[#2e1a87] text-white" : currentStep === 3 ? "border-2 border-[#2e1a87]" : "border-2 border-gray-300"
                   }`}>
-                    {currentStep > 3 ? <FaCheck size={16} /> : <FaChild size={16} />}
+                    {currentStep > 3 ? <FaCheck size={12} /> : <FaChild size={12} />}
                   </div>
-                  <span className="text-xs mt-1">Children</span>
+                  <span className="text-[10px] mt-1">Children</span>
                 </div>
-                <div className={`flex-1 h-1 mx-2 ${currentStep > 3 ? "bg-primary" : "bg-gray-300"}`}></div>
+                <div className={`flex-1 h-0.5 mx-1 ${currentStep > 3 ? "bg-[#2e1a87]" : "bg-gray-300"}`}></div>
                 
-                <div className={`flex flex-col items-center ${currentStep >= 4 ? "text-primary" : "text-gray-400"}`}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    completed ? "bg-primary text-white" : currentStep === 4 ? "border-2 border-primary" : "border-2 border-gray-300"
+                <div className={`flex flex-col items-center ${currentStep >= 4 ? "text-[#2e1a87]" : "text-gray-400"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    completed ? "bg-[#2e1a87] text-white" : currentStep === 4 ? "border-2 border-[#2e1a87]" : "border-2 border-gray-300"
                   }`}>
-                    {completed ? <FaCheck size={16} /> : <FaGavel size={16} />}
+                    {completed ? <FaCheck size={12} /> : <FaGavel size={12} />}
                   </div>
-                  <span className="text-xs mt-1">Jurisdiction</span>
+                  <span className="text-[10px] mt-1">Jurisdiction</span>
                 </div>
               </div>
             </div>
@@ -261,64 +253,63 @@ export default function OnboardingPage() {
             {/* Step 1: Personal Information */}
             {currentStep === 1 && (
               <Form {...personalInfoForm}>
-                <form onSubmit={personalInfoForm.handleSubmit(onPersonalInfoSubmit)} className="space-y-6">
-                  <div className="space-y-6">
+                <form onSubmit={personalInfoForm.handleSubmit(onPersonalInfoSubmit)} className="space-y-4">
+                  <div className="space-y-4">
                     <div>
                       <FormField
                         control={personalInfoForm.control}
                         name="displayName"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-base font-medium">Your Name</FormLabel>
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-medium">Your Name</FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input placeholder="" {...field} className="h-12" />
+                                <Input placeholder="" {...field} className="h-9 text-sm" />
                                 {field.value && (
-                                  <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                  <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
                                     ✓
                                   </div>
                                 )}
                               </div>
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-xs" />
                           </FormItem>
                         )}
                       />
                     </div>
                     
                     <div>
-                      <FormLabel className="text-base font-medium">Your Legal Address</FormLabel>
+                      <FormLabel className="text-xs font-medium">Your Legal Address</FormLabel>
                       
                       <FormField
                         control={personalInfoForm.control}
                         name="address"
                         render={({ field }) => (
-                          <FormItem className="mb-4">
-                            <FormLabel className="text-sm text-gray-600">Address</FormLabel>
+                          <FormItem className="mb-2">
                             <FormControl>
                               <div className="relative">
-                                <Input placeholder="" {...field} className="h-12" />
-                                <div className="absolute left-3 top-3 text-gray-400">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <Input placeholder="Address" {...field} className="h-9 text-sm pl-8" />
+                                <div className="absolute left-2 top-2 text-gray-400">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                 </div>
                               </div>
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-xs" />
                           </FormItem>
                         )}
                       />
                       
-                      <div className="grid grid-cols-3 gap-4 mb-4">
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">City</FormLabel>
-                          <Input placeholder="" className="h-12" />
+                      <div className="grid grid-cols-3 gap-2">
+                        <FormItem className="space-y-1">
+                          <FormControl>
+                            <Input placeholder="City" className="h-9 text-sm" />
+                          </FormControl>
                         </FormItem>
                         
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">State / Province</FormLabel>
+                        <FormItem className="space-y-1">
                           <Select>
-                            <SelectTrigger className="h-12">
-                              <SelectValue placeholder="" />
+                            <SelectTrigger className="h-9 text-sm">
+                              <SelectValue placeholder="State" />
                             </SelectTrigger>
                             <SelectContent>
                               {US_STATES.map((state) => (
@@ -330,9 +321,10 @@ export default function OnboardingPage() {
                           </Select>
                         </FormItem>
                         
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
-                          <Input placeholder="" className="h-12" />
+                        <FormItem className="space-y-1">
+                          <FormControl>
+                            <Input placeholder="ZIP" className="h-9 text-sm" />
+                          </FormControl>
                         </FormItem>
                       </div>
                     </div>
@@ -341,40 +333,33 @@ export default function OnboardingPage() {
                       control={personalInfoForm.control}
                       name="phone"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-medium">Phone number</FormLabel>
+                        <FormItem className="space-y-1">
+                          <FormLabel className="text-xs font-medium">Phone number</FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <div className="absolute left-0 top-0 h-12 w-14 flex items-center justify-center border-r">
-                                <div className="flex items-center">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
-                                    <rect y="0" width="24" height="18" fill="#fff"/>
-                                    <rect y="0" width="8" height="18" fill="#002868"/>
-                                    <rect x="16" y="0" width="8" height="18" fill="#bf0a30"/>
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-1" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                </div>
+                              <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                               </div>
-                              <Input placeholder="" {...field} className="h-12 pl-16" />
+                              <Input placeholder="(555) 123-4567" {...field} className="h-9 text-sm pl-8" />
                               {field.value && (
-                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
                                   ✓
                                 </div>
                               )}
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
                     
-                    <FormItem>
-                      <FormLabel className="text-base font-medium">Email</FormLabel>
+                    <FormItem className="space-y-1">
+                      <FormLabel className="text-xs font-medium">Email</FormLabel>
                       <div className="relative">
-                        <div className="absolute left-3 top-3 text-gray-400">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <div className="absolute left-2 top-2 text-gray-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         </div>
-                        <Input placeholder="" className="h-12 pl-10" />
+                        <Input placeholder="your.email@example.com" className="h-9 text-sm pl-8" />
                       </div>
                     </FormItem>
                   </div>
@@ -382,7 +367,7 @@ export default function OnboardingPage() {
                   <div className="flex justify-end">
                     <Button 
                       type="submit" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d]"
+                      className="bg-[#2e1a87] hover:bg-[#25156d] h-8 text-sm"
                       disabled={isLoading}
                     >
                       Continue
