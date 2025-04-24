@@ -217,330 +217,365 @@ export default function DashboardPage() {
       />
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left column */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Welcome card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Welcome, {user?.displayName || "User"}!</CardTitle>
-                <CardDescription>
-                  Here's your parenting partnership dashboard. Let's make positive progress together.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                {/* Course Schedule Section */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left column - Progress overview */}
+          <div className="lg:col-span-1 space-y-5">
+            {/* User welcome */}
+            <h2 className="text-xl font-semibold text-gray-900">Welcome, {user?.displayName || "User"}!</h2>
+            <p className="text-sm text-gray-600">Your parenting partnership journey</p>
+
+            {/* Progress overview */}
+            <div className="bg-white rounded-lg shadow p-5 space-y-4">
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium">Your Progress</h3>
+                </div>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium">Course Schedule</h3>
-                    {courseDate.scheduledDate && (
-                      <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
-                        {Math.ceil((courseDate.scheduledDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days to go
-                      </Badge>
-                    )}
+                  <div>
+                    <div className="flex justify-between text-sm mb-1.5">
+                      <span>Course Completion</span>
+                      <span>25%</span>
+                    </div>
+                    <Progress value={25} className="h-1.5" />
                   </div>
 
-                  {courseDateStatus === "none" && (
-                    <Alert>
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>No date scheduled</AlertTitle>
-                      <AlertDescription>
-                        Please propose a date for your course session with your co-parent.
-                      </AlertDescription>
-                    </Alert>
-                  )}
+                  <div>
+                    <div className="flex justify-between text-sm mb-1.5">
+                      <span>Parenting Plan</span>
+                      <span>15%</span>
+                    </div>
+                    <Progress value={15} className="h-1.5" />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-1.5">
+                      <span>Required Documents</span>
+                      <span>{completedWaivers}/{waivers.length}</span>
+                    </div>
+                    <Progress value={waiversProgress} className="h-1.5" />
+                  </div>
+                </div>
+                
+                <Button className="w-full" variant="default" size="sm">
+                  Continue Course <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
 
-                  {courseDateStatus === "awaiting" && (
-                    <Alert>
-                      <Clock className="h-4 w-4" />
-                      <AlertTitle>Awaiting Response</AlertTitle>
-                      <AlertDescription>
-                        You proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
-                        Waiting for your co-parent to accept.
-                      </AlertDescription>
-                    </Alert>
-                  )}
+            {/* Co-parent status */}
+            <div className="bg-white rounded-lg shadow p-5 space-y-4">
+              <h3 className="font-medium">Co-Parent Status</h3>
+              {coParentSignupStatus === "pending" ? (
+                <div className="space-y-3">
+                  <div className="px-3 py-2 bg-amber-50 border border-amber-200 rounded text-sm text-amber-700">
+                    <div className="flex gap-2 items-center">
+                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                      <span>Co-parent hasn't joined yet</span>
+                    </div>
+                  </div>
+                  <Button className="w-full" size="sm" variant="outline">
+                    <Users className="mr-2 h-3 w-3" /> Invite Co-Parent
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-green-100 text-green-800 text-xs">JD</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium text-sm">Jane Doe</p>
+                    <p className="text-xs text-gray-500">Joined April 10, 2024</p>
+                  </div>
+                  <Badge className="ml-auto bg-green-100 text-green-800 text-xs">Active</Badge>
+                </div>
+              )}
+            </div>
 
-                  {courseDateStatus === "proposed" && (
-                    <Alert className="bg-blue-50 border-blue-300">
-                      <Info className="h-4 w-4 text-blue-500" />
-                      <AlertTitle className="text-blue-700">Date Proposed</AlertTitle>
-                      <AlertDescription className="text-blue-600">
-                        Your co-parent proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
-                        <div className="mt-2 flex gap-2">
+            {/* Support */}
+            <div className="bg-white rounded-lg shadow p-5 space-y-3">
+              <h3 className="font-medium">Need Help?</h3>
+              <div className="flex flex-col gap-2">
+                <Button className="w-full justify-start" size="sm" variant="ghost">
+                  <Video className="mr-2 h-3.5 w-3.5" /> Schedule Consultation
+                </Button>
+                <Button className="w-full justify-start" size="sm" variant="ghost">
+                  <Info className="mr-2 h-3.5 w-3.5" /> FAQs & Support
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main content - Schedule and materials */}
+          <div className="lg:col-span-3 space-y-8">
+            {/* Course Schedule Section */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="p-5 border-b">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium">Course Schedule</h3>
+                  {courseDate.scheduledDate && (
+                    <Badge className="bg-green-100 text-green-800">
+                      {Math.ceil((courseDate.scheduledDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days to go
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-5">
+                {courseDateStatus === "none" && (
+                  <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <AlertCircle className="h-5 w-5 text-gray-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-gray-700">No date scheduled</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Please propose a date for your course session with your co-parent.
+                        </p>
+                        <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
+                          <DialogTrigger asChild>
+                            <Button className="mt-3" size="sm">
+                              Schedule Course Date
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Select Course Date</DialogTitle>
+                              <DialogDescription>
+                                Choose a date for your co-parenting course session. Your co-parent will need to confirm this date.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="py-4">
+                              <Calendar
+                                mode="single"
+                                selected={selectedDate}
+                                onSelect={setSelectedDate}
+                                disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
+                                className="rounded-md border mx-auto"
+                              />
+                            </div>
+                            <DialogFooter>
+                              <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
+                              <Button onClick={proposeDate}>Propose Date</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {courseDateStatus === "awaiting" && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-blue-700">Awaiting Response</p>
+                        <p className="text-sm text-blue-600 mt-1">
+                          You proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
+                          Waiting for your co-parent to accept.
+                        </p>
+                        <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
+                          <DialogTrigger asChild>
+                            <Button className="mt-3" size="sm" variant="outline">
+                              Change Proposed Date
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Select Course Date</DialogTitle>
+                              <DialogDescription>
+                                Choose a date for your co-parenting course session. Your co-parent will need to confirm this date.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="py-4">
+                              <Calendar
+                                mode="single"
+                                selected={selectedDate}
+                                onSelect={setSelectedDate}
+                                disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
+                                className="rounded-md border mx-auto"
+                              />
+                            </div>
+                            <DialogFooter>
+                              <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
+                              <Button onClick={proposeDate}>Propose Date</Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {courseDateStatus === "proposed" && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <Info className="h-5 w-5 text-blue-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-blue-700">Date Proposed</p>
+                        <p className="text-sm text-blue-600 mt-1">
+                          Your co-parent proposed {courseDate.proposedDate && format(courseDate.proposedDate, "MMMM d, yyyy")} for your course session.
+                        </p>
+                        <div className="mt-3 flex gap-2">
                           <Button size="sm" onClick={acceptProposedDate}>Accept</Button>
                           <Button size="sm" variant="outline" onClick={rejectProposedDate}>Decline</Button>
                         </div>
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  {courseDateStatus === "scheduled" && (
-                    <Alert className="bg-green-50 border-green-300">
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                      <AlertTitle className="text-green-700">Course Scheduled</AlertTitle>
-                      <AlertDescription className="text-green-600">
-                        Your course is scheduled for {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  {courseDateStatus === "today" && (
-                    <Alert className="bg-purple-50 border-purple-300">
-                      <AlertCircle className="h-4 w-4 text-purple-500" />
-                      <AlertTitle className="text-purple-700">Course Is Today!</AlertTitle>
-                      <AlertDescription className="text-purple-600">
-                        Your course is scheduled for today. Please join 5 minutes before your scheduled time.
-                        <div className="mt-2">
-                          <Button className="bg-purple-600 hover:bg-purple-700">
-                            Join Session
-                          </Button>
-                        </div>
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  {courseDateStatus === "past" && (
-                    <Alert className="bg-gray-50 border-gray-300">
-                      <CheckCheck className="h-4 w-4 text-gray-500" />
-                      <AlertTitle className="text-gray-700">Course Completed</AlertTitle>
-                      <AlertDescription className="text-gray-600">
-                        You completed your course on {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  {(courseDateStatus === "none" || courseDateStatus === "awaiting") && (
-                    <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
-                      <DialogTrigger asChild>
-                        <Button className="mt-2">
-                          {courseDateStatus === "none" ? "Schedule Course Date" : "Change Proposed Date"}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Select Course Date</DialogTitle>
-                          <DialogDescription>
-                            Choose a date for your co-parenting course session. Your co-parent will need to confirm this date.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="py-4">
-                          <Calendar
-                            mode="single"
-                            selected={selectedDate}
-                            onSelect={setSelectedDate}
-                            disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
-                            className="rounded-md border mx-auto"
-                          />
-                        </div>
-                        <DialogFooter>
-                          <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
-                          <Button onClick={proposeDate}>Propose Date</Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-
-                  <div className="mt-6">
-                    <h4 className="text-sm font-medium text-gray-500 mb-2">Course Completion</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Pre-course materials</span>
-                        <span>{Math.round(resourcesProgress)}% complete</span>
                       </div>
-                      <Progress value={resourcesProgress} className="h-2" />
                     </div>
                   </div>
-                </div>
+                )}
 
-                <Separator />
-
-                {/* Required Waivers Section */}
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium">Required Waivers & Documents</h3>
-                    <Badge className={waiversProgress === 100 ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}>
-                      {completedWaivers}/{waivers.length} Completed
-                    </Badge>
+                {courseDateStatus === "scheduled" && (
+                  <div className="bg-green-50 border border-green-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-green-700">Course Scheduled</p>
+                        <p className="text-sm text-green-600 mt-1">
+                          Your course is scheduled for {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                
-                  <Progress value={waiversProgress} className="h-2" />
-                
-                  <div className="space-y-4 mt-4">
-                    {waivers.map((waiver) => (
-                      <Card key={waiver.id} className={cn(
-                        "border-l-4",
-                        waiver.signed ? "border-l-green-500" : "border-l-amber-500"
-                      )}>
-                        <CardHeader className="p-4 pb-2">
-                          <div className="flex justify-between items-start">
-                            <div className="flex items-center">
-                              {waiver.signed ? 
-                                <CheckCircle2 className="h-5 w-5 text-green-500 mr-2" /> : 
-                                <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
-                              }
-                              <CardTitle className="text-base">{waiver.title}</CardTitle>
-                            </div>
-                            <Badge className={waiver.signed ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}>
-                              {waiver.signed ? "Signed" : "Unsigned"}
-                            </Badge>
+                )}
+
+                {courseDateStatus === "today" && (
+                  <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <AlertCircle className="h-5 w-5 text-purple-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-purple-700">Course Is Today!</p>
+                        <p className="text-sm text-purple-600 mt-1">
+                          Your course is scheduled for today. Please join 5 minutes before your scheduled time.
+                        </p>
+                        <Button className="mt-3 bg-purple-600 hover:bg-purple-700">
+                          Join Session
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {courseDateStatus === "past" && (
+                  <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
+                    <div className="flex gap-3 items-start">
+                      <CheckCheck className="h-5 w-5 text-gray-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-gray-700">Course Completed</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          You completed your course on {courseDate.scheduledDate && format(courseDate.scheduledDate, "MMMM d, yyyy")}.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Required Documents / Waivers - Simplified */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="p-5 border-b">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium">Required Documents</h3>
+                  <Badge className={waiversProgress === 100 ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}>
+                    {completedWaivers}/{waivers.length} Completed
+                  </Badge>
+                </div>
+              </div>
+              <div className="p-5">
+                <ul className="divide-y">
+                  {waivers.map((waiver) => (
+                    <li key={waiver.id} className="py-3 first:pt-0 last:pb-0">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          {waiver.signed ? 
+                            <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" /> : 
+                            <AlertCircle className="h-5 w-5 text-amber-500 mr-3" />
+                          }
+                          <div>
+                            <p className="font-medium">{waiver.title}</p>
+                            <p className="text-sm text-gray-500 mt-0.5">{waiver.description}</p>
                           </div>
-                        </CardHeader>
-                        <CardContent className="p-4 pt-0">
-                          <p className="text-sm text-gray-600 mb-3">{waiver.description}</p>
+                        </div>
+                        <div className="flex items-center">
                           {waiver.signed ? (
-                            <div className="text-xs text-gray-500">
-                              Signed on {waiver.signedDate ? format(waiver.signedDate, "MMMM d, yyyy") : ""}
-                            </div>
+                            <span className="text-xs text-gray-500">
+                              Signed {waiver.signedDate ? format(waiver.signedDate, "MMM d, yyyy") : ""}
+                            </span>
                           ) : (
-                            <Button size="sm" className="mt-2">
+                            <Button size="sm" variant="outline">
                               Review & Sign
                             </Button>
                           )}
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Preparatory Materials - Simplified to cards */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="p-5 border-b">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium">Preparatory Resources</h3>
+                  <Badge className={resourcesProgress === 100 ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
+                    {completedResources}/{resources.length} Completed
+                  </Badge>
                 </div>
-
-                <Separator />
-
-                {/* Preparatory Materials Section */}
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium">Preparatory Materials</h3>
-                    <Badge className={resourcesProgress === 100 ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
-                      {completedResources}/{resources.length} Completed
-                    </Badge>
-                  </div>
-                
-                  <Progress value={resourcesProgress} className="h-2" />
-                
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    {resources.map((resource) => (
-                      <Card key={resource.id} className="overflow-hidden">
-                        <CardHeader className="p-4 pb-2 bg-gray-50">
+              </div>
+              <div className="p-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {resources.map((resource) => (
+                    <div 
+                      key={resource.id} 
+                      className={`border rounded-lg overflow-hidden ${resource.completed ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}
+                    >
+                      <div className="p-4 flex items-start gap-3">
+                        <div className={`rounded-full p-2 flex-shrink-0 ${
+                          resource.type === "video" ? "bg-blue-100" :
+                          resource.type === "pdf" ? "bg-red-100" : 
+                          "bg-purple-100"
+                        }`}>
+                          {resource.type === "video" && <Video className={`h-4 w-4 ${resource.type === "video" ? "text-blue-600" : ""}`} />}
+                          {resource.type === "pdf" && <FileText className="h-4 w-4 text-red-600" />}
+                          {resource.type === "article" && <BookOpen className="h-4 w-4 text-purple-600" />}
+                        </div>
+                        
+                        <div className="flex-1">
                           <div className="flex justify-between items-start">
-                            <div className="flex items-center">
-                              {resource.type === "video" && <Video className="h-5 w-5 text-blue-500 mr-2" />}
-                              {resource.type === "pdf" && <FileText className="h-5 w-5 text-red-500 mr-2" />}
-                              {resource.type === "article" && <BookOpen className="h-5 w-5 text-purple-500 mr-2" />}
-                              <CardTitle className="text-base">{resource.title}</CardTitle>
-                            </div>
-                            <Badge className={resource.completed ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
-                              {resource.completed ? "Completed" : resource.type}
-                            </Badge>
+                            <h4 className="font-medium">{resource.title}</h4>
+                            {resource.completed && (
+                              <CheckCircle2 className="h-4 w-4 text-green-500" />
+                            )}
                           </div>
+                          
                           {resource.duration && (
                             <div className="flex items-center mt-1 text-gray-500 text-xs">
                               <Clock className="h-3 w-3 mr-1" />
                               {resource.duration}
                             </div>
                           )}
-                        </CardHeader>
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <Button size="sm" variant="outline" className="text-sm">
-                              {resource.type === "video" ? (
-                                <><PlayCircle className="h-4 w-4 mr-1" /> Watch</>
-                              ) : resource.type === "pdf" ? (
-                                <><Download className="h-4 w-4 mr-1" /> Download</>
-                              ) : (
-                                <><BookOpen className="h-4 w-4 mr-1" /> Read</>
-                              )}
+                          
+                          <div className="mt-3 flex items-center justify-between">
+                            <Button size="sm" variant="outline" className="text-xs px-2.5 py-1.5 h-7">
+                              {resource.type === "video" ? "Watch" : resource.type === "pdf" ? "Download" : "Read"}
                             </Button>
+                            
                             {!resource.completed && (
-                              <Button size="sm" variant="ghost" className="text-xs">
-                                Mark as Completed
+                              <Button size="sm" variant="ghost" className="text-xs h-7">
+                                Mark Complete
                               </Button>
                             )}
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right column - Co-parent info */}
-          <div className="space-y-6">
-            {/* Co-parent status card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Co-Parent Status</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {coParentSignupStatus === "pending" ? (
-                  <div className="space-y-3">
-                    <Alert className="border-amber-300 bg-amber-50">
-                      <AlertCircle className="h-4 w-4 text-amber-600" />
-                      <AlertTitle className="text-amber-800">Awaiting Co-Parent</AlertTitle>
-                      <AlertDescription className="text-amber-700">
-                        Your co-parent hasn't joined yet. Send them an invitation to get started.
-                      </AlertDescription>
-                    </Alert>
-                    <Button className="w-full bg-[#2e1a87] hover:bg-[#231366]">
-                      <Users className="mr-2 h-4 w-4" /> Invite Co-Parent
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-3">
-                    <Avatar>
-                      <AvatarFallback className="bg-green-100 text-green-800">JD</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">Jane Doe</p>
-                      <p className="text-sm text-gray-500">Joined April 10, 2024</p>
+                        </div>
+                      </div>
                     </div>
-                    <Badge className="ml-auto bg-green-100 text-green-800">Active</Badge>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Course progress card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Your Progress</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Course Completion</span>
-                    <span>25%</span>
-                  </div>
-                  <Progress value={25} className="h-2" />
+                  ))}
                 </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Parenting Plan</span>
-                    <span>15%</span>
-                  </div>
-                  <Progress value={15} className="h-2" />
-                </div>
-                <Button className="w-full mt-2" variant="outline">
-                  Continue Course <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Support card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Need Help?</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button className="w-full" variant="outline">
-                  <Video className="mr-2 h-4 w-4" /> Schedule Consultation
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Info className="mr-2 h-4 w-4" /> FAQs & Support
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </main>
