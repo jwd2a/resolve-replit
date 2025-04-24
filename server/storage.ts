@@ -1,7 +1,10 @@
 import { 
   User, InsertUser, Module, InsertModule, 
   Section, InsertSection, Progress, InsertProgress,
-  users, modules, sections, progress 
+  CoParent, InsertCoParent, Child, InsertChild, 
+  ParentingPlan, InsertParentingPlan,
+  users, modules, sections, progress, 
+  coParents, children, parentingPlans
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
@@ -10,7 +13,26 @@ export interface IStorage {
   // User methods
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, user: Partial<InsertUser>): Promise<User>;
+  
+  // Co-parent methods
+  getCoParents(userId: number): Promise<CoParent[]>;
+  getCoParent(id: number): Promise<CoParent | undefined>;
+  createCoParent(coParent: InsertCoParent): Promise<CoParent>;
+  updateCoParent(id: number, coParent: Partial<InsertCoParent>): Promise<CoParent>;
+  
+  // Child methods
+  getChildren(userId: number): Promise<Child[]>;
+  getChild(id: number): Promise<Child | undefined>;
+  createChild(child: InsertChild): Promise<Child>;
+  updateChild(id: number, child: Partial<InsertChild>): Promise<Child>;
+  
+  // Parenting Plan methods
+  getParentingPlan(userId: number): Promise<ParentingPlan | undefined>;
+  createParentingPlan(parentingPlan: InsertParentingPlan): Promise<ParentingPlan>;
+  updateParentingPlan(id: number, parentingPlan: Partial<InsertParentingPlan>): Promise<ParentingPlan>;
   
   // Module methods
   getModules(): Promise<Module[]>;
@@ -32,6 +54,7 @@ export interface IStorage {
  * Database Storage Implementation
  */
 export class DatabaseStorage implements IStorage {
+  // User methods
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user || undefined;
@@ -41,10 +64,88 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user || undefined;
   }
+  
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
+  }
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User> {
+    const [user] = await db.update(users)
+      .set(userData)
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+  
+  // Co-parent methods
+  async getCoParents(userId: number): Promise<CoParent[]> {
+    return db.select().from(coParents).where(eq(coParents.userId, userId));
+  }
+  
+  async getCoParent(id: number): Promise<CoParent | undefined> {
+    const [coParent] = await db.select().from(coParents).where(eq(coParents.id, id));
+    return coParent || undefined;
+  }
+  
+  async createCoParent(insertCoParent: InsertCoParent): Promise<CoParent> {
+    const [coParent] = await db.insert(coParents).values(insertCoParent).returning();
+    return coParent;
+  }
+  
+  async updateCoParent(id: number, coParentData: Partial<InsertCoParent>): Promise<CoParent> {
+    const [coParent] = await db.update(coParents)
+      .set(coParentData)
+      .where(eq(coParents.id, id))
+      .returning();
+    return coParent;
+  }
+  
+  // Child methods
+  async getChildren(userId: number): Promise<Child[]> {
+    return db.select().from(children).where(eq(children.userId, userId));
+  }
+  
+  async getChild(id: number): Promise<Child | undefined> {
+    const [child] = await db.select().from(children).where(eq(children.id, id));
+    return child || undefined;
+  }
+  
+  async createChild(insertChild: InsertChild): Promise<Child> {
+    const [child] = await db.insert(children).values(insertChild).returning();
+    return child;
+  }
+  
+  async updateChild(id: number, childData: Partial<InsertChild>): Promise<Child> {
+    const [child] = await db.update(children)
+      .set(childData)
+      .where(eq(children.id, id))
+      .returning();
+    return child;
+  }
+  
+  // Parenting Plan methods
+  async getParentingPlan(userId: number): Promise<ParentingPlan | undefined> {
+    const [plan] = await db.select().from(parentingPlans).where(eq(parentingPlans.userId, userId));
+    return plan || undefined;
+  }
+  
+  async createParentingPlan(insertParentingPlan: InsertParentingPlan): Promise<ParentingPlan> {
+    const [plan] = await db.insert(parentingPlans).values(insertParentingPlan).returning();
+    return plan;
+  }
+  
+  async updateParentingPlan(id: number, planData: Partial<InsertParentingPlan>): Promise<ParentingPlan> {
+    const [plan] = await db.update(parentingPlans)
+      .set(planData)
+      .where(eq(parentingPlans.id, id))
+      .returning();
+    return plan;
   }
 
   async getModules(): Promise<Module[]> {
@@ -132,7 +233,8 @@ async function seedDatabase() {
       username: "johndoe",
       password: "password123",
       displayName: "John Doe",
-      role: "student"
+      email: "john.doe@example.com",
+      role: "parent"
     };
     
     const [user] = await db.insert(users).values(demoUser).returning();
