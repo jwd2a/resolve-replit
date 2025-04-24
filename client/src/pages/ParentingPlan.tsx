@@ -317,18 +317,18 @@ export default function ParentingPlan() {
               <div className="sticky top-0 bg-white z-10 pb-4">
                 {/* Action buttons in the top right */}
                 <div className="flex justify-end py-2 mb-3">
-                  <div className="flex space-x-4">
-                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-primary to-primary-dark text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
-                      <Share2 className="h-5 w-5 mr-2" />
-                      <span className="font-semibold">Share</span>
+                  <div className="flex space-x-3">
+                    <button className="flex items-center px-3 py-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm rounded hover:shadow hover:translate-y-[-1px] transition-all duration-200">
+                      <Share2 className="h-4 w-4 mr-1" />
+                      <span className="font-medium">Share</span>
                     </button>
-                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
-                      <Download className="h-5 w-5 mr-2" />
-                      <span className="font-semibold">Download</span>
+                    <button className="flex items-center px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded hover:shadow hover:translate-y-[-1px] transition-all duration-200">
+                      <Download className="h-4 w-4 mr-1" />
+                      <span className="font-medium">Download</span>
                     </button>
-                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
-                      <Printer className="h-5 w-5 mr-2" />
-                      <span className="font-semibold">Print</span>
+                    <button className="flex items-center px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm rounded hover:shadow hover:translate-y-[-1px] transition-all duration-200">
+                      <Printer className="h-4 w-4 mr-1" />
+                      <span className="font-medium">Print</span>
                     </button>
                   </div>
                 </div>
