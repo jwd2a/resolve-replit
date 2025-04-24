@@ -180,7 +180,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#6c54da]">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4">
           <img 
             src={logoSrc}
             alt="Resolve Logo" 
@@ -702,7 +702,7 @@ export default function OnboardingPage() {
                 </p>
                 <div className="mt-8">
                   <Button
-                    onClick={() => window.location.href = "/dashboard"}
+                    onClick={() => { window.location.href = "/dashboard"; }}
                     className="bg-[#2e1a87] hover:bg-[#25156d]"
                   >
                     Go to Dashboard
