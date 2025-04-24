@@ -312,9 +312,9 @@ export default function ParentingPlan() {
       <div className="flex flex-1">
         <div className="w-full h-full flex flex-col lg:flex-row max-w-[95%] mx-auto">
           {/* Main document - scrollable */}
-          <div className="flex-1 lg:pr-3 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 84px)' }}>
-            <div className="bg-white rounded-lg shadow-lg p-6 m-2">
-              <div className="sticky top-0 bg-white z-10 pb-4 mb-2"  style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+          <div className="flex-1 lg:pr-3 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
+            <div className="bg-white rounded-lg shadow-lg p-6 m-2 h-full flex flex-col">
+              <div className="bg-white z-10 pb-4 mb-2" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 {/* Action buttons in the top right */}
                 <div className="flex justify-end py-2 mb-3">
                   <div className="flex space-x-3">
@@ -342,7 +342,7 @@ export default function ParentingPlan() {
                 </div>
               </div>
             
-              <div className="prose max-w-none">
+              <div className="prose max-w-none overflow-y-auto flex-1">
                 <p className="text-gray-600">
                   This is an agreement between the parents named below that is intended to address all of our legal rights and obligations 
                   relating to the child(ren) identified below. We, the parents, agree that it is best for our child(ren) that we determine 
