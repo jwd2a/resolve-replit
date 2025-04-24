@@ -21,8 +21,8 @@ const Header: FC<HeaderProps> = ({
 }) => {
   return (
     <div className="sticky top-0 z-10 w-full">
-      <header className="bg-[#2e1a87] py-0 px-6 flex items-center justify-between w-full" style={{ height: '70px' }}>
-        <div className="flex items-center">
+      <header className="bg-[#2e1a87] py-0 px-0 flex items-center justify-between w-full" style={{ height: '70px' }}>
+        <div className="flex items-center pl-4">
           <button 
             className="md:hidden mr-4 text-white"
             onClick={onMenuClick}
@@ -45,7 +45,7 @@ const Header: FC<HeaderProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center">
+        <div className="flex items-center pr-4">
           <div className="h-10 w-10 bg-[#e94caf] rounded-full flex items-center justify-center text-white font-bold">
             E
           </div>
