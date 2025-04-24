@@ -69,15 +69,12 @@ const childSchema = z.object({
       fullName: z.string().min(3, { message: "Child's name must be at least 3 characters" }),
       dateOfBirth: z.string().min(1, { message: "Please enter child's date of birth" }),
       gender: z.string().optional(),
-      specialNeeds: z.string().optional(),
     })
   ).min(1, { message: "Please add at least one child" }),
 });
 
 const jurisdictionSchema = z.object({
   jurisdiction: z.string().min(1, { message: "Please select a jurisdiction" }),
-  caseNumber: z.string().optional(),
-  courtName: z.string().optional(),
 });
 
 // Combined form type
@@ -96,7 +93,6 @@ export default function OnboardingPage() {
     fullName: "",
     dateOfBirth: "",
     gender: "",
-    specialNeeds: "",
   };
   
   // Form setup for each step
@@ -130,8 +126,6 @@ export default function OnboardingPage() {
     resolver: zodResolver(jurisdictionSchema),
     defaultValues: {
       jurisdiction: "",
-      caseNumber: "",
-      courtName: "",
     },
   });
 
@@ -506,29 +500,7 @@ export default function OnboardingPage() {
                       )}
                     />
                     
-                    <FormField
-                      control={coParentForm.control}
-                      name="relationship"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-medium">Relationship Status</FormLabel>
-                          <FormControl>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Select your relationship status" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="divorced">Divorced</SelectItem>
-                                <SelectItem value="separated">Separated</SelectItem>
-                                <SelectItem value="never_married">Never Married</SelectItem>
-                                <SelectItem value="in_process">Divorce in Process</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+
                   </div>
                   
                   <div className="flex justify-between">
@@ -620,8 +592,6 @@ export default function OnboardingPage() {
                                     <SelectContent>
                                       <SelectItem value="male">Male</SelectItem>
                                       <SelectItem value="female">Female</SelectItem>
-                                      <SelectItem value="non_binary">Non-binary</SelectItem>
-                                      <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </FormControl>
@@ -630,31 +600,21 @@ export default function OnboardingPage() {
                             )}
                           />
                           
-                          <FormField
-                            control={childForm.control}
-                            name={`children.${index}.specialNeeds`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Special Needs (Optional)</FormLabel>
-                                <FormControl>
-                                  <Textarea placeholder="Any special needs or considerations" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+
                         </div>
                       </div>
                     ))}
                     
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => append(emptyChild)}
-                      className="w-full"
-                    >
-                      Add Another Child
-                    </Button>
+                    <div className="flex justify-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => append(emptyChild)}
+                        className="px-8"
+                      >
+                        + Add Another Child
+                      </Button>
+                    </div>
                   </div>
                   
                   <div className="flex justify-between">
@@ -682,21 +642,18 @@ export default function OnboardingPage() {
               <Form {...jurisdictionForm}>
                 <form onSubmit={jurisdictionForm.handleSubmit(onJurisdictionSubmit)} className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Jurisdiction Information</h3>
-                    <p className="text-sm text-gray-500">
-                      This information helps ensure your parenting plan complies with the laws of your jurisdiction.
-                    </p>
+                    <h3 className="text-lg font-medium">Last step, we need the state in which your child(ren) reside:</h3>
                     
                     <FormField
                       control={jurisdictionForm.control}
                       name="jurisdiction"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Jurisdiction</FormLabel>
+                          <FormLabel>What state will you be filing your divorce or separation?</FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select your jurisdiction" />
+                              <SelectTrigger className="h-12">
+                                <SelectValue placeholder="Select state" />
                               </SelectTrigger>
                               <SelectContent>
                                 {US_STATES.map((state) => (
@@ -707,43 +664,6 @@ export default function OnboardingPage() {
                               </SelectContent>
                             </Select>
                           </FormControl>
-                          <FormDescription>
-                            Select the state or territory where your case is or will be filed.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={jurisdictionForm.control}
-                      name="caseNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Case Number (Optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. FAM-2023-12345" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            If you have an existing court case, enter the case number.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={jurisdictionForm.control}
-                      name="courtName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Court Name (Optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. Superior Court of California, County of Los Angeles" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            Enter the name of the court where your case is or will be filed.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
