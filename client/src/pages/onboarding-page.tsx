@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Redirect } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { z } from "zod";
@@ -87,6 +87,17 @@ export default function OnboardingPage() {
   const { user, isLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  
+  // Auto-redirect after completion
+  useEffect(() => {
+    if (completed && user) {
+      const timer = setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [completed, user]);
   
   // Initial form for children
   const emptyChild = {
@@ -704,7 +715,7 @@ export default function OnboardingPage() {
                 </div>
                 <h3 className="mt-6 text-2xl font-medium">Onboarding Complete!</h3>
                 <p className="mt-2 text-gray-500">
-                  Thank you for providing the information needed to create your parenting plan. You'll now be redirected to your dashboard.
+                  Thank you for providing the information needed to create your parenting plan. You'll be automatically redirected to your dashboard in 2 seconds.
                 </p>
                 <div className="mt-8">
                   <Button
