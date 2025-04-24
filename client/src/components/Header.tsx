@@ -36,11 +36,14 @@ const Header: FC<HeaderProps> = ({
           </Link>
           
           <div className="flex ml-10 space-x-8">
+            <Link href="/dashboard">
+              <span className="text-white cursor-pointer text-base">HOME</span>
+            </Link>
             <Link href="/course">
-              <span className="text-white cursor-pointer text-base">Resolve Course</span>
+              <span className="text-white cursor-pointer text-base">COURSE</span>
             </Link>
             <Link href="/parenting-plan">
-              <span className="text-white cursor-pointer text-base">Parenting Plan</span>
+              <span className="text-white cursor-pointer text-base">PARENTING PLAN</span>
             </Link>
           </div>
         </div>

@@ -217,34 +217,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-[#2e1a87] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <img 
-                src={logoSrc}
-                alt="Resolve Logo" 
-                className="h-12 mr-4"
-              />
-              <h1 className="text-xl font-semibold">Parenting Partnership</h1>
-            </div>
-            <div className="flex items-center">
-              <Button variant="ghost" className="text-white">
-                Messages
-              </Button>
-              <Button variant="ghost" className="text-white">
-                Support
-              </Button>
-              <Avatar className="h-10 w-10 ml-4">
-                <AvatarImage src="" />
-                <AvatarFallback className="bg-purple-300">
-                  {user?.displayName ? user?.displayName.charAt(0).toUpperCase() : "U"}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header 
+        title="Dashboard"
+        onMenuClick={() => {}}
+      />
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
