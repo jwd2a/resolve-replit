@@ -190,7 +190,7 @@ export default function OnboardingPage() {
           <img 
             src={logoSrc}
             alt="Resolve Logo" 
-            className="h-16"
+            className="h-32"
           />
         </div>
 
