@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Menu, ChevronRight } from "lucide-react";
 import TopNavbar from "@/components/TopNavbar";
 import { Link } from "wouter";
+import ResolveLogo from "../assets/resolve-logo.svg";
 
 interface HeaderProps {
   title: string;
@@ -30,7 +31,7 @@ const Header: FC<HeaderProps> = ({
           </button>
           <Link href="/">
             <div className="flex items-center cursor-pointer">
-              <img src="/resolve-logo.png" alt="Resolve Logo" className="h-8 mr-3" />
+              <img src={ResolveLogo} alt="Resolve Logo" className="h-8 mr-3" />
               <h1 className="text-lg font-semibold text-white">Resolve</h1>
             </div>
           </Link>

@@ -30,8 +30,7 @@ export default function MainLayout({
     <div className="min-h-screen bg-app flex flex-col w-full overflow-x-hidden">
       {/* Header - now full width */}
       <Header 
-        title="Resolve Course" 
-        sectionTitle="Parenting Plan"
+        title="Resolve Course"
         onMenuClick={openMenu}
       />
       
