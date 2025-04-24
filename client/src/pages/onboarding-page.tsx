@@ -380,55 +380,54 @@ export default function OnboardingPage() {
             {/* Step 2: Co-Parent Information */}
             {currentStep === 2 && (
               <Form {...coParentForm}>
-                <form onSubmit={coParentForm.handleSubmit(onCoParentSubmit)} className="space-y-6">
-                  <div className="space-y-6">
+                <form onSubmit={coParentForm.handleSubmit(onCoParentSubmit)} className="space-y-4">
+                  <div className="space-y-4">
                     <div>
                       <FormField
                         control={coParentForm.control}
                         name="fullName"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-base font-medium">Co-Parent's Name</FormLabel>
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-medium">Co-Parent's Name</FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input placeholder="" {...field} className="h-12" />
+                                <Input placeholder="Full name" {...field} className="h-9 text-sm" />
                                 {field.value && (
-                                  <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                  <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
                                     ✓
                                   </div>
                                 )}
                               </div>
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage className="text-xs" />
                           </FormItem>
                         )}
                       />
                     </div>
                     
                     <div>
-                      <FormLabel className="text-base font-medium">Co-Parent's Legal Address</FormLabel>
+                      <FormLabel className="text-xs font-medium">Co-Parent's Legal Address</FormLabel>
                       
-                      <FormItem className="mb-4">
-                        <FormLabel className="text-sm text-gray-600">Address</FormLabel>
+                      <FormItem className="mb-2">
                         <div className="relative">
-                          <Input placeholder="" className="h-12" />
-                          <div className="absolute left-3 top-3 text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                          <Input placeholder="Address" className="h-9 text-sm pl-8" />
+                          <div className="absolute left-2 top-2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                           </div>
                         </div>
                       </FormItem>
                       
-                      <div className="grid grid-cols-3 gap-4 mb-4">
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">City</FormLabel>
-                          <Input placeholder="" className="h-12" />
+                      <div className="grid grid-cols-3 gap-2">
+                        <FormItem className="space-y-1">
+                          <FormControl>
+                            <Input placeholder="City" className="h-9 text-sm" />
+                          </FormControl>
                         </FormItem>
                         
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">State / Province</FormLabel>
+                        <FormItem className="space-y-1">
                           <Select>
-                            <SelectTrigger className="h-12">
-                              <SelectValue placeholder="" />
+                            <SelectTrigger className="h-9 text-sm">
+                              <SelectValue placeholder="State" />
                             </SelectTrigger>
                             <SelectContent>
                               {US_STATES.map((state) => (
@@ -440,9 +439,10 @@ export default function OnboardingPage() {
                           </Select>
                         </FormItem>
                         
-                        <FormItem>
-                          <FormLabel className="text-sm text-gray-600">ZIP / Postal code</FormLabel>
-                          <Input placeholder="" className="h-12" />
+                        <FormItem className="space-y-1">
+                          <FormControl>
+                            <Input placeholder="ZIP" className="h-9 text-sm" />
+                          </FormControl>
                         </FormItem>
                       </div>
                     </div>
@@ -451,29 +451,22 @@ export default function OnboardingPage() {
                       control={coParentForm.control}
                       name="phone"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-medium">Phone number</FormLabel>
+                        <FormItem className="space-y-1">
+                          <FormLabel className="text-xs font-medium">Phone number</FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <div className="absolute left-0 top-0 h-12 w-14 flex items-center justify-center border-r">
-                                <div className="flex items-center">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
-                                    <rect y="0" width="24" height="18" fill="#fff"/>
-                                    <rect y="0" width="8" height="18" fill="#002868"/>
-                                    <rect x="16" y="0" width="8" height="18" fill="#bf0a30"/>
-                                  </svg>
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="ml-1" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                </div>
+                              <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                               </div>
-                              <Input placeholder="" {...field} className="h-12 pl-16" />
+                              <Input placeholder="(555) 123-4567" {...field} className="h-9 text-sm pl-8" />
                               {field.value && (
-                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
                                   ✓
                                 </div>
                               )}
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
@@ -482,22 +475,22 @@ export default function OnboardingPage() {
                       control={coParentForm.control}
                       name="email"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-medium">Email</FormLabel>
+                        <FormItem className="space-y-1">
+                          <FormLabel className="text-xs font-medium">Email</FormLabel>
                           <FormControl>
                             <div className="relative">
-                              <div className="absolute left-3 top-3 text-gray-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                              <div className="absolute left-2 top-2 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                               </div>
-                              <Input placeholder="" {...field} className="h-12 pl-10" />
+                              <Input placeholder="co-parent@example.com" {...field} className="h-9 text-sm pl-8" />
                               {field.value && (
-                                <div className="absolute right-3 top-3 text-white bg-red-500 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
                                   ✓
                                 </div>
                               )}
                             </div>
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
