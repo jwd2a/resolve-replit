@@ -9,6 +9,7 @@ import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
 import OnboardingPage from "@/pages/onboarding-page";
 import DashboardPage from "@/pages/dashboard-page";
+import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
 
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/" component={Course} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
+      <Route path="/ai-test" component={AITestPage} />
       
       {/* Fallback for unknown routes */}
       <Route component={NotFound} />

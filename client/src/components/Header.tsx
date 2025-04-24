@@ -59,6 +59,13 @@ const Header: FC<HeaderProps> = ({
                 PARENTING PLAN
               </span>
             </Link>
+            <Link href="/ai-test">
+              <span className={`cursor-pointer text-base font-medium ${location.startsWith('/ai-test') 
+                ? 'text-white border-b-2 border-white pb-1' 
+                : 'text-gray-300 hover:text-white'}`}>
+                AI TEST
+              </span>
+            </Link>
           </div>
         </div>
         
