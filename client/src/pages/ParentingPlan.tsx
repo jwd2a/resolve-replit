@@ -310,7 +310,7 @@ export default function ParentingPlan() {
       />
       
       <div className="flex flex-1">
-        <div className="w-full h-full flex flex-col lg:flex-row max-w-[99%] mx-auto">
+        <div className="w-full h-full flex flex-col lg:flex-row max-w-[97%] mx-auto mt-5">
           {/* Main document - scrollable */}
           <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
