@@ -79,18 +79,13 @@ export default function AuthPage() {
   return (
     <div className="flex min-h-screen w-full bg-gradient-to-b from-[#2e1a87] to-[#4730b8] items-center justify-center px-4 py-12">
       {/* Centered Authentication form */}
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-xl">
-        <div className="flex flex-col items-center mb-8">
-          <img 
-            src={logoSrc} 
-            alt="Resolve Logo" 
-            className="h-16 w-auto" 
-          />
-          <h2 className="mt-6 text-2xl font-bold tracking-tight text-gray-900">
+      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-xl">
+        <div className="flex flex-col items-center mb-4">
+          <h2 className="text-xl font-bold tracking-tight text-gray-900">
             Welcome to Resolve
           </h2>
-          <p className="mt-2 text-sm text-gray-600 text-center">
-            The simple way to create comprehensive parenting agreements
+          <p className="text-sm text-gray-600 text-center">
+            Creating parenting agreements made simple
           </p>
         </div>
 
@@ -99,43 +94,40 @@ export default function AuthPage() {
           onValueChange={(value) => setAuthMode(value as "login" | "register")}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="register">Register</TabsTrigger>
           </TabsList>
 
           {/* Social login buttons - displayed for both tabs */}
-          <div className="mb-6 space-y-4">
+          <div className="grid grid-cols-3 gap-2 mb-4">
             <Button 
               variant="outline" 
-              className="w-full flex items-center justify-center gap-2 border-gray-300 hover:bg-gray-50" 
+              className="flex items-center justify-center border-gray-300 hover:bg-gray-50 h-9 px-2" 
               onClick={() => loginWithGoogle()}
               disabled={isLoading}
             >
               <FaGoogle className="text-red-500" />
-              <span>Continue with Google</span>
             </Button>
             <Button 
               variant="outline" 
-              className="w-full flex items-center justify-center gap-2 border-gray-300 hover:bg-gray-50" 
+              className="flex items-center justify-center border-gray-300 hover:bg-gray-50 h-9 px-2" 
               onClick={() => loginWithApple()}
               disabled={isLoading}
             >
               <FaApple className="text-black" />
-              <span>Continue with Apple</span>
             </Button>
             <Button 
               variant="outline" 
-              className="w-full flex items-center justify-center gap-2 border-gray-300 hover:bg-gray-50" 
+              className="flex items-center justify-center border-gray-300 hover:bg-gray-50 h-9 px-2" 
               onClick={() => loginWithFacebook()}
               disabled={isLoading}
             >
               <FaFacebook className="text-blue-600" />
-              <span>Continue with Facebook</span>
             </Button>
           </div>
 
-          <div className="relative mb-6">
+          <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
@@ -147,17 +139,17 @@ export default function AuthPage() {
           {/* Login Tab Content */}
           <TabsContent value="login">
             <Form {...loginForm}>
-              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-3">
                 <FormField
                   control={loginForm.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+                    <FormItem className="space-y-1.5">
+                      <FormLabel className="text-xs">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="your.email@example.com" {...field} />
+                        <Input placeholder="your.email@example.com" {...field} className="h-8" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -165,25 +157,23 @@ export default function AuthPage() {
                   control={loginForm.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
+                    <FormItem className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <FormLabel className="text-xs">Password</FormLabel>
+                        <a href="#" className="text-xs font-medium text-primary hover:text-primary/90">
+                          Forgot?
+                        </a>
+                      </div>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input type="password" placeholder="••••••••" {...field} className="h-8" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
-                <div className="flex items-center justify-between">
-                  <div className="text-sm">
-                    <a href="#" className="font-medium text-primary hover:text-primary/90">
-                      Forgot your password?
-                    </a>
-                  </div>
-                </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
+                  className="w-full bg-[#2e1a87] hover:bg-[#25156d] mt-1 h-8 text-sm"
                   disabled={isLoading}
                 >
                   {isLoading ? "Logging in..." : "Log in"}
@@ -195,75 +185,79 @@ export default function AuthPage() {
           {/* Register Tab Content */}
           <TabsContent value="register">
             <Form {...registerForm}>
-              <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
+              <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-2">
                 <FormField
                   control={registerForm.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
+                    <FormItem className="space-y-1">
+                      <FormLabel className="text-xs">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="your.email@example.com" {...field} />
+                        <Input placeholder="your.email@example.com" {...field} className="h-8" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={registerForm.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="username" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={registerForm.control}
-                  name="displayName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={registerForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={registerForm.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={registerForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs">Username</FormLabel>
+                        <FormControl>
+                          <Input placeholder="username" {...field} className="h-8" />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="displayName"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs">Full Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John Doe" {...field} className="h-8" />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={registerForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs">Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="••••••••" {...field} className="h-8" />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs">Confirm</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="••••••••" {...field} className="h-8" />
+                        </FormControl>
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
+                  className="w-full bg-[#2e1a87] hover:bg-[#25156d] h-8 text-sm mt-1"
                   disabled={isLoading}
                 >
                   {isLoading ? "Creating account..." : "Create account"}
