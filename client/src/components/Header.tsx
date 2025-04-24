@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Menu, ChevronRight } from "lucide-react";
 import TopNavbar from "@/components/TopNavbar";
 import { Link } from "wouter";
-import ResolveLogo from "../assets/resolve-logo.svg";
+import ResolveLogo from "../assets/resolve-logo.png";
 
 interface HeaderProps {
   title: string;
@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({
 }) => {
   return (
     <div className="sticky top-0 z-10 w-full">
-      <header className="bg-[#2e1a87] py-3 px-4 flex items-center justify-between w-full">
+      <header className="bg-[#2e1a87] py-2 px-6 flex items-center justify-between w-full">
         <div className="flex items-center">
           <button 
             className="md:hidden mr-4 text-white"
@@ -31,17 +31,16 @@ const Header: FC<HeaderProps> = ({
           </button>
           <Link href="/">
             <div className="flex items-center cursor-pointer">
-              <img src={ResolveLogo} alt="Resolve Logo" className="h-8 mr-3" />
-              <h1 className="text-lg font-semibold text-white">Resolve</h1>
+              <img src={ResolveLogo} alt="Resolve Logo" className="h-10" />
             </div>
           </Link>
           
-          <div className="flex mx-8 space-x-6">
+          <div className="flex ml-10 space-x-8">
             <Link href="/course">
-              <span className="text-white cursor-pointer font-medium">Resolve Course</span>
+              <span className="text-white cursor-pointer text-sm">Resolve Course</span>
             </Link>
             <Link href="/parenting-plan">
-              <span className="text-white cursor-pointer font-medium">Parenting Plan</span>
+              <span className="text-white cursor-pointer text-sm">Parenting Plan</span>
             </Link>
           </div>
         </div>
