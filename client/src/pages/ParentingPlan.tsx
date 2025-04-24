@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download, AlertTriangle, History, FileText } from "lucide-react";
+import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download, AlertTriangle, History, FileText, X } from "lucide-react";
 import Header from "@/components/Header";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
@@ -310,10 +310,10 @@ export default function ParentingPlan() {
       />
       
       <div className="flex flex-1">
-        <div className="w-full h-full flex flex-col lg:flex-row max-w-[95%] mx-auto">
+        <div className="w-full h-full flex flex-col lg:flex-row max-w-[98%] mx-auto px-2">
           {/* Main document - scrollable */}
           <div className="flex-1 lg:pr-3 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
-            <div className="bg-white rounded-lg shadow-lg p-6 m-2 h-full flex flex-col">
+            <div className="bg-white rounded-lg shadow-lg p-6 m-1 h-full flex flex-col">
               <div className="bg-white z-10 pb-4 mb-2" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 {/* Action buttons in the top right */}
                 <div className="flex justify-end py-2 mb-3">
@@ -795,20 +795,32 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - always visible */}
-          <div className="lg:w-[420px] m-2 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 90px)' }}>
+          <div className="lg:w-[450px] m-1 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 90px)' }}>
             <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
                   <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                    <h2 className="text-lg font-semibold text-gray-800">Editing: {activeSectionTitle}</h2>
-                    {sectionVersions[activeSection] && sectionVersions[activeSection].length > 1 && (
+                    <div className="flex items-center">
+                      <h2 className="text-lg font-semibold text-gray-800">Editing: {activeSectionTitle}</h2>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      {sectionVersions[activeSection] && sectionVersions[activeSection].length > 1 && (
+                        <button 
+                          onClick={viewVersionHistory}
+                          className="text-xs text-primary hover:text-primary-dark flex items-center"
+                        >
+                          <History className="h-4 w-4 mr-1" />
+                          Version History
+                        </button>
+                      )}
                       <button 
-                        onClick={viewVersionHistory}
-                        className="text-xs text-primary hover:text-primary-dark flex items-center"
+                        onClick={() => setActiveSection(null)}
+                        className="text-xs text-gray-600 hover:text-gray-800 flex items-center"
                       >
-                        Version History
+                        <X className="h-4 w-4 mr-1" />
+                        Cancel
                       </button>
-                    )}
+                    </div>
                   </div>
                   
                   <div className="flex-1 p-4 overflow-y-auto">
