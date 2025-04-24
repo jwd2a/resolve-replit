@@ -314,21 +314,31 @@ export default function ParentingPlan() {
           {/* Main document - scrollable */}
           <div className="flex-1 lg:pr-6 h-full overflow-y-auto" style={{ maxHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-lg shadow-lg p-6 m-4">
-              <div className="flex justify-between items-center mb-6 sticky top-0 bg-white z-10 py-2">
-                <h1 className="text-2xl font-bold text-gray-800">Parenting Partnership Agreement</h1>
-                <div className="flex space-x-4">
-                  <button className="flex items-center text-primary hover:text-primary-dark">
-                    <Share2 className="h-5 w-5 mr-1" />
-                    <span>Share</span>
-                  </button>
-                  <button className="flex items-center text-primary hover:text-primary-dark">
-                    <Download className="h-5 w-5 mr-1" />
-                    <span>Download</span>
-                  </button>
-                  <button className="flex items-center text-primary hover:text-primary-dark">
-                    <Printer className="h-5 w-5 mr-1" />
-                    <span>Print</span>
-                  </button>
+              <div className="sticky top-0 bg-white z-10 pb-4">
+                {/* Action buttons in the top right */}
+                <div className="flex justify-end py-2 mb-3">
+                  <div className="flex space-x-4">
+                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-primary to-primary-dark text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
+                      <Share2 className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Share</span>
+                    </button>
+                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
+                      <Download className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Download</span>
+                    </button>
+                    <button className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg hover:translate-y-[-2px] transition-all duration-200 shadow-md">
+                      <Printer className="h-5 w-5 mr-2" />
+                      <span className="font-semibold">Print</span>
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Title below, left-justified */}
+                <div className="relative">
+                  <h1 className="text-3xl font-bold text-gray-800 pb-2 relative">
+                    Parenting Partnership Agreement
+                    <span className="absolute bottom-0 left-0 w-1/3 h-1 bg-gradient-to-r from-primary to-primary-dark"></span>
+                  </h1>
                 </div>
               </div>
             
