@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { FormLabel } from "@/components/ui/form";
+
 import { Separator } from "@/components/ui/separator";
 
 // Mock course sections for testing
@@ -122,7 +122,7 @@ the parenting plan section based on the specific needs expressed in the user inp
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <FormLabel className="mb-2 block">Temperature: {temperature}</FormLabel>
+                      <Label className="mb-2 block">Temperature: {temperature}</Label>
                       <Slider 
                         min={0} 
                         max={1} 
