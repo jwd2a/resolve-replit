@@ -251,15 +251,6 @@ export default function DashboardPage() {
                   <h3 className="font-medium text-[#2e1a87]">Your Journey</h3>
                 </div>
                 
-                <div className="relative pt-1">
-                  <div className="overflow-hidden h-2 text-xs flex rounded bg-purple-100">
-                    <div 
-                      style={{ width: "25%" }} 
-                      className="flex relative shadow-md rounded-r-none justify-center bg-gradient-to-r from-[#2e1a87] to-[#6c54da] transition-all duration-500"
-                    ></div>
-                  </div>
-                </div>
-                
                 <div className="space-y-2">
                   <div>
                     <div className="flex justify-between text-sm mb-1.5">
