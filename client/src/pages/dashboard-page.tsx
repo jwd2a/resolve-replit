@@ -219,73 +219,137 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#f5f0ff] to-[#fff8fd]">
       {/* Header */}
       <Header 
-        title="Dashboard"
+        title="Family Dashboard"
         onMenuClick={() => {}}
       />
 
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left column - Progress overview */}
-          <div className="lg:col-span-1 space-y-5">
-            {/* User welcome */}
-            <h2 className="text-xl font-semibold text-gray-900">Welcome, {user?.displayName || "User"}!</h2>
-            <p className="text-sm text-gray-600">Your parenting partnership journey</p>
+        {/* Encouraging message banner */}
+        <div className="mb-8 bg-gradient-to-r from-[#2e1a87]/10 to-[#6c54da]/10 rounded-xl p-5 border border-[#6c54da]/20">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <div className="p-3 bg-white rounded-full">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 10.5C19.6569 10.5 21 9.15685 21 7.5C21 5.84315 19.6569 4.5 18 4.5C16.3431 4.5 15 5.84315 15 7.5C15 9.15685 16.3431 10.5 18 10.5Z" fill="#6246ea"/>
+                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="#6246ea"/>
+                <path d="M24 15C25.6569 15 27 13.6569 27 12C27 10.3431 25.6569 9 24 9C22.3431 9 21 10.3431 21 12C21 13.6569 22.3431 15 24 15Z" fill="#6246ea"/>
+                <path d="M18 31.5C19.6569 31.5 21 30.1569 21 28.5C21 26.8431 19.6569 25.5 18 25.5C16.3431 25.5 15 26.8431 15 28.5C15 30.1569 16.3431 31.5 18 31.5Z" fill="#6246ea"/>
+                <path d="M12 25.5C13.6569 25.5 15 24.1569 15 22.5C15 20.8431 13.6569 19.5 12 19.5C10.3431 19.5 9 20.8431 9 22.5C9 24.1569 10.3431 25.5 12 25.5Z" fill="#6246ea"/>
+                <path d="M24 25.5C25.6569 25.5 27 24.1569 27 22.5C27 20.8431 25.6569 19.5 24 19.5C22.3431 19.5 21 20.8431 21 22.5C21 24.1569 22.3431 25.5 24 25.5Z" fill="#6246ea"/>
+                <path d="M15.5 18C15.5 17.1716 14.8284 16.5 14 16.5C13.1716 16.5 12.5 17.1716 12.5 18C12.5 18.8284 13.1716 19.5 14 19.5C14.8284 19.5 15.5 18.8284 15.5 18Z" fill="#6246ea"/>
+                <path d="M22 16.5C22.8284 16.5 23.5 17.1716 23.5 18C23.5 18.8284 22.8284 19.5 22 19.5C21.1716 19.5 20.5 18.8284 20.5 18C20.5 17.1716 21.1716 16.5 22 16.5Z" fill="#6246ea"/>
+                <path d="M18.5 13.5C18.5 12.6716 17.8284 12 17 12C16.1716 12 15.5 12.6716 15.5 13.5C15.5 14.3284 16.1716 15 17 15C17.8284 15 18.5 14.3284 18.5 13.5Z" fill="#6246ea"/>
+                <path d="M19 12C19.8284 12 20.5 12.6716 20.5 13.5C20.5 14.3284 19.8284 15 19 15C18.1716 15 17.5 14.3284 17.5 13.5C17.5 12.6716 18.1716 12 19 12Z" fill="#6246ea"/>
+                <path d="M18.5 22.5C18.5 21.6716 17.8284 21 17 21C16.1716 21 15.5 21.6716 15.5 22.5C15.5 23.3284 16.1716 24 17 24C17.8284 24 18.5 23.3284 18.5 22.5Z" fill="#6246ea"/>
+                <path d="M19 21C19.8284 21 20.5 21.6716 20.5 22.5C20.5 23.3284 19.8284 24 19 24C18.1716 24 17.5 23.3284 17.5 22.5C17.5 21.6716 18.1716 21 19 21Z" fill="#6246ea"/>
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-xl font-medium text-[#2e1a87]">Welcome to your family journey, {user?.displayName || "Friend"}!</h1>
+              <p className="text-sm text-gray-600 mt-1">Every step you take here is helping build a more harmonious future for your children. You're doing important work.</p>
+            </div>
+          </div>
+        </div>
 
-            {/* Progress overview */}
-            <div className="bg-white rounded-lg shadow p-5 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left column - Journey overview */}
+          <div className="lg:col-span-1 space-y-5">
+            {/* Journey visualization */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-medium">Your Progress</h3>
+                  <h3 className="font-medium text-[#2e1a87]">Your Journey</h3>
+                  <div className="bg-purple-100 text-[#2e1a87] text-xs px-2 py-1 rounded-full">
+                    Step 2 of 8
+                  </div>
                 </div>
-                <div className="space-y-4">
+                
+                <div className="relative pt-1">
+                  <div className="overflow-hidden h-2 text-xs flex rounded bg-purple-100">
+                    <div 
+                      style={{ width: "25%" }} 
+                      className="flex relative shadow-md rounded-r-none justify-center bg-gradient-to-r from-[#2e1a87] to-[#6c54da] transition-all duration-500"
+                    ></div>
+                  </div>
+                  <div className="mt-5 flex items-center space-x-1">
+                    {[0, 1, 2, 3, 4, 5, 6, 7].map((step) => (
+                      <div key={step} className="flex-1 flex flex-col items-center">
+                        <div 
+                          className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold ${
+                            step < 2 ? 'bg-[#2e1a87] text-white' : 'bg-gray-200 text-gray-500'
+                          }`}
+                        >
+                          {step < 2 ? '✓' : ''}
+                        </div>
+                        {step === 2 && (
+                          <span className="text-[9px] text-[#2e1a87] font-medium mt-1">Now</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
                   <div>
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span>Course Completion</span>
-                      <span>25%</span>
+                      <span className="flex items-center">
+                        <BookOpen className="w-3 h-3 mr-1 text-[#6c54da]" /> Course Progress
+                      </span>
+                      <span className="text-[#2e1a87] font-medium">25%</span>
                     </div>
-                    <Progress value={25} className="h-1.5" />
+                    <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: '25%' }}></div>
+                    </div>
                   </div>
 
                   <div>
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span>Parenting Plan</span>
-                      <span>15%</span>
+                      <span className="flex items-center">
+                        <FileText className="w-3 h-3 mr-1 text-[#6c54da]" /> Parenting Plan
+                      </span>
+                      <span className="text-[#2e1a87] font-medium">15%</span>
                     </div>
-                    <Progress value={15} className="h-1.5" />
+                    <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: '15%' }}></div>
+                    </div>
                   </div>
                   
                   <div>
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span>Required Documents</span>
-                      <span>{completedWaivers}/{waivers.length}</span>
+                      <span className="flex items-center">
+                        <CheckCheck className="w-3 h-3 mr-1 text-[#6c54da]" /> Required Forms
+                      </span>
+                      <span className="text-[#2e1a87] font-medium">{completedWaivers}/{waivers.length}</span>
                     </div>
-                    <Progress value={waiversProgress} className="h-1.5" />
+                    <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: `${waiversProgress}%` }}></div>
+                    </div>
                   </div>
                 </div>
                 
-                <Button className="w-full" variant="default" size="sm">
-                  Continue Course <ChevronRight className="ml-2 h-4 w-4" />
+                <Button className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
+                  Continue Your Journey <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
 
-            {/* Co-parent status */}
-            <div className="bg-white rounded-lg shadow p-5 space-y-4">
-              <h3 className="font-medium">Co-Parent Status</h3>
+            {/* Co-parent connection */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
+              <h3 className="font-medium text-[#2e1a87]">Co-Parent Connection</h3>
               {coParentSignupStatus === "pending" ? (
                 <div className="space-y-3">
-                  <div className="px-3 py-2 bg-amber-50 border border-amber-200 rounded text-sm text-amber-700">
+                  <div className="px-3 py-2 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-700">
                     <div className="flex gap-2 items-center">
                       <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                      <span>Co-parent hasn't joined yet</span>
+                      <span>Your co-parent hasn't joined yet</span>
                     </div>
                   </div>
-                  <Button className="w-full" size="sm" variant="outline">
-                    <Users className="mr-2 h-3 w-3" /> Invite Co-Parent
+                  <p className="text-xs text-gray-500">Inviting your co-parent helps you both work together for your child's wellbeing.</p>
+                  <Button className="w-full bg-gradient-to-r from-white to-amber-50 text-amber-700 border border-amber-200 hover:from-amber-50 hover:to-amber-100" size="sm">
+                    <Users className="mr-2 h-3 w-3" /> Send a Gentle Invitation
                   </Button>
                 </div>
               ) : (
@@ -297,20 +361,52 @@ export default function DashboardPage() {
                     <p className="font-medium text-sm">Jane Doe</p>
                     <p className="text-xs text-gray-500">Joined April 10, 2024</p>
                   </div>
-                  <Badge className="ml-auto bg-green-100 text-green-800 text-xs">Active</Badge>
+                  <Badge className="ml-auto bg-green-100 text-green-800 text-xs">Connected</Badge>
                 </div>
               )}
             </div>
 
-            {/* Support */}
-            <div className="bg-white rounded-lg shadow p-5 space-y-3">
-              <h3 className="font-medium">Need Help?</h3>
+            {/* Child Focus */}
+            <div className="bg-gradient-to-br from-[#f9f5ff] to-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-3">
+              <h3 className="font-medium text-[#2e1a87] flex items-center">
+                <svg width="18" height="18" className="mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.5 10C15.5 12.2091 13.7091 14 11.5 14C9.29086 14 7.5 12.2091 7.5 10C7.5 7.79086 9.29086 6 11.5 6C13.7091 6 15.5 7.79086 15.5 10Z" fill="#6c54da"/>
+                  <path d="M11.5 15.5C7.5 15.5 4 17.5 4 20V22H19V20C19 17.5 15.5 15.5 11.5 15.5Z" fill="#6c54da"/>
+                  <path d="M19.5 8C19.5 9.10457 18.6046 10 17.5 10C16.3954 10 15.5 9.10457 15.5 8C15.5 6.89543 16.3954 6 17.5 6C18.6046 6 19.5 6.89543 19.5 8Z" fill="#6c54da"/>
+                  <path d="M17.5 11.5C16 11.5 14.5 12 14 13C15 13.5 16 14.5 16.5 15.5H20V14C20 12.5 19 11.5 17.5 11.5Z" fill="#6c54da"/>
+                </svg>
+                Child Focus
+              </h3>
               <div className="flex flex-col gap-2">
-                <Button className="w-full justify-start" size="sm" variant="ghost">
-                  <Video className="mr-2 h-3.5 w-3.5" /> Schedule Consultation
+                <p className="text-sm text-gray-600">Remember, all of this work is centered on creating the best environment for your children to thrive.</p>
+                <Button className="w-full justify-start text-left bg-white hover:bg-[#f5f0ff]" size="sm" variant="outline">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6c54da" strokeWidth="2"/>
+                    <path d="M12 17V17.01" stroke="#6c54da" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M12 14C12 12 14 12 14 10C14 8 12 8 12 8C10 8 10 10 10 10" stroke="#6c54da" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Child Development Resources
                 </Button>
-                <Button className="w-full justify-start" size="sm" variant="ghost">
-                  <Info className="mr-2 h-3.5 w-3.5" /> FAQs & Support
+                <Button className="w-full justify-start text-left bg-white hover:bg-[#f5f0ff]" size="sm" variant="outline">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+                    <path d="M3 20.29V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V15C21 16.1046 20.1046 17 19 17H7.96125C7.35368 17 6.77906 17.2762 6.39951 17.7506L4.06852 20.6882C3.79158 21.0408 3.2423 21.0777 2.92003 20.7671C3.00586 20.6774 2.96481 20.7303 3 20.29Z" stroke="#6c54da" strokeWidth="2"/>
+                    <path d="M8 8H16M8 12H13" stroke="#6c54da" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Communication Toolkit
+                </Button>
+              </div>
+            </div>
+
+            {/* Support */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-3">
+              <h3 className="font-medium text-[#2e1a87]">We're Here For You</h3>
+              <p className="text-xs text-gray-600">You don't have to do this alone. Our team is ready to support you.</p>
+              <div className="flex flex-col gap-2">
+                <Button className="w-full justify-start bg-gradient-to-r from-white to-[#f5f0ff] text-[#2e1a87] hover:from-[#f5f0ff] hover:to-[#e8deff] border border-[#6c54da]/20" size="sm">
+                  <Video className="mr-2 h-3.5 w-3.5" /> Schedule a Support Call
+                </Button>
+                <Button className="w-full justify-start bg-white text-[#2e1a87] hover:bg-[#f5f0ff]" size="sm" variant="outline">
+                  <Info className="mr-2 h-3.5 w-3.5" /> Resources & Support
                 </Button>
               </div>
             </div>
@@ -319,12 +415,15 @@ export default function DashboardPage() {
           {/* Main content - Schedule and materials */}
           <div className="lg:col-span-3 space-y-8">
             {/* Course Schedule Section */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-5 border-b">
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 overflow-hidden">
+              <div className="p-5 border-b border-[#6c54da]/10">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">Course Schedule</h3>
+                  <h3 className="text-lg font-medium text-[#2e1a87] flex items-center">
+                    <CalendarIcon className="h-5 w-5 mr-2 text-[#6c54da]" />
+                    Learning Together Sessions
+                  </h3>
                   {courseDate.scheduledDate && (
-                    <Badge className="bg-green-100 text-green-800">
+                    <Badge className="bg-green-100 text-green-800 border border-green-200">
                       {Math.ceil((courseDate.scheduledDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days to go
                     </Badge>
                   )}
@@ -333,37 +432,45 @@ export default function DashboardPage() {
 
               <div className="p-5">
                 {courseDateStatus === "none" && (
-                  <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <AlertCircle className="h-5 w-5 text-gray-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#f9f5ff] to-white border border-[#6c54da]/20 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-[#6c54da]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CalendarIcon className="h-5 w-5 text-[#6c54da]" />
+                      </div>
                       <div>
-                        <p className="font-medium text-gray-700">No date scheduled</p>
+                        <p className="font-medium text-[#2e1a87]">Schedule Your First Session</p>
                         <p className="text-sm text-gray-600 mt-1">
-                          Please propose a date and time for your course session with your co-parent.
+                          Choose a time that works for both you and your co-parent to begin your learning journey together.
                         </p>
                         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
                           <DialogTrigger asChild>
-                            <Button className="mt-3" size="sm">
-                              Schedule Course
+                            <Button className="mt-3 bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
+                              Find a Time Together
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className="bg-white rounded-lg">
                             <DialogHeader>
-                              <DialogTitle>Select Course Date and Time</DialogTitle>
+                              <DialogTitle className="text-[#2e1a87]">Choose a Comfortable Time</DialogTitle>
                               <DialogDescription>
-                                Choose a date and time for your co-parenting course session. Your co-parent will need to confirm this.
+                                Select a date and time that gives both you and your co-parent space to focus on building a positive future for your children.
                               </DialogDescription>
                             </DialogHeader>
                             <div className="py-4">
+                              <div className="bg-[#f9f5ff] p-4 rounded-lg mb-4 text-sm text-[#2e1a87]">
+                                <div className="flex gap-2">
+                                  <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                                  <span>These sessions work best when both parents can be fully present and in a calm environment.</span>
+                                </div>
+                              </div>
                               <Calendar
                                 mode="single"
                                 selected={selectedDate}
                                 onSelect={setSelectedDate}
                                 disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
-                                className="rounded-md border mx-auto"
+                                className="rounded-md border border-[#6c54da]/20 mx-auto"
                               />
                               <div className="mt-4">
-                                <div className="text-sm font-medium mb-2">Select Time</div>
+                                <div className="text-sm font-medium mb-2 text-[#2e1a87]">Choose a Time</div>
                                 <div className="flex flex-wrap gap-2">
                                   {["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"].map((time) => (
                                     <button
@@ -372,8 +479,8 @@ export default function DashboardPage() {
                                       onClick={() => setSelectedTime(time)}
                                       className={`px-3 py-1.5 rounded-md text-sm ${
                                         selectedTime === time
-                                          ? "bg-[#2e1a87] text-white"
-                                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                          ? "bg-gradient-to-r from-[#2e1a87] to-[#6c54da] text-white"
+                                          : "bg-[#f5f0ff] text-[#2e1a87] hover:bg-[#e8deff]"
                                       }`}
                                     >
                                       {time}
@@ -383,8 +490,14 @@ export default function DashboardPage() {
                               </div>
                             </div>
                             <DialogFooter>
-                              <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
-                              <Button onClick={proposeDate}>Propose Date & Time</Button>
+                              <Button variant="outline" onClick={() => setShowDateDialog(false)} 
+                                className="border-[#6c54da]/20 text-[#2e1a87]">
+                                Not Now
+                              </Button>
+                              <Button onClick={proposeDate} 
+                                className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none">
+                                Suggest This Time
+                              </Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
@@ -394,26 +507,28 @@ export default function DashboardPage() {
                 )}
 
                 {courseDateStatus === "awaiting" && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <Clock className="h-5 w-5 text-blue-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#e8f4ff] to-white border border-blue-200 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Clock className="h-5 w-5 text-blue-500" />
+                      </div>
                       <div>
-                        <p className="font-medium text-blue-700">Awaiting Response</p>
+                        <p className="font-medium text-blue-700">Waiting for Response</p>
                         <p className="text-sm text-blue-600 mt-1">
-                          You proposed {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your course session.
-                          Waiting for your co-parent to accept.
+                          You suggested {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your learning session.
+                          We'll notify you when your co-parent responds.
                         </p>
                         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
                           <DialogTrigger asChild>
-                            <Button className="mt-3" size="sm" variant="outline">
-                              Change Proposed Time
+                            <Button className="mt-3 bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-200" size="sm">
+                              Suggest a Different Time
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className="bg-white rounded-lg">
                             <DialogHeader>
-                              <DialogTitle>Select Course Date and Time</DialogTitle>
+                              <DialogTitle className="text-[#2e1a87]">Adjust Your Suggestion</DialogTitle>
                               <DialogDescription>
-                                Choose a date and time for your co-parenting course session. Your co-parent will need to confirm this.
+                                Finding a time that works for both parties can take a few tries. That's completely normal.
                               </DialogDescription>
                             </DialogHeader>
                             <div className="py-4">
@@ -422,10 +537,10 @@ export default function DashboardPage() {
                                 selected={selectedDate}
                                 onSelect={setSelectedDate}
                                 disabled={(date) => isBefore(date, new Date()) && !isToday(date)}
-                                className="rounded-md border mx-auto"
+                                className="rounded-md border border-[#6c54da]/20 mx-auto"
                               />
                               <div className="mt-4">
-                                <div className="text-sm font-medium mb-2">Select Time</div>
+                                <div className="text-sm font-medium mb-2 text-[#2e1a87]">Choose a Time</div>
                                 <div className="flex flex-wrap gap-2">
                                   {["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"].map((time) => (
                                     <button
@@ -434,8 +549,8 @@ export default function DashboardPage() {
                                       onClick={() => setSelectedTime(time)}
                                       className={`px-3 py-1.5 rounded-md text-sm ${
                                         selectedTime === time
-                                          ? "bg-[#2e1a87] text-white"
-                                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                          ? "bg-gradient-to-r from-[#2e1a87] to-[#6c54da] text-white"
+                                          : "bg-[#f5f0ff] text-[#2e1a87] hover:bg-[#e8deff]"
                                       }`}
                                     >
                                       {time}
@@ -445,8 +560,14 @@ export default function DashboardPage() {
                               </div>
                             </div>
                             <DialogFooter>
-                              <Button variant="outline" onClick={() => setShowDateDialog(false)}>Cancel</Button>
-                              <Button onClick={proposeDate}>Propose Date & Time</Button>
+                              <Button variant="outline" onClick={() => setShowDateDialog(false)} 
+                                className="border-[#6c54da]/20 text-[#2e1a87]">
+                                Keep Current Suggestion
+                              </Button>
+                              <Button onClick={proposeDate} 
+                                className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none">
+                                Update Suggestion
+                              </Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
@@ -456,17 +577,32 @@ export default function DashboardPage() {
                 )}
 
                 {courseDateStatus === "proposed" && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <Info className="h-5 w-5 text-blue-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#e8f4ff] to-white border border-blue-200 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Info className="h-5 w-5 text-blue-500" />
+                      </div>
                       <div>
-                        <p className="font-medium text-blue-700">Date & Time Proposed</p>
+                        <p className="font-medium text-blue-700">Your Co-Parent Suggested a Time</p>
                         <p className="text-sm text-blue-600 mt-1">
-                          Your co-parent proposed {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your course session.
+                          Your co-parent suggested {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)} for your learning session together.
                         </p>
                         <div className="mt-3 flex gap-2">
-                          <Button size="sm" onClick={acceptProposedDate}>Accept</Button>
-                          <Button size="sm" variant="outline" onClick={rejectProposedDate}>Decline</Button>
+                          <Button 
+                            size="sm" 
+                            onClick={acceptProposedDate}
+                            className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                          >
+                            Accept This Time
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={rejectProposedDate}
+                            className="border-[#6c54da]/20 text-[#2e1a87] hover:bg-[#f5f0ff]"
+                          >
+                            Suggest Another Time
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -474,30 +610,51 @@ export default function DashboardPage() {
                 )}
 
                 {courseDateStatus === "scheduled" && (
-                  <div className="bg-green-50 border border-green-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#edfbf0] to-white border border-green-200 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                      </div>
                       <div>
-                        <p className="font-medium text-green-700">Course Scheduled</p>
+                        <p className="font-medium text-green-700">Your Session is Confirmed</p>
                         <p className="text-sm text-green-600 mt-1">
-                          Your course is scheduled for {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}.
+                          You and your co-parent will meet on {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}.
                         </p>
+                        <div className="mt-3 flex gap-2">
+                          <Button 
+                            size="sm"
+                            className="bg-green-100 text-green-700 hover:bg-green-200 border border-green-200"
+                          >
+                            Add to Calendar
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-green-200 text-green-700 hover:bg-green-50"
+                          >
+                            Reschedule
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {courseDateStatus === "today" && (
-                  <div className="bg-purple-50 border border-purple-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <AlertCircle className="h-5 w-5 text-purple-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#f4ebff] to-white border border-[#6c54da]/30 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-[#6c54da]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <AlertCircle className="h-5 w-5 text-[#6c54da]" />
+                      </div>
                       <div>
-                        <p className="font-medium text-purple-700">Course Is Today!</p>
-                        <p className="text-sm text-purple-600 mt-1">
-                          Your course is scheduled for today at {courseDate.proposedTime}. Please join 5 minutes before your scheduled time.
+                        <p className="font-medium text-[#2e1a87]">Your Session is Today!</p>
+                        <p className="text-sm text-[#6c54da] mt-1">
+                          Your learning session starts at {courseDate.proposedTime} today. Find a quiet space where you can focus on this important work.
                         </p>
-                        <Button className="mt-3 bg-purple-600 hover:bg-purple-700">
-                          Join Session
+                        <Button 
+                          className="mt-3 bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                        >
+                          Join Your Session Now
                         </Button>
                       </div>
                     </div>
@@ -505,14 +662,31 @@ export default function DashboardPage() {
                 )}
 
                 {courseDateStatus === "past" && (
-                  <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-                    <div className="flex gap-3 items-start">
-                      <CheckCheck className="h-5 w-5 text-gray-500 mt-0.5" />
+                  <div className="bg-gradient-to-r from-[#f8f9fa] to-white border border-gray-200 rounded-lg p-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCheck className="h-5 w-5 text-gray-500" />
+                      </div>
                       <div>
-                        <p className="font-medium text-gray-700">Course Completed</p>
+                        <p className="font-medium text-gray-700">Session Completed</p>
                         <p className="text-sm text-gray-600 mt-1">
-                          You completed your course on {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}.
+                          You attended your session on {formatDateTime(courseDate.scheduledDate, courseDate.proposedTime)}. Great job taking this important step!
                         </p>
+                        <div className="mt-3 flex gap-2">
+                          <Button 
+                            size="sm"
+                            className="bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200"
+                          >
+                            View Session Notes
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-gray-200 text-gray-600 hover:bg-gray-50"
+                          >
+                            Schedule Next Session
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -520,41 +694,65 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Required Documents / Waivers - Simplified */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-5 border-b">
+            {/* Required Documents / Agreements */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 overflow-hidden">
+              <div className="p-5 border-b border-[#6c54da]/10">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">Required Documents</h3>
-                  <Badge className={waiversProgress === 100 ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}>
-                    {completedWaivers}/{waivers.length} Completed
+                  <h3 className="text-lg font-medium text-[#2e1a87] flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-[#6c54da]" />
+                    Important Agreements
+                  </h3>
+                  <Badge className={waiversProgress === 100 
+                    ? "bg-green-100 text-green-700 border border-green-200" 
+                    : "bg-amber-50 text-amber-700 border border-amber-200"}>
+                    {completedWaivers}/{waivers.length} Acknowledged
                   </Badge>
                 </div>
               </div>
               <div className="p-5">
-                <ul className="divide-y">
+                <div className="bg-[#f9f5ff] border border-[#6c54da]/20 rounded-lg p-4 mb-4">
+                  <div className="flex gap-2 text-sm text-[#2e1a87]">
+                    <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                    <p>These agreements help create a safe space for both parents, ensuring we're all aligned on expectations.</p>
+                  </div>
+                </div>
+                
+                <ul className="space-y-4">
                   {waivers.map((waiver) => (
-                    <li key={waiver.id} className="py-3 first:pt-0 last:pb-0">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          {waiver.signed ? 
-                            <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" /> : 
-                            <AlertCircle className="h-5 w-5 text-amber-500 mr-3" />
-                          }
-                          <div>
-                            <p className="font-medium">{waiver.title}</p>
-                            <p className="text-sm text-gray-500 mt-0.5">{waiver.description}</p>
+                    <li key={waiver.id} className="border border-gray-100 rounded-lg overflow-hidden hover:border-[#6c54da]/20 transition-colors">
+                      <div className="p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="flex items-start gap-3">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                              waiver.signed ? 'bg-green-100' : 'bg-amber-50'
+                            }`}>
+                              {waiver.signed ? 
+                                <CheckCircle2 className="h-4 w-4 text-green-600" /> : 
+                                <AlertCircle className="h-4 w-4 text-amber-600" />
+                              }
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#2e1a87]">{waiver.title}</p>
+                              <p className="text-sm text-gray-600 mt-0.5">{waiver.description}</p>
+                              
+                              {waiver.signed && (
+                                <p className="text-xs text-green-600 mt-1 flex items-center">
+                                  <CheckCheck className="h-3 w-3 mr-1" />
+                                  Acknowledged on {waiver.signedDate ? format(waiver.signedDate, "MMMM d, yyyy") : ""}
+                                </p>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          {waiver.signed ? (
-                            <span className="text-xs text-gray-500">
-                              Signed {waiver.signedDate ? format(waiver.signedDate, "MMM d, yyyy") : ""}
-                            </span>
-                          ) : (
-                            <Button size="sm" variant="outline">
-                              Review & Sign
-                            </Button>
-                          )}
+                          <div className="ml-11 sm:ml-0">
+                            {!waiver.signed && (
+                              <Button 
+                                size="sm" 
+                                className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                              >
+                                Review & Acknowledge
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </li>
@@ -563,60 +761,96 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Preparatory Materials - Simplified to cards */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-5 border-b">
+            {/* Learning Resources */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 overflow-hidden">
+              <div className="p-5 border-b border-[#6c54da]/10">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">Preparatory Resources</h3>
-                  <Badge className={resourcesProgress === 100 ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}>
-                    {completedResources}/{resources.length} Completed
+                  <h3 className="text-lg font-medium text-[#2e1a87] flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2 text-[#6c54da]" />
+                    Helpful Resources
+                  </h3>
+                  <Badge className={resourcesProgress === 100 
+                    ? "bg-green-100 text-green-700 border border-green-200" 
+                    : "bg-blue-50 text-blue-700 border border-blue-200"}>
+                    {completedResources}/{resources.length} Explored
                   </Badge>
                 </div>
               </div>
               <div className="p-5">
+                <div className="bg-[#f9f5ff] border border-[#6c54da]/20 rounded-lg p-4 mb-4">
+                  <div className="flex gap-2 text-sm text-[#2e1a87]">
+                    <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                    <p>These materials are carefully selected to help you develop the skills and understanding needed for effective co-parenting.</p>
+                  </div>
+                </div>
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {resources.map((resource) => (
                     <div 
                       key={resource.id} 
-                      className={`border rounded-lg overflow-hidden ${resource.completed ? 'border-green-200 bg-green-50' : 'border-gray-200'}`}
+                      className={`border rounded-lg shadow-sm hover:shadow-md transition-shadow ${
+                        resource.completed 
+                          ? 'border-green-200 bg-gradient-to-r from-green-50 to-white' 
+                          : 'border-[#6c54da]/10 hover:border-[#6c54da]/30'
+                      }`}
                     >
-                      <div className="p-4 flex items-start gap-3">
-                        <div className={`rounded-full p-2 flex-shrink-0 ${
-                          resource.type === "video" ? "bg-blue-100" :
-                          resource.type === "pdf" ? "bg-red-100" : 
-                          "bg-purple-100"
-                        }`}>
-                          {resource.type === "video" && <Video className={`h-4 w-4 ${resource.type === "video" ? "text-blue-600" : ""}`} />}
-                          {resource.type === "pdf" && <FileText className="h-4 w-4 text-red-600" />}
-                          {resource.type === "article" && <BookOpen className="h-4 w-4 text-purple-600" />}
+                      <div className="p-5 flex flex-col h-full">
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            resource.type === "video" ? "bg-blue-100" :
+                            resource.type === "pdf" ? "bg-red-100" : 
+                            "bg-[#f5f0ff]"
+                          }`}>
+                            {resource.type === "video" && <Video className="h-4 w-4 text-blue-600" />}
+                            {resource.type === "pdf" && <FileText className="h-4 w-4 text-red-600" />}
+                            {resource.type === "article" && <BookOpen className="h-4 w-4 text-[#6c54da]" />}
+                          </div>
+                          
+                          <div className="flex-1">
+                            <div className="flex justify-between items-start">
+                              <h4 className="font-medium text-[#2e1a87]">{resource.title}</h4>
+                              {resource.completed && (
+                                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              )}
+                            </div>
+                            
+                            {resource.duration && (
+                              <div className="flex items-center mt-1 text-gray-500 text-xs">
+                                <Clock className="h-3 w-3 mr-1" />
+                                {resource.duration}
+                              </div>
+                            )}
+                          </div>
                         </div>
                         
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start">
-                            <h4 className="font-medium">{resource.title}</h4>
-                            {resource.completed && (
-                              <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            )}
-                          </div>
+                        <div className="mt-auto pt-3 flex flex-col sm:flex-row items-center gap-2">
+                          <Button 
+                            className={`w-full sm:w-auto ${
+                              resource.type === "video" 
+                                ? "bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-200" :
+                              resource.type === "pdf" 
+                                ? "bg-red-100 text-red-700 hover:bg-red-200 border border-red-200" : 
+                                "bg-[#f5f0ff] text-[#2e1a87] hover:bg-[#e8deff] border border-[#6c54da]/20"
+                            }`}
+                            size="sm"
+                          >
+                            {resource.type === "video" ? "Watch Video" : resource.type === "pdf" ? "Open PDF" : "Read Article"}
+                          </Button>
                           
-                          {resource.duration && (
-                            <div className="flex items-center mt-1 text-gray-500 text-xs">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {resource.duration}
-                            </div>
-                          )}
-                          
-                          <div className="mt-3 flex items-center justify-between">
-                            <Button size="sm" variant="outline" className="text-xs px-2.5 py-1.5 h-7">
-                              {resource.type === "video" ? "Watch" : resource.type === "pdf" ? "Download" : "Read"}
+                          {!resource.completed ? (
+                            <Button 
+                              size="sm" 
+                              variant="ghost" 
+                              className="w-full sm:w-auto text-[#2e1a87] hover:bg-[#f5f0ff]"
+                            >
+                              Mark as Explored
                             </Button>
-                            
-                            {!resource.completed && (
-                              <Button size="sm" variant="ghost" className="text-xs h-7">
-                                Mark Complete
-                              </Button>
-                            )}
-                          </div>
+                          ) : (
+                            <span className="text-xs text-green-600 flex items-center">
+                              <CheckCheck className="h-3 w-3 mr-1" />
+                              Completed
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
