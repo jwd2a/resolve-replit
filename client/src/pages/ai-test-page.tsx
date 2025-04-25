@@ -163,19 +163,150 @@ the parenting plan section based on the specific needs expressed in the user inp
           </Card>
         </div>
         
-        {/* Middle Section: User Input */}
+        {/* Middle Section: User Input Selection */}
         <Card className="mb-6">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">User Input</CardTitle>
-            <CardDescription>Enter the user's input to test against your prompt</CardDescription>
+            <CardTitle className="text-lg">User Input Selection</CardTitle>
+            <CardDescription>Configure the user's selections for the parenting plan</CardDescription>
           </CardHeader>
           <CardContent>
-            <Textarea 
-              placeholder="Enter test user input here..."
-              className="min-h-[100px]"
-              value={userInput}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Decision Making Areas */}
+              <div className="space-y-4">
+                <h3 className="text-base font-medium text-[#6246ea]">Decision-Making Areas</h3>
+                
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <div className="flex h-5 items-center">
+                      <input
+                        id="education"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-[#2e1a87] focus:ring-[#2e1a87]"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="education" className="font-medium text-gray-700">Education (choice of schools, tutoring, etc)</label>
+                      <p className="text-gray-500">Most parents include education decisions</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="flex h-5 items-center">
+                      <input
+                        id="healthcare"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-[#2e1a87] focus:ring-[#2e1a87]"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="healthcare" className="font-medium text-gray-700">Healthcare (non-emergency medical)</label>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="flex h-5 items-center">
+                      <input
+                        id="religious"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-[#2e1a87] focus:ring-[#2e1a87]"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="religious" className="font-medium text-gray-700">Religious upbringing</label>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="flex h-5 items-center">
+                      <input
+                        id="extracurricular"
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-[#2e1a87] focus:ring-[#2e1a87]"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="extracurricular" className="font-medium text-gray-700">Extracurricular activities</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Decision Making Process */}
+              <div className="space-y-4">
+                <h3 className="text-base font-medium text-[#6246ea]">Decision Making Process</h3>
+                
+                <div className="space-y-3">
+                  <div>
+                    <Label htmlFor="decision-process" className="text-sm font-medium">How will major decisions be made?</Label>
+                    <Select>
+                      <SelectTrigger id="decision-process" className="w-full mt-1">
+                        <SelectValue placeholder="Select a process" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="joint">Joint Decision (Both parents must agree)</SelectItem>
+                        <SelectItem value="primary-mother">Primary to Mother (Mother decides)</SelectItem>
+                        <SelectItem value="primary-father">Primary to Father (Father decides)</SelectItem>
+                        <SelectItem value="split">Split by Area (Decisions split by topic)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="communication-method" className="text-sm font-medium">Preferred communication method</Label>
+                    <Select>
+                      <SelectTrigger id="communication-method" className="w-full mt-1">
+                        <SelectValue placeholder="Select method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="app">Co-Parenting App</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="text">Text Messages</SelectItem>
+                        <SelectItem value="phone">Phone Calls</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="timeframe" className="text-sm font-medium">Decision response timeframe</Label>
+                    <Select>
+                      <SelectTrigger id="timeframe" className="w-full mt-1">
+                        <SelectValue placeholder="Select timeframe" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="24h">24 Hours</SelectItem>
+                        <SelectItem value="48h">48 Hours</SelectItem>
+                        <SelectItem value="72h">72 Hours</SelectItem>
+                        <SelectItem value="1w">1 Week</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Hidden field to compile all inputs into a single text value for the AI prompt */}
+            <input 
+              type="hidden" 
+              value={userInput} 
               onChange={(e) => setUserInput(e.target.value)}
             />
+            
+            <Button 
+              onClick={() => {
+                // Compile all the form selections into a structured text
+                // This is just a placeholder - in a real implementation, this would
+                // gather all the form values and compile them into a structured text
+                const compiledInput = `Decision Areas: Education, Healthcare, Religious
+Decision Process: Joint Decision
+Communication: Co-Parenting App
+Timeframe: 48 Hours`;
+                
+                setUserInput(compiledInput);
+              }}
+              className="mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800"
+            >
+              Apply Selections to AI Input
+            </Button>
           </CardContent>
         </Card>
         
