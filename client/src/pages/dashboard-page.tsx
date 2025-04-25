@@ -263,18 +263,6 @@ export default function DashboardPage() {
                       <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: '25%' }}></div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm mb-1.5">
-                      <span className="flex items-center">
-                        <CheckCheck className="w-3 h-3 mr-1 text-[#6c54da]" /> Required Forms
-                      </span>
-                      <span className="text-[#2e1a87] font-medium">{completedWaivers}/{waivers.length}</span>
-                    </div>
-                    <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: `${waiversProgress}%` }}></div>
-                    </div>
-                  </div>
                 </div>
                 
                 <Button className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
