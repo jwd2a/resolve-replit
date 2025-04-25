@@ -248,7 +248,7 @@ export default function DashboardPage() {
             <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <h3 className="font-medium text-[#2e1a87]">Your Journey</h3>
+                  <h3 className="font-medium text-[#2e1a87]">Your Parenting Plan</h3>
                 </div>
                 
                 <div className="space-y-2">
