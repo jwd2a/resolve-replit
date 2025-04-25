@@ -247,11 +247,8 @@ export default function DashboardPage() {
             {/* Journey visualization */}
             <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center">
                   <h3 className="font-medium text-[#2e1a87]">Your Journey</h3>
-                  <div className="bg-purple-100 text-[#2e1a87] text-xs px-2 py-1 rounded-full">
-                    Step 2 of 8
-                  </div>
                 </div>
                 
                 <div className="relative pt-1">
@@ -260,22 +257,6 @@ export default function DashboardPage() {
                       style={{ width: "25%" }} 
                       className="flex relative shadow-md rounded-r-none justify-center bg-gradient-to-r from-[#2e1a87] to-[#6c54da] transition-all duration-500"
                     ></div>
-                  </div>
-                  <div className="mt-5 flex items-center space-x-1">
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((step) => (
-                      <div key={step} className="flex-1 flex flex-col items-center">
-                        <div 
-                          className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                            step < 2 ? 'bg-[#2e1a87] text-white' : 'bg-gray-200 text-gray-500'
-                          }`}
-                        >
-                          {step < 2 ? '✓' : ''}
-                        </div>
-                        {step === 2 && (
-                          <span className="text-[9px] text-[#2e1a87] font-medium mt-1">Now</span>
-                        )}
-                      </div>
-                    ))}
                   </div>
                 </div>
                 
@@ -289,18 +270,6 @@ export default function DashboardPage() {
                     </div>
                     <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: '25%' }}></div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between text-sm mb-1.5">
-                      <span className="flex items-center">
-                        <FileText className="w-3 h-3 mr-1 text-[#6c54da]" /> Parenting Plan
-                      </span>
-                      <span className="text-[#2e1a87] font-medium">15%</span>
-                    </div>
-                    <div className="h-2 w-full bg-purple-100 rounded overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded" style={{ width: '15%' }}></div>
                     </div>
                   </div>
                   
@@ -318,7 +287,7 @@ export default function DashboardPage() {
                 </div>
                 
                 <Button className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
-                  Continue Your Journey <ChevronRight className="ml-2 h-4 w-4" />
+                  {completedWaivers > 0 ? "Continue Course" : "Start Course"} <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
