@@ -299,10 +299,10 @@ export default function DashboardSimplified() {
       />
 
       {/* Main content */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 flex flex-col gap-8">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
         {/* Warm welcome message - small and centered */}
-        <section className="text-center">
-          <h1 className="text-xl font-medium text-[#2e1a87] mb-2">
+        <section className="text-center mb-2">
+          <h1 className="text-lg font-medium text-[#2e1a87] mb-1">
             Welcome back, {user?.displayName || "Friend"}
           </h1>
           <p className="text-gray-600 text-sm max-w-md mx-auto">
@@ -313,19 +313,19 @@ export default function DashboardSimplified() {
         {/* Main card with pre-course checklist */}
         <section className="relative">
           {/* Main card */}
-          <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
+          <div className="bg-white rounded-xl p-6 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
             {/* Soft background illustration */}
             <div className="absolute -right-24 -bottom-24 w-64 h-64 rounded-full bg-gradient-to-br from-[#f5f0ff] to-transparent opacity-50 pointer-events-none"></div>
             
             <div className="flex flex-col relative z-10">
               {/* Combined progress section */}
-              <div className="mb-7">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
-                    <ClipboardList className="h-5 w-5 text-[#6c54da]" />
+              <div className="mb-5">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-9 h-9 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
+                    <ClipboardList className="h-4.5 w-4.5 text-[#6c54da]" />
                   </div>
                   <div>
-                    <h2 className="font-medium text-[#2e1a87] text-lg">
+                    <h2 className="font-medium text-[#2e1a87] text-base">
                       Before you start your parenting plan
                     </h2>
                     <p className="text-gray-600 text-sm">
@@ -335,9 +335,9 @@ export default function DashboardSimplified() {
                 </div>
                 
                 {/* Space instead of visual progress */}
-                <div className="mb-5 mt-4">
+                <div className="mb-3 mt-3">
                   {bothParentsCompleted && (
-                    <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-2">
+                    <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 mb-2">
                       <p className="text-sm text-green-700 flex items-center">
                         <CheckCheck className="h-4 w-4 mr-2 text-green-600" />
                         You and your co-parent have completed all required steps!
@@ -347,17 +347,17 @@ export default function DashboardSimplified() {
                 </div>
                 
                 {/* Pre-course checklist */}
-                <div className="bg-[#f9f5ff]/80 rounded-lg p-5 mb-6">
-                  <h3 className="font-medium text-[#2e1a87] mb-3 flex items-center text-sm">
+                <div className="bg-[#f9f5ff]/80 rounded-lg p-4 mb-5">
+                  <h3 className="font-medium text-[#2e1a87] mb-2.5 flex items-center text-sm">
                     <CheckCheck className="h-4 w-4 mr-2" />
                     Pre-Course Checklist
                   </h3>
                   
-                  <ul className="space-y-3">
+                  <ul className="space-y-2">
                     {preCourseRequirements.map((item) => (
                       <li 
                         key={item.id} 
-                        className={`flex items-start gap-3 p-2 rounded-md ${
+                        className={`flex items-start gap-2.5 p-1.5 rounded-md ${
                           item.completed.user ? 'bg-white/60' : 'bg-white'
                         }`}
                       >
@@ -398,11 +398,11 @@ export default function DashboardSimplified() {
                           
                           {/* Status indicators for both parents */}
                           {item.id !== "schedule" && (
-                            <div className="flex gap-6 mt-2">
+                            <div className="flex gap-4 mt-1.5">
                               <div className="flex items-center text-xs">
                                 <div className={`h-2 w-2 rounded-full ${
                                   item.completed.user ? 'bg-green-500' : 'bg-gray-300'
-                                } mr-1.5`}></div>
+                                } mr-1`}></div>
                                 <span className="text-gray-600">
                                   You {item.completed.user ? 'completed' : 'pending'}
                                 </span>
@@ -412,7 +412,7 @@ export default function DashboardSimplified() {
                                 <div className="flex items-center text-xs">
                                   <div className={`h-2 w-2 rounded-full ${
                                     item.completed.coParent ? 'bg-green-500' : 'bg-gray-300'
-                                  } mr-1.5`}></div>
+                                  } mr-1`}></div>
                                   <span className="text-gray-600">
                                     Co-parent {item.completed.coParent ? 'completed' : 'pending'}
                                   </span>
