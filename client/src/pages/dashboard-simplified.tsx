@@ -365,25 +365,62 @@ export default function DashboardSimplified() {
                           {getStatusIcon(item)}
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
-                              {item.title}
-                              {item.required ? (
-                                <span className="ml-2 text-xs bg-[#f0e6ff] text-[#2e1a87] px-2 py-0.5 rounded-full">
-                                  Required
-                                </span>
-                              ) : (
-                                <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                                  Optional
-                                </span>
-                              )}
-                            </h4>
+                          <div className="flex flex-col space-y-0.5">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
+                                {item.title}
+                                {item.required ? (
+                                  <span className="ml-2 text-xs bg-[#f0e6ff] text-[#2e1a87] px-2 py-0.5 rounded-full">
+                                    Required
+                                  </span>
+                                ) : (
+                                  <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                                    Optional
+                                  </span>
+                                )}
+                              </h4>
+                            </div>
                             
+                            <p className="text-xs text-gray-600 mt-0.5 pr-4">
+                              {item.description}
+                            </p>
+                          </div>
+
+                          {/* Bottom row with status and action button */}
+                          <div className="flex items-center justify-between mt-2 flex-wrap gap-y-1.5">
+                            {/* Status indicators for both parents */}
+                            {item.id !== "schedule" ? (
+                              <div className="flex flex-wrap text-xs text-gray-600 mr-1">
+                                <span className="whitespace-nowrap">
+                                  You: <span className={item.completed.user ? 'text-green-600 font-medium' : ''}>
+                                    {item.completed.user ? 'Completed' : 'Pending'}
+                                  </span>
+                                </span>
+                                
+                                {coParentRegistered && (
+                                  <>
+                                    <span className="mx-1 hidden sm:inline">•</span>
+                                    <span className="sm:hidden">&nbsp;/&nbsp;</span>
+                                    <span className="whitespace-nowrap">
+                                      Co-Parent: <span className={item.completed.coParent ? 'text-green-600 font-medium' : ''}>
+                                        {item.completed.coParent ? 'Completed' : 'Pending'}
+                                      </span>
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="text-xs text-gray-600">
+                                {courseScheduled ? 'Session scheduled' : 'No session scheduled'}
+                              </div>
+                            )}
+                            
+                            {/* Action button */}
                             {!item.completed.user && (
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff]"
+                                className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap"
                                 onClick={() => handleRequirementAction(item.id)}
                               >
                                 {item.action}
@@ -391,35 +428,6 @@ export default function DashboardSimplified() {
                               </Button>
                             )}
                           </div>
-                          
-                          <p className="text-xs text-gray-600 mt-0.5 pr-4">
-                            {item.description}
-                          </p>
-                          
-                          {/* Status indicators for both parents */}
-                          {item.id !== "schedule" && (
-                            <div className="flex gap-4 mt-1.5">
-                              <div className="flex items-center text-xs">
-                                <div className={`h-2 w-2 rounded-full ${
-                                  item.completed.user ? 'bg-green-500' : 'bg-gray-300'
-                                } mr-1`}></div>
-                                <span className="text-gray-600">
-                                  You {item.completed.user ? 'completed' : 'pending'}
-                                </span>
-                              </div>
-                              
-                              {coParentRegistered && (
-                                <div className="flex items-center text-xs">
-                                  <div className={`h-2 w-2 rounded-full ${
-                                    item.completed.coParent ? 'bg-green-500' : 'bg-gray-300'
-                                  } mr-1`}></div>
-                                  <span className="text-gray-600">
-                                    Co-parent {item.completed.coParent ? 'completed' : 'pending'}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          )}
                         </div>
                       </li>
                     ))}
