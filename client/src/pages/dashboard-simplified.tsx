@@ -357,15 +357,15 @@ export default function DashboardSimplified() {
                     {preCourseRequirements.map((item) => (
                       <li 
                         key={item.id} 
-                        className={`flex items-start gap-2.5 p-1.5 rounded-md ${
+                        className={`flex gap-2.5 p-1.5 rounded-md ${
                           item.completed.user ? 'bg-white/60' : 'bg-white'
                         }`}
                       >
-                        <div className="mt-0.5">
+                        <div className="mt-1.5">
                           {getStatusIcon(item)}
                         </div>
-                        <div className="flex-1">
-                          {/* Title row with status and action */}
+                        <div className="flex-1 flex flex-col justify-center">
+                          {/* Title row */}
                           <div className="flex flex-col space-y-0.5">
                             <div className="flex items-center justify-between">
                               <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
@@ -421,7 +421,7 @@ export default function DashboardSimplified() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-8 px-3 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap border-[#6c54da]/30 my-auto"
+                                className="h-8 px-3 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap border-[#6c54da]/30"
                                 onClick={() => handleRequirementAction(item.id)}
                               >
                                 {item.action}
