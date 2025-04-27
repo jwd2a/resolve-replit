@@ -280,13 +280,33 @@ export default function DashboardSimplified() {
   // Get status for checklist item
   const getStatusIcon = (item: PreCourseRequirement) => {
     if (item.completed.user && item.completed.coParent) {
-      return <CircleCheck className="h-5 w-5 text-green-600" />;
+      // Both completed - green check icon with filled background
+      return (
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-100 border border-green-300">
+          <CheckCircle className="h-5 w-5 text-green-600" />
+        </div>
+      );
     } else if (item.completed.user) {
-      return <CircleCheck className="h-5 w-5 text-amber-500" />;
+      // You completed - amber check icon with filled background
+      return (
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-amber-100 border border-amber-300">
+          <CheckCircle className="h-5 w-5 text-amber-500" />
+        </div>
+      );
+    } else if (item.required) {
+      // Required but incomplete - outlined circle with purple border
+      return (
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white border-2 border-[#6c54da]/50">
+          <Circle className="h-4 w-4 text-[#6c54da]/30" />
+        </div>
+      );
     } else {
-      return item.required ? 
-        <Circle className="h-5 w-5 text-gray-300" /> : 
-        <Clock className="h-5 w-5 text-gray-300" />;
+      // Optional and incomplete - clock icon with light background
+      return (
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 border border-gray-200">
+          <Clock className="h-4 w-4 text-gray-400" />
+        </div>
+      );
     }
   };
 
