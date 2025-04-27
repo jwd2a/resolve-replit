@@ -365,8 +365,9 @@ export default function DashboardSimplified() {
                           {getStatusIcon(item)}
                         </div>
                         <div className="flex-1">
-                          <div className="flex flex-col space-y-0.5">
-                            <div className="flex items-center justify-between">
+                          {/* Title row with status and action */}
+                          <div className="flex flex-col md:flex-row md:items-center md:gap-x-2">
+                            <div className="flex items-center md:mr-auto mb-1 md:mb-0">
                               <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
                                 {item.title}
                                 {item.required ? (
@@ -381,53 +382,52 @@ export default function DashboardSimplified() {
                               </h4>
                             </div>
                             
-                            <p className="text-xs text-gray-600 mt-0.5 pr-4">
-                              {item.description}
-                            </p>
-                          </div>
-
-                          {/* Bottom row with status and action button */}
-                          <div className="flex items-center justify-between mt-2 flex-wrap gap-y-1.5">
-                            {/* Status indicators for both parents */}
-                            {item.id !== "schedule" ? (
-                              <div className="flex flex-wrap text-xs text-gray-600 mr-1">
-                                <span className="whitespace-nowrap">
-                                  You: <span className={item.completed.user ? 'text-green-600 font-medium' : ''}>
-                                    {item.completed.user ? 'Completed' : 'Pending'}
-                                  </span>
-                                </span>
-                                
-                                {coParentRegistered && (
-                                  <>
-                                    <span className="mx-1 hidden sm:inline">•</span>
-                                    <span className="sm:hidden">&nbsp;/&nbsp;</span>
-                                    <span className="whitespace-nowrap">
-                                      Co-Parent: <span className={item.completed.coParent ? 'text-green-600 font-medium' : ''}>
-                                        {item.completed.coParent ? 'Completed' : 'Pending'}
-                                      </span>
+                            <div className="flex justify-between items-center flex-wrap gap-y-1.5">
+                              {/* Status indicators for both parents */}
+                              {item.id !== "schedule" ? (
+                                <div className="flex shrink-0 items-center text-xs text-gray-600 mr-2">
+                                  <span className="whitespace-nowrap">
+                                    You: <span className={item.completed.user ? 'text-green-600 font-medium' : ''}>
+                                      {item.completed.user ? 'Completed' : 'Pending'}
                                     </span>
-                                  </>
-                                )}
-                              </div>
-                            ) : (
-                              <div className="text-xs text-gray-600">
-                                {courseScheduled ? 'Session scheduled' : 'No session scheduled'}
-                              </div>
-                            )}
-                            
-                            {/* Action button */}
-                            {!item.completed.user && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap"
-                                onClick={() => handleRequirementAction(item.id)}
-                              >
-                                {item.action}
-                                <ChevronRight className="h-3.5 w-3.5 ml-1" />
-                              </Button>
-                            )}
+                                  </span>
+                                  
+                                  {coParentRegistered && (
+                                    <>
+                                      <span className="mx-1">•</span>
+                                      <span className="whitespace-nowrap">
+                                        Co-Parent: <span className={item.completed.coParent ? 'text-green-600 font-medium' : ''}>
+                                          {item.completed.coParent ? 'Completed' : 'Pending'}
+                                        </span>
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="text-xs text-gray-600 shrink-0">
+                                  {courseScheduled ? 'Session scheduled' : 'No session scheduled'}
+                                </div>
+                              )}
+                              
+                              {/* Action button */}
+                              {!item.completed.user && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap shrink-0"
+                                  onClick={() => handleRequirementAction(item.id)}
+                                >
+                                  {item.action}
+                                  <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                                </Button>
+                              )}
+                            </div>
                           </div>
+                          
+                          <p className="text-xs text-gray-600 mt-1 pr-4">
+                            {item.description}
+                          </p>
+                          
                         </div>
                       </li>
                     ))}
