@@ -391,7 +391,7 @@ export default function DashboardSimplified() {
                           <div className="flex items-center justify-between mt-2 flex-wrap gap-y-1.5">
                             {/* Status indicators for both parents */}
                             {item.id !== "schedule" ? (
-                              <div className="flex flex-wrap text-xs text-gray-600 mr-1">
+                              <div className="flex flex-wrap text-xs text-gray-600 mr-1 self-center">
                                 <span className="whitespace-nowrap">
                                   You: <span className={item.completed.user ? 'text-green-600 font-medium' : ''}>
                                     {item.completed.user ? 'Completed' : 'Pending'}
@@ -411,7 +411,7 @@ export default function DashboardSimplified() {
                                 )}
                               </div>
                             ) : (
-                              <div className="text-xs text-gray-600">
+                              <div className="text-xs text-gray-600 self-center">
                                 {courseScheduled ? 'Session scheduled' : 'No session scheduled'}
                               </div>
                             )}
@@ -419,9 +419,9 @@ export default function DashboardSimplified() {
                             {/* Action button */}
                             {!item.completed.user && (
                               <Button
-                                variant="ghost"
+                                variant="outline"
                                 size="sm"
-                                className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap"
+                                className="h-8 px-3 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap border-[#6c54da]/30 my-auto"
                                 onClick={() => handleRequirementAction(item.id)}
                               >
                                 {item.action}
@@ -605,7 +605,7 @@ export default function DashboardSimplified() {
                       <Button
                         size="sm"
                         onClick={() => completeWaiver(waiver.id)}
-                        className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                        className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none h-8 px-3"
                       >
                         Sign Agreement
                       </Button>
