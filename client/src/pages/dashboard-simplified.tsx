@@ -184,7 +184,7 @@ export default function DashboardSimplified() {
       id: "co-parent",
       title: "Co-Parent Registration",
       description: "Invite your co-parent to join the platform.",
-      completed: { user: coParentRegistered, coParent: coParentRegistered },
+      completed: { user: true, coParent: coParentRegistered }, // User is always completed, waiting on co-parent
       required: true,
       icon: <Users className="h-4 w-4" />,
       action: "Invite Co-Parent"
@@ -278,27 +278,9 @@ export default function DashboardSimplified() {
     setPrevCompletionStatus(requiredItemsCompleted);
   }, [requiredItemsCompleted, prevCompletionStatus, toast]);
   
-  // Get status for checklist item
+  // Get status icon for checklist item - always use themed icon
   const getStatusIcon = (item: PreCourseRequirement) => {
-    // For completed items by both parties
-    if (item.completed.user && item.completed.coParent) {
-      return (
-        <div className="w-7 h-7 flex items-center justify-center rounded-full bg-green-100 border border-green-300">
-          <Check className="h-5 w-5 text-green-600" />
-        </div>
-      );
-    }
-    
-    // For items completed only by the user
-    if (item.completed.user) {
-      return (
-        <div className="w-7 h-7 flex items-center justify-center rounded-full bg-amber-100 border border-amber-300">
-          <Check className="h-5 w-5 text-amber-500" />
-        </div>
-      );
-    }
-    
-    // For incomplete items - use themed icons based on requirement type
+    // Always use themed icons based on requirement type, regardless of completion status
     switch (item.id) {
       case "co-parent":
         return (
@@ -466,8 +448,8 @@ export default function DashboardSimplified() {
                           <div className="flex-shrink-0 flex items-center h-full ml-auto">
                             {item.id !== "schedule" ? (
                               <div className="flex items-center text-xs text-gray-500">
-                                {/* Status text inline with action link */}
-                                {!item.completed.user && (
+                                {/* Either show action link or completed status */}
+                                {!item.completed.user ? (
                                   <button
                                     className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center mr-3"
                                     onClick={() => handleRequirementAction(item.id)}
@@ -475,14 +457,18 @@ export default function DashboardSimplified() {
                                     {item.action}
                                     <ArrowRight className="h-3 w-3 ml-1" />
                                   </button>
+                                ) : (
+                                  /* Show completed status with check icon when item is completed */
+                                  <div className="flex items-center text-green-600 font-medium">
+                                    <Check className="h-4 w-4 mr-1.5" />
+                                    <span>Completed</span>
+                                  </div>
                                 )}
-                                
-                                {/* No additional status text needed - already displayed in the component */}
                               </div>
                             ) : (
                               /* Schedule action */
                               <div className="flex items-center text-xs">
-                                {!courseScheduled && (
+                                {!courseScheduled ? (
                                   <button
                                     className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center"
                                     onClick={() => handleRequirementAction(item.id)}
@@ -490,11 +476,12 @@ export default function DashboardSimplified() {
                                     {item.action}
                                     <ArrowRight className="h-3 w-3 ml-1" />
                                   </button>
-                                )}
-                                
-                                {/* Show schedule status separately */}
-                                {courseScheduled && (
-                                  <span className="text-gray-500">Session scheduled</span>
+                                ) : (
+                                  /* Show completed status with check icon when scheduled */
+                                  <div className="flex items-center text-green-600 font-medium">
+                                    <Check className="h-4 w-4 mr-1.5" />
+                                    <span>Scheduled</span>
+                                  </div>
                                 )}
                               </div>
                             )}
