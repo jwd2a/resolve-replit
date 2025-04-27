@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { format, addDays, isBefore, isToday, isSameDay } from "date-fns";
+import { format, addDays, isBefore, isToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 
 // UI components
@@ -15,16 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  CheckCircle2,
-  Clock,
   FileText,
   Calendar as CalendarIcon,
   Info,
-  ChevronRight,
   Video,
   Users,
   AlertCircle,
@@ -32,6 +26,7 @@ import {
   BookOpen,
   Heart,
   ArrowRight,
+  HelpCircle,
 } from "lucide-react";
 
 // Mock data interfaces
@@ -119,6 +114,7 @@ export default function DashboardSimplified() {
   const [completedWaivers, setCompletedWaivers] = useState(1); // Number of signed waivers
   const [completedResources, setCompletedResources] = useState(1); // Number of completed resources
   const [showSupportDialog, setShowSupportDialog] = useState(false);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
 
   const proposeDate = () => {
     setCourseDate({
@@ -142,36 +138,8 @@ export default function DashboardSimplified() {
     return `${format(date, "MMMM d, yyyy")} at ${time}`;
   };
 
-  // Determine the focus message based on progress
-  const getFocusMessage = () => {
-    if (completedWaivers < waivers.length) {
-      return {
-        title: "Complete pre-course items",
-        description: "Finalize your required forms before beginning the course",
-        action: "Start Now",
-        path: "/forms"
-      };
-    } else if (courseDate.scheduledDate === null) {
-      return {
-        title: "Schedule your first session",
-        description: "Choose a time that works for you and your co-parent",
-        action: "Find a Time",
-        path: "#schedule"
-      };
-    } else {
-      return {
-        title: "Continue your parenting plan",
-        description: "Pick up where you left off in your journey",
-        action: "Continue",
-        path: "/course"
-      };
-    }
-  };
-
-  const focusMessage = getFocusMessage();
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#f9f5ff] via-white to-white">
       {/* Header */}
       <Header 
         title="Family Dashboard"
@@ -179,148 +147,103 @@ export default function DashboardSimplified() {
       />
 
       {/* Main content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-12">
-        {/* Hero section with main CTA */}
-        <section className="text-center flex flex-col items-center">
-          <div className="max-w-xl mx-auto">
-            <h1 className="text-xl sm:text-2xl font-medium text-[#2e1a87] mb-3">
-              Welcome, {user?.displayName || "Friend"}
-            </h1>
-            <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Your journey to creating a thoughtful parenting plan continues here. 
-              One step at a time, you're building a better future for your children.
-            </p>
-            
-            <div className="bg-gradient-to-r from-[#f5f0ff] to-[#fff8fd] rounded-xl p-8 border border-[#6c54da]/20 mb-8 text-left">
-              <div className="flex flex-col sm:flex-row gap-6 items-center">
-                <div className="bg-white p-3 rounded-full shadow-sm">
-                  <div className="w-16 h-16 bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded-full flex items-center justify-center">
-                    {focusMessage.title.includes("Continue") ? (
-                      <BookOpen className="h-7 w-7 text-white" />
-                    ) : focusMessage.title.includes("Schedule") ? (
-                      <CalendarIcon className="h-7 w-7 text-white" />
-                    ) : (
-                      <FileText className="h-7 w-7 text-white" />
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 text-center sm:text-left">
-                  <h2 className="text-lg font-medium text-[#2e1a87] mb-1">{focusMessage.title}</h2>
-                  <p className="text-gray-600 mb-4">{focusMessage.description}</p>
-                  <Button className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none px-5">
-                    {focusMessage.action} <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Progress visualization */}
-          <div className="flex flex-col items-center mt-4 mb-8">
-            <div className="flex items-center justify-center mb-1">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] flex items-center justify-center mr-2">
-                <CheckCheck className="h-3 w-3 text-white" />
-              </div>
-              <span className="text-sm text-[#2e1a87] font-medium">{courseProgress}% Complete</span>
-            </div>
-            <div className="w-full max-w-xs h-2 bg-[#f5f0ff] rounded-full overflow-hidden mt-1">
-              <div 
-                className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded-full" 
-                style={{ width: `${courseProgress}%` }}
-              />
-            </div>
-          </div>
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 flex flex-col gap-8">
+        {/* Warm welcome message - small and centered */}
+        <section className="text-center">
+          <h1 className="text-xl font-medium text-[#2e1a87] mb-2">
+            Welcome back, {user?.displayName || "Friend"}
+          </h1>
+          <p className="text-gray-600 text-sm max-w-md mx-auto">
+            You're making thoughtful decisions for your family's future.
+          </p>
         </section>
-
-        {/* Secondary content in faded cards */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-80 hover:opacity-100 transition-opacity">
-          {/* Co-parent connection card */}
+        
+        {/* Main card with combined progress + forms */}
+        <section className="relative">
+          {/* Co-Parent micro-banner */}
           {coParentSignupStatus === "pending" && (
-            <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/10 p-5 transition-all hover:border-[#6c54da]/30 hover:shadow">
-              <div className="flex gap-4 items-start">
-                <div className="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Users className="h-5 w-5 text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-[#2e1a87]">Co-Parent Connection</h3>
-                  <p className="text-sm text-gray-600 mt-1 mb-3">
-                    Inviting your co-parent helps create a more collaborative journey.
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    className="border-amber-200 text-amber-700 hover:bg-amber-50 text-sm"
-                  >
-                    Send a Gentle Invitation
-                  </Button>
-                </div>
-              </div>
+            <div className="absolute -top-5 left-0 right-0 mx-auto w-fit bg-white rounded-full px-4 py-1.5 shadow-sm border border-amber-100 z-10">
+              <button 
+                onClick={() => setShowInviteDialog(true)}
+                className="flex items-center text-xs text-amber-700 hover:text-amber-800 gap-1.5"
+              >
+                <Heart className="h-3.5 w-3.5 text-amber-500" />
+                <span>Want to invite your co-parent to join you?</span>
+                <span className="underline font-medium">Send Invitation</span>
+              </button>
             </div>
           )}
-
-          {/* Support section */}
-          <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/10 p-5 transition-all hover:border-[#6c54da]/30 hover:shadow">
-            <div className="flex gap-4 items-start">
-              <div className="w-10 h-10 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
-                <Heart className="h-5 w-5 text-[#6c54da]" />
-              </div>
-              <div>
-                <h3 className="font-medium text-[#2e1a87]">Support When You Need It</h3>
-                <p className="text-sm text-gray-600 mt-1 mb-3">
-                  Our team is here to help with any questions during your journey.
-                </p>
-                <Dialog open={showSupportDialog} onOpenChange={setShowSupportDialog}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="border-[#6c54da]/20 text-[#2e1a87] hover:bg-[#f5f0ff] text-sm"
-                    >
-                      Chat With Our Team
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-white rounded-lg">
-                    <DialogHeader>
-                      <DialogTitle className="text-[#2e1a87]">How Can We Help?</DialogTitle>
-                      <DialogDescription>
-                        We're here to support you through your co-parenting journey.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="py-4">
-                      <div className="flex flex-col gap-3">
-                        <Button 
-                          variant="outline" 
-                          className="justify-start bg-[#f5f0ff] text-[#2e1a87] border-[#6c54da]/20 hover:bg-[#e8deff]"
-                        >
-                          <Video className="mr-2 h-4 w-4" /> Schedule a Support Call
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          className="justify-start border-[#6c54da]/20 text-[#2e1a87]"
-                        >
-                          <Info className="mr-2 h-4 w-4" /> View Our Resources
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          className="justify-start border-[#6c54da]/20 text-[#2e1a87]"
-                        >
-                          <AlertCircle className="mr-2 h-4 w-4" /> Report a Problem
-                        </Button>
-                      </div>
+          
+          {/* Main progress card */}
+          <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
+            {/* Soft background illustration */}
+            <div className="absolute -right-24 -bottom-24 w-64 h-64 rounded-full bg-gradient-to-br from-[#f5f0ff] to-transparent opacity-50 pointer-events-none"></div>
+            
+            <div className="flex flex-col">
+              {/* Combined progress section */}
+              <div className="mb-7">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
+                    <FileText className="h-5 w-5 text-[#6c54da]" />
+                  </div>
+                  <div>
+                    <h2 className="font-medium text-[#2e1a87] text-lg">You're {courseProgress}% of the way there!</h2>
+                    <p className="text-gray-600 text-sm">Complete your required forms to continue building your parenting plan.</p>
+                  </div>
+                </div>
+                
+                {/* Visual progress */}
+                <div className="mb-4 mt-5">
+                  <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+                    <span>Getting Started</span>
+                    <span>Complete</span>
+                  </div>
+                  <div className="h-2.5 w-full bg-[#f5f0ff] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded-full" 
+                      style={{ width: `${courseProgress}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between mt-2 text-xs">
+                    <div className="flex items-center text-amber-700">
+                      <AlertCircle className="h-3.5 w-3.5 mr-1" />
+                      <span>{waivers.length - completedWaivers} forms remaining</span>
                     </div>
-                    <DialogFooter>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setShowSupportDialog(false)}
-                        className="border-[#6c54da]/20 text-[#2e1a87]"
-                      >
-                        Close
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    <div className="flex items-center text-[#2e1a87]">
+                      <CheckCheck className="h-3.5 w-3.5 mr-1" />
+                      <span>{completedWaivers} completed</span>
+                    </div>
+                  </div>
+                </div>
               </div>
+              
+              {/* Primary CTA Button */}
+              <Button className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none px-5 py-6 h-auto">
+                <span className="text-base">Start Now</span>
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
             </div>
           </div>
         </section>
+
+        {/* Minimalist footer with support links */}
+        <footer className="mt-8 text-center">
+          <div className="flex justify-center items-center gap-6 text-xs text-gray-500">
+            <button 
+              onClick={() => setShowSupportDialog(true)}
+              className="flex items-center hover:text-[#2e1a87] transition-colors"
+            >
+              <HelpCircle className="h-3.5 w-3.5 mr-1.5" />
+              <span>Get Support</span>
+            </button>
+            <a href="#" className="hover:text-[#2e1a87] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#2e1a87] transition-colors">Terms of Service</a>
+          </div>
+          
+          <p className="text-xs text-gray-500 mt-8 max-w-md mx-auto font-light italic">
+            "Every step you take today creates a more peaceful tomorrow for your children."
+          </p>
+        </footer>
 
         {/* Schedule dialog functionality */}
         <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
@@ -377,14 +300,98 @@ export default function DashboardSimplified() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        
+        {/* Support Dialog */}
+        <Dialog open={showSupportDialog} onOpenChange={setShowSupportDialog}>
+          <DialogContent className="bg-white rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="text-[#2e1a87]">How Can We Help?</DialogTitle>
+              <DialogDescription>
+                We're here to support you through your co-parenting journey.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="flex flex-col gap-3">
+                <Button 
+                  variant="outline" 
+                  className="justify-start bg-[#f5f0ff] text-[#2e1a87] border-[#6c54da]/20 hover:bg-[#e8deff]"
+                >
+                  <Video className="mr-2 h-4 w-4" /> Schedule a Support Call
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="justify-start border-[#6c54da]/20 text-[#2e1a87]"
+                >
+                  <Info className="mr-2 h-4 w-4" /> View Our Resources
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="justify-start border-[#6c54da]/20 text-[#2e1a87]"
+                >
+                  <AlertCircle className="mr-2 h-4 w-4" /> Report a Problem
+                </Button>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowSupportDialog(false)}
+                className="border-[#6c54da]/20 text-[#2e1a87]"
+              >
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Invite Dialog */}
+        <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+          <DialogContent className="bg-white rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="text-[#2e1a87]">Invite Your Co-Parent</DialogTitle>
+              <DialogDescription>
+                Working together can help create better outcomes for your children.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="bg-[#f9f5ff] p-4 rounded-lg mb-4 text-sm text-[#2e1a87]">
+                <div className="flex gap-2">
+                  <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                  <span>Their information will remain private and they'll receive a gentle invitation to join.</span>
+                </div>
+              </div>
+              <div className="space-y-3 mt-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[#2e1a87]">Co-Parent's Email</label>
+                  <input 
+                    type="email" 
+                    className="border border-[#6c54da]/20 rounded-md p-2 text-sm"
+                    placeholder="email@example.com"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[#2e1a87]">Add a Personal Note (Optional)</label>
+                  <textarea 
+                    className="border border-[#6c54da]/20 rounded-md p-2 text-sm h-24 resize-none"
+                    placeholder="I've started creating our parenting plan. It would be great if we could work on this together."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowInviteDialog(false)} 
+                className="border-[#6c54da]/20 text-[#2e1a87]">
+                Not Now
+              </Button>
+              <Button
+                className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+              >
+                <Users className="mr-2 h-4 w-4" /> Send Invitation
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
-
-      {/* Minimalist footer with encouraging message */}
-      <footer className="py-6 text-center bg-[#f5f0ff]/50">
-        <p className="text-sm text-gray-600 max-w-md mx-auto">
-          "Every step you take today creates a more peaceful tomorrow for your children."
-        </p>
-      </footer>
     </div>
   );
 }
