@@ -479,20 +479,7 @@ export default function DashboardSimplified() {
                                   </button>
                                 )}
                                 
-                                <div className="flex whitespace-nowrap">
-                                  {/* Only show status text if not completed */}
-                                  {!item.completed.user && (
-                                    <span>
-                                      You: <span>Pending</span>
-                                      {coParentRegistered && (
-                                        <>
-                                          <span className="mx-1">•</span>
-                                          Co-Parent: <span>Pending</span>
-                                        </>
-                                      )}
-                                    </span>
-                                  )}
-                                </div>
+                                {/* No additional status text needed - already displayed in the component */}
                               </div>
                             ) : (
                               /* Schedule action */
