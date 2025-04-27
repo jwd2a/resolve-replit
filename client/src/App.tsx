@@ -9,6 +9,7 @@ import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
 import OnboardingPage from "@/pages/onboarding-page";
 import DashboardPage from "@/pages/dashboard-page";
+import DashboardSimplified from "@/pages/dashboard-simplified";
 import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -24,7 +25,8 @@ function Router() {
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
-      <Route path="/" component={Course} />
+      <Route path="/dashboard-new" component={DashboardSimplified} />
+      <Route path="/" component={DashboardSimplified} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
