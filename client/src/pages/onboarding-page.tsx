@@ -634,14 +634,14 @@ export default function OnboardingPage() {
               <Form {...jurisdictionForm}>
                 <form onSubmit={jurisdictionForm.handleSubmit(onJurisdictionSubmit)} className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Last step, we need the state in which your child(ren) reside:</h3>
+                    <h3 className="text-lg font-medium">Last step, what state will you be filing your divorce or separation?</h3>
                     
                     <FormField
                       control={jurisdictionForm.control}
                       name="jurisdiction"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>What state will you be filing your divorce or separation?</FormLabel>
+                          <FormLabel>Select your state</FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <SelectTrigger className="h-12">
