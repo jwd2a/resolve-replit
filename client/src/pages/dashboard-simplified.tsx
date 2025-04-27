@@ -423,7 +423,7 @@ export default function DashboardSimplified() {
                               {item.id !== "schedule" ? (
                                 <div className="flex flex-wrap text-xs text-gray-600">
                                   <span className="whitespace-nowrap">
-                                    You: <span className={item.id === "co-parent" || item.completed.user ? 'text-green-600 font-medium' : ''}>
+                                    You: <span className={item.id === "co-parent" || item.completed.user ? 'text-green-600 font-medium' : 'text-amber-500 font-medium'}>
                                       {item.id === "co-parent" || item.completed.user ? 'Completed' : 'Pending'}
                                     </span>
                                   </span>
@@ -432,7 +432,7 @@ export default function DashboardSimplified() {
                                     <span className="mx-1 hidden sm:inline">•</span>
                                     <span className="sm:hidden">&nbsp;/&nbsp;</span>
                                     <span className="whitespace-nowrap">
-                                      Co-Parent: <span className={item.completed.coParent ? 'text-green-600 font-medium' : ''}>
+                                      Co-Parent: <span className={item.completed.coParent ? 'text-green-600 font-medium' : 'text-amber-500 font-medium'}>
                                         {item.completed.coParent ? 'Completed' : 'Pending'}
                                       </span>
                                     </span>
@@ -440,7 +440,11 @@ export default function DashboardSimplified() {
                                 </div>
                               ) : (
                                 <div className="text-xs text-gray-600">
-                                  {courseScheduled ? 'Session scheduled' : 'No session scheduled'}
+                                  {courseScheduled ? (
+                                    <span className="text-green-600 font-medium">Session scheduled</span>
+                                  ) : (
+                                    <span className="text-amber-500 font-medium">No session scheduled</span>
+                                  )}
                                 </div>
                               )}
                             </div>
