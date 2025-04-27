@@ -306,7 +306,7 @@ export default function DashboardSimplified() {
             Welcome back, {user?.displayName || "Friend"}
           </h1>
           <p className="text-gray-600 text-sm max-w-md mx-auto">
-            You're taking thoughtful steps to create a supportive environment for your family.
+            You're taking important steps for your family's future.
           </p>
         </section>
         
