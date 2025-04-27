@@ -361,15 +361,15 @@ export default function DashboardSimplified() {
                           item.completed.user ? 'bg-white/60' : 'bg-white'
                         }`}
                       >
-                        {/* Main content area with 3-column grid */}
-                        <div className="grid grid-cols-[auto_1fr_auto] gap-3 items-start">
+                        {/* Use flexbox instead of grid for better vertical alignment */}
+                        <div className="flex items-center gap-3">
                           {/* Column 1: Icon */}
-                          <div>
+                          <div className="flex-shrink-0">
                             {getStatusIcon(item)}
                           </div>
                           
                           {/* Column 2: Title and description */}
-                          <div>
+                          <div className="flex-grow">
                             <h4 className="text-sm font-medium text-[#2e1a87] flex items-center flex-wrap gap-2">
                               {item.title}
                               {item.required ? (
@@ -418,7 +418,7 @@ export default function DashboardSimplified() {
                           </div>
                           
                           {/* Column 3: Action button (centered vertically) */}
-                          <div className="flex items-center self-center">
+                          <div className="flex-shrink-0 flex items-center h-full ml-auto">
                             {!item.completed.user && (
                               <Button
                                 variant="outline"
