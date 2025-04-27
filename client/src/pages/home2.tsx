@@ -26,6 +26,7 @@ import {
   Clock,
   CalendarDays,
   ClipboardList,
+  HelpCircle,
 } from "lucide-react";
 
 // Interfaces for tracking pre-course requirements
@@ -419,6 +420,25 @@ export default function Home2() {
           </DialogContent>
         </Dialog>
       </main>
+
+      {/* Minimalist footer with support links */}
+      <footer className="mt-4 text-center">
+        <div className="flex justify-center items-center gap-6 text-xs text-gray-500">
+          <button 
+            onClick={() => setShowSupportDialog(true)}
+            className="flex items-center hover:text-[#2e1a87] transition-colors"
+          >
+            <HelpCircle className="h-3.5 w-3.5 mr-1.5" />
+            <span>Get Support</span>
+          </button>
+          <a href="#" className="hover:text-[#2e1a87] transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-[#2e1a87] transition-colors">Terms of Service</a>
+        </div>
+        
+        <p className="text-xs text-gray-500 mt-8 max-w-md mx-auto font-light italic">
+          "Every thoughtful decision you make today creates a more supportive tomorrow for your children."
+        </p>
+      </footer>
     </div>
   );
 }
