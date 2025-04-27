@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { format, addDays, isBefore, isToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import Header from "@/components/Header";
+import { useToast } from "@/hooks/use-toast";
 
 // UI components
 import {
@@ -84,6 +85,7 @@ interface HolidayPreference {
 
 export default function DashboardSimplified() {
   const { user, isLoading } = useAuth();
+  const { toast } = useToast();
   const [showChecklistDetail, setShowChecklistDetail] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   const [showWaiverDialog, setShowWaiverDialog] = useState(false);
@@ -91,6 +93,7 @@ export default function DashboardSimplified() {
   const [showSupportDialog, setShowSupportDialog] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [courseScheduled, setCourseScheduled] = useState(false);
+  const [prevCompletionStatus, setPrevCompletionStatus] = useState(false);
   
   // Course scheduling state
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -259,6 +262,21 @@ export default function DashboardSimplified() {
     }
   };
 
+  // Show success toast when all required items are completed
+  useEffect(() => {
+    // Check if the completion status has changed from incomplete to complete
+    if (requiredItemsCompleted && !prevCompletionStatus) {
+      toast({
+        title: "You're ready to start!",
+        description: "You've completed all required items for your Parenting Plan course.",
+        variant: "default",
+      });
+    }
+    
+    // Update the previous completion status
+    setPrevCompletionStatus(requiredItemsCompleted);
+  }, [requiredItemsCompleted, prevCompletionStatus, toast]);
+  
   // Get status for checklist item
   const getStatusIcon = (item: PreCourseRequirement) => {
     if (item.completed.user && item.completed.coParent) {
@@ -316,39 +334,16 @@ export default function DashboardSimplified() {
                   </div>
                 </div>
                 
-                {/* Visual progress */}
+                {/* Space instead of visual progress */}
                 <div className="mb-5 mt-4">
-                  <div className="flex justify-between text-xs text-gray-500 mb-1.5">
-                    <span>Getting Started</span>
-                    <span>Ready to Begin</span>
-                  </div>
-                  <div className="h-2.5 w-full bg-[#f5f0ff] rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded-full" 
-                      style={{ width: `${progressPercentage}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between mt-2 text-xs">
-                    <div className="flex items-center text-amber-700">
-                      {requiredItemsCompleted ? (
-                        <div className="flex items-center text-green-600">
-                          <CheckCheck className="h-3.5 w-3.5 mr-1" />
-                          <span>All required items completed</span>
-                        </div>
-                      ) : (
-                        <>
-                          <AlertCircle className="h-3.5 w-3.5 mr-1" />
-                          <span>
-                            {requiredItemsCount - completedRequiredItems} {requiredItemsCount - completedRequiredItems === 1 ? 'item' : 'items'} remaining
-                          </span>
-                        </>
-                      )}
+                  {bothParentsCompleted && (
+                    <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-2">
+                      <p className="text-sm text-green-700 flex items-center">
+                        <CheckCheck className="h-4 w-4 mr-2 text-green-600" />
+                        You and your co-parent have completed all required steps!
+                      </p>
                     </div>
-                    <div className="flex items-center text-[#2e1a87]">
-                      <CheckCheck className="h-3.5 w-3.5 mr-1" />
-                      <span>{completedRequiredItems} of {requiredItemsCount} completed</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
                 
                 {/* Pre-course checklist */}
@@ -373,7 +368,11 @@ export default function DashboardSimplified() {
                           <div className="flex items-center justify-between">
                             <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
                               {item.title}
-                              {!item.required && (
+                              {item.required ? (
+                                <span className="ml-2 text-xs bg-[#f0e6ff] text-[#2e1a87] px-2 py-0.5 rounded-full">
+                                  Required
+                                </span>
+                              ) : (
                                 <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
                                   Optional
                                 </span>
@@ -439,8 +438,8 @@ export default function DashboardSimplified() {
               >
                 <span className="text-base">
                   {requiredItemsCompleted 
-                    ? "Begin Your Parenting Plan" 
-                    : "Complete Required Items"
+                    ? "Start Course" 
+                    : "Complete Required Items to Start"
                   }
                 </span>
                 <ArrowRight className="ml-2 h-5 w-5" />
