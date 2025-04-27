@@ -91,8 +91,8 @@ export default function OnboardingPage() {
   // Auto-redirect after completion
   useEffect(() => {
     if (completed && user) {
-      // Immediately navigate to dashboard without delay
-      window.location.href = "/dashboard";
+      // Immediately navigate to new dashboard design
+      window.location.href = "/";
     }
   }, [completed, user]);
   
@@ -149,7 +149,7 @@ export default function OnboardingPage() {
   }
   
   if (user.onboardingComplete && !completed) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/" />;
   }
   
   // Handle step completion
