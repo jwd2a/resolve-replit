@@ -38,8 +38,8 @@ const Header: FC<HeaderProps> = ({
           </Link>
           
           <div className="flex ml-10 space-x-8">
-            <Link href="/dashboard">
-              <span className={`cursor-pointer text-base font-medium ${location === '/dashboard' 
+            <Link href="/">
+              <span className={`cursor-pointer text-base font-medium ${location === '/' 
                 ? 'text-white border-b-2 border-white pb-1' 
                 : 'text-gray-300 hover:text-white'}`}>
                 HOME
