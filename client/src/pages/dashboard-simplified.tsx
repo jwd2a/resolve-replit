@@ -464,18 +464,54 @@ export default function DashboardSimplified() {
                             </div>
                           </div>
                           
-                          {/* Column 3: Action button (centered vertically) */}
+                          {/* Status text - moved from below to be next to action links */}
                           <div className="flex-shrink-0 flex items-center h-full ml-auto">
-                            {!item.completed.user && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-8 px-3 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff] whitespace-nowrap border-[#6c54da]/70 border shadow-sm"
-                                onClick={() => handleRequirementAction(item.id)}
-                              >
-                                {item.action}
-                                <ChevronRight className="h-3.5 w-3.5 ml-1" />
-                              </Button>
+                            {item.id !== "schedule" ? (
+                              <div className="flex items-center text-xs text-gray-500">
+                                {/* Status text inline with action link */}
+                                {!item.completed.user && (
+                                  <button
+                                    className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center mr-3"
+                                    onClick={() => handleRequirementAction(item.id)}
+                                  >
+                                    {item.action}
+                                    <ArrowRight className="h-3 w-3 ml-1" />
+                                  </button>
+                                )}
+                                
+                                <div className="flex whitespace-nowrap">
+                                  {/* Only show status text if not completed */}
+                                  {!item.completed.user && (
+                                    <span>
+                                      You: <span>Pending</span>
+                                      {coParentRegistered && (
+                                        <>
+                                          <span className="mx-1">•</span>
+                                          Co-Parent: <span>Pending</span>
+                                        </>
+                                      )}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              /* Schedule action */
+                              <div className="flex items-center text-xs">
+                                {!courseScheduled && (
+                                  <button
+                                    className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center"
+                                    onClick={() => handleRequirementAction(item.id)}
+                                  >
+                                    {item.action}
+                                    <ArrowRight className="h-3 w-3 ml-1" />
+                                  </button>
+                                )}
+                                
+                                {/* Show schedule status separately */}
+                                {courseScheduled && (
+                                  <span className="text-gray-500">Session scheduled</span>
+                                )}
+                              </div>
                             )}
                           </div>
                         </div>
