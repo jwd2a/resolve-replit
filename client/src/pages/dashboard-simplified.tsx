@@ -23,11 +23,32 @@ import {
   Users,
   AlertCircle,
   CheckCheck,
+  CircleCheck,
+  Circle,
   BookOpen,
   Heart,
   ArrowRight,
   HelpCircle,
+  ChevronRight,
+  Clock,
+  CalendarDays,
+  ClipboardList,
+  Mail,
 } from "lucide-react";
+
+// Interfaces for tracking pre-course requirements
+interface PreCourseRequirement {
+  id: string;
+  title: string;
+  description: string;
+  completed: {
+    user: boolean;
+    coParent: boolean;
+  };
+  required: boolean;
+  icon: React.ReactNode;
+  action: string;
+}
 
 // Mock data interfaces
 interface CourseDate {
@@ -42,100 +63,213 @@ interface Waiver {
   id: string;
   title: string;
   description: string;
-  signed: boolean;
-  signedDate?: Date;
+  signed: {
+    user: boolean;
+    coParent: boolean;
+  };
+  signedDate?: {
+    user: Date | null;
+    coParent: Date | null;
+  };
 }
 
-interface Resource {
+interface HolidayPreference {
   id: string;
   title: string;
-  type: "video" | "pdf" | "article";
-  url: string;
-  duration?: string;
-  completed: boolean;
+  completed: {
+    user: boolean;
+    coParent: boolean;
+  };
 }
-
-// Sample data
-const waivers: Waiver[] = [
-  {
-    id: "confidentiality",
-    title: "Confidentiality Agreement",
-    description: "Agreement to keep all shared information confidential during the course and parenting plan development.",
-    signed: false,
-  },
-  {
-    id: "mediation",
-    title: "Mediation Participation",
-    description: "Agreement to participate in good faith in the mediation process if needed during the course.",
-    signed: false,
-  },
-  {
-    id: "terms",
-    title: "Terms of Service",
-    description: "Agreement to the platform terms of service and usage guidelines.",
-    signed: true,
-    signedDate: new Date(2024, 3, 15),
-  },
-];
-
-const resources: Resource[] = [
-  {
-    id: "video1",
-    title: "Introduction to Co-Parenting",
-    type: "video",
-    url: "#",
-    duration: "15 min",
-    completed: true,
-  },
-  {
-    id: "pdf1",
-    title: "Preparing for Your Co-Parenting Journey",
-    type: "pdf",
-    url: "#",
-    completed: false,
-  }
-];
 
 export default function DashboardSimplified() {
   const { user, isLoading } = useAuth();
-  const [courseDate, setCourseDate] = useState<CourseDate>({
-    scheduledDate: null,
-    proposedDate: null,
-    proposedTime: "10:00",
-    proposedBy: null,
-    approved: false,
-  });
+  const [showChecklistDetail, setShowChecklistDetail] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [showWaiverDialog, setShowWaiverDialog] = useState(false);
+  const [showHolidayDialog, setShowHolidayDialog] = useState(false);
+  const [showSupportDialog, setShowSupportDialog] = useState(false);
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [courseScheduled, setCourseScheduled] = useState(false);
+  
+  // Course scheduling state
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     addDays(new Date(), 7)
   );
   const [selectedTime, setSelectedTime] = useState<string>("10:00");
-  const [showDateDialog, setShowDateDialog] = useState(false);
-  const [coParentSignupStatus, setCoParentSignupStatus] = useState("pending"); // "pending", "completed"
-  const [completedWaivers, setCompletedWaivers] = useState(1); // Number of signed waivers
-  const [completedResources, setCompletedResources] = useState(1); // Number of completed resources
-  const [showSupportDialog, setShowSupportDialog] = useState(false);
-  const [showInviteDialog, setShowInviteDialog] = useState(false);
-
-  const proposeDate = () => {
-    setCourseDate({
-      ...courseDate,
-      proposedDate: selectedDate || null,
-      proposedTime: selectedTime,
-      proposedBy: "You",
-      approved: false,
-    });
-    setShowDateDialog(false);
+  
+  // Co-parent status
+  const [coParentRegistered, setCoParentRegistered] = useState(false);
+  
+  // Waiver and holiday preferences state
+  const [waivers] = useState<Waiver[]>([
+    {
+      id: "confidentiality",
+      title: "Confidentiality Agreement",
+      description: "Agreement to keep all shared information confidential during the course and parenting plan development.",
+      signed: { user: true, coParent: false },
+      signedDate: { 
+        user: new Date(2024, 3, 15), 
+        coParent: null 
+      },
+    },
+    {
+      id: "mediation",
+      title: "Terms & Conditions",
+      description: "Agreement to participate in good faith in the mediation process if needed during the course.",
+      signed: { user: false, coParent: false },
+      signedDate: { 
+        user: null, 
+        coParent: null 
+      },
+    },
+  ]);
+  
+  const [holidayPreferences] = useState<HolidayPreference[]>([
+    {
+      id: "holidays",
+      title: "Holiday Selection Form",
+      completed: { user: false, coParent: false },
+    }
+  ]);
+  
+  // Send invitation to co-parent
+  const sendInvitation = () => {
+    // In a real implementation, this would send an email invitation
+    setShowInviteDialog(false);
+    setCoParentRegistered(true); // For demo purposes, we'll simulate co-parent registering
   };
 
-  // Calculate progress percentage
-  const courseProgress = 25; // Example progress percentage
-  const waiversProgress = Math.round((completedWaivers / waivers.length) * 100);
-  const resourcesProgress = Math.round((completedResources / resources.length) * 100);
+  // Schedule course session
+  const scheduleCourse = () => {
+    setCourseScheduled(true);
+    setShowScheduleDialog(false);
+  };
 
-  // Format the date and time together
-  const formatDateTime = (date: Date | null, time: string = "10:00") => {
-    if (!date) return "";
-    return `${format(date, "MMMM d, yyyy")} at ${time}`;
+  // Complete waiver
+  const completeWaiver = (waiverId: string) => {
+    const updatedWaivers = waivers.map(waiver => {
+      if (waiver.id === waiverId) {
+        return {
+          ...waiver,
+          signed: { ...waiver.signed, user: true },
+          signedDate: { ...waiver.signedDate, user: new Date() }
+        };
+      }
+      return waiver;
+    });
+    
+    // In a real implementation, this would update the waivers state
+    setShowWaiverDialog(false);
+  };
+
+  // Complete holiday preferences
+  const completeHolidayPreferences = () => {
+    // In a real implementation, this would update the holiday preferences
+    const updatedHolidayPreferences = holidayPreferences.map(pref => ({
+      ...pref,
+      completed: { ...pref.completed, user: true }
+    }));
+    
+    setShowHolidayDialog(false);
+  };
+
+  // Pre-course requirements
+  const preCourseRequirements: PreCourseRequirement[] = [
+    {
+      id: "co-parent",
+      title: "Co-Parent Registration",
+      description: "Invite your co-parent to join the platform.",
+      completed: { user: coParentRegistered, coParent: coParentRegistered },
+      required: true,
+      icon: <Users className="h-4 w-4" />,
+      action: "Invite Co-Parent"
+    },
+    {
+      id: "waivers",
+      title: "Waivers & Agreements",
+      description: "Review and sign the required legal agreements.",
+      completed: { 
+        user: waivers.every(w => w.signed.user), 
+        coParent: waivers.every(w => w.signed.coParent) 
+      },
+      required: true,
+      icon: <FileText className="h-4 w-4" />,
+      action: "Review & Sign"
+    },
+    {
+      id: "holidays",
+      title: "Holiday Preferences",
+      description: "Select your preferences for holiday schedules.",
+      completed: { 
+        user: holidayPreferences[0].completed.user, 
+        coParent: holidayPreferences[0].completed.coParent 
+      },
+      required: true,
+      icon: <CalendarDays className="h-4 w-4" />,
+      action: "Select Preferences"
+    },
+    {
+      id: "schedule",
+      title: "Schedule Course Session",
+      description: "Pick a date and time to complete the course with your co-parent.",
+      completed: { user: courseScheduled, coParent: courseScheduled },
+      required: false,
+      icon: <Clock className="h-4 w-4" />,
+      action: "Schedule Now"
+    }
+  ];
+
+  // Calculate completion status
+  const requiredItemsCompleted = preCourseRequirements
+    .filter(item => item.required)
+    .every(item => item.completed.user);
+    
+  const requiredItemsCount = preCourseRequirements.filter(item => item.required).length;
+  const completedRequiredItems = preCourseRequirements
+    .filter(item => item.required)
+    .filter(item => item.completed.user)
+    .length;
+    
+  // Calculate progress percentage
+  const progressPercentage = Math.round((completedRequiredItems / requiredItemsCount) * 100);
+  
+  // Calculate if both parents have completed requirements
+  const bothParentsCompleted = preCourseRequirements
+    .filter(item => item.required)
+    .every(item => item.completed.user && item.completed.coParent);
+    
+  // Handle action click for pre-course requirements
+  const handleRequirementAction = (requirementId: string) => {
+    switch(requirementId) {
+      case "co-parent":
+        setShowInviteDialog(true);
+        break;
+      case "waivers":
+        setShowWaiverDialog(true);
+        break;
+      case "holidays":
+        setShowHolidayDialog(true);
+        break;
+      case "schedule":
+        setShowScheduleDialog(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Get status for checklist item
+  const getStatusIcon = (item: PreCourseRequirement) => {
+    if (item.completed.user && item.completed.coParent) {
+      return <CircleCheck className="h-5 w-5 text-green-600" />;
+    } else if (item.completed.user) {
+      return <CircleCheck className="h-5 w-5 text-amber-500" />;
+    } else {
+      return item.required ? 
+        <Circle className="h-5 w-5 text-gray-300" /> : 
+        <Clock className="h-5 w-5 text-gray-300" />;
+    }
   };
 
   return (
@@ -154,80 +288,184 @@ export default function DashboardSimplified() {
             Welcome back, {user?.displayName || "Friend"}
           </h1>
           <p className="text-gray-600 text-sm max-w-md mx-auto">
-            You're making thoughtful decisions for your family's future.
+            You're taking thoughtful steps to create a supportive environment for your family.
           </p>
         </section>
         
-        {/* Main card with combined progress + forms */}
+        {/* Main card with pre-course checklist */}
         <section className="relative">
-          {/* Co-Parent micro-banner */}
-          {coParentSignupStatus === "pending" && (
-            <div className="absolute -top-5 left-0 right-0 mx-auto w-fit bg-white rounded-full px-4 py-1.5 shadow-sm border border-amber-100 z-10">
-              <button 
-                onClick={() => setShowInviteDialog(true)}
-                className="flex items-center text-xs text-amber-700 hover:text-amber-800 gap-1.5"
-              >
-                <Heart className="h-3.5 w-3.5 text-amber-500" />
-                <span>Want to invite your co-parent to join you?</span>
-                <span className="underline font-medium">Send Invitation</span>
-              </button>
-            </div>
-          )}
-          
-          {/* Main progress card */}
+          {/* Main card */}
           <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
             {/* Soft background illustration */}
             <div className="absolute -right-24 -bottom-24 w-64 h-64 rounded-full bg-gradient-to-br from-[#f5f0ff] to-transparent opacity-50 pointer-events-none"></div>
             
-            <div className="flex flex-col">
+            <div className="flex flex-col relative z-10">
               {/* Combined progress section */}
               <div className="mb-7">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
-                    <FileText className="h-5 w-5 text-[#6c54da]" />
+                    <ClipboardList className="h-5 w-5 text-[#6c54da]" />
                   </div>
                   <div>
-                    <h2 className="font-medium text-[#2e1a87] text-lg">You're {courseProgress}% of the way there!</h2>
-                    <p className="text-gray-600 text-sm">Complete your required forms to continue building your parenting plan.</p>
+                    <h2 className="font-medium text-[#2e1a87] text-lg">
+                      Before you start your parenting plan
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      Please complete these preparation steps for the best experience.
+                    </p>
                   </div>
                 </div>
                 
                 {/* Visual progress */}
-                <div className="mb-4 mt-5">
+                <div className="mb-5 mt-4">
                   <div className="flex justify-between text-xs text-gray-500 mb-1.5">
                     <span>Getting Started</span>
-                    <span>Complete</span>
+                    <span>Ready to Begin</span>
                   </div>
                   <div className="h-2.5 w-full bg-[#f5f0ff] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] rounded-full" 
-                      style={{ width: `${courseProgress}%` }}
+                      style={{ width: `${progressPercentage}%` }}
                     />
                   </div>
                   <div className="flex justify-between mt-2 text-xs">
                     <div className="flex items-center text-amber-700">
-                      <AlertCircle className="h-3.5 w-3.5 mr-1" />
-                      <span>{waivers.length - completedWaivers} forms remaining</span>
+                      {requiredItemsCompleted ? (
+                        <div className="flex items-center text-green-600">
+                          <CheckCheck className="h-3.5 w-3.5 mr-1" />
+                          <span>All required items completed</span>
+                        </div>
+                      ) : (
+                        <>
+                          <AlertCircle className="h-3.5 w-3.5 mr-1" />
+                          <span>
+                            {requiredItemsCount - completedRequiredItems} {requiredItemsCount - completedRequiredItems === 1 ? 'item' : 'items'} remaining
+                          </span>
+                        </>
+                      )}
                     </div>
                     <div className="flex items-center text-[#2e1a87]">
                       <CheckCheck className="h-3.5 w-3.5 mr-1" />
-                      <span>{completedWaivers} completed</span>
+                      <span>{completedRequiredItems} of {requiredItemsCount} completed</span>
                     </div>
                   </div>
+                </div>
+                
+                {/* Pre-course checklist */}
+                <div className="bg-[#f9f5ff]/80 rounded-lg p-5 mb-6">
+                  <h3 className="font-medium text-[#2e1a87] mb-3 flex items-center text-sm">
+                    <CheckCheck className="h-4 w-4 mr-2" />
+                    Pre-Course Checklist
+                  </h3>
+                  
+                  <ul className="space-y-3">
+                    {preCourseRequirements.map((item) => (
+                      <li 
+                        key={item.id} 
+                        className={`flex items-start gap-3 p-2 rounded-md ${
+                          item.completed.user ? 'bg-white/60' : 'bg-white'
+                        }`}
+                      >
+                        <div className="mt-0.5">
+                          {getStatusIcon(item)}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-medium text-[#2e1a87] flex items-center">
+                              {item.title}
+                              {!item.required && (
+                                <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                                  Optional
+                                </span>
+                              )}
+                            </h4>
+                            
+                            {!item.completed.user && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 px-2 text-xs text-[#6c54da] hover:text-[#2e1a87] hover:bg-[#f5f0ff]"
+                                onClick={() => handleRequirementAction(item.id)}
+                              >
+                                {item.action}
+                                <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                              </Button>
+                            )}
+                          </div>
+                          
+                          <p className="text-xs text-gray-600 mt-0.5 pr-4">
+                            {item.description}
+                          </p>
+                          
+                          {/* Status indicators for both parents */}
+                          {item.id !== "schedule" && (
+                            <div className="flex gap-6 mt-2">
+                              <div className="flex items-center text-xs">
+                                <div className={`h-2 w-2 rounded-full ${
+                                  item.completed.user ? 'bg-green-500' : 'bg-gray-300'
+                                } mr-1.5`}></div>
+                                <span className="text-gray-600">
+                                  You {item.completed.user ? 'completed' : 'pending'}
+                                </span>
+                              </div>
+                              
+                              {coParentRegistered && (
+                                <div className="flex items-center text-xs">
+                                  <div className={`h-2 w-2 rounded-full ${
+                                    item.completed.coParent ? 'bg-green-500' : 'bg-gray-300'
+                                  } mr-1.5`}></div>
+                                  <span className="text-gray-600">
+                                    Co-parent {item.completed.coParent ? 'completed' : 'pending'}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
               
               {/* Primary CTA Button */}
-              <Button className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none px-5 py-6 h-auto">
-                <span className="text-base">Start Now</span>
+              <Button
+                className={`px-5 py-6 h-auto ${
+                  requiredItemsCompleted 
+                    ? 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none'
+                    : 'bg-gradient-to-r from-[#6c54da]/60 to-[#9a8ae6]/60 text-white border-none cursor-not-allowed opacity-80'
+                }`}
+                disabled={!requiredItemsCompleted}
+              >
+                <span className="text-base">
+                  {requiredItemsCompleted 
+                    ? "Begin Your Parenting Plan" 
+                    : "Complete Required Items"
+                  }
+                </span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
+              
+              {!requiredItemsCompleted && (
+                <p className="text-xs text-center text-amber-600 mt-2">
+                  Please complete all required items before continuing
+                </p>
+              )}
+              
+              {bothParentsCompleted && (
+                <div className="mt-4 bg-green-50 border border-green-100 rounded-lg p-3">
+                  <p className="text-sm text-green-700 flex items-center">
+                    <CheckCheck className="h-4 w-4 mr-2 text-green-600" />
+                    Both you and your co-parent have completed all required preparations!
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </section>
 
         {/* Minimalist footer with support links */}
-        <footer className="mt-8 text-center">
+        <footer className="mt-4 text-center">
           <div className="flex justify-center items-center gap-6 text-xs text-gray-500">
             <button 
               onClick={() => setShowSupportDialog(true)}
@@ -241,24 +479,24 @@ export default function DashboardSimplified() {
           </div>
           
           <p className="text-xs text-gray-500 mt-8 max-w-md mx-auto font-light italic">
-            "Every step you take today creates a more peaceful tomorrow for your children."
+            "Every thoughtful decision you make today creates a more supportive tomorrow for your children."
           </p>
         </footer>
 
-        {/* Schedule dialog functionality */}
-        <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
+        {/* Schedule dialog */}
+        <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
           <DialogContent className="bg-white rounded-lg">
             <DialogHeader>
-              <DialogTitle className="text-[#2e1a87]">Choose a Time Together</DialogTitle>
+              <DialogTitle className="text-[#2e1a87]">Schedule Your Course Session</DialogTitle>
               <DialogDescription>
-                Select a date and time that works for both you and your co-parent.
+                Choose a date and time when both you and your co-parent can focus together.
               </DialogDescription>
             </DialogHeader>
             <div className="py-4">
               <div className="bg-[#f9f5ff] p-4 rounded-lg mb-4 text-sm text-[#2e1a87]">
                 <div className="flex gap-2">
                   <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                  <span>These sessions work best when both parents can be fully present in a calm environment.</span>
+                  <span>Setting aside dedicated time to complete this course together often leads to better outcomes.</span>
                 </div>
               </div>
               <Calendar
@@ -287,15 +525,184 @@ export default function DashboardSimplified() {
                   ))}
                 </div>
               </div>
+              <div className="mt-4 bg-blue-50 p-3 rounded-md text-sm text-blue-700">
+                <div className="flex gap-2">
+                  <Mail className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                  <span>You'll both receive an email reminder 24 hours before your scheduled time.</span>
+                </div>
+              </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDateDialog(false)} 
+              <Button variant="outline" onClick={() => setShowScheduleDialog(false)} 
                 className="border-[#6c54da]/20 text-[#2e1a87]">
-                Not Now
+                Skip for Now
               </Button>
-              <Button onClick={proposeDate} 
+              <Button onClick={scheduleCourse} 
                 className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none">
-                Suggest This Time
+                Schedule Session
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Waiver dialog */}
+        <Dialog open={showWaiverDialog} onOpenChange={setShowWaiverDialog}>
+          <DialogContent className="bg-white rounded-lg max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-[#2e1a87]">Review & Sign Agreements</DialogTitle>
+              <DialogDescription>
+                Please review these documents carefully before signing.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4 max-h-[60vh] overflow-y-auto">
+              {waivers.map((waiver) => (
+                <div key={waiver.id} className="mb-6 border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                  <h3 className="text-[#2e1a87] font-medium mb-2 text-base">{waiver.title}</h3>
+                  <p className="text-gray-600 text-sm mb-3">{waiver.description}</p>
+                  
+                  <div className="bg-gray-50 p-4 rounded-md mb-4 text-sm text-gray-700 h-32 overflow-y-auto">
+                    <p className="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center text-xs">
+                        <div className={`h-2 w-2 rounded-full ${
+                          waiver.signed.user ? 'bg-green-500' : 'bg-gray-300'
+                        } mr-1.5`}></div>
+                        <span className="text-gray-600">
+                          {waiver.signed.user 
+                            ? `You signed on ${format(waiver.signedDate?.user || new Date(), 'MMMM d, yyyy')}` 
+                            : 'Your signature required'}
+                        </span>
+                      </div>
+                      
+                      {coParentRegistered && (
+                        <div className="flex items-center text-xs">
+                          <div className={`h-2 w-2 rounded-full ${
+                            waiver.signed.coParent ? 'bg-green-500' : 'bg-gray-300'
+                          } mr-1.5`}></div>
+                          <span className="text-gray-600">
+                            {waiver.signed.coParent 
+                              ? `Co-parent signed on ${format(waiver.signedDate?.coParent || new Date(), 'MMMM d, yyyy')}` 
+                              : 'Co-parent signature pending'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {!waiver.signed.user && (
+                      <Button
+                        size="sm"
+                        onClick={() => completeWaiver(waiver.id)}
+                        className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                      >
+                        Sign Agreement
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowWaiverDialog(false)}
+                className="border-[#6c54da]/20 text-[#2e1a87]"
+              >
+                Review Later
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Holiday preferences dialog */}
+        <Dialog open={showHolidayDialog} onOpenChange={setShowHolidayDialog}>
+          <DialogContent className="bg-white rounded-lg max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-[#2e1a87]">Holiday Schedule Preferences</DialogTitle>
+              <DialogDescription>
+                Choose your preferences for holidays and special occasions.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="bg-[#f9f5ff] p-4 rounded-lg mb-6 text-sm text-[#2e1a87]">
+                <div className="flex gap-2">
+                  <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                  <span>Your selections here will help create a starting point for your holiday schedule. You can always adjust these later.</span>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Sample holiday categories */}
+                <div>
+                  <h3 className="text-sm font-medium text-[#2e1a87] mb-3">Major Holidays</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {["Thanksgiving", "Christmas Eve", "Christmas Day", "New Year's Eve", "New Year's Day", "Fourth of July"].map((holiday) => (
+                      <div key={holiday} className="flex items-center justify-between border border-gray-200 rounded-md p-3">
+                        <span className="text-sm">{holiday}</span>
+                        <select className="text-xs border border-gray-200 rounded px-2 py-1 bg-white text-gray-700">
+                          <option>Alternating years</option>
+                          <option>Shared equally</option>
+                          <option>Always with you</option>
+                          <option>Always with co-parent</option>
+                          <option>Other arrangement</option>
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-medium text-[#2e1a87] mb-3">Special Days</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {["Child's Birthday", "Mother's Day", "Father's Day", "Your Birthday", "Co-Parent's Birthday"].map((day) => (
+                      <div key={day} className="flex items-center justify-between border border-gray-200 rounded-md p-3">
+                        <span className="text-sm">{day}</span>
+                        <select className="text-xs border border-gray-200 rounded px-2 py-1 bg-white text-gray-700">
+                          <option>Naturally assigned</option>
+                          <option>Alternating years</option>
+                          <option>Shared equally</option>
+                          <option>Always with you</option>
+                          <option>Always with co-parent</option>
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-medium text-[#2e1a87] mb-3">School Breaks</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {["Spring Break", "Summer Break", "Winter Break", "Other School Holidays"].map((break_) => (
+                      <div key={break_} className="flex items-center justify-between border border-gray-200 rounded-md p-3">
+                        <span className="text-sm">{break_}</span>
+                        <select className="text-xs border border-gray-200 rounded px-2 py-1 bg-white text-gray-700">
+                          <option>Alternating years</option>
+                          <option>Split equally</option>
+                          <option>Regular schedule applies</option>
+                          <option>Custom arrangement</option>
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowHolidayDialog(false)}
+                className="border-[#6c54da]/20 text-[#2e1a87]"
+              >
+                Save for Later
+              </Button>
+              <Button
+                onClick={completeHolidayPreferences}
+                className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+              >
+                Save Preferences
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -350,14 +757,14 @@ export default function DashboardSimplified() {
             <DialogHeader>
               <DialogTitle className="text-[#2e1a87]">Invite Your Co-Parent</DialogTitle>
               <DialogDescription>
-                Working together can help create better outcomes for your children.
+                Working together creates better outcomes for your children.
               </DialogDescription>
             </DialogHeader>
             <div className="py-4">
               <div className="bg-[#f9f5ff] p-4 rounded-lg mb-4 text-sm text-[#2e1a87]">
                 <div className="flex gap-2">
                   <Info className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                  <span>Their information will remain private and they'll receive a gentle invitation to join.</span>
+                  <span>Your co-parent will need to register and complete their own forms for the best results.</span>
                 </div>
               </div>
               <div className="space-y-3 mt-3">
@@ -373,17 +780,21 @@ export default function DashboardSimplified() {
                   <label className="text-sm font-medium text-[#2e1a87]">Add a Personal Note (Optional)</label>
                   <textarea 
                     className="border border-[#6c54da]/20 rounded-md p-2 text-sm h-24 resize-none"
-                    placeholder="I've started creating our parenting plan. It would be great if we could work on this together."
+                    placeholder="I've started creating our parenting plan. It would help if we could both complete our forms and work on this together."
                   ></textarea>
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowInviteDialog(false)} 
-                className="border-[#6c54da]/20 text-[#2e1a87]">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowInviteDialog(false)}
+                className="border-[#6c54da]/20 text-[#2e1a87]"
+              >
                 Not Now
               </Button>
               <Button
+                onClick={sendInvitation}
                 className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
               >
                 <Users className="mr-2 h-4 w-4" /> Send Invitation
