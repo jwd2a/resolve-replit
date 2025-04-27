@@ -423,8 +423,8 @@ export default function DashboardSimplified() {
                               {item.id !== "schedule" ? (
                                 <div className="flex flex-wrap text-xs text-gray-600">
                                   <span className="whitespace-nowrap">
-                                    You: <span className={item.completed.user ? 'text-green-600 font-medium' : ''}>
-                                      {item.completed.user ? 'Completed' : 'Pending'}
+                                    You: <span className={item.id === "co-parent" || item.completed.user ? 'text-green-600 font-medium' : ''}>
+                                      {item.id === "co-parent" || item.completed.user ? 'Completed' : 'Pending'}
                                     </span>
                                   </span>
                                   
@@ -450,8 +450,16 @@ export default function DashboardSimplified() {
                           <div className="flex-shrink-0 flex items-center h-full ml-auto">
                             {item.id !== "schedule" ? (
                               <div className="flex items-center text-xs text-gray-500">
-                                {/* Either show action link or completed status */}
-                                {!item.completed.user ? (
+                                {/* Special handling for co-parent registration which needs both sides */}
+                                {item.id === "co-parent" && !coParentRegistered ? (
+                                  <button
+                                    className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center mr-3"
+                                    onClick={() => handleRequirementAction(item.id)}
+                                  >
+                                    {item.action}
+                                    <ArrowRight className="h-3 w-3 ml-1" />
+                                  </button>
+                                ) : !item.completed.user ? (
                                   <button
                                     className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center mr-3"
                                     onClick={() => handleRequirementAction(item.id)}
