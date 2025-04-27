@@ -24,7 +24,8 @@ import {
   Users,
   AlertCircle,
   CheckCheck,
-  CircleCheck,
+  Check,
+  CheckCircle,
   Circle,
   BookOpen,
   Heart,
@@ -279,34 +280,60 @@ export default function DashboardSimplified() {
   
   // Get status for checklist item
   const getStatusIcon = (item: PreCourseRequirement) => {
+    // For completed items by both parties
     if (item.completed.user && item.completed.coParent) {
-      // Both completed - green check icon with filled background
       return (
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-100 border border-green-300">
-          <CheckCircle className="h-5 w-5 text-green-600" />
+        <div className="w-7 h-7 flex items-center justify-center rounded-full bg-green-100 border border-green-300">
+          <Check className="h-5 w-5 text-green-600" />
         </div>
       );
-    } else if (item.completed.user) {
-      // You completed - amber check icon with filled background
+    }
+    
+    // For items completed only by the user
+    if (item.completed.user) {
       return (
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-amber-100 border border-amber-300">
-          <CheckCircle className="h-5 w-5 text-amber-500" />
+        <div className="w-7 h-7 flex items-center justify-center rounded-full bg-amber-100 border border-amber-300">
+          <Check className="h-5 w-5 text-amber-500" />
         </div>
       );
-    } else if (item.required) {
-      // Required but incomplete - outlined circle with purple border
-      return (
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white border-2 border-[#6c54da]/50">
-          <Circle className="h-4 w-4 text-[#6c54da]/30" />
-        </div>
-      );
-    } else {
-      // Optional and incomplete - clock icon with light background
-      return (
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 border border-gray-200">
-          <Clock className="h-4 w-4 text-gray-400" />
-        </div>
-      );
+    }
+    
+    // For incomplete items - use themed icons based on requirement type
+    switch (item.id) {
+      case "co-parent":
+        return (
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0e6ff] border-2 border-[#6c54da]/50">
+            <Users className="h-4 w-4 text-[#6c54da]" />
+          </div>
+        );
+        
+      case "waivers":
+        return (
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0e6ff] border-2 border-[#6c54da]/50">
+            <FileText className="h-4 w-4 text-[#6c54da]" />
+          </div>
+        );
+        
+      case "holidays":
+        return (
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0e6ff] border-2 border-[#6c54da]/50">
+            <CalendarDays className="h-4 w-4 text-[#6c54da]" />
+          </div>
+        );
+        
+      case "schedule":
+        return (
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 border border-gray-200">
+            <Clock className="h-4 w-4 text-gray-500" />
+          </div>
+        );
+        
+      default:
+        return (
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#f0e6ff] border-2 border-[#6c54da]/50">
+            <Circle className="h-4 w-4 text-[#6c54da]" />
+          </div>
+        );
     }
   };
 
