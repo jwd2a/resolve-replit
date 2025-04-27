@@ -184,7 +184,9 @@ export default function DashboardSimplified() {
       id: "co-parent",
       title: "Co-Parent Registration",
       description: "Invite your co-parent to join the platform.",
-      completed: { user: true, coParent: coParentRegistered }, // User is always completed, waiting on co-parent
+      // Mark the item as not completed by the user until the co-parent registers
+      // This ensures the action link is still shown
+      completed: { user: coParentRegistered, coParent: coParentRegistered },
       required: true,
       icon: <Users className="h-4 w-4" />,
       action: "Invite Co-Parent"
