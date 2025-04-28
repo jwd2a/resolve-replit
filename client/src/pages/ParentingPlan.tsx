@@ -313,9 +313,13 @@ export default function ParentingPlan() {
           {/* Main document - scrollable */}
           <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
-              <div className="bg-white pb-4 mb-2">
-                {/* Document header with prominent title */}
-                <div className="border-b border-gray-100 pb-3">
+              <div className="bg-white pb-2 mb-2">
+                {/* Empty div to maintain spacing - actual header moved to scrollable content */}
+              </div>
+            
+              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
+                {/* Document header with prominent title - now part of scrollable content */}
+                <div className="border-b border-gray-100 pb-3 mb-4">
                   {/* Large, prominent title */}
                   <h1 className="text-4xl font-bold text-[#2e1a87] py-4" style={{ letterSpacing: "-0.025em" }}>
                     Parenting Partnership Agreement
@@ -343,11 +347,6 @@ export default function ParentingPlan() {
                   </div>
                 </div>
                 
-                {/* Clear break for AI Assistant */}
-                <div className="my-4 border-t border-gray-100"></div>
-              </div>
-            
-              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
                 <p className="text-gray-600">
                   This is an agreement between the parents named below that is intended to address all of our legal rights and obligations 
                   relating to the child(ren) identified below. We, the parents, agree that it is best for our child(ren) that we determine 
