@@ -11,6 +11,7 @@ import OnboardingPage from "@/pages/onboarding-page";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
+import Home3 from "@/pages/home3";
 import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/dashboard-new" component={DashboardSimplified} />
       <Route path="/" component={DashboardSimplified} />
       <Route path="/home2" component={Home2} />
+      <Route path="/home3" component={Home3} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
