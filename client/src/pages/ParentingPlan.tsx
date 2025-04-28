@@ -332,10 +332,6 @@ export default function ParentingPlan() {
                     {/* Smaller action buttons */}
                     <div className="flex space-x-2">
                       <button className="flex items-center px-3 py-1 text-[#2e1a87] bg-white border border-[#2e1a87] text-xs rounded-full hover:bg-[#f5f3ff] hover:shadow transition-all duration-200">
-                        <Share2 className="h-3 w-3 mr-1" />
-                        <span className="font-medium">Share</span>
-                      </button>
-                      <button className="flex items-center px-3 py-1 text-[#2e1a87] bg-white border border-[#2e1a87] text-xs rounded-full hover:bg-[#f5f3ff] hover:shadow transition-all duration-200">
                         <Download className="h-3 w-3 mr-1" />
                         <span className="font-medium">Download</span>
                       </button>
