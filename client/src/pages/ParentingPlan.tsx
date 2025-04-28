@@ -311,8 +311,8 @@ export default function ParentingPlan() {
       <div className="flex flex-1">
         <div className="w-full h-full flex flex-col lg:flex-row max-w-[97%] mx-auto mt-5">
           {/* Main document - scrollable */}
-          <div className="flex-1 overflow-auto flex flex-col">
-            <div className="bg-white rounded-l-lg shadow-lg p-6 flex flex-col">
+          <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
+            <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
               <div className="bg-white pb-4 mb-2">
                 {/* Document header with prominent title */}
                 <div className="border-b border-gray-100 pb-3">
@@ -347,7 +347,7 @@ export default function ParentingPlan() {
                 <div className="my-4 border-t border-gray-100"></div>
               </div>
             
-              <div className="prose max-w-none overflow-y-auto">
+              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
                 <p className="text-gray-600">
                   This is an agreement between the parents named below that is intended to address all of our legal rights and obligations 
                   relating to the child(ren) identified below. We, the parents, agree that it is best for our child(ren) that we determine 
@@ -800,7 +800,7 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - connected with a divider */}
-          <div className="lg:w-[450px] border-l border-gray-300 flex flex-col overflow-auto">
+          <div className="lg:w-[450px] border-l border-gray-300 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-r-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
