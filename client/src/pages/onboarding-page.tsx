@@ -212,11 +212,7 @@ export default function OnboardingPage() {
     }, 1500);
   };
   
-  const handleInviteLater = () => {
-    toast({
-      description: "You can invite your co-parent anytime from your dashboard.",
-    });
-  };
+  // No longer needed - removed handleInviteLater function
 
   const onJurisdictionSubmit = (data: JurisdictionFormValues) => {
     console.log("Jurisdiction info submitted:", data);
@@ -533,9 +529,9 @@ export default function OnboardingPage() {
                     
                     <div className="mt-6 pt-4 border-t border-gray-100">
                       <div className="flex flex-col space-y-3">
-                        <h3 className="text-sm font-medium text-gray-700">Would you like to invite your co-parent now?</h3>
+                        <h3 className="text-sm font-medium text-gray-700">Co-parent Registration</h3>
                         <div className="bg-blue-50 rounded-md p-3 text-sm text-blue-800 mb-2">
-                          <p>Inviting your co-parent allows them to collaborate on the parenting plan. You can always invite them later from your dashboard.</p>
+                          <p>You and your co-parent will take the course together, they will need to register as well. You can do this later from the home screen.</p>
                         </div>
                         
                         {isInviteSent ? (
@@ -544,11 +540,11 @@ export default function OnboardingPage() {
                             <span>Invitation sent to co-parent</span>
                           </div>
                         ) : (
-                          <div className="flex space-x-3">
+                          <div className="flex">
                             <Button 
                               type="button"
                               variant="outline"
-                              className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] flex-1 text-sm"
+                              className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] w-full text-sm"
                               onClick={handleInviteCoParent}
                               disabled={isSendingInvite}
                             >
@@ -563,17 +559,9 @@ export default function OnboardingPage() {
                               ) : (
                                 <>
                                   <Mail className="w-4 h-4 mr-2" />
-                                  Send Invite Email
+                                  Send Invite Email Now
                                 </>
                               )}
-                            </Button>
-                            <Button 
-                              type="button"
-                              variant="ghost"
-                              className="flex-1 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                              onClick={handleInviteLater}
-                            >
-                              Invite Later
                             </Button>
                           </div>
                         )}
