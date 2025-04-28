@@ -12,6 +12,7 @@ import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
 import Home3 from "@/pages/home3";
+import Home4 from "@/pages/home4";
 import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/" component={DashboardSimplified} />
       <Route path="/home2" component={Home2} />
       <Route path="/home3" component={Home3} />
+      <Route path="/home4" component={Home4} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
