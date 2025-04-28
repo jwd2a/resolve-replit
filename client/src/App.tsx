@@ -16,7 +16,6 @@ import Home4 from "@/pages/home4";
 import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
-import { NavigationMenu } from "@/components/NavigationMenu";
 
 function Router() {
   return (
@@ -50,12 +49,7 @@ function App() {
       <AuthProvider>
         <TooltipProvider>
           <Toaster />
-          <div className="min-h-screen flex flex-col">
-            <NavigationMenu />
-            <div className="flex-1">
-              <Router />
-            </div>
-          </div>
+          <Router />
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>

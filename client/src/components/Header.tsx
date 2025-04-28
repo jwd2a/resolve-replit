@@ -1,8 +1,14 @@
 import { FC } from "react";
-import { Menu, ChevronRight } from "lucide-react";
+import { Menu, ChevronRight, ChevronDown, Home } from "lucide-react";
 import TopNavbar from "@/components/TopNavbar";
 import { Link, useLocation } from "wouter";
 import ResolveLogo from "../assets/resolve-logo.png";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   title: string;
@@ -38,13 +44,42 @@ const Header: FC<HeaderProps> = ({
           </Link>
           
           <div className="flex ml-10 space-x-8">
-            <Link href="/">
-              <span className={`cursor-pointer text-base font-medium ${location === '/' 
-                ? 'text-white border-b-2 border-white pb-1' 
-                : 'text-gray-300 hover:text-white'}`}>
-                HOME
-              </span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center focus:outline-none">
+                <span className={`cursor-pointer text-base font-medium flex items-center ${
+                  location === '/' || 
+                  location === '/home2' || 
+                  location === '/home3' || 
+                  location === '/home4' 
+                    ? 'text-white border-b-2 border-white pb-1' 
+                    : 'text-gray-300 hover:text-white'}`}>
+                  HOME
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white">
+                <Link href="/">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Dashboard {location === '/' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/home2">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Home 2 {location === '/home2' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/home3">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Home 3 {location === '/home3' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/home4">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Home 4 {location === '/home4' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link href="/course">
               <span className={`cursor-pointer text-base font-medium ${location.startsWith('/course') 
                 ? 'text-white border-b-2 border-white pb-1' 
