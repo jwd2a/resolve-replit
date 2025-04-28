@@ -118,7 +118,8 @@ export default function Home4() {
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-white text-white hover:bg-white/10 hover:text-white"
+                    className="border-white text-white bg-transparent hover:bg-white/10"
+                    style={{ color: 'white' }}
                     onClick={() => setLocation("/parenting-plan")}
                   >
                     View Parenting Plan
