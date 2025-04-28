@@ -881,7 +881,7 @@ export default function ParentingPlan() {
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">AI Parenting Plan Assistant</h3>
                   <p className="text-gray-600">
-                    Select any section from the document to get AI-powered help with drafting the perfect language for your parenting plan.
+                    Select a section from the document to get AI-powered help with drafting the perfect language for your parenting plan.
                   </p>
                   <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left">
                     <p className="text-sm font-medium text-gray-700 mb-2">What the assistant can help with:</p>
