@@ -311,13 +311,13 @@ export default function ParentingPlan() {
       <div className="flex flex-1">
         <div className="w-full h-full flex flex-col lg:flex-row max-w-[97%] mx-auto mt-5">
           {/* Main document - scrollable */}
-          <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 84px)' }}>
+          <div className="flex-1 h-full overflow-hidden flex flex-col" style={{ minHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-l-lg shadow-lg p-6 h-full flex flex-col">
               <div className="bg-white pb-2 mb-2">
                 {/* Empty div to maintain spacing - actual header moved to scrollable content */}
               </div>
             
-              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 200px)' }}>
+              <div className="prose max-w-none overflow-y-auto" style={{ height: 'calc(100vh - 100px)' }}>
                 {/* Document header with prominent title - now part of scrollable content */}
                 <div className="border-b border-gray-100 pb-3 mb-4">
                   {/* Large, prominent title */}
@@ -799,7 +799,7 @@ export default function ParentingPlan() {
           </div>
           
           {/* AI Assistant sidebar - connected with a divider */}
-          <div className="lg:w-[450px] border-l border-gray-300 flex flex-col overflow-hidden" style={{ height: 'calc(100vh - 84px)' }}>
+          <div className="lg:w-[450px] border-l border-gray-300 flex flex-col overflow-hidden" style={{ minHeight: 'calc(100vh - 84px)' }}>
             <div className="bg-white rounded-r-lg shadow-lg flex-1 flex flex-col overflow-hidden">
               {activeSection ? (
                 <>
