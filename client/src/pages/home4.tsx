@@ -12,8 +12,6 @@ import {
   ChevronRight, 
   UserPlus, 
   Zap,
-  Bell,
-  BarChart,
   Clock,
   BookOpen,
   Heart,
@@ -21,24 +19,22 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { getInitials } from "@/lib/utils";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { format, addDays } from "date-fns";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { format } from "date-fns";
+import Header from "@/components/Header";
 
 export default function Home4() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("dashboard");
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [coparentEmail, setCoparentEmail] = useState("");
 
   // Mock data
   const completedModules = 0;
-  const totalModules = 4;
+  const totalModules = 5;
   const progress = Math.round((completedModules / totalModules) * 100);
   
   // Mock co-parent status
@@ -66,53 +62,6 @@ export default function Home4() {
     }, 1000);
   };
   
-  const quickActions = [
-    { 
-      id: 1, 
-      title: "Start Course", 
-      description: "Begin your guided journey",
-      icon: <Star className="h-5 w-5 text-[#2e1a87]" />,
-      action: () => setLocation("/course"),
-      primary: true
-    },
-    { 
-      id: 2, 
-      title: "Create Parenting Plan", 
-      description: "Draft your agreements",
-      icon: <FileText className="h-5 w-5 text-[#2e1a87]" />,
-      action: () => setLocation("/parenting-plan"),
-      primary: false
-    },
-    { 
-      id: 3, 
-      title: "Invite Co-Parent", 
-      description: "Work together on your plan",
-      icon: <UserPlus className="h-5 w-5 text-[#2e1a87]" />,
-      action: () => setShowInviteModal(true),
-      primary: !coParentJoined,
-      status: coParentJoined ? "completed" : "pending"
-    },
-    { 
-      id: 4, 
-      title: "Schedule Mediation", 
-      description: "Book time with a professional",
-      icon: <Calendar className="h-5 w-5 text-[#2e1a87]" />,
-      action: () => toast({
-        description: "Scheduling feature coming soon"
-      }),
-      primary: false
-    }
-  ];
-  
-  const recentActivity = [
-    {
-      id: 1,
-      title: "Account Created",
-      timestamp: new Date(),
-      icon: <Zap className="h-4 w-4 text-blue-500" />
-    }
-  ];
-  
   const upcomingDeadlines = [
     {
       id: 1,
@@ -130,8 +79,15 @@ export default function Home4() {
     }
   ];
   
+  // This is needed for the Header component
+  const onMenuClick = () => {
+    // Placeholder
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
+      <Header title="Dashboard" onMenuClick={onMenuClick} />
+      
       <div className="max-w-6xl mx-auto pt-6 px-4">
         <div className="flex flex-col space-y-6">
           {/* Welcome/Overview Banner */}
@@ -139,7 +95,7 @@ export default function Home4() {
             <CardContent className="pt-6 pb-6">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
-                  <h1 className="text-2xl font-bold mb-2">Welcome, {user?.displayName?.split(' ')[0] || 'there'}!</h1>
+                  <h1 className="text-2xl font-bold mb-2">Welcome, Linda!</h1>
                   <p className="opacity-90 mb-2">Your co-parenting journey starts here</p>
                   <div className="flex items-center mt-2">
                     <div className="w-full max-w-xs">
@@ -147,7 +103,7 @@ export default function Home4() {
                         <span>Course Progress</span>
                         <span>{completedModules}/{totalModules} Modules</span>
                       </div>
-                      <Progress value={progress} className="h-2 bg-white/20" indicatorClassName="bg-white" />
+                      <Progress value={progress} className="h-2 bg-white/20" />
                     </div>
                   </div>
                 </div>
@@ -162,7 +118,7 @@ export default function Home4() {
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-white text-white hover:bg-white/10"
+                    className="border-white text-white hover:bg-white/10 hover:text-white"
                     onClick={() => setLocation("/parenting-plan")}
                   >
                     View Parenting Plan
@@ -178,51 +134,6 @@ export default function Home4() {
             <div className="md:col-span-2 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                  <CardDescription>
-                    Next steps on your co-parenting journey
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {quickActions.map((action) => (
-                      <div 
-                        key={action.id} 
-                        className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md 
-                        ${action.primary ? 'border-[#2e1a87] bg-[#2e1a87]/5' : 'hover:border-[#2e1a87]/50'}
-                        ${action.status === 'completed' ? 'bg-green-50 border-green-200' : ''}`}
-                        onClick={action.action}
-                      >
-                        <div className="flex items-start">
-                          <div className="p-2 rounded-full bg-white mr-3 border">
-                            {action.status === 'completed' ? 
-                              <Check className="h-5 w-5 text-green-500" /> : 
-                              action.icon
-                            }
-                          </div>
-                          <div>
-                            <h3 className="font-medium">{action.title}</h3>
-                            <p className="text-sm text-gray-500">{action.description}</p>
-                            {action.status === 'completed' && (
-                              <span className="text-xs text-green-600 flex items-center mt-1">
-                                <Check className="h-3 w-3 mr-1" /> Completed
-                              </span>
-                            )}
-                            {action.status === 'pending' && !action.primary && (
-                              <span className="text-xs text-amber-600 flex items-center mt-1">
-                                <Clock className="h-3 w-3 mr-1" /> Pending
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
                   <CardTitle>Course Modules</CardTitle>
                   <CardDescription>
                     Your guided learning journey
@@ -234,7 +145,8 @@ export default function Home4() {
                       { id: 1, title: "Introduction to Co-Parenting", duration: "25 min", locked: false },
                       { id: 2, title: "Communication Strategies", duration: "40 min", locked: true },
                       { id: 3, title: "Creating a Parenting Plan", duration: "35 min", locked: true },
-                      { id: 4, title: "Conflict Resolution", duration: "30 min", locked: true }
+                      { id: 4, title: "Conflict Resolution", duration: "30 min", locked: true },
+                      { id: 5, title: "Moving Forward", duration: "20 min", locked: true }
                     ].map((module) => (
                       <div key={module.id} className={`border rounded-lg p-4 ${module.locked ? 'opacity-70' : ''}`}>
                         <div className="flex justify-between items-center">
