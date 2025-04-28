@@ -351,11 +351,6 @@ export default function ParentingPlan() {
                   The parents named below are entering into this agreement to address their legal rights and obligations relating to their minor child(ren). The parents (referred to later in this agreement as "we" or by individual name) are:
                 </p>
                 
-                <p className="text-gray-600">
-                  It is our intention to submit this agreement to the Court in any legal proceeding to determine our parenting rights and obligations. 
-                  We both want the Court to adopt this agreement in its entirety.
-                </p>
-                
                 {/* Section 1 - Parents */}
                 <div 
                   className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-1' ? 'active' : ''}`}
