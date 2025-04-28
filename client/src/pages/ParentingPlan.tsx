@@ -348,9 +348,7 @@ export default function ParentingPlan() {
                 </div>
                 
                 <p className="text-gray-600">
-                  This is an agreement between the parents named below that is intended to address all of our legal rights and obligations 
-                  relating to the child(ren) identified below. We, the parents, agree that it is best for our child(ren) that we determine 
-                  how we will parent them following our separation and that the terms below are in our child(ren)'s best interests.
+                  The parents named below are entering into this agreement to address their legal rights and obligations relating to their minor child(ren). The parents (referred to later in this agreement as "we" or by individual name) are:
                 </p>
                 
                 <p className="text-gray-600">
