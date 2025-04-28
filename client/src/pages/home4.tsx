@@ -278,18 +278,6 @@ export default function Home4() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-      <header className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="text-xl font-bold text-[#2e1a87]">Resolve</div>
-          
-          <div className="flex items-center">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>{user?.displayName ? getInitials(user.displayName) : "U"}</AvatarFallback>
-            </Avatar>
-          </div>
-        </div>
-      </header>
-      
       {step === "welcome" && renderWelcomeScreen()}
       {step === "invite-coparent" && renderInviteCoParentStep()}
       {step === "checklist" && renderChecklist()}
