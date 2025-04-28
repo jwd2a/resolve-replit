@@ -99,6 +99,7 @@ export default function Home3() {
   const { toast } = useToast();
   const [showSupportDialog, setShowSupportDialog] = useState(false);
   const [showResourcesDialog, setShowResourcesDialog] = useState(false);
+  const [showRequirementsDialog, setShowRequirementsDialog] = useState(false);
   
   // In this version, everything is already completed
   const [coParentRegistered] = useState(true);
@@ -314,209 +315,206 @@ export default function Home3() {
       {/* Main content */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
         {/* Warm welcome message - small and centered */}
-        <section className="text-center mb-2">
+        <section className="text-center mb-4">
           <h1 className="text-lg font-medium text-[#2e1a87] mb-1">
             Welcome back, {user?.displayName || "Emily"}
           </h1>
           <p className="text-gray-600 text-sm max-w-md mx-auto">
-            You're taking important steps for your family's future.
+            You're making progress on your parenting plan journey.
           </p>
         </section>
         
-        {/* Main card with pre-course checklist */}
-        <section className="relative">
-          {/* Main card */}
-          <div className="bg-white rounded-xl p-6 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
-            {/* Soft background illustration */}
-            <div className="absolute -right-24 -bottom-24 w-64 h-64 rounded-full bg-gradient-to-br from-[#f5f0ff] to-transparent opacity-50 pointer-events-none"></div>
+        {/* Course Progress Hero - NEW PRIMARY FOCUS */}
+        <section className="mb-5 relative">
+          <div className="bg-gradient-to-r from-[#2e1a87] to-[#4730b8] text-white rounded-xl p-6 shadow-md relative overflow-hidden">
+            {/* Soft background pattern */}
+            <div className="absolute right-0 top-0 w-64 h-64 opacity-10 pointer-events-none">
+              <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100" height="100" fill="url(#grid)" />
+              </svg>
+            </div>
             
-            <div className="flex flex-col relative z-10">
-              {/* Combined progress section */}
-              <div className="mb-5">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
-                    <ClipboardList className="h-4.5 w-4.5 text-[#6c54da]" />
-                  </div>
-                  <div>
-                    <h2 className="font-medium text-[#2e1a87] text-base">
-                      Before you start your parenting plan
-                    </h2>
-                    <p className="text-gray-600 text-sm">
-                      Please complete these preparation steps for the best experience.
-                    </p>
-                  </div>
+            <div className="flex flex-col gap-4 relative z-10">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-xl font-semibold mb-1">
+                    Your Co-Parenting Course
+                  </h2>
+                  <p className="text-white/80 text-sm">
+                    Build your customized parenting agreement
+                  </p>
                 </div>
-                
-                {/* Space instead of visual progress */}
-                <div className="mb-3 mt-3">
-                  {bothParentsCompleted && (
-                    <div className="bg-green-50 border border-green-100 rounded-lg p-2.5 mb-2">
-                      <p className="text-sm text-green-700 flex items-center">
-                        <CheckCheck className="h-4 w-4 mr-2 text-green-600" />
-                        You and your co-parent have completed all required steps!
-                      </p>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Pre-course checklist */}
-                <div className="bg-[#f9f5ff]/80 rounded-lg p-4 mb-5">
-                  <h3 className="font-medium text-[#2e1a87] mb-2.5 flex items-center text-sm">
-                    <CheckCheck className="h-4 w-4 mr-2" />
-                    Pre-Course Checklist
-                  </h3>
-                  
-                  <ul className="space-y-2">
-                    {preCourseRequirements.map((item) => (
-                      <li 
-                        key={item.id} 
-                        className={`rounded-md p-3 ${
-                          item.completed.user ? 'bg-white/60' : 'bg-white'
-                        }`}
-                      >
-                        {/* Use flexbox instead of grid for better vertical alignment */}
-                        <div className="flex items-center gap-3">
-                          {/* Column 1: Icon */}
-                          <div className="flex-shrink-0">
-                            {getStatusIcon(item)}
-                          </div>
-                          
-                          {/* Column 2: Title and description */}
-                          <div className="flex-grow min-w-0">
-                            <h4 className="font-medium text-[#2e1a87] text-sm flex items-center justify-between">
-                              <span>{item.title}</span>
-                              
-                              {/* Completion status shown on the right */}
-                              {item.completed.user && (
-                                <Check className="h-4 w-4 text-green-600 ml-1" />
-                              )}
-                            </h4>
-                            <p className="text-xs text-gray-600">{item.description}</p>
-                            
-                            {/* Status label */}
-                            <div className="mt-1 flex justify-between items-center text-xs">
-                              <div className="flex gap-3">
-                                <span>
-                                  <span className="font-medium mr-1">You:</span>
-                                  {item.completed.user ? (
-                                    <span className="text-green-600">Completed</span>
-                                  ) : (
-                                    <span className="text-amber-500">Pending</span>
-                                  )}
-                                </span>
-                                <span>
-                                  <span className="font-medium mr-1">Co-Parent:</span>
-                                  {item.completed.coParent ? (
-                                    <span className="text-green-600">Completed</span>
-                                  ) : (
-                                    <span className="text-amber-500">Pending</span>
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Session status - change to show scheduled session */}
-                <div className="bg-[#f0f9ff] rounded-lg p-4 mb-5">
-                  <h3 className="font-medium text-[#0d4f8c] mb-2.5 flex items-center text-sm">
-                    <CalendarIcon className="h-4 w-4 mr-2" />
-                    Course Session
-                  </h3>
-                  
-                  <div className="bg-white rounded-md p-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-gray-900 text-sm">
-                          Session Scheduled
-                        </h4>
-                        <p className="text-sm text-green-600 font-medium">
-                          Sunday, May 5, 2024 at 10:00 AM
-                        </p>
-                      </div>
-                      <div className="bg-green-50 rounded-full p-1">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* NEW: Resources section */}
-                <div className="bg-[#eff9ef] rounded-lg p-4 mb-5">
-                  <div className="flex justify-between items-center mb-2.5">
-                    <h3 className="font-medium text-[#2e6a1a] flex items-center text-sm">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Resources
-                    </h3>
-                    <button 
-                      onClick={() => setShowResourcesDialog(true)}
-                      className="text-xs text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center"
-                    >
-                      View all
-                      <ArrowRight className="h-3 w-3 ml-1" />
-                    </button>
-                  </div>
-                  
-                  {/* Show featured resources only */}
-                  <div className="space-y-2">
-                    {resources.filter(r => r.featured).map((resource) => (
-                      <div key={resource.id} className="bg-white rounded-md p-3">
-                        <div className="flex items-start gap-3">
-                          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#e6f5e6] border-2 border-[#2e6a1a]/30 flex-shrink-0 mt-1">
-                            {getResourceIcon(resource.type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start">
-                              <h4 className="font-medium text-[#2e1a87] text-sm line-clamp-2">
-                                {resource.title}
-                              </h4>
-                              
-                              {resource.completed ? (
-                                <div className="bg-green-50 rounded-full p-1 flex-shrink-0 ml-1">
-                                  <CheckCircle className="h-3.5 w-3.5 text-green-600" />
-                                </div>
-                              ) : (
-                                resource.type === "video" && (
-                                  <div className="bg-[#f0e6ff] rounded-full p-1 flex-shrink-0 ml-1">
-                                    <Play className="h-3.5 w-3.5 text-[#6c54da]" />
-                                  </div>
-                                )
-                              )}
-                            </div>
-                            <p className="text-xs text-gray-600 line-clamp-2 mt-0.5">{resource.description}</p>
-                            <div className="flex justify-between items-center mt-1.5">
-                              <span className="inline-flex items-center text-xs bg-[#f9f5ff] px-2 py-0.5 rounded-full text-[#6c54da] font-medium">
-                                {resource.type}
-                                {resource.duration && <span className="ml-1">{resource.duration}</span>}
-                              </span>
-                              <Link href={resource.url}>
-                                <button className="text-xs text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center">
-                                  View
-                                  <ExternalLink className="h-3 w-3 ml-1" />
-                                </button>
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* CTA now active since everything is completed */}
-                <div className="pb-1 pt-4">
-                  <Link href="/course">
-                    <Button className="w-full py-6 font-medium text-base bg-[#2e1a87] hover:bg-[#251565] text-white">
-                      Start Course
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
+                <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                  <span className="text-xs font-medium">Module 1 of 4</span>
                 </div>
               </div>
+              
+              {/* Progress bar */}
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span>Course progress</span>
+                  <span>25% complete</span>
+                </div>
+                <div className="h-2 bg-white/20 rounded-full">
+                  <div className="h-2 bg-white rounded-full" style={{ width: '25%' }}></div>
+                </div>
+              </div>
+              
+              {/* Primary action button */}
+              <div className="mt-1">
+                <Link href="/course">
+                  <Button className="w-full py-6 font-medium text-base bg-white hover:bg-white/90 text-[#2e1a87]">
+                    Continue Course
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Side by side resources and upcoming */}
+        <div className="grid md:grid-cols-2 gap-4 mb-5">
+          {/* NEW: Resources section - now more prominent */}
+          <div className="bg-[#eff9ef] rounded-xl p-5 border border-[#d1e7d1] shadow-sm">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-medium text-[#2e6a1a] flex items-center text-base">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Resources
+              </h3>
+              <button 
+                onClick={() => setShowResourcesDialog(true)}
+                className="text-xs text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center"
+              >
+                View all
+                <ArrowRight className="h-3 w-3 ml-1" />
+              </button>
+            </div>
+            
+            {/* Show featured resources only */}
+            <div className="space-y-2">
+              {resources.filter(r => r.featured).map((resource) => (
+                <div key={resource.id} className="bg-white rounded-md p-3 border border-green-50">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#e6f5e6] border-2 border-[#2e6a1a]/30 flex-shrink-0 mt-1">
+                      {getResourceIcon(resource.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-medium text-[#2e1a87] text-sm line-clamp-2">
+                          {resource.title}
+                        </h4>
+                        
+                        {resource.completed ? (
+                          <div className="bg-green-50 rounded-full p-1 flex-shrink-0 ml-1">
+                            <CheckCircle className="h-3.5 w-3.5 text-green-600" />
+                          </div>
+                        ) : (
+                          resource.type === "video" && (
+                            <div className="bg-[#f0e6ff] rounded-full p-1 flex-shrink-0 ml-1">
+                              <Play className="h-3.5 w-3.5 text-[#6c54da]" />
+                            </div>
+                          )
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 line-clamp-2 mt-0.5">{resource.description}</p>
+                      <div className="flex justify-between items-center mt-1.5">
+                        <span className="inline-flex items-center text-xs bg-[#f9f5ff] px-2 py-0.5 rounded-full text-[#6c54da] font-medium">
+                          {resource.type}
+                          {resource.duration && <span className="ml-1">{resource.duration}</span>}
+                        </span>
+                        <Link href={resource.url}>
+                          <button className="text-xs text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center">
+                            View
+                            <ExternalLink className="h-3 w-3 ml-1" />
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Session status - in its own card now */}
+          <div className="bg-[#f0f9ff] rounded-xl p-5 border border-[#d1e4f5] shadow-sm">
+            <h3 className="font-medium text-[#0d4f8c] mb-3 flex items-center text-base">
+              <CalendarIcon className="h-4 w-4 mr-2" />
+              Upcoming Session
+            </h3>
+            
+            <div className="bg-white rounded-md p-3 border border-blue-50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-medium text-gray-900 text-sm">
+                    Scheduled Meeting
+                  </h4>
+                  <p className="text-sm text-green-600 font-medium">
+                    Sunday, May 5, 2024
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    10:00 AM - 11:30 AM
+                  </p>
+                </div>
+                <div className="bg-green-50 rounded-full p-2">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                </div>
+              </div>
+              
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <div className="flex items-center text-sm text-gray-500">
+                  <Users className="h-3.5 w-3.5 mr-2 text-blue-500" />
+                  <span>Both parents confirmed</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-3 text-center">
+              <button className="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                Reschedule Session
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Pre-course checklist - now collapsed since everything is completed */}
+        <section className="relative mb-5">
+          {/* Main card - now smaller */}
+          <div className="bg-white rounded-xl p-5 border border-[#6c54da]/20 shadow-sm relative overflow-hidden">
+            <div className="absolute -right-24 -bottom-24 w-64 h-64 rounded-full bg-gradient-to-br from-[#f5f0ff] to-transparent opacity-50 pointer-events-none"></div>
+            
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 bg-[#f5f0ff] rounded-full flex items-center justify-center flex-shrink-0">
+                <ClipboardList className="h-4.5 w-4.5 text-[#6c54da]" />
+              </div>
+              <div>
+                <h2 className="font-medium text-[#2e1a87] text-base">
+                  Pre-Course Requirements
+                </h2>
+              </div>
+            </div>
+            
+            {/* Completed status */}
+            <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-2">
+              <p className="text-sm text-green-700 flex items-center justify-between">
+                <span className="flex items-center">
+                  <CheckCheck className="h-4 w-4 mr-2 text-green-600" />
+                  All requirements completed!
+                </span>
+                <button 
+                  onClick={() => setShowRequirementsDialog(true)}
+                  className="text-xs text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center"
+                >
+                  View details
+                  <ArrowRight className="h-3 w-3 ml-1" />
+                </button>
+              </p>
             </div>
           </div>
           
@@ -625,6 +623,64 @@ export default function Home3() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowResourcesDialog(false)}>
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Requirements dialog */}
+        <Dialog open={showRequirementsDialog} onOpenChange={setShowRequirementsDialog}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Pre-Course Requirements</DialogTitle>
+              <DialogDescription>
+                All requirements have been completed by you and your co-parent.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+              <ul className="space-y-2 mt-2">
+                {preCourseRequirements.map((item) => (
+                  <li 
+                    key={item.id} 
+                    className="rounded-md p-3 bg-white border border-gray-100"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0">
+                        {getStatusIcon(item)}
+                      </div>
+                      
+                      <div className="flex-grow min-w-0">
+                        <h4 className="font-medium text-[#2e1a87] text-sm flex items-center justify-between">
+                          <span>{item.title}</span>
+                          {item.required && (
+                            <span className="text-xs text-[#2e1a87] bg-[#f0e6ff] px-2 py-0.5 rounded-full">
+                              Required
+                            </span>
+                          )}
+                        </h4>
+                        <p className="text-xs text-gray-600">{item.description}</p>
+                        
+                        <div className="mt-2 flex justify-between items-center text-xs">
+                          <div className="flex gap-3">
+                            <span>
+                              <span className="font-medium mr-1">You:</span>
+                              <span className="text-green-600">Completed</span>
+                            </span>
+                            <span>
+                              <span className="font-medium mr-1">Co-Parent:</span>
+                              <span className="text-green-600">Completed</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowRequirementsDialog(false)}>
                 Close
               </Button>
             </DialogFooter>
