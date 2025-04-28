@@ -529,7 +529,7 @@ export default function OnboardingPage() {
                     
                     <div className="mt-6 pt-4 border-t border-gray-100">
                       <div className="flex flex-col space-y-3">
-                        <h3 className="text-sm font-medium text-gray-700">Co-parent Registration</h3>
+                        <h3 className="text-sm font-medium text-gray-700">Invite Your Co-Parent</h3>
                         <div className="bg-blue-50 rounded-md p-3 text-sm text-blue-800 mb-2">
                           <p>You and your co-parent will take the course together, they will need to register as well. You can do this later from the home screen.</p>
                         </div>
@@ -544,7 +544,7 @@ export default function OnboardingPage() {
                             <Button 
                               type="button"
                               variant="outline"
-                              className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] w-full text-sm"
+                              className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] text-sm"
                               onClick={handleInviteCoParent}
                               disabled={isSendingInvite}
                             >
