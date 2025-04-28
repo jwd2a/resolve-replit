@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
+import { Check, X, Mail, Users } from "lucide-react";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { FaCheck, FaChild, FaHome, FaUserFriends, FaGavel } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 import logoSrc from "@assets/@Resolve Primary Logo - Main Color 02.png";
 
 // US states for jurisdiction picker
@@ -87,6 +89,9 @@ export default function OnboardingPage() {
   const { user, isLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [isInviteSent, setIsInviteSent] = useState(false);
+  const [isSendingInvite, setIsSendingInvite] = useState(false);
+  const { toast } = useToast();
   
   // Auto-redirect after completion
   useEffect(() => {
@@ -179,6 +184,40 @@ export default function OnboardingPage() {
     nextStep();
   };
   
+  // Handle inviting co-parent
+  const handleInviteCoParent = async () => {
+    const coParentEmail = coParentForm.getValues("email");
+    const coParentName = coParentForm.getValues("fullName");
+    
+    if (!coParentEmail) {
+      toast({
+        title: "Email required",
+        description: "Please enter your co-parent's email address to send an invitation.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsSendingInvite(true);
+    
+    // Simulate invitation being sent (would be replaced with actual API call)
+    setTimeout(() => {
+      setIsSendingInvite(false);
+      setIsInviteSent(true);
+      
+      toast({
+        title: "Invitation sent!",
+        description: `An invitation email has been sent to ${coParentName || "your co-parent"}.`,
+      });
+    }, 1500);
+  };
+  
+  const handleInviteLater = () => {
+    toast({
+      description: "You can invite your co-parent anytime from your dashboard.",
+    });
+  };
+
   const onJurisdictionSubmit = (data: JurisdictionFormValues) => {
     console.log("Jurisdiction info submitted:", data);
     // In a real app, this would save all the collected data
@@ -492,10 +531,57 @@ export default function OnboardingPage() {
                       )}
                     />
                     
-
+                    <div className="mt-6 pt-4 border-t border-gray-100">
+                      <div className="flex flex-col space-y-3">
+                        <h3 className="text-sm font-medium text-gray-700">Would you like to invite your co-parent now?</h3>
+                        <div className="bg-blue-50 rounded-md p-3 text-sm text-blue-800 mb-2">
+                          <p>Inviting your co-parent allows them to collaborate on the parenting plan. You can always invite them later from your dashboard.</p>
+                        </div>
+                        
+                        {isInviteSent ? (
+                          <div className="flex items-center justify-center w-full p-3 bg-green-50 text-green-800 rounded-md">
+                            <Check className="w-5 h-5 mr-2 text-green-600" />
+                            <span>Invitation sent to co-parent</span>
+                          </div>
+                        ) : (
+                          <div className="flex space-x-3">
+                            <Button 
+                              type="button"
+                              variant="outline"
+                              className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] flex-1 text-sm"
+                              onClick={handleInviteCoParent}
+                              disabled={isSendingInvite}
+                            >
+                              {isSendingInvite ? (
+                                <>
+                                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#2e1a87]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  Sending...
+                                </>
+                              ) : (
+                                <>
+                                  <Mail className="w-4 h-4 mr-2" />
+                                  Send Invite Email
+                                </>
+                              )}
+                            </Button>
+                            <Button 
+                              type="button"
+                              variant="ghost"
+                              className="flex-1 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                              onClick={handleInviteLater}
+                            >
+                              Invite Later
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-6">
                     <Button 
                       type="button" 
                       variant="outline"
