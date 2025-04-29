@@ -510,7 +510,7 @@ export default function OnboardingPage3Step() {
                             <p className="text-xs font-medium text-blue-800">Invite Your Co-Parent</p>
                             <p className="text-xs text-blue-700 mt-0.5">
                               Since you and your co-parent will take the course together, they will need to register as well.
-                              You can invite them later from the home screen as well.
+                              You can also invite them later from the home screen.
                             </p>
                           </div>
                         </div>
