@@ -373,10 +373,7 @@ export default function OnboardingPage3Step() {
                     
                     {/* Right column - Co-Parent Information */}
                     <div className="space-y-4 relative border-l pl-4 md:pl-6">
-                      <div className="flex justify-between items-center border-b pb-1">
-                        <h3 className="text-md font-semibold text-[#2e1a87]">Co-Parent Information</h3>
-                        <div className="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-[10px] font-medium">Can be completed later</div>
-                      </div>
+                      <h3 className="text-md font-semibold text-[#2e1a87] border-b pb-1">Co-Parent Information</h3>
                       
                       <FormField
                         control={combinedInfoForm.control}
