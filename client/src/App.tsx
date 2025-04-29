@@ -9,6 +9,7 @@ import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
 import BetaAuth from "@/pages/beta-auth";
 import OnboardingPage from "@/pages/onboarding-page";
+import OnboardingPage3Step from "@/pages/onboarding-page-3step";
 import Onboarding2 from "@/pages/onboarding2";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
@@ -30,6 +31,7 @@ function Router() {
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />
+      <ProtectedRoute path="/onboarding-3step" component={OnboardingPage3Step} requireOnboarding={false} />
       
       {/* For beta testing, make onboarding2 public */}
       <Route path="/onboarding2" component={Onboarding2} />

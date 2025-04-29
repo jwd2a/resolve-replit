@@ -114,7 +114,12 @@ const Header: FC<HeaderProps> = ({
               <DropdownMenuContent className="bg-white">
                 <Link href="/onboarding">
                   <DropdownMenuItem className="cursor-pointer">
-                    Standard Onboarding {location === '/onboarding' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                    Standard Onboarding (4-step) {location === '/onboarding' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/onboarding-3step">
+                  <DropdownMenuItem className="cursor-pointer">
+                    3-Step Onboarding {location === '/onboarding-3step' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/onboarding2">
