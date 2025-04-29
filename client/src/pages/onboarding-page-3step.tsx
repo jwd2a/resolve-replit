@@ -274,9 +274,9 @@ export default function OnboardingPage3Step() {
               <Form {...combinedInfoForm}>
                 <form onSubmit={combinedInfoForm.handleSubmit(onCombinedInfoSubmit)} className="space-y-4">
                   {/* Two-column layout */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Left column - Your Information */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 pr-4">
                       <h3 className="text-md font-semibold text-[#2e1a87] border-b pb-1">Your Information</h3>
                       
                       <FormField
@@ -377,7 +377,7 @@ export default function OnboardingPage3Step() {
                     </div>
                     
                     {/* Right column - Co-Parent Information */}
-                    <div className="space-y-4 relative border-l pl-4 md:pl-6">
+                    <div className="space-y-4 relative border-l pl-4">
                       <h3 className="text-md font-semibold text-[#2e1a87] border-b pb-1">Co-Parent Information</h3>
                       
                       <FormField
