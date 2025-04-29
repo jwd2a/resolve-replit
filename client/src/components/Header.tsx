@@ -101,13 +101,29 @@ const Header: FC<HeaderProps> = ({
                 AI TEST
               </span>
             </Link>
-            <Link href="/onboarding">
-              <span className={`cursor-pointer text-base font-medium ${location.startsWith('/onboarding') 
-                ? 'text-white border-b-2 border-white pb-1' 
-                : 'text-gray-300 hover:text-white'}`}>
-                ONBOARDING
-              </span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center focus:outline-none">
+                <span className={`cursor-pointer text-base font-medium flex items-center ${
+                  location.startsWith('/onboarding') 
+                    ? 'text-white border-b-2 border-white pb-1' 
+                    : 'text-gray-300 hover:text-white'}`}>
+                  ONBOARDING
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white">
+                <Link href="/onboarding">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Standard Onboarding {location === '/onboarding' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/onboarding2">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Beta Test Onboarding {location === '/onboarding2' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         

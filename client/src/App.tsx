@@ -8,6 +8,7 @@ import Course from "@/pages/Course";
 import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
 import OnboardingPage from "@/pages/onboarding-page";
+import Onboarding2 from "@/pages/onboarding2";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -25,6 +26,7 @@ function Router() {
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />
+      <ProtectedRoute path="/onboarding2" component={Onboarding2} requireOnboarding={false} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
