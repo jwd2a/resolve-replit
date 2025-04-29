@@ -507,10 +507,10 @@ export default function OnboardingPage3Step() {
                         <div className="flex gap-2 mb-2 p-3 bg-blue-50 rounded-md">
                           <Info className="h-4 w-4 flex-shrink-0 mt-0.5 text-blue-600" />
                           <div>
-                            <p className="text-xs font-medium text-blue-800">Co-Parent Information</p>
+                            <p className="text-xs font-medium text-blue-800">Invite Your Co-Parent</p>
                             <p className="text-xs text-blue-700 mt-0.5">
-                              You can complete the co-parent information now, or invite them to complete it themselves.
-                              This information can also be updated later.
+                              Since you and your co-parent will take the course together, they will need to register as well.
+                              You can invite them later from the home screen as well.
                             </p>
                           </div>
                         </div>
