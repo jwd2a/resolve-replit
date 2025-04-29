@@ -293,7 +293,7 @@ export default function OnboardingPage() {
                         name="displayName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Your Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="" {...field} className="h-9 text-sm" />
@@ -311,7 +311,7 @@ export default function OnboardingPage() {
                     </div>
                     
                     <div>
-                      <FormLabel className="text-xs font-medium">Your Legal Address</FormLabel>
+                      <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
                       
                       <FormField
                         control={personalInfoForm.control}
@@ -394,6 +394,15 @@ export default function OnboardingPage() {
                         <Input placeholder="your.email@example.com" className="h-9 text-sm pl-8" />
                       </div>
                     </FormItem>
+                    
+                    <div className="flex items-center p-2 bg-gray-100 border border-gray-300 border-dashed rounded-md mt-3">
+                      <div className="flex-shrink-0 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                      </div>
+                      <p className="text-xs text-gray-600 italic">
+                        It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
+                      </p>
+                    </div>
                   </div>
                   
                   <div className="flex justify-end">
@@ -420,7 +429,7 @@ export default function OnboardingPage() {
                         name="fullName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Co-Parent's Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="Full name" {...field} className="h-9 text-sm" />
@@ -438,7 +447,7 @@ export default function OnboardingPage() {
                     </div>
                     
                     <div>
-                      <FormLabel className="text-xs font-medium">Co-Parent's Legal Address</FormLabel>
+                      <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
                       
                       <FormItem className="mb-2">
                         <div className="relative">
@@ -531,7 +540,7 @@ export default function OnboardingPage() {
                       <div className="flex flex-col space-y-3">
                         <h3 className="text-sm font-medium text-gray-700">Invite Your Co-Parent</h3>
                         <div className="bg-blue-50 rounded-md p-3 text-sm text-blue-800 mb-2">
-                          <p>You and your co-parent will take the course together, they will need to register as well. You can do this later from the home screen.</p>
+                          <p>Since you and your co-parent will take the course together, they will need to register as well. You can also invite them later from the home screen.</p>
                         </div>
                         
                         {isInviteSent ? (
