@@ -85,10 +85,10 @@ type CoParentFormValues = z.infer<typeof coParentSchema>;
 type ChildFormValues = z.infer<typeof childSchema>;
 type JurisdictionFormValues = z.infer<typeof jurisdictionSchema>;
 
-// Handwritten note style className
-const noteStyle = "font-handwritten text-blue-600 text-lg transform -rotate-3 p-4 my-4 relative";
-const arrowStyle = "absolute text-blue-600 w-8 h-8";
-const mainInstructionStyle = "font-handwritten text-blue-800 text-xl p-6 my-5 relative font-semibold bg-yellow-50 border-2 border-blue-300 shadow-md";
+// Direct inline styles for maximum visibility
+const noteStyle = "font-handwritten";
+const arrowStyle = "absolute text-red-500 w-10 h-10 stroke-2";
+const mainInstructionStyle = "font-handwritten text-2xl font-bold my-6 bg-yellow-200 border-4 border-pink-500 shadow-lg p-6 max-w-xl mx-auto";
 
 export default function Onboarding2() {
   const { user, isLoading } = useAuth();
@@ -234,34 +234,122 @@ export default function Onboarding2() {
     switch(stage) {
       case 1:
         return (
-          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
+          <div style={{
+            fontFamily: 'Caveat, cursive',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            backgroundColor: '#FFEB3B',
+            color: '#0D47A1',
+            border: '3px solid #E91E63',
+            borderRadius: '8px',
+            boxShadow: '5px 5px 0 rgba(233, 30, 99, 0.3)',
+            padding: '15px',
+            margin: '15px 0',
+            position: 'relative',
+            zIndex: 10,
+            transform: 'rotate(-2deg)'
+          }}>
             <div>👋 Hi Beta Tester! Here's where you'll enter your personal information. 
             Fill in your name, address, and contact details.</div>
-            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
+            <ArrowDown style={{
+              position: 'absolute', 
+              right: '50px', 
+              top: '70px', 
+              width: '40px', 
+              height: '40px', 
+              color: '#E91E63',
+              strokeWidth: 3
+            }} />
           </div>
         );
       case 2:
         return (
-          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
+          <div style={{
+            fontFamily: 'Caveat, cursive',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            backgroundColor: '#FFEB3B',
+            color: '#0D47A1',
+            border: '3px solid #E91E63',
+            borderRadius: '8px',
+            boxShadow: '5px 5px 0 rgba(233, 30, 99, 0.3)',
+            padding: '15px',
+            margin: '15px 0',
+            position: 'relative',
+            zIndex: 10,
+            transform: 'rotate(-2deg)'
+          }}>
             <div>🤝 This section is about your co-parent. Their details will be used to create their account 
             and link it to yours. Try sending the invitation!</div>
-            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
+            <ArrowDown style={{
+              position: 'absolute', 
+              right: '50px', 
+              top: '70px', 
+              width: '40px', 
+              height: '40px', 
+              color: '#E91E63',
+              strokeWidth: 3
+            }} />
           </div>
         );
       case 3:
         return (
-          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
+          <div style={{
+            fontFamily: 'Caveat, cursive',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            backgroundColor: '#FFEB3B',
+            color: '#0D47A1',
+            border: '3px solid #E91E63',
+            borderRadius: '8px',
+            boxShadow: '5px 5px 0 rgba(233, 30, 99, 0.3)',
+            padding: '15px',
+            margin: '15px 0',
+            position: 'relative',
+            zIndex: 10,
+            transform: 'rotate(-2deg)'
+          }}>
             <div>👶 Children info helps customize your parenting plan for their specific needs.
             Test adding multiple children to see how it works!</div>
-            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
+            <ArrowDown style={{
+              position: 'absolute', 
+              right: '50px', 
+              top: '70px', 
+              width: '40px', 
+              height: '40px', 
+              color: '#E91E63',
+              strokeWidth: 3
+            }} />
           </div>
         );
       case 4:
         return (
-          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
+          <div style={{
+            fontFamily: 'Caveat, cursive',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            backgroundColor: '#FFEB3B',
+            color: '#0D47A1',
+            border: '3px solid #E91E63',
+            borderRadius: '8px',
+            boxShadow: '5px 5px 0 rgba(233, 30, 99, 0.3)',
+            padding: '15px',
+            margin: '15px 0',
+            position: 'relative',
+            zIndex: 10,
+            transform: 'rotate(-2deg)'
+          }}>
             <div>⚖️ Jurisdiction matters for legal aspects of your parenting plan.
             We'd love feedback on which states have special requirements!</div>
-            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
+            <ArrowDown style={{
+              position: 'absolute', 
+              right: '50px', 
+              top: '70px', 
+              width: '40px', 
+              height: '40px', 
+              color: '#E91E63',
+              strokeWidth: 3
+            }} />
           </div>
         );
       default:
@@ -284,11 +372,41 @@ export default function Onboarding2() {
               A few more details to create your parenting plan
             </CardDescription>
 
-            <div className={mainInstructionStyle + " mx-auto max-w-xl rotate-1"}>
+            <div style={{
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.75rem',
+              fontWeight: 'bold',
+              backgroundColor: '#FFF59D',
+              color: '#0D47A1',
+              border: '4px solid #9C27B0',
+              borderRadius: '12px',
+              boxShadow: '7px 7px 0 rgba(156, 39, 176, 0.3)',
+              padding: '20px',
+              margin: '25px auto',
+              maxWidth: '90%',
+              position: 'relative',
+              zIndex: 10,
+              transform: 'rotate(1deg)'
+            }}>
               <div>🙏 Thanks for taking the time to help us with beta testing. We are going to have you go through the setup just as a couple would. One parent starts the process and invites the other.</div>
             </div>
             
-            <div className={noteStyle + " mx-auto w-fit mt-4"}>
+            <div style={{
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              backgroundColor: '#E1F5FE',
+              color: '#01579B',
+              border: '3px solid #03A9F4',
+              borderRadius: '8px',
+              boxShadow: '4px 4px 0 rgba(3, 169, 244, 0.3)',
+              padding: '12px',
+              margin: '15px auto',
+              maxWidth: '85%',
+              position: 'relative',
+              zIndex: 10,
+              transform: 'rotate(-1deg)'
+            }}>
               <div>✏️ This is our beta testing onboarding flow! Please take notes on any confusing parts 
               or ideas for improvements as you go through each step.</div>
             </div>
