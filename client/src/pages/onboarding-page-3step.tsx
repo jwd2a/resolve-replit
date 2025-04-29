@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Check, X, Mail, Users } from "lucide-react";
+import { Check, X, Mail, Users, ChevronRight, Info } from "lucide-react";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from "@/components/ui/alert";
 import { FaCheck, FaChild, FaHome, FaUserFriends, FaGavel } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import logoSrc from "@assets/@Resolve Primary Logo - Main Color 02.png";
@@ -221,7 +226,7 @@ export default function OnboardingPage3Step() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8]">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
-        <Card className="w-full max-w-3xl mx-auto shadow-xl">
+        <Card className="w-full max-w-3xl mx-auto shadow-xl border-0">
           <CardHeader className="text-center pb-3">
             <CardTitle className="text-lg font-bold">Complete Your Profile</CardTitle>
             <CardDescription className="text-sm">
@@ -263,7 +268,7 @@ export default function OnboardingPage3Step() {
             </div>
           </CardHeader>
           
-          <CardContent>
+          <CardContent className="px-6 pt-4 pb-6">
             {/* Step 1: Combined Your Information and Co-Parent Information */}
             {currentStep === 1 && (
               <Form {...combinedInfoForm}>
@@ -499,18 +504,22 @@ export default function OnboardingPage3Step() {
                       
                       {/* Invite Co-parent button */}
                       <div className="mt-2">
-                        <div className="bg-blue-50 p-3 rounded-md mb-2">
-                          <p className="text-xs text-blue-800">
-                            You can complete the co-parent information now, or invite them to complete it themselves.
-                            This information can also be updated later.
-                          </p>
+                        <div className="flex gap-2 mb-2 p-3 bg-blue-50 rounded-md">
+                          <Info className="h-4 w-4 flex-shrink-0 mt-0.5 text-blue-600" />
+                          <div>
+                            <p className="text-xs font-medium text-blue-800">Co-Parent Information</p>
+                            <p className="text-xs text-blue-700 mt-0.5">
+                              You can complete the co-parent information now, or invite them to complete it themselves.
+                              This information can also be updated later.
+                            </p>
+                          </div>
                         </div>
                         
                         <Button
                           type="button"
                           onClick={handleInviteCoParent}
                           variant="outline"
-                          className="flex items-center text-xs w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87] hover:text-white"
+                          className="flex items-center text-xs w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87] hover:text-white shadow-sm"
                           disabled={isSendingInvite || isInviteSent || !combinedInfoForm.getValues("coParentEmail")}
                         >
                           {isSendingInvite ? (
@@ -552,9 +561,10 @@ export default function OnboardingPage3Step() {
                   <div className="pt-4 flex justify-end">
                     <Button 
                       type="submit" 
-                      className="bg-[#2e1a87] hover:bg-blue-800 text-white"
+                      className="bg-[#2e1a87] hover:bg-[#4730b8] text-white shadow-sm"
                     >
-                      Next
+                      <span>Next</span>
+                      <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
                 </form>
@@ -666,14 +676,16 @@ export default function OnboardingPage3Step() {
                       type="button" 
                       variant="outline"
                       onClick={prevStep}
+                      className="border-[#2e1a87] text-[#2e1a87] hover:bg-gray-50"
                     >
                       Back
                     </Button>
                     <Button 
                       type="submit" 
-                      className="bg-[#2e1a87] hover:bg-blue-800 text-white"
+                      className="bg-[#2e1a87] hover:bg-[#4730b8] text-white shadow-sm"
                     >
-                      Next
+                      <span>Next</span>
+                      <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
                 </form>
