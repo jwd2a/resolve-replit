@@ -50,7 +50,8 @@ const Header: FC<HeaderProps> = ({
                   location === '/' || 
                   location === '/home2' || 
                   location === '/home3' || 
-                  location === '/home4' 
+                  location === '/home4' ||
+                  location === '/home5'
                     ? 'text-white border-b-2 border-white pb-1' 
                     : 'text-gray-300 hover:text-white'}`}>
                   HOME
@@ -76,6 +77,11 @@ const Header: FC<HeaderProps> = ({
                 <Link href="/home4">
                   <DropdownMenuItem className="cursor-pointer">
                     Home 4 {location === '/home4' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/home5">
+                  <DropdownMenuItem className="cursor-pointer">
+                    Home 5 {location === '/home5' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuContent>
@@ -125,6 +131,11 @@ const Header: FC<HeaderProps> = ({
                 <Link href="/onboarding2">
                   <DropdownMenuItem className="cursor-pointer">
                     Beta Test Onboarding {location === '/onboarding2' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/onboarding6step">
+                  <DropdownMenuItem className="cursor-pointer">
+                    6-Step Onboarding {location === '/onboarding6step' && <span className="ml-2 h-2 w-2 rounded-full bg-[#2e1a87]" />}
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuContent>
