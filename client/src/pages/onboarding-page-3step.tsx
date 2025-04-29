@@ -349,10 +349,6 @@ export default function OnboardingPage3Step() {
                             </FormControl>
                           </FormItem>
                         </div>
-                        
-                        <div className="text-xs text-gray-500 mt-1 italic">
-                          It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
-                        </div>
                       </div>
                       
                       <FormField
@@ -378,6 +374,15 @@ export default function OnboardingPage3Step() {
                           </FormItem>
                         )}
                       />
+                      
+                      <div className="flex gap-2 p-3 bg-blue-50 rounded-md mt-3">
+                        <Info className="h-4 w-4 flex-shrink-0 mt-0.5 text-blue-600" />
+                        <div>
+                          <p className="text-xs text-blue-700">
+                            It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     
                     {/* Right column - Co-Parent Information */}
@@ -453,10 +458,6 @@ export default function OnboardingPage3Step() {
                               <Input placeholder="ZIP" className="h-9 text-sm" />
                             </FormControl>
                           </FormItem>
-                        </div>
-                        
-                        <div className="text-xs text-gray-500 mt-1 italic">
-                          It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
                         </div>
                       </div>
                       
