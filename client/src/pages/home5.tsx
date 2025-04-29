@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { 
   Mail, 
   Check, 
@@ -157,41 +158,8 @@ export default function Home5() {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <span className="text-2xl font-bold text-[#2e1a87]">Resolve</span>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-gray-600"
-                onClick={() => {
-                  toast({
-                    title: "Support",
-                    description: "Our support team will contact you shortly.",
-                  });
-                }}
-              >
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Support
-              </Button>
-              
-              <div className="flex items-center">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-[#2e1a87]/10 text-[#2e1a87]">
-                    {getInitials(user?.displayName || parentFirstName)}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Standard Navigation Menu used across the app */}
+      <NavigationMenu />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
