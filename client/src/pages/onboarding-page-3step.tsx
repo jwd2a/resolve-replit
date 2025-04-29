@@ -61,7 +61,7 @@ const US_STATES = [
 const combinedInfoSchema = z.object({
   // Personal info fields
   displayName: z.string().min(3, { message: "Full name must be at least 3 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }).optional(),
+  email: z.string().email({ message: "Please enter a valid email address" }),
   phone: z.string().min(10, { message: "Please enter a valid phone number" }).optional(),
   address: z.string().min(5, { message: "Please enter your address" }).optional(),
   
@@ -375,13 +375,37 @@ export default function OnboardingPage3Step() {
                         )}
                       />
                       
-                      <div className="flex gap-2 p-3 bg-blue-50 rounded-md mt-3">
-                        <Info className="h-4 w-4 flex-shrink-0 mt-0.5 text-blue-600" />
-                        <div>
-                          <p className="text-xs text-blue-700">
-                            It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
-                          </p>
+                      <FormField
+                        control={combinedInfoForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-medium">Email address</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                                <Input placeholder="email@example.com" {...field} className="h-9 text-sm pl-8" />
+                                {field.value && (
+                                  <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                    ✓
+                                  </div>
+                                )}
+                              </div>
+                            </FormControl>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="flex items-center p-2 bg-gray-100 border border-gray-300 border-dashed rounded-md mt-3">
+                        <div className="flex-shrink-0 mr-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                         </div>
+                        <p className="text-xs text-gray-600 italic">
+                          It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
+                        </p>
                       </div>
                     </div>
                     
