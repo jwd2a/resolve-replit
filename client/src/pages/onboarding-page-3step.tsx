@@ -748,14 +748,16 @@ export default function OnboardingPage3Step() {
                       type="button" 
                       variant="outline"
                       onClick={prevStep}
+                      className="border-[#2e1a87] text-[#2e1a87] hover:bg-gray-50"
                     >
                       Back
                     </Button>
                     <Button 
                       type="submit" 
-                      className="bg-[#2e1a87] hover:bg-blue-800 text-white"
+                      className="bg-[#2e1a87] hover:bg-[#4730b8] text-white shadow-sm"
                     >
-                      Complete
+                      <span>Complete</span>
+                      <Check className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
                 </form>
