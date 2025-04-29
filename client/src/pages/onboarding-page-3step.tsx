@@ -543,11 +543,7 @@ export default function OnboardingPage3Step() {
                           )}
                         </Button>
                         
-                        {combinedInfoForm.getValues("coParentEmail") ? null : 
-                          <p className="text-xs text-amber-600 mt-1 text-center">
-                            Please enter your co-parent's email to send an invitation
-                          </p>
-                        }
+
                         
                         {isInviteSent && (
                           <p className="text-xs text-green-700 mt-2 text-center">
