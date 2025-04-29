@@ -370,12 +370,12 @@ export default function Onboarding2() {
       case 1:
         return (
           <>
-            {/* Bottom left note - specific to personal info */}
+            {/* Left note - specific to personal info */}
             <div style={{
               position: 'absolute',
-              bottom: '100px',
-              left: '30px',
-              maxWidth: '250px',
+              top: '350px',
+              left: '10px',
+              maxWidth: '230px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -384,15 +384,24 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              ✍️ Test the address field validation. Does it work correctly?
+              ✍️ Test the address field validation
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '-10px', 
+                bottom: '-30px', 
+                transform: 'rotate(45deg)'
+              }}>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
             </div>
             
-            {/* Bottom right note - specific to personal info */}
+            {/* Right note - specific to personal info */}
             <div style={{
               position: 'absolute',
-              bottom: '170px',
-              right: '30px',
-              maxWidth: '280px',
+              top: '250px',
+              right: '10px',
+              maxWidth: '230px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -401,19 +410,19 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              🏠 Notice how it asks for your personal info first before co-parent details
+              🏠 Asks for personal info first before co-parent details
             </div>
           </>
         );
       case 2:
         return (
           <>
-            {/* Bottom left note - specific to co-parent */}
+            {/* Left note - specific to co-parent */}
             <div style={{
               position: 'absolute',
-              bottom: '140px',
-              left: '40px',
-              maxWidth: '250px',
+              top: '380px',
+              left: '20px',
+              maxWidth: '230px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -422,15 +431,23 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              🔍 Test the invite button - does it show a confirmation?
+              🔍 Test the invite button - does it confirm?
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '0', 
+                bottom: '-30px', 
+                transform: 'rotate(30deg)'
+              }}>
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
             </div>
             
-            {/* Bottom right note - specific to co-parent */}
+            {/* Right note - specific to co-parent */}
             <div style={{
               position: 'absolute',
-              bottom: '80px',
-              right: '40px',
-              maxWidth: '270px',
+              top: '280px',
+              right: '20px',
+              maxWidth: '240px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -439,19 +456,19 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              ✉️ In the real app, this would send an email to the co-parent
+              ✉️ This would email the co-parent in the real app
             </div>
           </>
         );
       case 3:
         return (
           <>
-            {/* Bottom left note - specific to children */}
+            {/* Left note - specific to children */}
             <div style={{
               position: 'absolute',
-              bottom: '120px',
-              left: '35px',
-              maxWidth: '270px',
+              top: '350px',
+              left: '15px',
+              maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -461,14 +478,23 @@ export default function Onboarding2() {
               zIndex: 20
             }}>
               👶 Click "Add Another Child" to test multiple children
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '-10px', 
+                bottom: '-20px', 
+                transform: 'rotate(30deg)'
+              }}>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
             </div>
             
-            {/* Bottom right note - specific to children */}
+            {/* Right note - specific to children */}
             <div style={{
               position: 'absolute',
-              bottom: '180px',
-              right: '30px',
-              maxWidth: '280px',
+              top: '250px',
+              right: '15px',
+              maxWidth: '240px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -484,12 +510,12 @@ export default function Onboarding2() {
       case 4:
         return (
           <>
-            {/* Bottom left note - specific to jurisdiction */}
+            {/* Left note - specific to jurisdiction */}
             <div style={{
               position: 'absolute',
-              bottom: '80px',
-              left: '40px',
-              maxWidth: '250px',
+              top: '360px',
+              left: '20px',
+              maxWidth: '240px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -498,15 +524,23 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              ⚖️ The dropdown should include all 50 U.S. states. Check if any are missing.
+              ⚖️ Check if all 50 U.S. states are in the dropdown
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '-10px', 
+                bottom: '-20px', 
+                transform: 'rotate(30deg)'
+              }}>
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
             </div>
             
-            {/* Bottom right note - specific to jurisdiction */}
+            {/* Right note - specific to jurisdiction */}
             <div style={{
               position: 'absolute',
-              bottom: '140px',
-              right: '35px',
-              maxWidth: '270px',
+              top: '250px',
+              right: '20px',
+              maxWidth: '240px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
               fontWeight: 'bold',
@@ -515,7 +549,7 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              📝 Is it clear why jurisdiction matters for parenting plans?
+              📝 Is it clear why jurisdiction matters for plans?
             </div>
           </>
         );

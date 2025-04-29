@@ -68,9 +68,9 @@ export default function BetaAuth() {
       {/* Left side beta tester note */}
       <div style={{
         position: 'absolute',
-        top: '100px',
-        left: '60px',
-        maxWidth: '280px',
+        top: '200px',
+        left: '20px',
+        maxWidth: '240px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
@@ -80,14 +80,23 @@ export default function BetaAuth() {
         zIndex: 20
       }}>
         Thanks for taking the time to help us with beta testing.
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+          position: 'absolute', 
+          right: '-20px', 
+          bottom: '-30px', 
+          transform: 'rotate(30deg)'
+        }}>
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
       </div>
       
       {/* Right side beta tester note */}
       <div style={{
         position: 'absolute',
         top: '180px',
-        right: '60px',
-        maxWidth: '280px',
+        right: '10px',
+        maxWidth: '240px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
@@ -96,15 +105,15 @@ export default function BetaAuth() {
         textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
         zIndex: 20
       }}>
-        Please go through the setup just as a couple would. One parent starts the process and invites the other.
+        Go through setup as a couple would. One parent starts and invites the other.
       </div>
       
       {/* Bottom left beta tester note */}
       <div style={{
         position: 'absolute',
-        bottom: '100px',
-        left: '40px',
-        maxWidth: '270px',
+        bottom: '180px',
+        left: '20px',
+        maxWidth: '240px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.5rem',
         fontWeight: 'bold',
@@ -113,15 +122,23 @@ export default function BetaAuth() {
         textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
         zIndex: 20
       }}>
-        🔐 Try both the login and register tabs to test the user experience
+        🔐 Try both login and register tabs!
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+          position: 'absolute', 
+          right: '0', 
+          bottom: '-20px', 
+          transform: 'rotate(30deg)'
+        }}>
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
       </div>
       
       {/* Bottom right beta tester note */}
       <div style={{
         position: 'absolute',
-        bottom: '140px',
-        right: '50px',
-        maxWidth: '260px',
+        bottom: '200px',
+        right: '15px',
+        maxWidth: '230px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.5rem',
         fontWeight: 'bold',
@@ -130,7 +147,7 @@ export default function BetaAuth() {
         textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
         zIndex: 20
       }}>
-        🔄 Test the social login buttons - in the final app they would connect to real providers
+        🔄 Test social login buttons!
       </div>
       
       {/* Login form */}
