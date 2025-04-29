@@ -56,6 +56,7 @@ const US_STATES = [
 const combinedInfoSchema = z.object({
   // Personal info fields
   displayName: z.string().min(3, { message: "Full name must be at least 3 characters" }),
+  email: z.string().email({ message: "Please enter a valid email address" }).optional(),
   phone: z.string().min(10, { message: "Please enter a valid phone number" }).optional(),
   address: z.string().min(5, { message: "Please enter your address" }).optional(),
   
@@ -63,7 +64,7 @@ const combinedInfoSchema = z.object({
   coParentName: z.string().min(3, { message: "Co-parent's name must be at least 3 characters" }),
   coParentEmail: z.string().email({ message: "Please enter a valid email address" }).optional(),
   coParentPhone: z.string().min(10, { message: "Please enter a valid phone number" }).optional(),
-  coParentRelationship: z.string().optional(),
+  coParentAddress: z.string().min(5, { message: "Please enter their address" }).optional(),
 });
 
 const childSchema = z.object({
@@ -113,12 +114,13 @@ export default function OnboardingPage3Step() {
     resolver: zodResolver(combinedInfoSchema),
     defaultValues: {
       displayName: user?.displayName || "",
+      email: user?.email || "",
       phone: "",
       address: "",
       coParentName: "",
       coParentEmail: "",
       coParentPhone: "",
-      coParentRelationship: "",
+      coParentAddress: "",
     },
   });
   
@@ -442,32 +444,7 @@ export default function OnboardingPage3Step() {
                         )}
                       />
                       
-                      <FormField
-                        control={combinedInfoForm.control}
-                        name="coParentRelationship"
-                        render={({ field }) => (
-                          <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Your Relationship</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger className="h-9 text-sm">
-                                  <SelectValue placeholder="Select relationship" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="separated">Separated</SelectItem>
-                                <SelectItem value="divorced">Divorced</SelectItem>
-                                <SelectItem value="never_married">Never Married</SelectItem>
-                                <SelectItem value="in_relationship">In Relationship</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage className="text-xs" />
-                          </FormItem>
-                        )}
-                      />
+
                       
                       {/* Invite Co-parent button */}
                       <div className="mt-2">
