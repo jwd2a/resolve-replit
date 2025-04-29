@@ -14,19 +14,16 @@ import { ChevronDown, Home, User } from "lucide-react";
 export function NavigationMenu() {
   const [location] = useLocation();
   
-  const homeRoutes = [
-    { name: "Dashboard", path: "/" },
-    { name: "Home 2", path: "/home2" },
-    { name: "Home 3", path: "/home3" },
-    { name: "Home 4", path: "/home4" },
-    { name: "Home 5 - NEW", path: "/home5" },
-  ];
+  // Directly list routes for clearer render
+  const dashboardRoute = { name: "Dashboard", path: "/" };
+  const home2Route = { name: "Home 2", path: "/home2" };
+  const home3Route = { name: "Home 3", path: "/home3" };
+  const home4Route = { name: "Home 4", path: "/home4" };
+  const home5Route = { name: "Home 5", path: "/home5" };
   
-  const otherRoutes = [
-    { name: "Course", path: "/course" },
-    { name: "Parenting Plan", path: "/parenting-plan" },
-    { name: "AI Test", path: "/ai-test" },
-  ];
+  const courseRoute = { name: "Course", path: "/course" };
+  const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
+  const aiTestRoute = { name: "AI Test", path: "/ai-test" };
   
   return (
     <div className="bg-white border-b">
@@ -47,31 +44,82 @@ export function NavigationMenu() {
             <DropdownMenuContent align="start">
               <DropdownMenuLabel>Home Versions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {homeRoutes.map((route) => (
-                <Link key={route.path} href={route.path}>
-                  <DropdownMenuItem className="cursor-pointer">
-                    {route.name}
-                    {location === route.path && (
-                      <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
+              
+              <Link href={dashboardRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {dashboardRoute.name}
+                  {location === dashboardRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={home2Route.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {home2Route.name}
+                  {location === home2Route.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={home3Route.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {home3Route.name}
+                  {location === home3Route.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={home4Route.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {home4Route.name}
+                  {location === home4Route.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={home5Route.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {home5Route.name}
+                  {location === home5Route.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
               
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Other Pages</DropdownMenuLabel>
               <DropdownMenuSeparator />
               
-              {otherRoutes.map((route) => (
-                <Link key={route.path} href={route.path}>
-                  <DropdownMenuItem className="cursor-pointer">
-                    {route.name}
-                    {location === route.path && (
-                      <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-              ))}
+              <Link href={courseRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {courseRoute.name}
+                  {location === courseRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={parentingPlanRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {parentingPlanRoute.name}
+                  {location === parentingPlanRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={aiTestRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {aiTestRoute.name}
+                  {location === aiTestRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
