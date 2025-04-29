@@ -364,8 +364,154 @@ export default function Onboarding2() {
     }
   };
 
+  // Dynamic notes based on current step
+  const StepSpecificNotes = ({ step }: { step: number }) => {
+    switch(step) {
+      case 1:
+        return (
+          <>
+            {/* Bottom left note - specific to personal info */}
+            <div style={{
+              position: 'absolute',
+              bottom: '250px',
+              left: '40px',
+              maxWidth: '250px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(-3deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              ✍️ Personal info helps tailor the process to your specific situation
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '-30px', 
+                bottom: '-30px', 
+                transform: 'rotate(45deg)'
+              }}>
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </div>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            {/* Bottom left note - specific to co-parent */}
+            <div style={{
+              position: 'absolute',
+              bottom: '220px',
+              left: '30px',
+              maxWidth: '250px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(-3deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              🔍 Test sending the invitation email feature!
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
+                position: 'absolute', 
+                right: '-20px', 
+                bottom: '-40px', 
+                transform: 'rotate(30deg)'
+              }}>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
+            </div>
+          </>
+        );
+      case 3:
+        return (
+          <>
+            {/* Bottom left note - specific to children */}
+            <div style={{
+              position: 'absolute',
+              bottom: '150px',
+              left: '40px',
+              maxWidth: '270px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(-3deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              👶 Try adding multiple children to test how it adapts the form!
+            </div>
+          </>
+        );
+      case 4:
+        return (
+          <>
+            {/* Bottom left note - specific to jurisdiction */}
+            <div style={{
+              position: 'absolute',
+              bottom: '200px',
+              left: '35px',
+              maxWidth: '250px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(-3deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              ⚖️ The legal requirements vary by state - does this explain that clearly?
+            </div>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8]">
+    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8] relative">
+      {/* Left side beta tester note - always visible */}
+      <div style={{
+        position: 'absolute',
+        top: '120px',
+        left: '50px',
+        maxWidth: '300px',
+        fontFamily: 'Caveat, cursive',
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        color: 'white',
+        transform: 'rotate(-5deg)',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+        zIndex: 20
+      }}>
+        Thanks for taking the time to help us with beta testing.
+      </div>
+      
+      {/* Right side beta tester note - always visible */}
+      <div style={{
+        position: 'absolute',
+        top: '220px',
+        right: '50px',
+        maxWidth: '300px',
+        fontFamily: 'Caveat, cursive',
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        color: 'white',
+        transform: 'rotate(3deg)',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+        zIndex: 20
+      }}>
+        Please go through the setup just as a couple would. One parent starts the process and invites the other.
+      </div>
+      
+      {/* Step-specific notes that change with each step */}
+      <StepSpecificNotes step={currentStep} />
+      
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
         <Card className="w-full max-w-3xl mx-auto shadow-xl relative">
           {/* Beta Testing Banner */}
@@ -379,44 +525,7 @@ export default function Onboarding2() {
               A few more details to create your parenting plan
             </CardDescription>
 
-            <div style={{
-              fontFamily: 'Caveat, cursive',
-              fontSize: '1.75rem',
-              fontWeight: 'bold',
-              backgroundColor: '#FFF59D',
-              color: '#0D47A1',
-              border: '4px solid #9C27B0',
-              borderRadius: '12px',
-              boxShadow: '7px 7px 0 rgba(156, 39, 176, 0.3)',
-              padding: '20px',
-              margin: '25px auto',
-              maxWidth: '90%',
-              position: 'relative',
-              zIndex: 10,
-              transform: 'rotate(1deg)'
-            }}>
-              <div>🙏 Thanks for taking the time to help us with beta testing. We are going to have you go through the setup just as a couple would. One parent starts the process and invites the other.</div>
-            </div>
-            
-            <div style={{
-              fontFamily: 'Caveat, cursive',
-              fontSize: '1.25rem',
-              fontWeight: 'bold',
-              backgroundColor: '#E1F5FE',
-              color: '#01579B',
-              border: '3px solid #03A9F4',
-              borderRadius: '8px',
-              boxShadow: '4px 4px 0 rgba(3, 169, 244, 0.3)',
-              padding: '12px',
-              margin: '15px auto',
-              maxWidth: '85%',
-              position: 'relative',
-              zIndex: 10,
-              transform: 'rotate(-1deg)'
-            }}>
-              <div>✏️ This is our beta testing onboarding flow! Please take notes on any confusing parts 
-              or ideas for improvements as you go through each step.</div>
-            </div>
+            {/* Beta testing instructions moved outside the card */}
             
             {/* Step indicators */}
             <div className="flex justify-center mt-3">
@@ -464,8 +573,6 @@ export default function Onboarding2() {
           </CardHeader>
           
           <CardContent>
-            {/* Beta tester instructions for current stage */}
-            <BetaInstructions stage={currentStep} />
 
             {/* Step 1: Personal Information */}
             {currentStep === 1 && (
