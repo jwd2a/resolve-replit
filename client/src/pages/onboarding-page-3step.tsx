@@ -284,7 +284,7 @@ export default function OnboardingPage3Step() {
                         name="displayName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Your Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Your Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="" {...field} className="h-9 text-sm" />
@@ -385,7 +385,7 @@ export default function OnboardingPage3Step() {
                         name="coParentName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Co-Parent's Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Co-Parent's Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="" {...field} className="h-9 text-sm" />
