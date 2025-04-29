@@ -31,7 +31,9 @@ function Router() {
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />
-      <ProtectedRoute path="/onboarding-3step" component={OnboardingPage3Step} requireOnboarding={false} />
+      
+      {/* For testing, make the 3-step onboarding public */}
+      <Route path="/onboarding-3step" component={OnboardingPage3Step} />
       
       {/* For beta testing, make onboarding2 public */}
       <Route path="/onboarding2" component={Onboarding2} />
