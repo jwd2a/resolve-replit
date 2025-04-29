@@ -349,6 +349,10 @@ export default function OnboardingPage3Step() {
                             </FormControl>
                           </FormItem>
                         </div>
+                        
+                        <div className="text-xs text-gray-500 mt-1 italic">
+                          It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
+                        </div>
                       </div>
                       
                       <FormField
@@ -449,6 +453,10 @@ export default function OnboardingPage3Step() {
                               <Input placeholder="ZIP" className="h-9 text-sm" />
                             </FormControl>
                           </FormItem>
+                        </div>
+                        
+                        <div className="text-xs text-gray-500 mt-1 italic">
+                          It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
                         </div>
                       </div>
                       
