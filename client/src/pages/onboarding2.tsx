@@ -373,8 +373,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to personal info */}
             <div style={{
               position: 'absolute',
-              top: '450px',
-              left: '70px',
+              bottom: '100px',
+              left: '30px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -384,15 +384,24 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              ✍️ Personal info helps tailor the process to your specific situation
-              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
-                position: 'absolute', 
-                right: '-20px', 
-                bottom: '-30px', 
-                transform: 'rotate(45deg)'
-              }}>
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
+              ✍️ Test the address field validation. Does it work correctly?
+            </div>
+            
+            {/* Bottom right note - specific to personal info */}
+            <div style={{
+              position: 'absolute',
+              bottom: '170px',
+              right: '30px',
+              maxWidth: '280px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(2deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              🏠 Notice how it asks for your personal info first before co-parent details
             </div>
           </>
         );
@@ -402,7 +411,7 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to co-parent */}
             <div style={{
               position: 'absolute',
-              top: '450px',
+              bottom: '140px',
               left: '40px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
@@ -413,16 +422,24 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              🔍 Test sending the invitation email feature!
-              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
-                position: 'absolute', 
-                right: '-20px', 
-                bottom: '-20px', 
-                transform: 'rotate(30deg)'
-              }}>
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <polyline points="19 12 12 19 5 12"></polyline>
-              </svg>
+              🔍 Test the invite button - does it show a confirmation?
+            </div>
+            
+            {/* Bottom right note - specific to co-parent */}
+            <div style={{
+              position: 'absolute',
+              bottom: '80px',
+              right: '40px',
+              maxWidth: '270px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(2deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              ✉️ In the real app, this would send an email to the co-parent
             </div>
           </>
         );
@@ -432,8 +449,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to children */}
             <div style={{
               position: 'absolute',
-              top: '480px',
-              left: '50px',
+              bottom: '120px',
+              left: '35px',
               maxWidth: '270px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -443,7 +460,24 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              👶 Try adding multiple children to test how it adapts the form!
+              👶 Click "Add Another Child" to test multiple children
+            </div>
+            
+            {/* Bottom right note - specific to children */}
+            <div style={{
+              position: 'absolute',
+              bottom: '180px',
+              right: '30px',
+              maxWidth: '280px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(2deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              🎂 Does entering a date of birth work smoothly?
             </div>
           </>
         );
@@ -453,8 +487,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to jurisdiction */}
             <div style={{
               position: 'absolute',
-              top: '430px',
-              left: '45px',
+              bottom: '80px',
+              left: '40px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -464,7 +498,24 @@ export default function Onboarding2() {
               textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
               zIndex: 20
             }}>
-              ⚖️ The legal requirements vary by state - does this explain that clearly?
+              ⚖️ The dropdown should include all 50 U.S. states. Check if any are missing.
+            </div>
+            
+            {/* Bottom right note - specific to jurisdiction */}
+            <div style={{
+              position: 'absolute',
+              bottom: '140px',
+              right: '35px',
+              maxWidth: '270px',
+              fontFamily: 'Caveat, cursive',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'white',
+              transform: 'rotate(2deg)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              zIndex: 20
+            }}>
+              📝 Is it clear why jurisdiction matters for parenting plans?
             </div>
           </>
         );

@@ -68,9 +68,9 @@ export default function BetaAuth() {
       {/* Left side beta tester note */}
       <div style={{
         position: 'absolute',
-        top: '120px',
-        left: '50px',
-        maxWidth: '300px',
+        top: '100px',
+        left: '60px',
+        maxWidth: '280px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
@@ -85,9 +85,9 @@ export default function BetaAuth() {
       {/* Right side beta tester note */}
       <div style={{
         position: 'absolute',
-        top: '250px',
-        right: '50px',
-        maxWidth: '300px',
+        top: '180px',
+        right: '60px',
+        maxWidth: '280px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
@@ -97,6 +97,40 @@ export default function BetaAuth() {
         zIndex: 20
       }}>
         Please go through the setup just as a couple would. One parent starts the process and invites the other.
+      </div>
+      
+      {/* Bottom left beta tester note */}
+      <div style={{
+        position: 'absolute',
+        bottom: '100px',
+        left: '40px',
+        maxWidth: '270px',
+        fontFamily: 'Caveat, cursive',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        color: 'white',
+        transform: 'rotate(-3deg)',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+        zIndex: 20
+      }}>
+        🔐 Try both the login and register tabs to test the user experience
+      </div>
+      
+      {/* Bottom right beta tester note */}
+      <div style={{
+        position: 'absolute',
+        bottom: '140px',
+        right: '50px',
+        maxWidth: '260px',
+        fontFamily: 'Caveat, cursive',
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        color: 'white',
+        transform: 'rotate(2deg)',
+        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+        zIndex: 20
+      }}>
+        🔄 Test the social login buttons - in the final app they would connect to real providers
       </div>
       
       {/* Login form */}
