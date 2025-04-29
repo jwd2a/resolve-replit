@@ -33,6 +33,12 @@ export function NavigationMenu() {
             <span className="text-xl font-bold text-[#2e1a87] cursor-pointer">Resolve</span>
           </Link>
           
+          <Link href="/home5">
+            <Button variant="ghost" className="text-[#2e1a87] font-bold">
+              Home 5
+            </Button>
+          </Link>
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-1">
