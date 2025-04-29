@@ -1,0 +1,79 @@
+ Prompt: Build a Unified Onboarding Flow for a Parenting App
+Goal:
+Create a seamless, emotionally supportive onboarding journey for a co-parenting course app. This replaces our current “setup wizard → home screen → second wizard” experience with one clear, guided flow.
+
+🎯 UX Philosophy:
+This is not just form-filling — it’s the beginning of the parenting journey.
+
+The tone should be warm, human, and supportive — not administrative.
+
+Each step should feel purposeful, visually cohesive, and low-stress.
+
+Avoid abrupt context switches (no sudden jump to a dashboard).
+
+📚 Flow Structure (6 Steps):
+Parent Info
+
+Full Name, Address, Phone, Email for Parent & Co-Parent
+
+Invite co-parent if not already joined (soft, optional)
+
+Children Info
+
+Add name, birthdate, and gender for each child
+
+Jurisdiction
+
+Select the state where the parenting plan will be filed
+
+Required Forms
+
+Show required forms (e.g., waiver, consent)
+
+Let users sign digitally or skip for now (with a soft warning)
+
+Co-Parent Status
+
+Show if co-parent has registered
+
+If not: prompt to invite, or continue solo
+
+Parenting Preferences (Optional)
+
+Allow selection of relevant holidays and family traditions
+
+Users can skip or complete this step later
+
+✅ Final Screen:
+
+“You’re all set! You can now begin your Parenting Plan course.”
+
+Button: Start Course Now
+
+🎨 Design Details:
+Use a step progress indicator at the top (e.g., Step 4 of 6)
+
+Each screen should include:
+
+A warm, friendly title (e.g., “Tell us about your children”)
+
+Brief helper text
+
+Cleanly grouped input fields with subtle helper copy
+
+Primary CTA: Continue
+
+Optional: “Save and Finish Later” under the button
+
+Use subtle icons and soft color backgrounds to guide the user visually
+
+Include success indicators (like checkmarks, progress bars) to build momentum
+
+🧩 Behavior Rules:
+Do not show the dashboard until onboarding is 100% complete or explicitly skipped
+
+Save partial progress (e.g., localStorage, session, or backend session)
+
+If the user exits mid-flow, resume from the last completed step when they return
+
+If a co-parent joins later, they go through the same flow (skip what’s already complete
