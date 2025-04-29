@@ -284,7 +284,7 @@ export default function OnboardingPage3Step() {
                         name="displayName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Your Legal Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="" {...field} className="h-9 text-sm" />
@@ -301,7 +301,7 @@ export default function OnboardingPage3Step() {
                       />
                       
                       <div>
-                        <FormLabel className="text-xs font-medium">Your Legal Address</FormLabel>
+                        <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
                         
                         <FormField
                           control={combinedInfoForm.control}
@@ -385,7 +385,7 @@ export default function OnboardingPage3Step() {
                         name="coParentName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Co-Parent's Legal Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="" {...field} className="h-9 text-sm" />
@@ -402,7 +402,7 @@ export default function OnboardingPage3Step() {
                       />
                       
                       <div>
-                        <FormLabel className="text-xs font-medium">Co-Parent's Legal Address</FormLabel>
+                        <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
                         
                         <FormField
                           control={combinedInfoForm.control}
@@ -457,7 +457,7 @@ export default function OnboardingPage3Step() {
                         name="coParentPhone"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Co-Parent's Phone</FormLabel>
+                            <FormLabel className="text-xs font-medium">Phone number</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
@@ -481,7 +481,7 @@ export default function OnboardingPage3Step() {
                         name="coParentEmail"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Co-Parent's Email</FormLabel>
+                            <FormLabel className="text-xs font-medium">Email address</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
