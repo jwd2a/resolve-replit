@@ -19,7 +19,7 @@ export function NavigationMenu() {
     { name: "Home 2", path: "/home2" },
     { name: "Home 3", path: "/home3" },
     { name: "Home 4", path: "/home4" },
-    { name: "Home 5", path: "/home5" },
+    { name: "Home 5 - NEW", path: "/home5" },
   ];
   
   const otherRoutes = [
