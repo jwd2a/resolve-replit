@@ -26,7 +26,9 @@ function Router() {
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />
-      <ProtectedRoute path="/onboarding2" component={Onboarding2} requireOnboarding={false} />
+      
+      {/* For beta testing, make onboarding2 public */}
+      <Route path="/onboarding2" component={Onboarding2} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />

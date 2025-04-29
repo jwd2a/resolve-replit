@@ -98,13 +98,18 @@ export default function Onboarding2() {
   const [isSendingInvite, setIsSendingInvite] = useState(false);
   const { toast } = useToast();
   
-  // Auto-redirect after completion
+  // Auto-redirect after completion - for beta testing we'll show a success message instead
   useEffect(() => {
-    if (completed && user) {
-      // Immediately navigate to new dashboard design
-      window.location.href = "/";
+    if (completed) {
+      // For beta testing, we'll just show a success message and not redirect
+      toast({
+        title: "Beta Testing Complete!",
+        description: "Thank you for testing the onboarding flow! In the actual app, you would be redirected to the dashboard.",
+      });
+      // Commented out for beta testing:
+      // window.location.href = "/";
     }
-  }, [completed, user]);
+  }, [completed, toast]);
   
   // Initial form for children
   const emptyChild = {
@@ -153,14 +158,16 @@ export default function Onboarding2() {
     name: "children",
   });
 
-  // If user is not logged in or has already completed onboarding, redirect
-  if (!user) {
-    return <Redirect to="/auth" />;
-  }
+  // For beta testing, we're not requiring login
+  // Comment out redirects to make the beta test version accessible without login
   
-  if (user.onboardingComplete && !completed) {
-    return <Redirect to="/" />;
-  }
+  // if (!user) {
+  //   return <Redirect to="/auth" />;
+  // }
+  
+  // if (user?.onboardingComplete && !completed) {
+  //   return <Redirect to="/" />;
+  // }
   
   // Handle step completion
   const nextStep = () => {
