@@ -86,8 +86,9 @@ type ChildFormValues = z.infer<typeof childSchema>;
 type JurisdictionFormValues = z.infer<typeof jurisdictionSchema>;
 
 // Handwritten note style className
-const noteStyle = "font-handwritten text-blue-600 text-lg transform -rotate-3 p-2 my-3 relative";
-const arrowStyle = "absolute text-blue-600";
+const noteStyle = "font-handwritten text-blue-600 text-lg transform -rotate-3 p-4 my-4 relative";
+const arrowStyle = "absolute text-blue-600 w-8 h-8";
+const mainInstructionStyle = "font-handwritten text-blue-800 text-xl p-6 my-5 relative font-semibold bg-yellow-50 border-2 border-blue-300 shadow-md";
 
 export default function Onboarding2() {
   const { user, isLoading } = useAuth();
@@ -233,34 +234,34 @@ export default function Onboarding2() {
     switch(stage) {
       case 1:
         return (
-          <div className={noteStyle}>
+          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
             <div>👋 Hi Beta Tester! Here's where you'll enter your personal information. 
             Fill in your name, address, and contact details.</div>
-            <ArrowDown className={`${arrowStyle} right-10 top-16`} />
+            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
           </div>
         );
       case 2:
         return (
-          <div className={noteStyle}>
+          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
             <div>🤝 This section is about your co-parent. Their details will be used to create their account 
             and link it to yours. Try sending the invitation!</div>
-            <ArrowDown className={`${arrowStyle} right-10 top-16`} />
+            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
           </div>
         );
       case 3:
         return (
-          <div className={noteStyle}>
+          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
             <div>👶 Children info helps customize your parenting plan for their specific needs.
             Test adding multiple children to see how it works!</div>
-            <ArrowDown className={`${arrowStyle} right-10 top-16`} />
+            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
           </div>
         );
       case 4:
         return (
-          <div className={noteStyle}>
+          <div className={noteStyle + " border-blue-300 border-2 shadow-md"}>
             <div>⚖️ Jurisdiction matters for legal aspects of your parenting plan.
             We'd love feedback on which states have special requirements!</div>
-            <ArrowDown className={`${arrowStyle} right-10 top-16`} />
+            <ArrowDown className={`${arrowStyle} right-16 top-20`} />
           </div>
         );
       default:
@@ -283,7 +284,11 @@ export default function Onboarding2() {
               A few more details to create your parenting plan
             </CardDescription>
 
-            <div className={noteStyle + " mx-auto w-fit"}>
+            <div className={mainInstructionStyle + " mx-auto max-w-xl rotate-1"}>
+              <div>🙏 Thanks for taking the time to help us with beta testing. We are going to have you go through the setup just as a couple would. One parent starts the process and invites the other.</div>
+            </div>
+            
+            <div className={noteStyle + " mx-auto w-fit mt-4"}>
               <div>✏️ This is our beta testing onboarding flow! Please take notes on any confusing parts 
               or ideas for improvements as you go through each step.</div>
             </div>
