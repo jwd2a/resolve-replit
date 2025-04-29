@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Course from "@/pages/Course";
 import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
+import BetaAuth from "@/pages/beta-auth";
 import OnboardingPage from "@/pages/onboarding-page";
 import Onboarding2 from "@/pages/onboarding2";
 import DashboardPage from "@/pages/dashboard-page";
@@ -23,6 +24,9 @@ function Router() {
     <Switch>
       {/* Public route for authentication */}
       <Route path="/auth" component={AuthPage} />
+      
+      {/* Beta testing auth page */}
+      <Route path="/beta-auth" component={BetaAuth} />
       
       {/* Protected routes that require authentication */}
       <ProtectedRoute path="/onboarding" component={OnboardingPage} requireOnboarding={false} />

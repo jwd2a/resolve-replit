@@ -373,8 +373,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to personal info */}
             <div style={{
               position: 'absolute',
-              bottom: '250px',
-              left: '40px',
+              top: '450px',
+              left: '70px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -387,7 +387,7 @@ export default function Onboarding2() {
               ✍️ Personal info helps tailor the process to your specific situation
               <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
                 position: 'absolute', 
-                right: '-30px', 
+                right: '-20px', 
                 bottom: '-30px', 
                 transform: 'rotate(45deg)'
               }}>
@@ -402,8 +402,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to co-parent */}
             <div style={{
               position: 'absolute',
-              bottom: '220px',
-              left: '30px',
+              top: '450px',
+              left: '40px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -417,7 +417,7 @@ export default function Onboarding2() {
               <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{ 
                 position: 'absolute', 
                 right: '-20px', 
-                bottom: '-40px', 
+                bottom: '-20px', 
                 transform: 'rotate(30deg)'
               }}>
                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -432,8 +432,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to children */}
             <div style={{
               position: 'absolute',
-              bottom: '150px',
-              left: '40px',
+              top: '480px',
+              left: '50px',
               maxWidth: '270px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -453,8 +453,8 @@ export default function Onboarding2() {
             {/* Bottom left note - specific to jurisdiction */}
             <div style={{
               position: 'absolute',
-              bottom: '200px',
-              left: '35px',
+              top: '430px',
+              left: '45px',
               maxWidth: '250px',
               fontFamily: 'Caveat, cursive',
               fontSize: '1.5rem',
@@ -479,8 +479,8 @@ export default function Onboarding2() {
       <div style={{
         position: 'absolute',
         top: '120px',
-        left: '50px',
-        maxWidth: '300px',
+        left: '60px',
+        maxWidth: '280px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
@@ -496,8 +496,8 @@ export default function Onboarding2() {
       <div style={{
         position: 'absolute',
         top: '220px',
-        right: '50px',
-        maxWidth: '300px',
+        right: '60px',
+        maxWidth: '280px',
         fontFamily: 'Caveat, cursive',
         fontSize: '1.75rem',
         fontWeight: 'bold',
