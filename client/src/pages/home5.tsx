@@ -1,1060 +1,629 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { 
   Mail, 
-  Check,
-  ChevronRight,
-  ChevronLeft,
-  User,
+  Check, 
+  FileText, 
+  Calendar, 
+  ChevronRight, 
+  UserPlus, 
+  X,
+  Edit,
   Users,
-  MapPin,
-  Phone,
-  AtSign,
-  Calendar,
-  FileText,
-  Info,
+  BookOpen,
   AlertCircle,
-  Heart,
-  Bookmark,
-  Loader2
+  ChevronDown,
+  User,
+  MessageCircle,
+  ExternalLink,
+  Zap
 } from "lucide-react";
-import Header from "@/components/Header";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { getInitials } from "@/lib/utils";
 
-// Mock US states array 
-const US_STATES = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
-  "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
-  "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
-  "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
-  "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island",
-  "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-  "West Virginia", "Wisconsin", "Wyoming"
-];
-
-// Common US holidays
-const US_HOLIDAYS = [
-  { id: "new_years", name: "New Year's Day" },
-  { id: "mlk", name: "Martin Luther King Jr. Day" },
-  { id: "presidents", name: "Presidents' Day" },
-  { id: "memorial", name: "Memorial Day" },
-  { id: "juneteenth", name: "Juneteenth" },
-  { id: "independence", name: "Independence Day" },
-  { id: "labor", name: "Labor Day" },
-  { id: "columbus", name: "Columbus Day" },
-  { id: "veterans", name: "Veterans Day" },
-  { id: "thanksgiving", name: "Thanksgiving" },
-  { id: "christmas", name: "Christmas" },
-  { id: "easter", name: "Easter" },
-  { id: "mothers", name: "Mother's Day" },
-  { id: "fathers", name: "Father's Day" },
-  { id: "halloween", name: "Halloween" },
-  { id: "valentines", name: "Valentine's Day" },
-];
-
-// Form interfaces
-interface PersonalInfoForm {
-  legalName: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-  email: string;
+// Course module interface
+interface Module {
+  id: number;
+  title: string;
+  status: "completed" | "in_progress" | "not_started";
+  locked: boolean;
 }
 
-interface CoParentInfoForm {
-  legalName: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-  email: string;
-  sameAddress: boolean;
-}
-
-interface ChildInfo {
-  fullName: string;
-  dateOfBirth: string;
-  gender: string;
-}
-
-interface ChildrenInfoForm {
-  children: ChildInfo[];
-}
-
-interface JurisdictionForm {
-  state: string;
-}
-
-interface RequiredFormsForm {
-  confidentialityAgreement: boolean;
-  termsAndConditions: boolean;
-}
-
-interface HolidayPreference {
+// Admin task interface
+interface AdminTask {
   id: string;
-  name: string;
-  selected: boolean;
+  title: string;
+  description: string;
+  completed: boolean;
+  priority: "high" | "medium" | "low";
+  type: "waiver" | "form" | "preference";
 }
 
-interface HolidayPreferencesForm {
-  holidays: HolidayPreference[];
-  customTraditions: string;
+// Family member interface
+interface FamilyMember {
+  id: number;
+  name: string;
+  role: "parent" | "co-parent" | "child";
+  status: "registered" | "pending" | "incomplete";
+  age?: number;
 }
 
 export default function Home5() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+  const [isSendingInvite, setIsSendingInvite] = useState(false);
+  const [coParentEmail, setCoParentEmail] = useState("");
   
-  // Current step state
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCompleting, setIsCompleting] = useState(false);
-  const [showSendInviteModal, setShowSendInviteModal] = useState(false);
-  const [coParentJoined, setCoParentJoined] = useState(false);
+  // Mock data for the course progress
+  const courseProgress = 45; // 45% complete
   
-  // Form states
-  const [personalInfo, setPersonalInfo] = useState<PersonalInfoForm>({
-    legalName: user?.displayName || "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    phone: "",
-    email: user?.email || ""
-  });
+  // Mock data for the course modules
+  const courseModules: Module[] = [
+    { id: 1, title: "Foundations", status: "completed", locked: false },
+    { id: 2, title: "Communication", status: "completed", locked: false },
+    { id: 3, title: "Custody", status: "in_progress", locked: false },
+    { id: 4, title: "Holidays", status: "not_started", locked: true },
+    { id: 5, title: "Support & Resources", status: "not_started", locked: true }
+  ];
   
-  const [coParentInfo, setCoParentInfo] = useState<CoParentInfoForm>({
-    legalName: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    phone: "",
-    email: "",
-    sameAddress: false
-  });
-  
-  const [childrenInfo, setChildrenInfo] = useState<ChildrenInfoForm>({
-    children: [{ fullName: "", dateOfBirth: "", gender: "" }]
-  });
-  
-  const [jurisdictionInfo, setJurisdictionInfo] = useState<JurisdictionForm>({
-    state: ""
-  });
-  
-  const [requiredFormsInfo, setRequiredFormsInfo] = useState<RequiredFormsForm>({
-    confidentialityAgreement: false,
-    termsAndConditions: false
-  });
-  
-  const [holidayPreferencesInfo, setHolidayPreferencesInfo] = useState<HolidayPreferencesForm>({
-    holidays: US_HOLIDAYS.map(holiday => ({ ...holiday, selected: false })),
-    customTraditions: ""
-  });
-  
-  // Effect to simulate loading saved progress
-  useEffect(() => {
-    // In a real app, we would fetch saved progress from the backend here
-    // For now, this is just simulating a delay
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // Handle co-parent address sync when "same address" is checked
-  useEffect(() => {
-    if (coParentInfo.sameAddress) {
-      setCoParentInfo(prevState => ({
-        ...prevState,
-        address: personalInfo.address,
-        city: personalInfo.city,
-        state: personalInfo.state,
-        zip: personalInfo.zip
-      }));
+  // Mock data for admin tasks
+  const adminTasks: AdminTask[] = [
+    { 
+      id: "waiver", 
+      title: "Confidentiality Waiver", 
+      description: "This waiver protects your privacy during the co-parenting process.",
+      completed: false,
+      priority: "high",
+      type: "waiver"
+    },
+    { 
+      id: "holiday_prefs", 
+      title: "Holiday Preferences", 
+      description: "Define your important holiday traditions and preferences.",
+      completed: false,
+      priority: "medium",
+      type: "preference"
     }
-  }, [coParentInfo.sameAddress, personalInfo]);
+  ];
   
-  // Navigation functions
-  const nextStep = () => {
-    window.scrollTo(0, 0);
-    setCurrentStep(prev => Math.min(prev + 1, 6));
-  };
+  // Mock data for family members
+  const familyMembers: FamilyMember[] = [
+    { id: 1, name: "Eric Robinson", role: "parent", status: "registered" },
+    { id: 2, name: "Sarah Parker", role: "co-parent", status: "pending" },
+    { id: 3, name: "Mila Robinson", role: "child", status: "registered", age: 6 }
+  ];
   
-  const prevStep = () => {
-    window.scrollTo(0, 0);
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
+  // Get the current parent's first name
+  const parentFirstName = user?.displayName?.split(" ")[0] || familyMembers.find(m => m.role === "parent")?.name.split(" ")[0] || "Eric";
   
-  const skipToNext = () => {
-    window.scrollTo(0, 0);
-    // For steps that can be skipped
-    nextStep();
-  };
+  // Check if there are incomplete admin tasks
+  const hasIncompleteTasks = adminTasks.some(task => !task.completed);
   
-  // Add a new child
-  const addChild = () => {
-    setChildrenInfo(prevState => ({
-      children: [...prevState.children, { fullName: "", dateOfBirth: "", gender: "" }]
-    }));
-  };
+  // Get the current module
+  const currentModule = courseModules.find(module => module.status === "in_progress") || courseModules[0];
   
-  // Remove a child
-  const removeChild = (index: number) => {
-    setChildrenInfo(prevState => ({
-      children: prevState.children.filter((_, i) => i !== index)
-    }));
-  };
+  // Determine co-parent status
+  const coParent = familyMembers.find(member => member.role === "co-parent");
+  const coParentPending = coParent?.status === "pending";
   
-  // Update a child's information
-  const updateChildInfo = (index: number, field: keyof ChildInfo, value: string) => {
-    setChildrenInfo(prevState => {
-      const updatedChildren = [...prevState.children];
-      updatedChildren[index] = { ...updatedChildren[index], [field]: value };
-      return { children: updatedChildren };
-    });
-  };
-  
-  // Toggle holiday selection
-  const toggleHoliday = (id: string) => {
-    setHolidayPreferencesInfo(prevState => ({
-      ...prevState,
-      holidays: prevState.holidays.map(holiday => 
-        holiday.id === id ? { ...holiday, selected: !holiday.selected } : holiday
-      )
-    }));
-  };
-  
-  // Handle simulated invite to co-parent
-  const sendCoParentInvite = () => {
-    if (!coParentInfo.email) {
+  // Handle inviting co-parent
+  const handleInviteCoParent = () => {
+    if (!coParentEmail) {
       toast({
         title: "Email Required",
-        description: "Please enter your co-parent's email address to send an invitation.",
+        description: "Please enter your co-parent's email address.",
         variant: "destructive"
       });
       return;
     }
     
-    setIsLoading(true);
-    // Simulate sending invite
+    setIsSendingInvite(true);
+    
+    // Simulate sending invitation
     setTimeout(() => {
-      setIsLoading(false);
+      setIsSendingInvite(false);
+      setInviteDialogOpen(false);
+      
       toast({
         title: "Invitation Sent",
-        description: `An invitation has been sent to ${coParentInfo.email}.`,
+        description: `An invitation has been sent to ${coParentEmail}.`,
       });
-      setShowSendInviteModal(false);
+      
+      // Clear the email input
+      setCoParentEmail("");
     }, 1500);
   };
   
-  // Complete onboarding and redirect to course
-  const completeOnboarding = () => {
-    setIsCompleting(true);
-    // Simulate saving data and redirecting
-    setTimeout(() => {
-      setIsCompleting(false);
-      toast({
-        title: "Onboarding Complete",
-        description: "You're all set! Ready to start your course.",
-      });
-      
-      // In a real app, you'd update the user's onboarding status here
-      if (user) {
-        // user.onboardingComplete = true;
-      }
-      
-      // Redirect to course page
-      setLocation("/course");
-    }, 2000);
-  };
-  
-  // This is required for the Header component
-  const onMenuClick = () => {
-    // This would typically toggle a mobile menu
-  };
-  
-  // Determine if we can proceed to the next step
-  const canProceedToNext = () => {
-    switch (currentStep) {
-      case 1: // Parent & Co-Parent Info
-        return (
-          personalInfo.legalName && 
-          personalInfo.address && 
-          personalInfo.city && 
-          personalInfo.state && 
-          personalInfo.zip && 
-          personalInfo.phone && 
-          personalInfo.email
-        );
-      case 2: // Children Info
-        return childrenInfo.children.every(child => 
-          child.fullName && child.dateOfBirth && child.gender
-        );
-      case 3: // Jurisdiction
-        return !!jurisdictionInfo.state;
-      case 4: // Required Forms
-        // This step can proceed even if forms aren't signed
-        return true;
-      case 5: // Co-Parent Status
-        // This step can always proceed
-        return true;
-      case 6: // Parenting Preferences
-        // This step is optional
-        return true;
+  // Get status icon for a module
+  const getModuleStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <Check className="h-4 w-4 text-green-600" />;
+      case "in_progress":
+        return <Zap className="h-4 w-4 text-amber-500" />;
       default:
-        return false;
+        return null;
     }
   };
-  
-  // Determine the title for the current step
-  const getStepTitle = () => {
-    switch (currentStep) {
-      case 1: return "Tell us about you and your co-parent";
-      case 2: return "Who are the children in your parenting plan?";
-      case 3: return "Where will you be filing your parenting plan?";
-      case 4: return "Required forms and agreements";
-      case 5: return "Co-parent invitation status";
-      case 6: return "Parenting preferences";
-      default: return "";
-    }
-  };
-  
-  // Determine the helper text for the current step
-  const getStepDescription = () => {
-    switch (currentStep) {
-      case 1:
-        return "We'll use this information to customize your parenting plan.";
-      case 2:
-        return "Enter information for each child who will be included in your parenting plan.";
-      case 3:
-        return "Different states have different requirements for parenting plans.";
-      case 4:
-        return "These agreements help protect your privacy and outline how we'll work together.";
-      case 5:
-        return "Working together with your co-parent helps create the best plan for your children.";
-      case 6:
-        return "Tell us about important holidays and family traditions to include in your plan.";
-      default:
-        return "";
-    }
-  };
-  
-  if (isLoading && currentStep === 1) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[#2e1a87] mx-auto" />
-          <h3 className="mt-4 text-lg font-medium text-gray-900">Loading your progress</h3>
-          <p className="mt-1 text-sm text-gray-500">Just a moment while we get things ready...</p>
-        </div>
-      </div>
-    );
-  }
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-10">
-      <Header title="Complete Your Onboarding" onMenuClick={onMenuClick} />
-      
-      <div className="max-w-3xl mx-auto pt-6 px-4">
-        <Card className="border-gray-200 shadow-sm">
-          <CardHeader>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <CardTitle>{getStepTitle()}</CardTitle>
-                <CardDescription className="mt-1">{getStepDescription()}</CardDescription>
-              </div>
-              <div className="rounded-full bg-[#2e1a87]/10 text-[#2e1a87] px-3 py-1 text-sm font-medium">
-                Step {currentStep} of 6
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Navigation */}
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <span className="text-2xl font-bold text-[#2e1a87]">Resolve</span>
             </div>
             
-            {/* Progress bar */}
-            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-[#2e1a87]" 
-                style={{ width: `${(currentStep / 6) * 100}%` }}
-              ></div>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-gray-600"
+                onClick={() => {
+                  toast({
+                    title: "Support",
+                    description: "Our support team will contact you shortly.",
+                  });
+                }}
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Support
+              </Button>
+              
+              <div className="flex items-center">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-[#2e1a87]/10 text-[#2e1a87]">
+                    {getInitials(user?.displayName || parentFirstName)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
             </div>
-          </CardHeader>
-          
-          <CardContent>
-            {/* Step 1: Parent & Co-Parent Info */}
-            {currentStep === 1 && (
-              <div className="space-y-8">
-                {/* Your Information */}
-                <div className="bg-gray-50 p-5 rounded-lg">
-                  <h3 className="text-base font-medium mb-4">Your Information</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm">Legal Name</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          value={personalInfo.legalName}
-                          onChange={(e) => setPersonalInfo({...personalInfo, legalName: e.target.value})}
-                          className="pl-8"
-                        />
-                        <User className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {personalInfo.legalName && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm">Legal Address</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          value={personalInfo.address}
-                          onChange={(e) => setPersonalInfo({...personalInfo, address: e.target.value})}
-                          placeholder="Street address"
-                          className="pl-8"
-                        />
-                        <MapPin className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-2">
-                      <Input
-                        value={personalInfo.city}
-                        onChange={(e) => setPersonalInfo({...personalInfo, city: e.target.value})}
-                        placeholder="City"
-                      />
-                      <Select 
-                        value={personalInfo.state}
-                        onValueChange={(value) => setPersonalInfo({...personalInfo, state: value})}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="State" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {US_STATES.map((state) => (
-                            <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
-                              {state}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Input
-                        value={personalInfo.zip}
-                        onChange={(e) => setPersonalInfo({...personalInfo, zip: e.target.value})}
-                        placeholder="ZIP"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm">Phone Number</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          value={personalInfo.phone}
-                          onChange={(e) => setPersonalInfo({...personalInfo, phone: e.target.value})}
-                          placeholder="(555) 123-4567"
-                          className="pl-8"
-                        />
-                        <Phone className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {personalInfo.phone && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm">Email</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          type="email"
-                          value={personalInfo.email}
-                          onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
-                          placeholder="your.email@example.com"
-                          className="pl-8"
-                        />
-                        <AtSign className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {personalInfo.email && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
-                          </div>
-                        )}
-                      </div>
+          </div>
+        </div>
+      </header>
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
+          {/* Welcome & Status Header */}
+          <div className="bg-gradient-to-r from-[#2e1a87] to-[#5a43c6] rounded-xl overflow-hidden shadow-sm">
+            <div className="px-6 py-6 sm:px-8 sm:py-8 text-white">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div className="space-y-4">
+                  <h1 className="text-2xl font-semibold">Welcome back, {parentFirstName}.</h1>
+                  <div className="space-y-1">
+                    <p className="text-white/90">You're {courseProgress}% of the way through your course.</p>
+                    <div className="w-full max-w-xs">
+                      <Progress value={courseProgress} className="h-2 bg-white/20" />
                     </div>
                   </div>
                 </div>
                 
-                {/* Co-Parent Information */}
-                <div className="bg-gray-50 p-5 rounded-lg">
-                  <h3 className="text-base font-medium mb-4">Co-Parent Information</h3>
+                <Button 
+                  className="mt-4 md:mt-0 bg-white text-[#2e1a87] hover:bg-white/90"
+                  onClick={() => setLocation(`/course`)}
+                >
+                  Continue Course
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Left Column - Course Modules */}
+            <div className="md:col-span-2 space-y-6">
+              {/* Course Modules Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Course Outline</CardTitle>
+                  <CardDescription>
+                    Track your progress through the co-parenting curriculum
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent>
+                  <div className="space-y-3">
+                    {courseModules.map((module) => (
+                      <div 
+                        key={module.id} 
+                        className={`p-3 border rounded-md flex items-center justify-between group transition-all ${
+                          module.status === "in_progress" 
+                            ? "border-amber-200 bg-amber-50" 
+                            : module.status === "completed"
+                            ? "border-green-200 bg-green-50"
+                            : module.locked ? "opacity-60" : ""
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                            module.status === "in_progress" 
+                              ? "bg-amber-100 text-amber-600" 
+                              : module.status === "completed"
+                              ? "bg-green-100 text-green-600"
+                              : "bg-gray-100 text-gray-500"
+                          }`}>
+                            {module.status === "completed" ? (
+                              <Check className="h-4 w-4" />
+                            ) : module.status === "in_progress" ? (
+                              <Zap className="h-4 w-4" />
+                            ) : (
+                              module.id
+                            )}
+                          </div>
+                          
+                          <div>
+                            <h3 className="font-medium">
+                              Module {module.id}: {module.title}
+                            </h3>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center">
+                          <div className="mr-3">
+                            {getModuleStatusIcon(module.status)}
+                          </div>
+                          
+                          {module.status === "in_progress" && (
+                            <Button 
+                              size="sm"
+                              className="bg-[#2e1a87] hover:bg-[#25156d] h-8"
+                              onClick={() => setLocation(`/course`)}
+                            >
+                              Continue
+                            </Button>
+                          )}
+                          
+                          {module.status === "completed" && (
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="h-8"
+                              onClick={() => setLocation(`/course`)}
+                            >
+                              Review
+                            </Button>
+                          )}
+                          
+                          {module.status === "not_started" && !module.locked && (
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="h-8"
+                              onClick={() => setLocation(`/course`)}
+                            >
+                              Start
+                            </Button>
+                          )}
+                          
+                          {module.locked && (
+                            <span className="text-sm text-gray-500">Locked</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+                
+                <CardFooter className="border-t pt-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full text-[#2e1a87]"
+                    onClick={() => setLocation("/course")}
+                  >
+                    View Full Outline
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              {/* Form & Admin Tasks Section - only show if there are incomplete tasks */}
+              {hasIncompleteTasks && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Required Items</CardTitle>
+                    <CardDescription>
+                      Complete these items to finalize your parenting plan
+                    </CardDescription>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-3">
+                      {adminTasks.filter(task => !task.completed).map((task) => (
+                        <div 
+                          key={task.id} 
+                          className={`p-3 border rounded-md ${
+                            task.priority === "high" ? "border-red-200" : "border-amber-200"
+                          }`}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className={`h-8 w-8 rounded-full flex-shrink-0 flex items-center justify-center ${
+                              task.priority === "high" 
+                                ? "bg-red-100 text-red-600" 
+                                : "bg-amber-100 text-amber-600"
+                            }`}>
+                              <AlertCircle className="h-4 w-4" />
+                            </div>
+                            
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <h3 className="font-medium">{task.title}</h3>
+                                
+                                <Button 
+                                  size="sm" 
+                                  className="h-7 bg-[#2e1a87]"
+                                  onClick={() => {
+                                    // In a real app, this would open a dialog to complete the task
+                                    toast({
+                                      title: "Action Required",
+                                      description: `Please complete the ${task.title.toLowerCase()}.`,
+                                    });
+                                  }}
+                                >
+                                  Complete
+                                </Button>
+                              </div>
+                              
+                              <p className="text-sm text-gray-500 mt-1">
+                                {task.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                  
+                  <CardFooter className="border-t pt-4">
+                    <Button 
+                      className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
+                      onClick={() => {
+                        // In a real app, this would take you to a page to complete all items
+                        toast({
+                          title: "Action Required",
+                          description: "Please complete all required items.",
+                        });
+                      }}
+                    >
+                      Complete These Items
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )}
+            </div>
+            
+            {/* Right Column - Family Info & Support */}
+            <div className="space-y-6">
+              {/* Family Information Card */}
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Family Information</CardTitle>
+                    <Button variant="ghost" size="sm" className="h-8 text-[#2e1a87]" onClick={() => setLocation("/onboarding6step")}>
+                      <Edit className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                  </div>
+                </CardHeader>
+                
+                <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm">Legal Name</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          value={coParentInfo.legalName}
-                          onChange={(e) => setCoParentInfo({...coParentInfo, legalName: e.target.value})}
-                          className="pl-8"
-                        />
-                        <User className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {coParentInfo.legalName && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
+                      <h3 className="text-sm font-medium text-gray-500 mb-2">Parents</h3>
+                      <div className="space-y-2">
+                        {familyMembers.filter(member => member.role === "parent" || member.role === "co-parent").map((member) => (
+                          <div key={member.id} className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <Avatar className="h-8 w-8 mr-2">
+                                <AvatarFallback className={`${
+                                  member.status === "registered" 
+                                    ? "bg-green-100 text-green-800" 
+                                    : "bg-amber-100 text-amber-800"
+                                }`}>
+                                  {getInitials(member.name)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">{member.name}</span>
+                            </div>
+                            
+                            <div>
+                              {member.status === "registered" ? (
+                                <div className="flex items-center text-green-600 text-xs">
+                                  <Check className="h-3.5 w-3.5 mr-1" />
+                                  <span>Active</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center text-amber-600 text-xs">
+                                  <span>Pending</span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        )}
+                        ))}
                       </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="same-address" 
-                        checked={coParentInfo.sameAddress}
-                        onCheckedChange={(checked) => 
-                          setCoParentInfo({...coParentInfo, sameAddress: checked as boolean})
-                        }
-                      />
-                      <label
-                        htmlFor="same-address"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Same address as you
-                      </label>
-                    </div>
-                    
-                    {!coParentInfo.sameAddress && (
-                      <>
-                        <div>
-                          <Label className="text-sm">Legal Address</Label>
-                          <div className="relative mt-1">
-                            <Input
-                              value={coParentInfo.address}
-                              onChange={(e) => setCoParentInfo({...coParentInfo, address: e.target.value})}
-                              placeholder="Street address"
-                              className="pl-8"
-                            />
-                            <MapPin className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-3 gap-2">
-                          <Input
-                            value={coParentInfo.city}
-                            onChange={(e) => setCoParentInfo({...coParentInfo, city: e.target.value})}
-                            placeholder="City"
-                          />
-                          <Select 
-                            value={coParentInfo.state}
-                            onValueChange={(value) => setCoParentInfo({...coParentInfo, state: value})}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="State" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {US_STATES.map((state) => (
-                                <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
-                                  {state}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <Input
-                            value={coParentInfo.zip}
-                            onChange={(e) => setCoParentInfo({...coParentInfo, zip: e.target.value})}
-                            placeholder="ZIP"
-                          />
-                        </div>
-                      </>
-                    )}
-                    
-                    <div>
-                      <Label className="text-sm">Phone Number</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          value={coParentInfo.phone}
-                          onChange={(e) => setCoParentInfo({...coParentInfo, phone: e.target.value})}
-                          placeholder="(555) 123-4567"
-                          className="pl-8"
-                        />
-                        <Phone className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {coParentInfo.phone && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm">Email</Label>
-                      <div className="relative mt-1">
-                        <Input
-                          type="email"
-                          value={coParentInfo.email}
-                          onChange={(e) => setCoParentInfo({...coParentInfo, email: e.target.value})}
-                          placeholder="coparent@example.com"
-                          className="pl-8"
-                        />
-                        <AtSign className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        {coParentInfo.email && (
-                          <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
-                            ✓
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center p-2 bg-gray-100 border border-gray-300 border-dashed rounded-md mt-3">
-                      <div className="flex-shrink-0 mr-2">
-                        <Info className="h-4 w-4 text-gray-500" />
-                      </div>
-                      <p className="text-xs text-gray-600 italic">
-                        It is common to have the same legal address as your co-parent at this stage. You can always adjust your plan as things progress.
-                      </p>
-                    </div>
-                    
-                    <div className="mt-6 pt-4 border-t border-gray-200">
-                      <div className="flex flex-col space-y-3">
-                        <h3 className="text-sm font-medium text-gray-700">Invite Your Co-Parent</h3>
-                        <div className="bg-blue-50 rounded-md p-3 text-sm text-blue-800 mb-2">
-                          <p>Since you and your co-parent will take the course together, they will need to register as well. You can also invite them later from the home screen.</p>
-                        </div>
-                        
-                        <div className="flex">
-                          <Button 
-                            type="button"
-                            variant="outline"
-                            className="border-[#2e1a87] text-[#2e1a87] hover:bg-[#f5f3ff] text-sm"
-                            onClick={() => setShowSendInviteModal(true)}
-                            disabled={!coParentInfo.email}
-                          >
-                            <Mail className="w-4 h-4 mr-2" />
-                            Send Invite Email Now
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {/* Step 2: Children Information */}
-            {currentStep === 2 && (
-              <div className="space-y-6">
-                {childrenInfo.children.map((child, index) => (
-                  <div key={index} className="bg-gray-50 p-5 rounded-lg">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-base font-medium">Child {index + 1}</h3>
-                      {index > 0 && (
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => removeChild(index)}
+                      
+                      {coParentPending && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="mt-2 text-xs h-7"
+                          onClick={() => setInviteDialogOpen(true)}
                         >
-                          Remove
+                          <Mail className="h-3 w-3 mr-1" />
+                          Resend Invitation
                         </Button>
                       )}
                     </div>
                     
-                    <div className="space-y-4">
-                      <div>
-                        <Label className="text-sm">Full Name</Label>
-                        <div className="relative mt-1">
-                          <Input
-                            value={child.fullName}
-                            onChange={(e) => updateChildInfo(index, 'fullName', e.target.value)}
-                            placeholder="Child's full name"
-                            className="pl-8"
-                          />
-                          <User className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <Label className="text-sm">Date of Birth</Label>
-                        <div className="relative mt-1">
-                          <Input
-                            type="date"
-                            value={child.dateOfBirth}
-                            onChange={(e) => updateChildInfo(index, 'dateOfBirth', e.target.value)}
-                            className="pl-8"
-                          />
-                          <Calendar className="h-4 w-4 absolute left-2.5 top-2.5 text-gray-400" />
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <Label className="text-sm">Gender</Label>
-                        <div className="mt-1">
-                          <Select 
-                            value={child.gender}
-                            onValueChange={(value) => updateChildInfo(index, 'gender', value)}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select gender" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="male">Male</SelectItem>
-                              <SelectItem value="female">Female</SelectItem>
-                              <SelectItem value="non-binary">Non-binary</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                    <Separator />
+                    
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500 mb-2">Children</h3>
+                      <div className="space-y-2">
+                        {familyMembers.filter(member => member.role === "child").map((child) => (
+                          <div key={child.id} className="flex items-center">
+                            <Avatar className="h-8 w-8 mr-2">
+                              <AvatarFallback className="bg-blue-100 text-blue-800">
+                                {getInitials(child.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">{child.name}</span>
+                            {child.age && (
+                              <span className="text-xs text-gray-500 ml-2">({child.age} years old)</span>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                ))}
+                </CardContent>
+              </Card>
+              
+              {/* Resources Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Resources</CardTitle>
+                </CardHeader>
                 
-                <div className="flex justify-center">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addChild}
-                    className="border-dashed border-gray-300"
-                  >
-                    + Add Another Child
-                  </Button>
-                </div>
-              </div>
-            )}
-            
-            {/* Step 3: Jurisdiction Selection */}
-            {currentStep === 3 && (
-              <div className="space-y-6">
-                <div className="bg-gray-50 p-5 rounded-lg">
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm">Select Your State</Label>
-                      <div className="mt-1">
-                        <Select 
-                          value={jurisdictionInfo.state}
-                          onValueChange={(value) => setJurisdictionInfo({state: value})}
-                        >
-                          <SelectTrigger className="h-12">
-                            <SelectValue placeholder="Select the state where you'll file your parenting plan" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {US_STATES.map((state) => (
-                              <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
-                                {state}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-blue-50 p-3 rounded-md mt-4">
-                      <div className="flex items-start">
-                        <Info className="h-4 w-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                        <p className="text-sm text-blue-800">
-                          Different states have different requirements for parenting plans. Your selection helps us customize your experience to meet local regulations.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {/* Step 4: Required Forms */}
-            {currentStep === 4 && (
-              <div className="space-y-6">
-                <div className="bg-gray-50 p-5 rounded-lg">
-                  <h3 className="text-base font-medium mb-4">Required Agreements</h3>
-                  
-                  <div className="space-y-5">
-                    <div className="border rounded-md p-4">
-                      <div className="flex items-start space-x-3">
-                        <Checkbox 
-                          id="confidentiality" 
-                          checked={requiredFormsInfo.confidentialityAgreement}
-                          onCheckedChange={(checked) => 
-                            setRequiredFormsInfo({...requiredFormsInfo, confidentialityAgreement: checked as boolean})
-                          }
-                          className="mt-1"
-                        />
+                <CardContent>
+                  <div className="space-y-3">
+                    <a 
+                      href="#"
+                      className="block p-3 border rounded-md hover:border-[#2e1a87]/50 cursor-pointer transition-all"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: "Resource Opened",
+                          description: "Co-Parenting Guide opened in a new tab.",
+                        });
+                      }}
+                    >
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mr-3">
+                          <BookOpen className="h-4 w-4" />
+                        </div>
                         <div>
-                          <label
-                            htmlFor="confidentiality"
-                            className="text-sm font-medium"
-                          >
-                            Confidentiality Agreement
-                          </label>
-                          <p className="text-sm text-gray-500 mt-1">
-                            I agree to keep all shared information confidential during the course and parenting plan development process.
-                          </p>
-                          <Button 
-                            variant="link" 
-                            className="h-auto p-0 text-[#2e1a87] text-xs mt-1"
-                            onClick={() => {
-                              // In a real app, this would open the full agreement
-                              toast({
-                                title: "Document Opened",
-                                description: "Confidentiality Agreement opened in a new window.",
-                              });
-                            }}
-                          >
-                            Read Full Agreement
-                          </Button>
+                          <h4 className="font-medium text-sm">Co-Parenting Guide</h4>
+                          <p className="text-xs text-gray-500">PDF • 15 pages</p>
                         </div>
                       </div>
-                    </div>
+                    </a>
                     
-                    <div className="border rounded-md p-4">
-                      <div className="flex items-start space-x-3">
-                        <Checkbox 
-                          id="terms" 
-                          checked={requiredFormsInfo.termsAndConditions}
-                          onCheckedChange={(checked) => 
-                            setRequiredFormsInfo({...requiredFormsInfo, termsAndConditions: checked as boolean})
-                          }
-                          className="mt-1"
-                        />
+                    <a 
+                      href="#"
+                      className="block p-3 border rounded-md hover:border-[#2e1a87]/50 cursor-pointer transition-all"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: "Resource Opened",
+                          description: "Communication Toolkit opened in a new tab.",
+                        });
+                      }}
+                    >
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-3">
+                          <FileText className="h-4 w-4" />
+                        </div>
                         <div>
-                          <label
-                            htmlFor="terms"
-                            className="text-sm font-medium"
-                          >
-                            Terms & Conditions
-                          </label>
-                          <p className="text-sm text-gray-500 mt-1">
-                            I agree to the Terms & Conditions, including participation in good faith in the mediation process if needed during the course.
-                          </p>
-                          <Button 
-                            variant="link" 
-                            className="h-auto p-0 text-[#2e1a87] text-xs mt-1"
-                            onClick={() => {
-                              // In a real app, this would open the full agreement
-                              toast({
-                                title: "Document Opened",
-                                description: "Terms & Conditions opened in a new window.",
-                              });
-                            }}
-                          >
-                            Read Full Agreement
-                          </Button>
+                          <h4 className="font-medium text-sm">Communication Toolkit</h4>
+                          <p className="text-xs text-gray-500">Article • 10 min read</p>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="mt-4">
-                      <div className="flex items-start bg-amber-50 p-3 rounded-md">
-                        <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
-                        <p className="text-sm text-amber-800">
-                          {requiredFormsInfo.confidentialityAgreement && requiredFormsInfo.termsAndConditions 
-                            ? "Thank you for signing the agreements!" 
-                            : "You can proceed without signing the agreements now, but they will need to be completed before you can finalize your parenting plan."}
-                        </p>
-                      </div>
-                    </div>
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Support Banner */}
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 text-blue-800">
+                <div className="flex items-start">
+                  <MessageCircle className="h-5 w-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium">Need help? Our support team is just a click away.</p>
+                    <Button 
+                      variant="link" 
+                      className="h-auto p-0 text-blue-600 text-sm mt-1"
+                      onClick={() => {
+                        toast({
+                          title: "Support",
+                          description: "Our support team will contact you shortly.",
+                        });
+                      }}
+                    >
+                      Contact Support
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </Button>
                   </div>
                 </div>
               </div>
-            )}
-            
-            {/* Step 5: Co-Parent Status */}
-            {currentStep === 5 && (
-              <div className="space-y-6">
-                <div className={`bg-gray-50 p-5 rounded-lg ${coParentJoined ? "border-green-200" : "border-amber-100"}`}>
-                  <h3 className="text-base font-medium mb-4">Co-Parent Status</h3>
-                  
-                  <div className="flex justify-between items-center mb-4">
-                    <p className="text-sm">{coParentInfo.email || "No email provided"}</p>
-                    {coParentJoined ? (
-                      <div className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
-                        Joined
-                      </div>
-                    ) : (
-                      <div className="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full">
-                        Pending
-                      </div>
-                    )}
-                  </div>
-                  
-                  {coParentJoined ? (
-                    <div className="bg-green-50 p-3 rounded-md">
-                      <div className="flex items-start">
-                        <Check className="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                        <p className="text-sm text-green-800">
-                          Great news! {coParentInfo.legalName || "Your co-parent"} has joined and will be working with you on the parenting plan.
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="bg-amber-50 p-3 rounded-md mb-4">
-                        <div className="flex items-start">
-                          <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
-                          <p className="text-sm text-amber-800">
-                            Your co-parent hasn't joined yet. You can send another invitation or continue on your own for now.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex space-x-3">
-                        <Button 
-                          variant="outline" 
-                          className="border-[#2e1a87] text-[#2e1a87]"
-                          onClick={() => setShowSendInviteModal(true)}
-                          disabled={!coParentInfo.email}
-                        >
-                          <Mail className="h-4 w-4 mr-2" />
-                          Send Another Invitation
-                        </Button>
-                        
-                        <Button 
-                          variant="ghost"
-                          onClick={() => {
-                            // This mimics the co-parent joining for demo purposes
-                            // In a real app, this would come from a backend event
-                            setCoParentJoined(true);
-                            toast({
-                              title: "Demo Mode",
-                              description: "In the real app, this would happen when your co-parent actually joins.",
-                            });
-                          }}
-                        >
-                          Demo: Simulate Co-Parent Joining
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-            
-            {/* Step 6: Parenting Preferences */}
-            {currentStep === 6 && (
-              <div className="space-y-6">
-                <div className="bg-gray-50 p-5 rounded-lg">
-                  <h3 className="text-base font-medium mb-2">Important Holidays</h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Select holidays that are important to include in your parenting plan.
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-3">
-                    {holidayPreferencesInfo.holidays.map((holiday) => (
-                      <div key={holiday.id} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={holiday.id} 
-                          checked={holiday.selected}
-                          onCheckedChange={() => toggleHoliday(holiday.id)}
-                        />
-                        <label
-                          htmlFor={holiday.id}
-                          className="text-sm"
-                        >
-                          {holiday.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-6">
-                    <Label className="text-sm">Family Traditions</Label>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Describe any special family traditions or events that should be included in your plan.
-                    </p>
-                    <Textarea 
-                      placeholder="Family reunions, cultural celebrations, annual vacations, etc."
-                      className="mt-1"
-                      value={holidayPreferencesInfo.customTraditions}
-                      onChange={(e) => setHolidayPreferencesInfo({
-                        ...holidayPreferencesInfo, 
-                        customTraditions: e.target.value
-                      })}
-                    />
-                  </div>
-                  
-                  <div className="mt-6 bg-blue-50 p-3 rounded-md">
-                    <div className="flex items-start">
-                      <Info className="h-4 w-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
-                      <p className="text-sm text-blue-800">
-                        These preferences help us create a more tailored parenting plan. You can always modify this later.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-          
-          <CardFooter className="border-t pt-6 flex justify-between">
-            {currentStep > 1 ? (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-                disabled={isLoading}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Back
-              </Button>
-            ) : (
-              <div></div> // Empty div to maintain spacing
-            )}
-            
-            {currentStep < 6 ? (
-              <Button
-                type="button"
-                className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={nextStep}
-                disabled={isLoading || !canProceedToNext()}
-              >
-                Continue
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={completeOnboarding}
-                disabled={isCompleting}
-              >
-                {isCompleting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Completing...
-                  </>
-                ) : (
-                  <>
-                    Start Course Now
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </>
-                )}
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
-        
-        {currentStep !== 1 && currentStep !== 6 && (
-          <div className="mt-4 text-center">
-            <Button
-              variant="link"
-              className="text-gray-500 text-sm"
-              onClick={skipToNext}
-            >
-              {currentStep === 5 ? "Skip to Final Step" : "Skip This Step"}
-            </Button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      </main>
+      
+      {/* Co-Parent Invite Dialog */}
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invite Your Co-Parent</DialogTitle>
+            <DialogDescription>
+              Working together with your co-parent will help create the best possible parenting plan for your family.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Co-Parent's Email</label>
+              <input 
+                type="email"
+                placeholder="email@example.com"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#2e1a87]"
+                value={coParentEmail}
+                onChange={(e) => setCoParentEmail(e.target.value)}
+              />
+            </div>
+            
+            <div className="bg-blue-50 p-3 rounded-md text-sm text-blue-700">
+              <div className="flex items-start">
+                <AlertCircle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+                <p>Your co-parent will need to create their own account to work with you on the parenting plan.</p>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setInviteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleInviteCoParent}
+              disabled={isSendingInvite}
+              className="bg-[#2e1a87]"
+            >
+              {isSendingInvite ? (
+                <>
+                  <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-white rounded-full" />
+                  Sending...
+                </>
+              ) : (
+                "Send Invitation"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

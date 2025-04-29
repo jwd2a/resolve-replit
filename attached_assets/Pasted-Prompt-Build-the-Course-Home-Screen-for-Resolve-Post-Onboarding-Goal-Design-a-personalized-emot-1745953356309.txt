@@ -1,0 +1,108 @@
+Prompt: Build the Course Home Screen for Resolve (Post-Onboarding)
+Goal:
+Design a personalized, emotionally supportive Course Home Screen for users who have completed onboarding. This is their new “basecamp” to:
+
+Track course progress
+
+Complete remaining admin tasks (like forms or waivers)
+
+View/edit family info
+
+Resume the course
+
+The experience should be branded, calm, and focused, with a clear CTA to continue their co-parenting journey.
+
+🎨 Screen Structure & Layout
+1. Welcome & Status Header
+Show user’s first name:
+
+“Welcome back, Eric.”
+
+Short progress message:
+
+“You're 45% of the way through your course.”
+
+Primary CTA:
+
+[Continue Course ➡️]
+
+2. Course Outline Section
+Show a vertical list of course modules with status indicators:
+
+Module 1: Foundations ✅
+
+Module 2: Communication ✅
+
+Module 3: Custody ⚡ (in progress)
+
+Module 4: Holidays ⏳ (not started)
+
+Secondary button:
+
+[View Full Outline]
+
+3. Forms & Admin Tasks Section
+If any required forms/tasks were skipped during onboarding, show here:
+
+❗ Waiver not signed
+
+❗ Holiday preferences not completed
+
+Include helpful icons and supportive tone
+
+CTA:
+
+[Complete These Items]
+
+4. Family Information & Edit Access
+Compact card or section:
+
+Parents:
+
+Eric ✅
+
+Co-Parent: Pending ❗ (“Invite sent” or “Not yet registered”)
+
+Children:
+
+Mila ✅
+
+Button:
+
+[Edit Family Info]
+
+5. Optional Footer or Banner
+Soft message like:
+
+“Need help? Our support team is just a click away.”
+→ [Contact Support]
+
+🧭 UX Behavior & Rules
+Continue Course should take users to the last module they worked on
+
+Users should see only the sections relevant to them (don’t show parenting plan status here)
+
+If all admin tasks are complete, hide that section and replace with:
+
+“✅ All required items completed!”
+
+✍️ Tone & Microcopy Guidelines
+Friendly, human-centered tone: “You're making great progress!”
+
+Avoid pressure — everything should feel optional, even if required
+
+Labels:
+
+Continue Course, Edit Info, Complete Items, Invite Co-Parent
+
+📐 Design Details
+Clean two-column or vertical layout
+
+Branded with Resolve logo and soft color scheme
+
+Subtle progress bar or visual badge indicators
+
+Responsive design for mobile and desktop
+
+Top nav with logo, optional avatar, and Support link
+
