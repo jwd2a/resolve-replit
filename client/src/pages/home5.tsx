@@ -169,34 +169,49 @@ export default function Home5() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="space-y-4">
                   <div>
-                    <h1 className="text-2xl font-semibold">Welcome to Your Family's Space</h1>
-                    <div className="flex flex-wrap items-center mt-2">
-                      {/* Display all family members with avatars */}
-                      <div className="flex -space-x-2 mr-3">
-                        {familyMembers.map((member) => (
-                          <Avatar key={member.id} className="h-8 w-8 border-2 border-white">
-                            <AvatarFallback className={`${
-                              member.role === "parent" 
-                                ? "bg-green-100 text-green-800" 
-                                : member.role === "co-parent"
-                                ? "bg-amber-100 text-amber-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}>
-                              {getInitials(member.name)}
-                            </AvatarFallback>
-                          </Avatar>
-                        ))}
+                    <h1 className="text-2xl font-semibold">Welcome to Your Family's Parenting Plan</h1>
+                    <div className="mt-3">
+                      {/* Display parents */}
+                      <div className="flex items-center mb-2">
+                        <div className="flex -space-x-2 mr-3">
+                          {familyMembers
+                            .filter(member => member.role === "parent" || member.role === "co-parent")
+                            .map((member) => (
+                              <Avatar key={member.id} className="h-8 w-8 border-2 border-white">
+                                <AvatarFallback className={`${
+                                  member.role === "parent" 
+                                    ? "bg-green-100 text-green-800" 
+                                    : "bg-amber-100 text-amber-800"
+                                }`}>
+                                  {getInitials(member.name)}
+                                </AvatarFallback>
+                              </Avatar>
+                          ))}
+                        </div>
+                        <div className="text-white/90">
+                          <span className="font-medium">
+                            {familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}
+                            {coParent && ` & ${coParent.name.split(" ")[0]}`}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-white/90">
-                        {/* Parents */}
-                        <span className="font-medium">
-                          {familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}
-                          {coParent && ` & ${coParent.name.split(" ")[0]}`}
-                        </span>
-                        {/* Children */}
-                        {familyMembers.some(m => m.role === "child") && (
-                          <span>
-                            {" "}with{" "}
+                      
+                      {/* Display children separately */}
+                      {familyMembers.some(m => m.role === "child") && (
+                        <div className="flex items-center">
+                          <div className="flex -space-x-2 mr-3">
+                            {familyMembers
+                              .filter(member => member.role === "child")
+                              .map((child) => (
+                                <Avatar key={child.id} className="h-7 w-7 border-2 border-white">
+                                  <AvatarFallback className="bg-blue-100 text-blue-800">
+                                    {getInitials(child.name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                            ))}
+                          </div>
+                          <div className="text-white/90 text-sm">
+                            <span>Children: </span>
                             {familyMembers
                               .filter(m => m.role === "child")
                               .map((child, index, array) => (
@@ -205,9 +220,9 @@ export default function Home5() {
                                   {child.name.split(" ")[0]}
                                 </span>
                               ))}
-                          </span>
-                        )}
-                      </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="space-y-1">
@@ -227,7 +242,7 @@ export default function Home5() {
                   className="mt-6 md:mt-0 bg-white text-[#2e1a87] hover:bg-white/90"
                   onClick={() => setLocation(`/course`)}
                 >
-                  Continue Your Family's Journey
+                  Continue Course
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
@@ -335,7 +350,7 @@ export default function Home5() {
                     className="w-full text-[#2e1a87]"
                     onClick={() => setLocation("/course")}
                   >
-                    View Your Family's Complete Journey
+                    View Full Outline
                   </Button>
                 </CardFooter>
               </Card>
