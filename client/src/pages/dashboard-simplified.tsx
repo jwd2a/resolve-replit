@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 import { format, addDays, isBefore, isToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import Header from "@/components/Header";
@@ -87,6 +88,7 @@ interface HolidayPreference {
 export default function DashboardSimplified() {
   const { user, isLoading } = useAuth();
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const [showChecklistDetail, setShowChecklistDetail] = useState(false);
   const [showScheduleDialog, setShowScheduleDialog] = useState(false);
   const [showWaiverDialog, setShowWaiverDialog] = useState(false);
@@ -515,6 +517,7 @@ export default function DashboardSimplified() {
                     : 'bg-gradient-to-r from-[#6c54da]/60 to-[#9a8ae6]/60 text-white border-none cursor-not-allowed opacity-80'
                 }`}
                 disabled={!requiredItemsCompleted}
+                onClick={() => requiredItemsCompleted && navigate('/co-parent-verification')}
               >
                 <span className="text-base">
                   {requiredItemsCompleted 
