@@ -1,0 +1,76 @@
+Redesign the content inside the existing course header box for first-time users who have not yet completed the required items.
+
+Keep the existing size, padding, and gradient styling exactly as is
+
+Replace the current text with a first-time onboarding summary
+
+The main goal is to gently push the user to complete the three required items:
+
+✅ Sign waivers
+
+✅ Select holiday preferences
+
+✅ Ensure co-parent is registered
+
+Only once all three are done will the Start Course button become active.
+
+🎯 Content & Layout (Inside Gradient Box)
+Title:
+
+Welcome to Your Family’s Parenting Plan
+
+Subheading (new):
+
+Let’s get a few things in place so you’re ready to begin.
+
+📝 Task Checklist (inside the box)
+Use a 3-item checklist with icons or status indicators like this:
+
+swift
+Copy
+Edit
+☐ Sign required waivers  
+☐ Choose your family’s holiday preferences  
+☐ Co-parent registration required
+Use visual indicators (checkmarks, circles, or muted icons) that can dynamically update as items are completed.
+
+If an item is complete, switch to ✅ or “Completed” tag
+
+🔘 Button Logic:
+Button Label:
+
+Start Course
+
+State:
+
+❌ Disabled until all three checklist items are complete
+
+Tooltip or microtext under the button:
+
+All items must be completed before starting.
+
+✍️ Optional Microcopy Enhancements:
+If you want a little polish without sounding cheesy:
+
+Instead of “Let’s get a few things in place...” try:
+
+“To begin your course, please complete the following steps.”
+
+Below the checklist, add:
+
+Your progress will be saved as you go.
+
+🧭 Behavior & Rules:
+The card remains visible and static (no vertical expansion needed)
+
+Once all three prerequisites are done, button state changes from disabled → active
+
+After the course starts, this entire box can switch to the in-progress view
+
+✅ Final Summary
+Keep: card size, gradient background, rounded corners
+
+Replace: current text + progress bar with a 3-item checklist, clean headline, and clear inactive CTA
+
+Goal: guide user to complete setup and be emotionally ready to begin
+
