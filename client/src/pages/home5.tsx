@@ -168,9 +168,55 @@ export default function Home5() {
             <div className="px-6 py-6 sm:px-8 sm:py-8 text-white">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="space-y-4">
-                  <h1 className="text-2xl font-semibold">Welcome back, {parentFirstName}.</h1>
+                  <div>
+                    <h1 className="text-2xl font-semibold">Welcome to Your Family's Space</h1>
+                    <div className="flex flex-wrap items-center mt-2">
+                      {/* Display all family members with avatars */}
+                      <div className="flex -space-x-2 mr-3">
+                        {familyMembers.map((member) => (
+                          <Avatar key={member.id} className="h-8 w-8 border-2 border-white">
+                            <AvatarFallback className={`${
+                              member.role === "parent" 
+                                ? "bg-green-100 text-green-800" 
+                                : member.role === "co-parent"
+                                ? "bg-amber-100 text-amber-800"
+                                : "bg-blue-100 text-blue-800"
+                            }`}>
+                              {getInitials(member.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                        ))}
+                      </div>
+                      <div className="text-white/90">
+                        {/* Parents */}
+                        <span className="font-medium">
+                          {familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}
+                          {coParent && ` & ${coParent.name.split(" ")[0]}`}
+                        </span>
+                        {/* Children */}
+                        {familyMembers.some(m => m.role === "child") && (
+                          <span>
+                            {" "}with{" "}
+                            {familyMembers
+                              .filter(m => m.role === "child")
+                              .map((child, index, array) => (
+                                <span key={child.id}>
+                                  {index > 0 && index === array.length - 1 ? " & " : index > 0 ? ", " : ""}
+                                  {child.name.split(" ")[0]}
+                                </span>
+                              ))}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="space-y-1">
-                    <p className="text-white/90">You're {courseProgress}% of the way through your course.</p>
+                    <p className="text-white/90">
+                      Your family's journey is {courseProgress}% complete.
+                      <span className="block mt-1 text-white/80 text-sm">
+                        Together, you're building a stronger co-parenting foundation.
+                      </span>
+                    </p>
                     <div className="w-full max-w-xs">
                       <Progress value={courseProgress} className="h-2 bg-white/20" />
                     </div>
@@ -178,10 +224,10 @@ export default function Home5() {
                 </div>
                 
                 <Button 
-                  className="mt-4 md:mt-0 bg-white text-[#2e1a87] hover:bg-white/90"
+                  className="mt-6 md:mt-0 bg-white text-[#2e1a87] hover:bg-white/90"
                   onClick={() => setLocation(`/course`)}
                 >
-                  Continue Course
+                  Continue Your Family's Journey
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </div>
@@ -194,9 +240,9 @@ export default function Home5() {
               {/* Course Modules Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Course Outline</CardTitle>
+                  <CardTitle>Your Family's Journey</CardTitle>
                   <CardDescription>
-                    Track your progress through the co-parenting curriculum
+                    Track your progress together through the co-parenting curriculum
                   </CardDescription>
                 </CardHeader>
                 
@@ -289,7 +335,7 @@ export default function Home5() {
                     className="w-full text-[#2e1a87]"
                     onClick={() => setLocation("/course")}
                   >
-                    View Full Outline
+                    View Your Family's Complete Journey
                   </Button>
                 </CardFooter>
               </Card>
@@ -298,9 +344,9 @@ export default function Home5() {
               {hasIncompleteTasks && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Required Items</CardTitle>
+                    <CardTitle>Family Agreement Checklist</CardTitle>
                     <CardDescription>
-                      Complete these items to finalize your parenting plan
+                      Complete these steps to finalize your family's parenting agreement
                     </CardDescription>
                   </CardHeader>
                   
