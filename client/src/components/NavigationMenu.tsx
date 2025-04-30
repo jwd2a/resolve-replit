@@ -80,51 +80,7 @@ export function NavigationMenu() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link href={onboardingRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding Process (6-Step)</span>
-                    {isActive(onboardingRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={courseEntryCodeRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <MessageSquare size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Course Verification</span>
-                    {isActive(courseEntryCodeRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={scheduleRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Calendar size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Co-Parenting Schedule</span>
-                    {isActive(scheduleRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={aiTestRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
-                    <span>AI Assistant</span>
-                    {isActive(aiTestRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">HOME PAGES</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">HOME</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
                 <Link href={dashboardRoute.path}>
@@ -136,10 +92,6 @@ export function NavigationMenu() {
                     )}
                   </DropdownMenuItem>
                 </Link>
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">OTHER OPTIONS</DropdownMenuLabel>
-                <DropdownMenuSeparator />
                 
                 <Link href={home2Route.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
@@ -176,6 +128,54 @@ export function NavigationMenu() {
                     <Home size={16} className="mr-2 text-[#6c54da]" />
                     <span>Home 5 (Course Home)</span>
                     {isActive(home5Route.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <Link href={onboardingRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Settings size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Onboarding Process (6-Step)</span>
+                    {isActive(onboardingRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={courseEntryCodeRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <MessageSquare size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Course Verification</span>
+                    {isActive(courseEntryCodeRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">OTHER</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <Link href={scheduleRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Calendar size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Co-Parenting Schedule</span>
+                    {isActive(scheduleRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={aiTestRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
+                    <span>AI Assistant</span>
+                    {isActive(aiTestRoute.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
