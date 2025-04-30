@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Home, User } from "lucide-react";
+import resolveLogo from "@assets/@Resolve Primary Logo - Main Color 02.png";
 
 export function NavigationMenu() {
   const [location] = useLocation();
@@ -32,7 +33,9 @@ export function NavigationMenu() {
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link href="/">
-            <span className="text-xl font-bold text-[#2e1a87] cursor-pointer">Resolve</span>
+            <div className="flex items-center cursor-pointer">
+              <img src={resolveLogo} alt="Resolve Logo" className="h-8 mr-2" />
+            </div>
           </Link>
           
           <Link href="/home5">

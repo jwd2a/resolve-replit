@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Printer, Calendar, Gift, Snowflake, Flower, Sun, AlertTriangle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { NavigationMenu } from "@/components/NavigationMenu";
 
 // Mock data - replace with actual data from the parenting plan
 const mockData = {
@@ -61,8 +62,9 @@ export default function CoParentingSchedule() {
   
   if (!mockData.isPlanComplete) {
     return (
-      <div className="min-h-screen bg-[#f9f7fe] py-12">
-        <div className="max-w-4xl mx-auto px-4">
+      <div className="min-h-screen bg-[#f9f7fe]">
+        <NavigationMenu />
+        <div className="max-w-4xl mx-auto px-4 py-12">
           <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm text-center">
             <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
             <h1 className="text-2xl font-medium text-[#2e1a87] mb-4">Parenting Plan Not Complete</h1>
@@ -108,6 +110,7 @@ export default function CoParentingSchedule() {
   
   return (
     <div className="min-h-screen bg-[#f9f7fe]">
+      <NavigationMenu />
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <div>
