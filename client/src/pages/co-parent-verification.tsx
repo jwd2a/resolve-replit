@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Check, RefreshCw, Info, User, Mail, Clock3 } from "lucide-react";
+import { Check, RefreshCw, Info, User, Mail, Clock3, Send } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -21,9 +21,10 @@ export default function CoParentVerification() {
   const [, navigate] = useLocation();
   
   // States for the verification process
+  const [codeSent, setCodeSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState<string[]>(Array(6).fill(""));
   const [isResending, setIsResending] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(300); // 5 minutes to enter the code
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const [verifying, setVerifying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
@@ -39,19 +40,20 @@ export default function CoParentVerification() {
     }
   }, [timeRemaining]);
   
-  // Function to resend verification code
-  const resendVerificationCode = () => {
+  // Function to send verification code
+  const sendVerificationCode = () => {
     // In a real implementation, this would call an API to send the email
     setIsResending(true);
     
     // Simulate API call delay
     setTimeout(() => {
       setIsResending(false);
+      setCodeSent(true);
       setTimeRemaining(300); // 5 minutes to enter the code
       
       toast({
         title: "Verification Code Sent",
-        description: `A new 6-digit code was sent to ${coParentEmail}`,
+        description: `A 6-digit code was sent to ${coParentEmail}`,
       });
     }, 1500);
   };
@@ -173,86 +175,122 @@ export default function CoParentVerification() {
           </div>
           
           <div className="space-y-6">
-            <div className={cn("transition-all duration-500", isSuccess ? "opacity-50" : "opacity-100")}>
-              <div className="text-center bg-blue-50 p-4 rounded-lg w-full mb-6">
-                <Mail className="h-5 w-5 mx-auto text-blue-500 mb-2" />
-                <p className="text-sm text-blue-700">
-                  A verification code has been sent to your co-parent's email.
-                </p>
-              </div>
-              
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-[#2e1a87]">Enter Verification Code</h3>
-                  {timeRemaining > 0 && (
-                    <div className="flex items-center text-amber-600 text-sm">
-                      <Clock3 className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{formatTime(timeRemaining)}</span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="flex justify-center gap-3 mb-4">
-                  {verificationCode.map((digit, index) => (
-                    <Input
-                      key={index}
-                      id={`code-${index}`}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleCodeChange(index, e.target.value)}
-                      className="w-12 h-14 text-center text-xl font-medium border-[#6c54da]/30 focus:border-[#6c54da] focus:ring-[#6c54da]/20 rounded-md"
-                      disabled={isSuccess || verifying}
-                    />
-                  ))}
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <button
-                    onClick={resendVerificationCode}
-                    disabled={isResending || timeRemaining > 270 || isSuccess || verifying} // Don't allow resend within 30 seconds
-                    className={`text-xs ${
-                      isResending || timeRemaining > 270 || isSuccess || verifying
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-[#6c54da] hover:underline'
-                    }`}
-                  >
-                    {isResending ? "Sending..." : "Resend Code"}
-                  </button>
-                  
-                  <p className="text-xs text-gray-500">
-                    Code sent to {coParentEmail}
+            {!codeSent ? (
+              <div className="flex flex-col items-center">
+                <div className="text-center mb-6">
+                  <Mail className="h-10 w-10 mx-auto text-[#6c54da] mb-4" />
+                  <h3 className="text-[#2e1a87] font-medium mb-2">Verify Co-Parent's Email</h3>
+                  <p className="text-gray-600 text-sm max-w-md mx-auto">
+                    Your co-parent's email ({coParentEmail}) will receive a 6-digit verification code.
+                    Both of you need to be present to proceed with the course.
                   </p>
                 </div>
-              </div>
-              
-              <Button
-                onClick={verifyCode}
-                disabled={verificationCode.some(digit => digit === "") || isSuccess || verifying}
-                className={`w-full py-6 ${
-                  verifying 
-                    ? 'bg-[#6c54da]/60' 
-                    : isSuccess 
-                      ? 'bg-green-600 hover:bg-green-700'
+                
+                <Button
+                  onClick={sendVerificationCode}
+                  disabled={isResending}
+                  className={`py-6 px-8 ${
+                    isResending 
+                      ? 'bg-[#6c54da]/60'
                       : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4]'
-                }`}
-              >
-                {verifying ? (
-                  <>
-                    <RefreshCw className="h-5 w-5 animate-spin mr-2" />
-                    Verifying...
-                  </>
-                ) : isSuccess ? (
-                  <>
-                    <Check className="h-5 w-5 mr-2" />
-                    Verified! Redirecting to Course...
-                  </>
-                ) : (
-                  "Verify & Continue to Course"
-                )}
-              </Button>
-            </div>
+                  }`}
+                  size="lg"
+                >
+                  {isResending ? (
+                    <>
+                      <RefreshCw className="h-5 w-5 animate-spin mr-2" />
+                      Sending Code...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-5 w-5 mr-2" />
+                      Send Verification Code
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div className={cn("transition-all duration-500", isSuccess ? "opacity-50" : "opacity-100")}>
+                <div className="text-center bg-blue-50 p-4 rounded-lg w-full mb-6">
+                  <Mail className="h-5 w-5 mx-auto text-blue-500 mb-2" />
+                  <p className="text-sm text-blue-700">
+                    A verification code has been sent to your co-parent's email.
+                  </p>
+                </div>
+                
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-medium text-[#2e1a87]">Enter Verification Code</h3>
+                    {timeRemaining > 0 && (
+                      <div className="flex items-center text-amber-600 text-sm">
+                        <Clock3 className="h-3.5 w-3.5 mr-1.5" />
+                        <span>{formatTime(timeRemaining)}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex justify-center gap-3 mb-4">
+                    {verificationCode.map((digit, index) => (
+                      <Input
+                        key={index}
+                        id={`code-${index}`}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleCodeChange(index, e.target.value)}
+                        className="w-12 h-14 text-center text-xl font-medium border-[#6c54da]/30 focus:border-[#6c54da] focus:ring-[#6c54da]/20 rounded-md"
+                        disabled={isSuccess || verifying}
+                      />
+                    ))}
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={sendVerificationCode}
+                      disabled={isResending || timeRemaining > 270 || isSuccess || verifying} // Don't allow resend within 30 seconds
+                      className={`text-xs ${
+                        isResending || timeRemaining > 270 || isSuccess || verifying
+                          ? 'text-gray-400 cursor-not-allowed'
+                          : 'text-[#6c54da] hover:underline'
+                      }`}
+                    >
+                      {isResending ? "Sending..." : "Resend Code"}
+                    </button>
+                    
+                    <p className="text-xs text-gray-500">
+                      Code sent to {coParentEmail}
+                    </p>
+                  </div>
+                </div>
+                
+                <Button
+                  onClick={verifyCode}
+                  disabled={verificationCode.some(digit => digit === "") || isSuccess || verifying}
+                  className={`w-full py-6 ${
+                    verifying 
+                      ? 'bg-[#6c54da]/60' 
+                      : isSuccess 
+                        ? 'bg-green-600 hover:bg-green-700'
+                        : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4]'
+                  }`}
+                >
+                  {verifying ? (
+                    <>
+                      <RefreshCw className="h-5 w-5 animate-spin mr-2" />
+                      Verifying...
+                    </>
+                  ) : isSuccess ? (
+                    <>
+                      <Check className="h-5 w-5 mr-2" />
+                      Verified! Redirecting to Course...
+                    </>
+                  ) : (
+                    "Verify & Continue to Course"
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
         
