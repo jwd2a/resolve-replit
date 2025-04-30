@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { 
   Mail, 
   Check, 
@@ -158,8 +158,8 @@ export default function Home5() {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Use the standard app header */}
-      <Header title="Resolve" onMenuClick={() => {}}/>
+      {/* Use the NavigationMenu component */}
+      <NavigationMenu />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">

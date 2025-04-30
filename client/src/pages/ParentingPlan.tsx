@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Printer, Edit2, CheckCircle2, Circle, HelpCircle, Send, Share2, Download, AlertTriangle, History, FileText, X } from "lucide-react";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
 export default function ParentingPlan() {
