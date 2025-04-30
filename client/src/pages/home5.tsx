@@ -163,133 +163,93 @@ export default function Home5() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
-          {/* Welcome & Status Header - Card-style container as requested */}
-          <div className="max-w-5xl mx-auto bg-[#F8F6FF] rounded-xl overflow-hidden shadow-sm border border-[#E5E1F8]">
-            <div className="px-6 py-6 sm:px-8 sm:py-8">
-              {/* Welcome and Family Info */}
-              <div className="space-y-6">
-                <div>
-                  <h1 className="text-2xl font-semibold text-[#2e1a87]">You're almost ready to begin.</h1>
-                  
-                  {/* Family Members Display */}
-                  <div className="mt-6 p-4 bg-white rounded-lg border border-gray-100">
-                    {/* Parents with status indicators */}
-                    <div className="flex items-center space-x-4">
-                      {/* Active parent */}
-                      <div className="flex items-center">
-                        <div className="relative">
-                          <Avatar className="h-10 w-10 border-2 border-white">
-                            <AvatarFallback className="bg-green-100 text-green-800">
-                              {getInitials(familyMembers.find(m => m.role === "parent")?.name || "")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white"></div>
-                        </div>
-                        <span className="ml-2 font-medium">
-                          {familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}
-                        </span>
-                      </div>
-                      
-                      {/* Separator dot */}
-                      <div className="h-1 w-1 rounded-full bg-gray-300"></div>
-                      
-                      {/* Co-parent with pending status */}
-                      {coParent ? (
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <Avatar className="h-10 w-10 border-2 border-white">
-                              <AvatarFallback className="bg-amber-100 text-amber-800">
-                                {getInitials(coParent.name || "")}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-amber-500 border-2 border-white"></div>
-                          </div>
-                          <div className="ml-2">
-                            <span className="font-medium">{coParent.name.split(" ")[0]}</span>
-                            <span className="block text-xs text-amber-600">(Pending)</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <Avatar className="h-10 w-10 border-2 border-white">
-                              <AvatarFallback className="bg-gray-100 text-gray-500">?</AvatarFallback>
-                            </Avatar>
-                            <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-gray-300 border-2 border-white"></div>
-                          </div>
-                          <div className="ml-2">
-                            <span className="font-medium text-gray-500">Co-parent</span>
-                            <span className="block text-xs text-gray-500">(Not invited)</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Children display */}
-                    {familyMembers.some(m => m.role === "child") && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-500 mr-2">
-                            👧 Children:
-                          </span>
-                          <span className="text-sm font-medium">
-                            {familyMembers
-                              .filter(m => m.role === "child")
-                              .map((child, index, array) => (
-                                <span key={child.id}>
-                                  {index > 0 && index === array.length - 1 ? " & " : index > 0 ? ", " : ""}
-                                  {child.name.split(" ")[0]}
-                                </span>
-                              ))}
-                          </span>
-                        </div>
-                      </div>
+          {/* Compact Status Bar */}
+          {(coParent && coParent.status === "registered") ? (
+            // When both parents are registered, show the start course button
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 flex items-center justify-between">
+              <div className="flex items-center">
+                <Check className="h-5 w-5 text-green-600 mr-2" />
+                <p className="text-sm text-green-800">Both co-parents have joined. You're ready to begin!</p>
+              </div>
+              <Button 
+                className="bg-[#2e1a87] hover:bg-[#25156d]"
+                onClick={() => setLocation(`/course`)}
+              >
+                Start Course
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          ) : (
+            // When co-parent hasn't joined yet, show compact status bar
+            <div className="bg-[#F8F8FF] border border-[#E5E1F8] rounded-lg p-4 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                {/* Family info - line 1 */}
+                <div className="flex items-center flex-wrap gap-1 sm:gap-2">
+                  <span className="text-[#2e1a87]">👨‍👩‍👧</span>
+                  <span className="text-sm">
+                    <span className="font-medium">{familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}</span>
+                    {coParent ? (
+                      <>
+                        {" & "}
+                        <span className="font-medium">{coParent.name.split(" ")[0]}</span>
+                        <span className="text-amber-600">{" (Pending)"}</span>
+                      </>
+                    ) : (
+                      <span className="text-gray-600">{" & Co-parent (Not invited)"}</span>
                     )}
-                  </div>
+                    {familyMembers.some(m => m.role === "child") && (
+                      <>
+                        {" — Children: "}
+                        {familyMembers
+                          .filter(m => m.role === "child")
+                          .map((child, index, array) => (
+                            <span key={child.id}>
+                              {index > 0 && index === array.length - 1 ? " & " : index > 0 ? ", " : ""}
+                              {child.name.split(" ")[0]}
+                            </span>
+                          ))}
+                      </>
+                    )}
+                  </span>
                 </div>
                 
-                {/* Message about co-parent requirement */}
-                <div className="text-center space-y-5">
-                  <p className="text-gray-700">
-                    {!coParent ? (
-                      "Invite your co-parent to join so you can begin the course together."
-                    ) : coParent && coParent.status !== "registered" ? (
-                      "Once your co-parent registers, you'll be able to start the course together."
-                    ) : (
-                      "Both co-parents have joined! You can now begin the course."
-                    )}
-                  </p>
+                {/* Alert and action - line 2 */}
+                <div className="flex items-center justify-between sm:justify-end gap-4">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-4 w-4 text-amber-600 mr-1.5 flex-shrink-0" />
+                    <p className="text-sm text-gray-700">
+                      {!coParent ? (
+                        "Co-parent hasn't been invited yet."
+                      ) : (
+                        `${coParent.name.split(" ")[0]} hasn't joined yet.`
+                      )}
+                    </p>
+                  </div>
                   
-                  {/* CTA Button - Conditional based on co-parent status */}
                   {!coParent ? (
                     <Button 
-                      className="bg-[#2e1a87] hover:bg-[#25156d] px-6"
+                      size="sm"
+                      className="bg-[#2e1a87] hover:bg-[#25156d] h-8 whitespace-nowrap"
                       onClick={() => setInviteDialogOpen(true)}
                     >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Invite Co-Parent to Join
-                    </Button>
-                  ) : coParent && coParent.status !== "registered" ? (
-                    <Button 
-                      className="bg-[#2e1a87] hover:bg-[#25156d] px-6"
-                      onClick={() => setInviteDialogOpen(true)}
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Send Reminder
+                      <Mail className="h-3.5 w-3.5 mr-1.5" />
+                      Invite Co-Parent
                     </Button>
                   ) : (
                     <Button 
-                      className="bg-[#2e1a87] hover:bg-[#25156d] px-6"
-                      onClick={() => setLocation(`/course`)}
+                      size="sm"
+                      variant="outline" 
+                      className="h-8 text-[#2e1a87] border-[#2e1a87] whitespace-nowrap"
+                      onClick={() => setInviteDialogOpen(true)}
                     >
-                      Start Course
-                      <ChevronRight className="h-4 w-4 ml-1" />
+                      <Mail className="h-3.5 w-3.5 mr-1.5" />
+                      Send Reminder
                     </Button>
                   )}
                 </div>
               </div>
             </div>
-          </div>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Left Column - Course Modules */}
