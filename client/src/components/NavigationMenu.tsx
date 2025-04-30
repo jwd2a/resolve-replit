@@ -40,6 +40,12 @@ export function NavigationMenu() {
             </Button>
           </Link>
           
+          <Link href="/co-parent-verification">
+            <Button variant="ghost" className="text-[#2e1a87] font-bold">
+              Course Entry Code
+            </Button>
+          </Link>
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-1">
