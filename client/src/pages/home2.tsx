@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 
 // UI components
 import {
@@ -216,11 +216,8 @@ export default function Home2() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f9f5ff] via-white to-white">
-      {/* Header */}
-      <Header 
-        title="Family Dashboard"
-        onMenuClick={() => {}}
-      />
+      {/* Navigation Menu */}
+      <NavigationMenu />
 
       {/* Main content */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
