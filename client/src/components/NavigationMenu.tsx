@@ -30,13 +30,20 @@ export function NavigationMenu() {
   
   // Define all routes
   const dashboardRoute = { name: "Dashboard", path: "/" };
+  const home2Route = { name: "Home 2", path: "/home2" };
+  const home3Route = { name: "Home 3", path: "/home3" };
+  const home4Route = { name: "Home 4", path: "/home4" };
   const home5Route = { name: "Home 5", path: "/home5" };
-  const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
-  const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
+  
+  // Course related routes
   const courseRoute = { name: "Course", path: "/course" };
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
-  const aiTestRoute = { name: "AI Test", path: "/ai-test" };
+  
+  // Onboarding related routes
   const onboardingRoute = { name: "Onboarding", path: "/onboarding6step" };
+  const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
+  const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
+  const aiTestRoute = { name: "AI Test", path: "/ai-test" };
   
   // Check if current route is active
   const isActive = (path: string) => {
@@ -79,8 +86,38 @@ export function NavigationMenu() {
                 <Link href={dashboardRoute.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Dashboard</span>
+                    <span>Dashboard (Main)</span>
                     {isActive(dashboardRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={home2Route.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Home size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Home 2</span>
+                    {isActive(home2Route.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={home3Route.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Home size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Home 3</span>
+                    {isActive(home3Route.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={home4Route.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Home size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Home 4</span>
+                    {isActive(home4Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
@@ -89,7 +126,7 @@ export function NavigationMenu() {
                 <Link href={home5Route.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Course Home</span>
+                    <span>Home 5 (Course Home)</span>
                     {isActive(home5Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
@@ -97,8 +134,18 @@ export function NavigationMenu() {
                 </Link>
                 
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">TOOLS</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                
+                <Link href={onboardingRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Settings size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Onboarding Process</span>
+                    {isActive(onboardingRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
                 
                 <Link href={courseEntryCodeRoute.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
@@ -125,16 +172,6 @@ export function NavigationMenu() {
                     <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
                     <span>AI Assistant</span>
                     {isActive(aiTestRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={onboardingRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding</span>
-                    {isActive(onboardingRoute.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
