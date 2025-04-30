@@ -303,10 +303,7 @@ export default function ParentingPlan() {
 
   return (
     <div className="min-h-screen bg-app flex flex-col w-full overflow-hidden">
-      <Header 
-        title="Parenting Plan"
-        onMenuClick={openMenu}
-      />
+      <NavigationMenu />
       
       <div className="flex flex-1">
         <div className="w-full flex flex-col lg:flex-row max-w-[97%] mx-auto mt-5" style={{ height: 'calc(100vh - 84px)' }}>
