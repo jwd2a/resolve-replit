@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format, addDays, isBefore, isToday, isSameDay } from "date-fns";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 
 // UI components
 import {
@@ -207,11 +207,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f5f0ff] to-[#fff8fd]">
-      {/* Header */}
-      <Header 
-        title="Family Dashboard"
-        onMenuClick={() => {}}
-      />
+      {/* Navigation Menu */}
+      <NavigationMenu />
 
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
