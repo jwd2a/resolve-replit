@@ -22,7 +22,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 
 export default function Home4() {
   const { user } = useAuth();
@@ -86,7 +86,7 @@ export default function Home4() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-      <Header title="Dashboard" onMenuClick={onMenuClick} />
+      <NavigationMenu />
       
       <div className="max-w-6xl mx-auto pt-6 px-4">
         <div className="flex flex-col space-y-6">
