@@ -21,6 +21,7 @@ export function NavigationMenu() {
   const home4Route = { name: "Home 4", path: "/home4" };
   const home5Route = { name: "Home 5", path: "/home5" };
   const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
+  const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
   
   const courseRoute = { name: "Course", path: "/course" };
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
@@ -43,6 +44,12 @@ export function NavigationMenu() {
           <Link href="/co-parent-verification">
             <Button variant="ghost" className="text-[#2e1a87] font-bold">
               Course Entry Code
+            </Button>
+          </Link>
+          
+          <Link href="/co-parenting-schedule">
+            <Button variant="ghost" className="text-[#2e1a87] font-bold">
+              Schedule
             </Button>
           </Link>
           
@@ -111,6 +118,15 @@ export function NavigationMenu() {
                 <DropdownMenuItem className="cursor-pointer">
                   {courseEntryCodeRoute.name}
                   {location === courseEntryCodeRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={scheduleRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {scheduleRoute.name}
+                  {location === scheduleRoute.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
                 </DropdownMenuItem>

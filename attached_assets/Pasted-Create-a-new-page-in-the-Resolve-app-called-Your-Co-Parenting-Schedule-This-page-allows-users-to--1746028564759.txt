@@ -1,0 +1,148 @@
+Create a new page in the Resolve app called “Your Co-Parenting Schedule.”
+This page allows users to view, print, and download their finalized parenting schedule, broken down into five clear views:
+
+Normal Weekly Schedule
+
+Holiday Schedule
+
+Winter Break
+
+Spring Break
+
+Summer Break
+
+All data should be pulled from the completed Parenting Plan. This screen is read-only and designed to be both useful in-app and printable for refrigerator-friendly use.
+
+🧱 UI Layout & Functionality
+🔝 Top Section (Shared Across All Views)
+Page Title:
+
+Your Co-Parenting Schedule
+
+Subtext:
+
+“View your family’s parenting time by category. You can download or print any section.”
+
+Tabs or Dropdown to Switch Views:
+
+css
+Copy
+Edit
+[ Weekly Schedule ] [ Holiday Schedule ] [ Winter Break ] [ Spring Break ] [ Summer Break ]
+Top Right Buttons:
+→ [ Download PDF ]
+→ [ Print View ]
+
+🔄 Behavior:
+Switching tabs loads the relevant view with its own content + print/export logic
+
+Only one view shown at a time
+
+PDF/Print button respects the current view
+
+🗓️ View 1: Weekly Schedule
+Table Format or Calendar Grid:
+
+mathematica
+Copy
+Edit
+| Day       | Overnight With | Drop-off/Pick-up |
+|-----------|----------------|------------------|
+| Monday    | Sarah          | Eric drops off at school |
+| Tuesday   | Sarah          | — |
+| Wednesday | Eric           | Sarah picks up |
+...
+Show alternating weeks if applicable (Week A / Week B toggle)
+
+Clearly show transition points (hand-offs, school pickups, midweek exchanges)
+
+Clean, fridge-friendly layout
+
+🎉 View 2: Holiday Schedule
+List of specific holidays with:
+
+Name
+
+Date(s)
+
+Assigned Parent
+
+Rotation notes (alternates every year, fixed, etc.)
+
+Example:
+
+sql
+Copy
+Edit
+| Holiday        | Dates        | With      | Notes                 |
+|----------------|--------------|-----------|------------------------|
+| Thanksgiving   | Nov 27–29    | Eric      | Alternates annually   |
+| Christmas Eve  | Dec 24       | Sarah     | Fixed                 |
+| 4th of July    | July 4       | Eric      | Alternates – odd yrs  |
+Show current year only (future years optional)
+
+❄️ View 3: Winter Break
+Date range pulled from Parenting Plan
+
+Show entire break structure (week-on/week-off, split by date, etc.)
+
+Indicate handoff dates/times (e.g. Dec 24th at 6pm)
+
+Optional calendar block or card format:
+
+“Dec 20–Dec 27: With Eric”
+“Dec 27–Jan 3: With Sarah”
+
+🌸 View 4: Spring Break
+Same structure as Winter
+
+Date range + assignment
+
+Example:
+
+csharp
+Copy
+Edit
+Spring Break 2025: March 10 – March 17  
+→ Entire week with Sarah
+☀️ View 5: Summer Break
+Show week-on/week-off calendar or block assignment
+
+Highlight any breaks in routine or mid-summer swaps
+
+Optional:
+
+Include “Summer Plan starts June 10”
+
+Show how normal routine resumes in August
+
+🖨️ Print & PDF Logic
+Each view should have its own print layout
+
+Keep layouts clean, readable, and easy to hang on a wall/fridge
+
+Include:
+
+Family name or child’s name at top
+
+Date range for breaks
+
+No extra UI elements
+
+🧭 Behavior Rules
+This screen is only accessible if the Parenting Plan is marked “Complete”
+
+If user tries to visit the page without a completed plan, show:
+
+“You’ll be able to view and download your full parenting schedule once your Parenting Plan is complete.”
+
+✅ Summary for Replit
+New screen: /schedule or /co-parenting-schedule
+
+Top nav: Page title, PDF/Print buttons, view-switching tabs
+
+5 tabs/views: Weekly, Holidays, Winter, Spring, Summer
+
+All views are read-only from finalized Parenting Plan data
+
+Each view is printable/downloadable on its own
