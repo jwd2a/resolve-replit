@@ -20,6 +20,7 @@ export function NavigationMenu() {
   const home3Route = { name: "Home 3", path: "/home3" };
   const home4Route = { name: "Home 4", path: "/home4" };
   const home5Route = { name: "Home 5", path: "/home5" };
+  const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
   
   const courseRoute = { name: "Course", path: "/course" };
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
@@ -99,6 +100,15 @@ export function NavigationMenu() {
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Other Pages</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              
+              <Link href={courseEntryCodeRoute.path}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {courseEntryCodeRoute.name}
+                  {location === courseEntryCodeRoute.path && (
+                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
               
               <Link href={courseRoute.path}>
                 <DropdownMenuItem className="cursor-pointer">
