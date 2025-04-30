@@ -18,6 +18,7 @@ import Home2 from "@/pages/home2";
 import Home3 from "@/pages/home3";
 import Home4 from "@/pages/home4";
 import Home5 from "@/pages/home5";
+import CoParentVerification from "@/pages/co-parent-verification";
 import AITestPage from "@/pages/ai-test-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -51,6 +52,7 @@ function Router() {
       <Route path="/home3" component={Home3} />
       <Route path="/home4" component={Home4} />
       <Route path="/home5" component={Home5} />
+      <Route path="/co-parent-verification" component={CoParentVerification} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
