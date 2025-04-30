@@ -161,8 +161,8 @@ export default function CoParentVerification() {
               <div>
                 <h3 className="font-medium text-[#2e1a87] text-sm mb-1">Why this step matters</h3>
                 <p className="text-gray-600 text-sm">
-                  Studies show that when both parents participate together, they're more likely to develop 
-                  effective co-parenting agreements and reduce future conflicts.
+                  Making important decisions together as a team creates the foundation for effective 
+                  co-parenting and helps children feel more secure in their family relationships.
                 </p>
                 <button 
                   onClick={() => setShowInfoDialog(true)} 
@@ -326,13 +326,13 @@ export default function CoParentVerification() {
           <DialogHeader>
             <DialogTitle className="text-[#2e1a87]">Why Both Parents Matter</DialogTitle>
             <DialogDescription>
-              Our approach is based on research about effective co-parenting.
+              Working as a team creates better outcomes for your children.
             </DialogDescription>
           </DialogHeader>
           
           <div className="py-4 space-y-4">
             <p className="text-sm text-gray-700">
-              Research consistently shows that when both parents participate in planning and decision-making:
+              When both parents participate together in making important decisions:
             </p>
             
             <ul className="space-y-3">
@@ -341,8 +341,8 @@ export default function CoParentVerification() {
                   <Check className="h-4 w-4 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900">Reduced Conflict</h4>
-                  <p className="text-xs text-gray-600">Parents who create agreements together experience 60% fewer disagreements about implementation.</p>
+                  <h4 className="text-sm font-medium text-gray-900">United Front</h4>
+                  <p className="text-xs text-gray-600">Children feel more secure when parents present a united approach to important family decisions.</p>
                 </div>
               </li>
               
@@ -351,8 +351,8 @@ export default function CoParentVerification() {
                   <Check className="h-4 w-4 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900">Better Child Outcomes</h4>
-                  <p className="text-xs text-gray-600">Children show improved emotional well-being when both parents are actively involved in creating parenting arrangements.</p>
+                  <h4 className="text-sm font-medium text-gray-900">Consistent Understanding</h4>
+                  <p className="text-xs text-gray-600">Both parents share the same understanding of your agreement, reducing misinterpretations later.</p>
                 </div>
               </li>
               
@@ -361,15 +361,15 @@ export default function CoParentVerification() {
                   <Check className="h-4 w-4 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900">Increased Compliance</h4>
-                  <p className="text-xs text-gray-600">Parenting plans created collaboratively have an 85% higher rate of being followed by both parties.</p>
+                  <h4 className="text-sm font-medium text-gray-900">Stronger Commitment</h4>
+                  <p className="text-xs text-gray-600">When you create a plan together, you're both more invested in making it work for your family.</p>
                 </div>
               </li>
             </ul>
             
             <div className="bg-blue-50 p-4 rounded-md text-sm text-blue-700 mt-4">
               <p>
-                Our verification process ensures that both parents are present and engaged during critical decision-making moments in the course.
+                Our verification process ensures that both parents can participate together in creating your family's parenting plan.
               </p>
             </div>
           </div>
