@@ -167,8 +167,11 @@ export default function Home5() {
           <div className="bg-gradient-to-r from-[#2e1a87] to-[#5a43c6] rounded-xl overflow-hidden shadow-sm">
             <div className="px-6 py-6 sm:px-8 sm:py-8 text-white">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div className="space-y-4">
-                  <h1 className="text-2xl font-semibold">Welcome back, {parentFirstName}.</h1>
+                <div className="space-y-2">
+                  <h1 className="text-2xl font-semibold">Welcome to Your Family's Parenting Plan</h1>
+                  <p className="text-white/90 text-lg -mt-1">
+                    {familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]} & {familyMembers.find(m => m.role === "co-parent")?.name.split(" ")[0]}
+                  </p>
                   <div className="space-y-1">
                     <p className="text-white/90">You're {courseProgress}% of the way through your course.</p>
                     <div className="w-full max-w-xs">
