@@ -334,7 +334,7 @@ export default function DashboardSimplified() {
         {/* Warm welcome message - small and centered */}
         <section className="text-center mb-2">
           <h1 className="text-lg font-medium text-[#2e1a87] mb-1">
-            Welcome back, {user?.displayName || "Friend"}
+            Welcome to Your Family's Parenting Plan
           </h1>
           <p className="text-gray-600 text-sm max-w-md mx-auto">
             You're taking important steps for your family's future.
