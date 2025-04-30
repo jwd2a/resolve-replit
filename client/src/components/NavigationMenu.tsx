@@ -15,7 +15,7 @@ import resolveLogo from "@assets/@Resolve Primary Logo - Main Color 02.png";
 export function NavigationMenu() {
   const [location] = useLocation();
   
-  // Directly list routes for clearer render
+  // Define all routes
   const dashboardRoute = { name: "Dashboard", path: "/" };
   const home2Route = { name: "Home 2", path: "/home2" };
   const home3Route = { name: "Home 3", path: "/home3" };
@@ -23,7 +23,6 @@ export function NavigationMenu() {
   const home5Route = { name: "Home 5", path: "/home5" };
   const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
   const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
-  
   const courseRoute = { name: "Course", path: "/course" };
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
   const aiTestRoute = { name: "AI Test", path: "/ai-test" };
@@ -38,39 +37,20 @@ export function NavigationMenu() {
             </div>
           </Link>
           
-          <Link href="/home5">
-            <Button variant="ghost" className="text-[#2e1a87] font-bold">
-              Home 5
-            </Button>
-          </Link>
-          
-          <Link href="/co-parent-verification">
-            <Button variant="ghost" className="text-[#2e1a87] font-bold">
-              Course Entry Code
-            </Button>
-          </Link>
-          
-          <Link href="/co-parenting-schedule">
-            <Button variant="ghost" className="text-[#2e1a87] font-bold">
-              Schedule
-            </Button>
-          </Link>
-          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-1">
-                <Home size={16} className="mr-1" />
-                Home
+              <Button variant="ghost" className="flex items-center gap-1 text-[#2e1a87] font-bold">
+                HOME
                 <ChevronDown size={14} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuLabel>Home Versions</DropdownMenuLabel>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel>Home Screens</DropdownMenuLabel>
               <DropdownMenuSeparator />
               
               <Link href={dashboardRoute.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {dashboardRoute.name}
+                  Dashboard (Main)
                   {location === dashboardRoute.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -79,7 +59,7 @@ export function NavigationMenu() {
               
               <Link href={home2Route.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {home2Route.name}
+                  Home 2
                   {location === home2Route.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -88,7 +68,7 @@ export function NavigationMenu() {
               
               <Link href={home3Route.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {home3Route.name}
+                  Home 3
                   {location === home3Route.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -97,7 +77,7 @@ export function NavigationMenu() {
               
               <Link href={home4Route.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {home4Route.name}
+                  Home 4
                   {location === home4Route.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -106,7 +86,7 @@ export function NavigationMenu() {
               
               <Link href={home5Route.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {home5Route.name}
+                  Home 5
                   {location === home5Route.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -114,12 +94,12 @@ export function NavigationMenu() {
               </Link>
               
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>Other Pages</DropdownMenuLabel>
+              <DropdownMenuLabel>Course Tools</DropdownMenuLabel>
               <DropdownMenuSeparator />
               
               <Link href={courseEntryCodeRoute.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {courseEntryCodeRoute.name}
+                  Course Entry Code
                   {location === courseEntryCodeRoute.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -128,26 +108,8 @@ export function NavigationMenu() {
               
               <Link href={scheduleRoute.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {scheduleRoute.name}
+                  Co-Parenting Schedule
                   {location === scheduleRoute.path && (
-                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
-                  )}
-                </DropdownMenuItem>
-              </Link>
-              
-              <Link href={courseRoute.path}>
-                <DropdownMenuItem className="cursor-pointer">
-                  {courseRoute.name}
-                  {location === courseRoute.path && (
-                    <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
-                  )}
-                </DropdownMenuItem>
-              </Link>
-              
-              <Link href={parentingPlanRoute.path}>
-                <DropdownMenuItem className="cursor-pointer">
-                  {parentingPlanRoute.name}
-                  {location === parentingPlanRoute.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
                 </DropdownMenuItem>
@@ -155,7 +117,7 @@ export function NavigationMenu() {
               
               <Link href={aiTestRoute.path}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {aiTestRoute.name}
+                  AI Assistant
                   {location === aiTestRoute.path && (
                     <span className="ml-2 h-1.5 w-1.5 rounded-full bg-[#2e1a87]" />
                   )}
@@ -163,6 +125,18 @@ export function NavigationMenu() {
               </Link>
             </DropdownMenuContent>
           </DropdownMenu>
+          
+          <Link href="/course">
+            <Button variant="ghost" className="text-[#2e1a87] font-bold">
+              COURSE
+            </Button>
+          </Link>
+          
+          <Link href="/parenting-plan">
+            <Button variant="ghost" className="text-[#2e1a87] font-bold">
+              PARENTING PLAN
+            </Button>
+          </Link>
         </div>
         
         <Link href="/auth">
