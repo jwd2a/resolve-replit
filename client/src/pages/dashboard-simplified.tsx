@@ -357,7 +357,7 @@ export default function DashboardSimplified() {
                   </div>
                   <div>
                     <h2 className="font-medium text-[#2e1a87] text-base">
-                      Before you start your parenting plan
+                      Before You Start the Course
                     </h2>
                     <p className="text-gray-600 text-sm">
                       Please complete these preparation steps for the best experience.
