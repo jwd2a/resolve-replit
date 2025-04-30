@@ -163,93 +163,30 @@ export default function Home5() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
-          {/* Compact Status Bar */}
-          {(coParent && coParent.status === "registered") ? (
-            // When both parents are registered, show the start course button
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 flex items-center justify-between">
-              <div className="flex items-center">
-                <Check className="h-5 w-5 text-green-600 mr-2" />
-                <p className="text-sm text-green-800">Both co-parents have joined. You're ready to begin!</p>
-              </div>
-              <Button 
-                className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={() => setLocation(`/course`)}
-              >
-                Start Course
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          ) : (
-            // When co-parent hasn't joined yet, show compact status bar
-            <div className="bg-[#F8F8FF] border border-[#E5E1F8] rounded-lg p-4 mb-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                {/* Family info - line 1 */}
-                <div className="flex items-center flex-wrap gap-1 sm:gap-2">
-                  <span className="text-[#2e1a87]">👨‍👩‍👧</span>
-                  <span className="text-sm">
-                    <span className="font-medium">{familyMembers.find(m => m.role === "parent")?.name.split(" ")[0]}</span>
-                    {coParent ? (
-                      <>
-                        {" & "}
-                        <span className="font-medium">{coParent.name.split(" ")[0]}</span>
-                        <span className="text-amber-600">{" (Pending)"}</span>
-                      </>
-                    ) : (
-                      <span className="text-gray-600">{" & Co-parent (Not invited)"}</span>
-                    )}
-                    {familyMembers.some(m => m.role === "child") && (
-                      <>
-                        {" — Children: "}
-                        {familyMembers
-                          .filter(m => m.role === "child")
-                          .map((child, index, array) => (
-                            <span key={child.id}>
-                              {index > 0 && index === array.length - 1 ? " & " : index > 0 ? ", " : ""}
-                              {child.name.split(" ")[0]}
-                            </span>
-                          ))}
-                      </>
-                    )}
-                  </span>
+          {/* Welcome & Status Header */}
+          <div className="bg-gradient-to-r from-[#2e1a87] to-[#5a43c6] rounded-xl overflow-hidden shadow-sm">
+            <div className="px-6 py-6 sm:px-8 sm:py-8 text-white">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div className="space-y-4">
+                  <h1 className="text-2xl font-semibold">Welcome back, {parentFirstName}.</h1>
+                  <div className="space-y-1">
+                    <p className="text-white/90">You're {courseProgress}% of the way through your course.</p>
+                    <div className="w-full max-w-xs">
+                      <Progress value={courseProgress} className="h-2 bg-white/20" />
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Alert and action - line 2 */}
-                <div className="flex items-center justify-between sm:justify-end gap-4">
-                  <div className="flex items-center">
-                    <AlertCircle className="h-4 w-4 text-amber-600 mr-1.5 flex-shrink-0" />
-                    <p className="text-sm text-gray-700">
-                      {!coParent ? (
-                        "Co-parent hasn't been invited yet."
-                      ) : (
-                        `${coParent.name.split(" ")[0]} hasn't joined yet.`
-                      )}
-                    </p>
-                  </div>
-                  
-                  {!coParent ? (
-                    <Button 
-                      size="sm"
-                      className="bg-[#2e1a87] hover:bg-[#25156d] h-8 whitespace-nowrap"
-                      onClick={() => setInviteDialogOpen(true)}
-                    >
-                      <Mail className="h-3.5 w-3.5 mr-1.5" />
-                      Invite Co-Parent
-                    </Button>
-                  ) : (
-                    <Button 
-                      size="sm"
-                      variant="outline" 
-                      className="h-8 text-[#2e1a87] border-[#2e1a87] whitespace-nowrap"
-                      onClick={() => setInviteDialogOpen(true)}
-                    >
-                      <Mail className="h-3.5 w-3.5 mr-1.5" />
-                      Send Reminder
-                    </Button>
-                  )}
-                </div>
+                <Button 
+                  className="mt-4 md:mt-0 bg-white text-[#2e1a87] hover:bg-white/90"
+                  onClick={() => setLocation(`/course`)}
+                >
+                  Continue Course
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
               </div>
             </div>
-          )}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Left Column - Course Modules */}
@@ -257,9 +194,9 @@ export default function Home5() {
               {/* Course Modules Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Your Family's Journey</CardTitle>
+                  <CardTitle>Course Outline</CardTitle>
                   <CardDescription>
-                    Track your progress together through the co-parenting curriculum
+                    Track your progress through the co-parenting curriculum
                   </CardDescription>
                 </CardHeader>
                 
@@ -361,9 +298,9 @@ export default function Home5() {
               {hasIncompleteTasks && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Family Agreement Checklist</CardTitle>
+                    <CardTitle>Required Items</CardTitle>
                     <CardDescription>
-                      Complete these steps to finalize your family's parenting agreement
+                      Complete these items to finalize your parenting plan
                     </CardDescription>
                   </CardHeader>
                   
