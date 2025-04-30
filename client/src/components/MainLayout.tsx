@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import Breadcrumb from "@/components/Breadcrumb";
 import SectionNavigation from "@/components/SectionNavigation";
 import CourseContent from "@/components/CourseContent";
@@ -28,11 +28,8 @@ export default function MainLayout({
   
   return (
     <div className="min-h-screen bg-app flex flex-col w-full overflow-x-hidden">
-      {/* Header - now full width */}
-      <Header 
-        title="Resolve Course"
-        onMenuClick={openMenu}
-      />
+      {/* Navigation menu at the top */}
+      <NavigationMenu />
       
       {/* Content area with sidebar and main content */}
       <div className="flex flex-1 w-full">
