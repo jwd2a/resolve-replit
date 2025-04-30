@@ -7,9 +7,11 @@ interface RootLayoutProps {
 
 export function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
+    <div className="min-h-screen bg-[#f9f7fe] flex flex-col">
       <NavigationMenu />
-      <main>{children}</main>
-    </>
+      <div className="flex-grow">
+        {children}
+      </div>
+    </div>
   );
 }
