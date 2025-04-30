@@ -40,7 +40,10 @@ export function NavigationMenu() {
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
   
   // Onboarding related routes
-  const onboardingRoute = { name: "Onboarding", path: "/onboarding6step" };
+  const onboarding6stepRoute = { name: "6-Step Onboarding", path: "/onboarding6step" };
+  const onboarding4stepRoute = { name: "4-Step Onboarding", path: "/onboarding" };
+  const onboarding3stepRoute = { name: "3-Step Onboarding", path: "/onboarding-3step" };
+  const onboarding2Route = { name: "Beta Test Onboarding", path: "/onboarding2" };
   const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
   const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
   const aiTestRoute = { name: "AI Test", path: "/ai-test" };
@@ -137,11 +140,41 @@ export function NavigationMenu() {
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
-                <Link href={onboardingRoute.path}>
+                <Link href={onboarding6stepRoute.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding Process (6-Step)</span>
-                    {isActive(onboardingRoute.path) && (
+                    <span>Onboarding (6-Step)</span>
+                    {isActive(onboarding6stepRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={onboarding4stepRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Settings size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Onboarding (4-Step)</span>
+                    {isActive(onboarding4stepRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={onboarding3stepRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Settings size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Onboarding (3-Step)</span>
+                    {isActive(onboarding3stepRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
+                <Link href={onboarding2Route.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Settings size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Beta Test Onboarding</span>
+                    {isActive(onboarding2Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
