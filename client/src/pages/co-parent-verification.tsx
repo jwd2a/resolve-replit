@@ -124,24 +124,6 @@ export default function CoParentVerification() {
   
   return (
     <div className="min-h-screen bg-[#f9f7fe]">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 py-4">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-lg font-medium text-[#2e1a87]">
-              Welcome to Your Family's Parenting Plan
-            </h1>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs bg-transparent border-[#6c54da]/20 text-[#2e1a87]"
-            >
-              <User className="h-3.5 w-3.5 mr-1.5" />
-              Account
-            </Button>
-          </div>
-        </div>
-      </header>
       
       {/* Main content */}
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
