@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { 
   Mail, 
   Check,
@@ -369,7 +370,7 @@ export default function Onboarding6Step() {
   
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-      <Header title="Complete Your Onboarding" onMenuClick={onMenuClick} />
+      <NavigationMenu />
       
       <div className="max-w-3xl mx-auto pt-6 px-4">
         <Card className="border-gray-200 shadow-sm">

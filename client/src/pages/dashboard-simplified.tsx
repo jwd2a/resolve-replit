@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { format, addDays, isBefore, isToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import Header from "@/components/Header";
+import { NavigationMenu } from "@/components/NavigationMenu";
 import { useToast } from "@/hooks/use-toast";
 
 // UI components
@@ -325,11 +325,8 @@ export default function DashboardSimplified() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f9f5ff] via-white to-white">
-      {/* Header */}
-      <Header 
-        title="Family Dashboard"
-        onMenuClick={() => {}}
-      />
+      {/* Navigation Menu */}
+      <NavigationMenu />
 
       {/* Main content */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
