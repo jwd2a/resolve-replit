@@ -392,13 +392,9 @@ export default function Home6() {
               </div>
               
               <div className="bg-gray-50 p-3 rounded-md mb-4">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm text-gray-700">Course Enrollment</span>
-                  <span className="text-sm font-medium text-gray-900">$249</span>
-                </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-700">Today's Payment</span>
-                  <span className="text-sm font-medium text-gray-900">$249</span>
+                  <span className="text-sm text-gray-700">Course Enrollment</span>
+                  <span className="text-sm font-medium text-gray-900">$600</span>
                 </div>
               </div>
               
