@@ -1,0 +1,142 @@
+Build the Admin Portal – “Users & Families” Section for Resolve
+Overview:
+Create a fully interactive prototype of the Users & Families section of the Resolve Admin Portal. This is an internal-only admin tool that allows our team to manage families using the Resolve platform, view their Parenting Plan progress, course scheduling details, engagement, and system flags.
+
+This is Phase 1 of the Admin Portal. It must be clean, fast, and logically structured — and ready to evolve into a production-grade tool after prototyping.
+
+🧱 Overall Page Layout
+Split the screen into two main parts:
+
+LEFT COLUMN (25–30% width): Family List
+Search bar (top)
+
+Filter dropdowns:
+
+Plan Status: All / Not Started / In Progress / Complete
+
+Co-Parent Joined: All / Yes / No
+
+Course Scheduled: All / Yes / No
+
+Scrollable list of families (repeating group or table)
+
+Each list item should include:
+
+yaml
+Copy
+Edit
+Family Name (or Family ID)
+Parents: Eric & Sarah
+Children: Mila (9), Jonah (6)
+Plan: In Progress
+Last Active: 2 days ago
+Flags: 1
+Clicking a family loads their detail view in the right column.
+
+RIGHT PANEL (70–75% width): Family Profile View
+Tabbed interface or clear vertical sections with the following content:
+
+1️⃣ Overview
+Parenting Plan Status (% complete or "Not Started")
+
+Waiver Status: ✅ / ❌
+
+Holiday Preferences: ✅ / ❌
+
+Co-Parent Status: Joined / Invited / Not Invited
+
+Last Activity Date
+
+Buttons:
+
+[View Plan PDF]
+
+[Mark as Flagged] / [Clear Flags]
+
+2️⃣ Course Scheduling
+Has course been scheduled? (Yes / No)
+
+Proposed Date & Time
+
+Confirmed by both parents? (Yes / No)
+
+Buttons:
+
+[Resend Invite]
+
+[Update Schedule]
+
+3️⃣ Parenting Plan Sections
+Show section-by-section status:
+
+Custody: ✅
+
+Communication: ✅
+
+Holidays: ❌
+
+Travel: ✅
+
+Finalized: No
+
+Use a clean checklist or progress blocks.
+
+Optional: Add “Last edited” timestamps for each section
+
+4️⃣ Engagement Log
+Timeline or list format:
+
+css
+Copy
+Edit
+[✔] Eric invited Sarah – Apr 12  
+[✔] Sarah accepted invite – Apr 14  
+[✔] Waivers signed – Apr 15  
+[⏳] Holiday prefs incomplete  
+[✔] Started Plan – Apr 15  
+[⏳] Course not yet scheduled
+5️⃣ Flags & Intervention
+Show active system-generated alerts:
+
+❗ Co-Parent not joined after 7 days
+
+❗ Waivers incomplete
+
+❗ Course not scheduled
+
+Admin notes (add/edit/delete)
+
+Status: Active / Resolved
+
+Button: [Send Reminder Email]
+
+🧪 For the Prototype in Replit
+Use mock data for 3–5 families
+
+Simulate different states (plan complete, no course scheduled, flags triggered)
+
+No backend yet, but simulate interactivity (i.e., filters change list, flag toggles update state)
+
+Allow expanding/collapsing family detail panel for smooth navigation
+
+🖼️ Design Notes
+Use modern, clean UI (light theme)
+
+Font: system default or Inter
+
+Style priorities: clarity > flash
+
+Prefer tabs, cards, and color-coded status chips (e.g., green = done, red = missing)
+
+🧭 Summary of Functionality
+
+Feature	Required in Prototype
+Family Search & Filter	✅
+Family List	✅
+Family Detail Panel	✅
+Parenting Plan Overview	✅
+Course Scheduling	✅
+Engagement Timeline	✅
+Flags & Admin Notes	✅
+Simulated Interactivity	✅
+Responsive Layout	✅
