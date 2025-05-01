@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { useLocation } from "wouter";
 import { format, addDays, isBefore, isToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
@@ -27,6 +28,7 @@ import {
   CheckCheck,
   Check,
   CheckCircle,
+  CheckCircle2,
   Circle,
   BookOpen,
   Heart,
@@ -37,6 +39,8 @@ import {
   CalendarDays,
   ClipboardList,
   Mail,
+  CreditCard,
+  Loader2,
 } from "lucide-react";
 
 // Interfaces for tracking pre-course requirements
@@ -87,6 +91,7 @@ interface HolidayPreference {
 
 export default function DashboardSimplified() {
   const { user, isLoading } = useAuth();
+  const { paymentStatus, completePayment } = usePaymentStatus();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [showChecklistDetail, setShowChecklistDetail] = useState(false);
@@ -95,6 +100,7 @@ export default function DashboardSimplified() {
   const [showHolidayDialog, setShowHolidayDialog] = useState(false);
   const [showSupportDialog, setShowSupportDialog] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [courseScheduled, setCourseScheduled] = useState(false);
   const [prevCompletionStatus, setPrevCompletionStatus] = useState(false);
   
@@ -384,6 +390,71 @@ export default function DashboardSimplified() {
                   </h3>
                   
                   <ul className="space-y-2">
+                    {/* Course Payment Item - Goes below Holiday Preferences and above Schedule Course Session */}
+                    <li className="rounded-md p-3 bg-white">
+                      <div className="flex items-center gap-3">
+                        {/* Column 1: Icon */}
+                        <div className="flex-shrink-0">
+                          {paymentStatus ? (
+                            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                              <CheckCircle2 className="h-4 w-4" />
+                            </div>
+                          ) : (
+                            <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                              <CreditCard className="h-4 w-4" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Column 2: Title and description */}
+                        <div className="flex-grow">
+                          <h4 className="text-sm font-medium text-[#2e1a87] flex items-center flex-wrap gap-2">
+                            Complete Course Enrollment
+                            <span className="text-xs bg-[#f0e6ff] text-[#2e1a87] px-2 py-0.5 rounded-full">
+                              Required
+                            </span>
+                          </h4>
+                          
+                          <p className="text-xs text-gray-600 mt-1.5">
+                            {paymentStatus 
+                              ? "You have full access to all course materials and features."
+                              : "Complete your enrollment to unlock full course access and personalized resources."}
+                          </p>
+                          
+                          {/* Status text */}
+                          <div className="mt-2">
+                            <div className="flex flex-wrap text-xs text-gray-600">
+                              <span className="whitespace-nowrap">
+                                You: <span className={paymentStatus ? 'text-green-600 font-medium' : 'text-amber-500 font-medium'}>
+                                  {paymentStatus ? 'Completed' : 'Pending'}
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Column 3: Action */}
+                        <div className="flex-shrink-0 flex items-center h-full ml-auto">
+                          <div className="flex items-center text-xs text-gray-500">
+                            {!paymentStatus ? (
+                              <button
+                                className="font-semibold text-[#3B82F6] hover:text-[#2563EB] hover:underline flex items-center mr-3"
+                                onClick={() => setShowPaymentDialog(true)}
+                              >
+                                Complete Enrollment
+                                <ArrowRight className="h-3 w-3 ml-1" />
+                              </button>
+                            ) : (
+                              <div className="flex items-center text-green-600 font-medium">
+                                <Check className="h-4 w-4 mr-1.5" />
+                                <span>Enrollment Complete</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    
                     {preCourseRequirements.map((item) => (
                       <li 
                         key={item.id} 
@@ -827,6 +898,81 @@ export default function DashboardSimplified() {
                 Close
               </Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Payment Dialog */}
+        <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+          <DialogContent className="bg-white rounded-lg">
+            <DialogHeader>
+              <DialogTitle className="text-[#2e1a87]">Complete Your Enrollment</DialogTitle>
+              <DialogDescription>
+                Access the full course to create a comprehensive parenting plan.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="bg-[#f9f5ff] p-4 rounded-lg mb-4">
+                <h3 className="text-[#2e1a87] font-medium mb-2 text-sm">Course Benefits</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 text-xs text-gray-700">
+                    <Check className="h-4 w-4 text-[#6c54da] mt-0.5 flex-shrink-0" />
+                    <span>Complete, legally-ready parenting plan</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs text-gray-700">
+                    <Check className="h-4 w-4 text-[#6c54da] mt-0.5 flex-shrink-0" />
+                    <span>Detailed co-parenting schedule with holiday arrangements</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs text-gray-700">
+                    <Check className="h-4 w-4 text-[#6c54da] mt-0.5 flex-shrink-0" />
+                    <span>AI-assisted communication tools</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-xs text-gray-700">
+                    <Check className="h-4 w-4 text-[#6c54da] mt-0.5 flex-shrink-0" />
+                    <span>One-to-one support from parenting experts</span>
+                  </li>
+                </ul>
+              </div>
+              
+              {/* Price display */}
+              <div className="flex justify-between items-center mb-6 bg-white p-3 border border-gray-100 rounded-md">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-800">Complete Course</h4>
+                  <p className="text-xs text-gray-500">Lifetime access + 30-day support</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg font-semibold text-[#2e1a87]">$195</div>
+                  <div className="text-xs text-gray-500">One-time payment</div>
+                </div>
+              </div>
+              
+              {/* Payment button */}
+              <Button 
+                className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none h-12"
+                onClick={() => {
+                  // Show a short loading state
+                  toast({
+                    title: "Processing payment...",
+                  });
+                  
+                  // Using setTimeout to simulate payment processing
+                  setTimeout(() => {
+                    completePayment();
+                    setShowPaymentDialog(false);
+                    toast({
+                      title: "Payment successful!",
+                      description: "You now have full access to the course.",
+                      variant: "default",
+                    });
+                  }, 1500);
+                }}
+              >
+                Complete Enrollment
+              </Button>
+              
+              <p className="text-center text-xs text-gray-500 mt-3">
+                Secure payment processing by Stripe
+              </p>
+            </div>
           </DialogContent>
         </Dialog>
         
