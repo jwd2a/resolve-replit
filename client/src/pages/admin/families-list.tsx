@@ -8,7 +8,6 @@ import {
   AlertCircle,
   Calendar,
   CheckCircle2,
-  ChevronRight,
   Clock,
   FileText,
   Flag,
@@ -181,7 +180,6 @@ export default function AdminFamiliesList() {
               <div className="col-span-1">Course</div>
               <div className="col-span-1">Last Active</div>
               <div className="col-span-1 text-center">Flags</div>
-              <div className="col-span-1 text-center">Actions</div>
             </div>
             
             {filteredFamilies.length === 0 ? (
@@ -282,12 +280,7 @@ export default function AdminFamiliesList() {
                         )}
                       </div>
                       
-                      <div className="col-span-1 text-center">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <ChevronRight className="h-5 w-5" />
-                          <span className="sr-only">View Details</span>
-                        </Button>
-                      </div>
+
                     </div>
                   </Link>
                 ))}
