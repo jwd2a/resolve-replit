@@ -213,6 +213,20 @@ export function NavigationMenu() {
                     )}
                   </DropdownMenuItem>
                 </Link>
+                
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <Link href="/admin/users-families">
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <User size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Users & Families</span>
+                    {isActive("/admin/users-families") && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
             

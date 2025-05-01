@@ -115,16 +115,16 @@ export default function AdminUsersFamilies() {
     if (flagExists) {
       updatedFlags = selectedFamily.flags.map(f => 
         f.id === flag.id 
-          ? { ...f, status: f.status === "Active" ? "Resolved" : "Active" } 
+          ? { ...f, status: f.status === "Active" ? "Resolved" as const : "Active" as const } 
           : f
       );
     } else {
-      updatedFlags = [...selectedFamily.flags, { ...flag, status: "Active" }];
+      updatedFlags = [...selectedFamily.flags, { ...flag, status: "Active" as const }];
     }
 
-    const updatedFamily = { 
+    const updatedFamily: AdminFamily = { 
       ...selectedFamily,
-      flags: updatedFlags
+      flags: updatedFlags as { id: string; message: string; status: "Active" | "Resolved"; }[]
     };
 
     setFamilies(families.map(f => f.id === selectedFamily.id ? updatedFamily : f));
@@ -667,9 +667,9 @@ export default function AdminUsersFamilies() {
                             variant="outline" 
                             className="gap-2"
                             onClick={() => {
-                              const updatedFamily = {
+                              const updatedFamily: AdminFamily = {
                                 ...selectedFamily,
-                                flags: selectedFamily.flags.map(f => ({ ...f, status: "Resolved" }))
+                                flags: selectedFamily.flags.map(f => ({ ...f, status: "Resolved" as const }))
                               };
                               setFamilies(families.map(f => f.id === selectedFamily.id ? updatedFamily : f));
                               setSelectedFamily(updatedFamily);
