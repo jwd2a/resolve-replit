@@ -123,12 +123,60 @@ export default function Home6() {
               To begin your course, please complete the items below.
             </p>
             
-            {/* Progress tracker */}
-            <div className="bg-indigo-700/30 rounded-full h-2.5 mb-4">
-              <div 
-                className="bg-white rounded-full h-2.5" 
-                style={{ width: `${Math.max(25, paymentStatus ? 60 : 25)}%` }}
-              />
+            {/* Progress tracker with icons */}
+            <div className="w-1/2 mb-4">
+              <div className="relative flex items-center justify-between">
+                {/* Line connecting all steps */}
+                <div className="absolute left-0 right-0 h-0.5 bg-indigo-700/30"></div>
+                
+                {/* Step 1: Co-Parent Registration */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
+                      ? "bg-white text-[#2e1a87]" 
+                      : "bg-indigo-700/50 text-white/80"
+                  }`}>
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs text-white/80 mt-1">Co-Parent</span>
+                </div>
+                
+                {/* Step 2: Waivers */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
+                      ? "bg-white text-[#2e1a87]" 
+                      : "bg-indigo-700/50 text-white/80"
+                  }`}>
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs text-white/80 mt-1">Waivers</span>
+                </div>
+                
+                {/* Step 3: Holiday Preferences */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
+                      ? "bg-white text-[#2e1a87]" 
+                      : "bg-indigo-700/50 text-white/80"
+                  }`}>
+                    <CalendarDays className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs text-white/80 mt-1">Holidays</span>
+                </div>
+                
+                {/* Step 4: Payment */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    paymentStatus 
+                      ? "bg-white text-[#2e1a87]" 
+                      : "bg-indigo-700/50 text-white/80"
+                  }`}>
+                    <CreditCard className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs text-white/80 mt-1">Payment</span>
+                </div>
+              </div>
             </div>
             
             <div className="flex items-center justify-between">
