@@ -22,6 +22,7 @@ import CoParentVerification from "@/pages/co-parent-verification";
 import CoParentingSchedule from "@/pages/co-parenting-schedule";
 import AITestPage from "@/pages/ai-test-page";
 import AdminUsersFamilies from "@/pages/admin/users-families";
+import AdminFamiliesList from "@/pages/admin/families-list";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/protected-route";
 import { RootLayout } from "@/components/RootLayout";
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/ai-test" component={AITestPage} />
       
       {/* Admin routes */}
+      <Route path="/admin/families" component={AdminFamiliesList} />
       <Route path="/admin/users-families" component={AdminUsersFamilies} />
       
       {/* Fallback for unknown routes */}

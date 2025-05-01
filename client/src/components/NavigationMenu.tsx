@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { 
   ChevronDown, 
   User, 
+  Users,
   Home, 
   BookOpen, 
   FileText, 
@@ -218,10 +219,20 @@ export function NavigationMenu() {
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
+                <Link href="/admin/families">
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Users size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Families Overview</span>
+                    {isActive("/admin/families") && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                
                 <Link href="/admin/users-families">
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <User size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Users & Families</span>
+                    <span>Users & Families Detail</span>
                     {isActive("/admin/users-families") && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
