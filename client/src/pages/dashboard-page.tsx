@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format, addDays, isBefore, isToday, isSameDay } from "date-fns";
 import { NavigationMenu } from "@/components/NavigationMenu";
+import { CoursePaymentGate } from "@/components/payments/CoursePaymentGate";
 
 // UI components
 import {
@@ -131,6 +133,7 @@ const resources: Resource[] = [
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
+  const { paymentStatus, completePayment } = usePaymentStatus();
   const [courseDate, setCourseDate] = useState<CourseDate>({
     scheduledDate: null,
     proposedDate: null,
@@ -261,12 +264,14 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                
-                <Button className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
-                  {completedWaivers > 0 ? "Continue Course" : "Start Course"} <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
               </div>
             </div>
+                
+            {/* Payment gate or course access button */}
+            <CoursePaymentGate 
+              paymentCompleted={paymentStatus}
+              onPaymentComplete={completePayment}
+            />
 
             {/* Co-parent connection */}
             <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
@@ -396,6 +401,114 @@ export default function DashboardPage() {
                     </Dialog>
                   </div>
                 )}
+
+                {courseDateStatus === "awaiting" && (
+                  <div className="px-4 py-3 bg-blue-50 border border-blue-100 rounded-lg">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock className="h-5 w-5 text-blue-500" />
+                      <div>
+                        <p className="font-medium text-blue-800">Waiting for co-parent to approve</p>
+                        <p className="text-sm text-blue-600">You suggested {formatDateTime(courseDate.proposedDate, courseDate.proposedTime)}</p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Your co-parent will be notified of this suggested time. We'll update you when they respond.
+                    </p>
+                  </div>
+                )}
+
+                {courseDateStatus === "proposed" && (
+                  <div className="px-4 py-3 bg-yellow-50 border border-yellow-100 rounded-lg">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock className="h-5 w-5 text-yellow-500" />
+                      <div>
+                        <p className="font-medium text-yellow-800">Your co-parent suggested a time</p>
+                        <p className="text-sm text-yellow-600">{formatDateTime(courseDate.proposedDate, courseDate.proposedTime)}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                      <Button 
+                        onClick={acceptProposedDate}
+                        className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                        size="sm"
+                      >
+                        Accept
+                      </Button>
+                      <Button 
+                        onClick={rejectProposedDate}
+                        variant="outline"
+                        className="border-[#6c54da]/20 text-[#2e1a87]"
+                        size="sm"
+                      >
+                        Suggest Different Time
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {courseDateStatus === "scheduled" && (
+                  <div className="px-4 py-3 bg-green-50 border border-green-100 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      <div>
+                        <p className="font-medium text-green-800">Your course is scheduled!</p>
+                        <p className="text-sm text-green-600">{formatDateTime(courseDate.scheduledDate)}</p>
+                      </div>
+                    </div>
+                    <Button 
+                      className="mt-3 bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                      size="sm"
+                    >
+                      Add to Calendar
+                    </Button>
+                  </div>
+                )}
+
+                {courseDateStatus === "today" && (
+                  <div className="px-4 py-3 bg-green-50 border border-green-100 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="bg-green-100 text-green-600 p-1 rounded-full">
+                        <CheckCircle2 className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-green-800">Your course is today!</p>
+                        <p className="text-sm text-green-600">{formatDateTime(courseDate.scheduledDate)}</p>
+                        <div className="mt-3 flex gap-2">
+                          <Button className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none">
+                            <Video className="mr-2 h-4 w-4" /> Join Session
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {courseDateStatus === "past" && (
+                  <div className="px-4 py-3 bg-gray-50 border border-gray-100 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-gray-500" />
+                      <div>
+                        <p className="font-medium text-gray-700">Your course session has ended</p>
+                        <p className="text-sm text-gray-500">{formatDateTime(courseDate.scheduledDate)}</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      <Button 
+                        variant="outline"
+                        className="border-[#6c54da]/20 text-[#2e1a87]"
+                        size="sm"
+                      >
+                        View Recording
+                      </Button>
+                      <Button 
+                        className="bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+                        size="sm"
+                      >
+                        Schedule Next Session
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -467,51 +580,53 @@ export default function DashboardPage() {
                           : 'border-[#6c54da]/10 hover:border-[#6c54da]/30'
                       }`}
                     >
-                      <div className="p-4 flex items-start gap-3">
+                      <div className="p-3 flex items-start gap-3">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          resource.type === "video" ? "bg-blue-100" :
-                          resource.type === "pdf" ? "bg-red-100" : 
-                          "bg-[#f5f0ff]"
+                          resource.completed 
+                            ? 'bg-green-100 text-green-600'
+                            : 'bg-[#6c54da]/10 text-[#6c54da]'
                         }`}>
-                          {resource.type === "video" && <Video className="h-4 w-4 text-blue-600" />}
-                          {resource.type === "pdf" && <FileText className="h-4 w-4 text-red-600" />}
-                          {resource.type === "article" && <BookOpen className="h-4 w-4 text-[#6c54da]" />}
+                          {resource.type === 'video' && <PlayCircle className="h-4 w-4" />}
+                          {resource.type === 'pdf' && <FileText className="h-4 w-4" />}
+                          {resource.type === 'article' && <BookOpen className="h-4 w-4" />}
                         </div>
-                        
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
                             <div>
-                              <h4 className="font-medium text-[#2e1a87] text-sm">{resource.title}</h4>
-                              {resource.duration && (
-                                <div className="flex items-center mt-1 text-gray-500 text-xs">
-                                  <Clock className="h-3 w-3 mr-1" />
-                                  {resource.duration}
-                                </div>
-                              )}
+                              <h4 className="text-sm font-medium text-[#2e1a87]">{resource.title}</h4>
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                {resource.type === 'video' 
+                                  ? `Video · ${resource.duration}`
+                                  : resource.type === 'pdf' 
+                                    ? 'PDF Document'
+                                    : 'Article'
+                                }
+                              </p>
                             </div>
                             {resource.completed && (
-                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
                             )}
                           </div>
-                          
-                          <div className="mt-3 flex items-center gap-2">
-                            <Button 
-                              className={`text-xs px-3 py-1 h-7 ${
-                                resource.type === "video" 
-                                  ? "bg-blue-100 text-blue-700 hover:bg-blue-200 border border-blue-200" :
-                                resource.type === "pdf" 
-                                  ? "bg-red-100 text-red-700 hover:bg-red-200 border border-red-200" : 
-                                  "bg-[#f5f0ff] text-[#2e1a87] hover:bg-[#e8deff] border border-[#6c54da]/20"
-                              }`}
-                              size="sm"
-                            >
-                              {resource.type === "video" ? "Watch" : resource.type === "pdf" ? "Open" : "Read"}
-                            </Button>
-                          </div>
+                          <Button 
+                            variant="link" 
+                            className="px-0 h-6 text-xs text-[#6c54da] hover:text-[#2e1a87]"
+                          >
+                            {resource.completed ? 'View Again' : 'Start'}
+                          </Button>
                         </div>
                       </div>
                     </div>
                   ))}
+                </div>
+                
+                <div className="mt-4 flex justify-center">
+                  <Button 
+                    variant="outline"
+                    className="border-[#6c54da]/20 text-[#2e1a87]"
+                    size="sm"
+                  >
+                    View All Resources
+                  </Button>
                 </div>
               </div>
             </div>

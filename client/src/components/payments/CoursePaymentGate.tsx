@@ -1,129 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, ChevronRight, Lock, CheckCheck, Shield } from "lucide-react";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-// Make sure to call loadStripe outside of a component's render to avoid recreating the Stripe object on every render
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-interface CheckoutFormProps {
-  onSuccess: () => void;
-  onCancel: () => void;
-}
-
-// This is the actual payment form that will be shown inside the payment dialog
-function CheckoutForm({ onSuccess, onCancel }: CheckoutFormProps) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsLoading(true);
-    setErrorMessage(null);
-
-    // For the demo, let's just simulate a successful payment
-    setTimeout(() => {
-      setIsLoading(false);
-      onSuccess();
-    }, 1500);
-
-    // In a real implementation, you would use this:
-    /*
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + "/payment-success",
-      },
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-      setErrorMessage(error.message || "An unknown error occurred");
-    } else {
-      onSuccess();
-    }
-    */
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* In a real implementation, you would uncomment this:
-      <PaymentElement />
-      */}
-      
-      {/* Mock Payment UI for demo */}
-      <div className="border rounded-md p-4 space-y-4">
-        <div className="flex items-center justify-between border-b pb-3">
-          <div className="text-sm font-medium">Course Access Fee</div>
-          <div className="font-bold">$149.00</div>
-        </div>
-        
-        <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
-            <div>
-              <div className="text-sm font-medium">One-time payment</div>
-              <div className="text-xs text-gray-500">No recurring charges or hidden fees</div>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
-            <div>
-              <div className="text-sm font-medium">Access for both parents</div>
-              <div className="text-xs text-gray-500">Your co-parent can join at no additional cost</div>
-            </div>
-          </div>
-          
-          <div className="flex items-start gap-2">
-            <Shield className="h-5 w-5 text-green-600 mt-0.5" />
-            <div>
-              <div className="text-sm font-medium">Secure payment</div>
-              <div className="text-xs text-gray-500">Protected by Stripe's industry-leading security</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {errorMessage && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
-          {errorMessage}
-        </div>
-      )}
-      
-      <div className="flex gap-3 pt-2">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-          Cancel
-        </Button>
-        <Button 
-          type="submit" 
-          className="flex-1 bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4]"
-          disabled={!stripe || isLoading}
-        >
-          {isLoading ? "Processing..." : "Complete Payment"}
-        </Button>
-      </div>
-    </form>
-  );
-}
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Check, ChevronRight, Lock, Unlock, CreditCard, CheckCircle, Loader2 } from "lucide-react";
 
 interface CoursePaymentGateProps {
   paymentCompleted: boolean;
@@ -131,102 +10,106 @@ interface CoursePaymentGateProps {
 }
 
 export function CoursePaymentGate({ paymentCompleted, onPaymentComplete }: CoursePaymentGateProps) {
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-  // For the demo, we'll use a mock client secret
-  const [clientSecret] = useState("mock_client_secret");
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handlePaymentSuccess = () => {
-    setShowPaymentDialog(false);
+  const handlePayment = () => {
+    setIsProcessing(true);
     onPaymentComplete();
+    
+    // Reset processing state after completion (matching the timeout in the hook)
+    setTimeout(() => {
+      setIsProcessing(false);
+    }, 1500);
   };
 
-  // If payment is already completed, show the success state
+  // Render different content based on payment status
   if (paymentCompleted) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-green-200 p-5 space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <CheckCheck className="h-5 w-5 text-green-600" />
+      <Card className="bg-gradient-to-r from-green-50 to-white border border-green-200 hover:shadow-md transition-shadow">
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-medium text-green-800">Course Access Unlocked</CardTitle>
+            <Unlock className="h-4 w-4 text-green-600" />
           </div>
-          <div>
-            <h3 className="font-medium text-[#2e1a87]">Payment Confirmed</h3>
-            <p className="text-sm text-gray-600">You have full access to the course</p>
+        </CardHeader>
+        <CardContent className="pb-4">
+          <div className="flex items-center gap-2 text-xs text-green-700">
+            <CheckCircle className="h-3.5 w-3.5 flex-shrink-0" />
+            <span>Full course access enabled</span>
           </div>
-        </div>
-        
-        <Button 
-          className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" 
-          size="sm"
-        >
-          Start Course <ChevronRight className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
+        </CardContent>
+        <CardFooter className="pt-0">
+          <Button className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" size="sm">
+            Continue Course <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
     );
   }
 
-  // Otherwise, show the payment gate
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20 p-5 space-y-4">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-[#6c54da]/10 rounded-full flex items-center justify-center flex-shrink-0">
-          <Lock className="h-5 w-5 text-[#6c54da]" />
+    <Card className="bg-white rounded-lg shadow-sm border border-[#6c54da]/20">
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-sm font-medium text-[#2e1a87]">Course Access</CardTitle>
+          <Lock className="h-4 w-4 text-[#6c54da]" />
         </div>
-        <div>
-          <h3 className="font-medium text-[#2e1a87]">💳 Payment Required to Begin</h3>
-          <p className="text-sm text-gray-600">To start your parenting course, please complete a secure one-time payment. This covers access for both co-parents.</p>
+        <CardDescription className="text-xs text-gray-500">
+          Complete the course enrollment to continue
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-0 pb-3">
+        <div className="mb-3 bg-amber-50 rounded-md p-2 border border-amber-100">
+          <div className="text-xs text-amber-700">
+            Your course access is pending payment
+          </div>
         </div>
-      </div>
-      
-      <div className="space-y-3 py-1">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-green-600" />
-          <span className="text-sm">One-time fee</span>
+        
+        <div className="text-xs space-y-1.5 mb-3">
+          <div className="flex items-center gap-2">
+            <Check className="h-3 w-3 text-[#6c54da]" />
+            <span className="text-gray-600">Comprehensive co-parenting course</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Check className="h-3 w-3 text-[#6c54da]" />
+            <span className="text-gray-600">Legal template creation tools</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Check className="h-3 w-3 text-[#6c54da]" />
+            <span className="text-gray-600">Lifetime access to resources</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-green-600" />
-          <span className="text-sm">Includes both parents</span>
+        
+        <div className="flex justify-between items-baseline text-xs text-gray-500 mb-1">
+          <span>Course Enrollment</span>
+          <span className="text-sm font-medium text-[#2e1a87]">$249</span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-green-600" />
-          <span className="text-sm">Immediate access after payment</span>
+        <Separator className="bg-gray-200 mb-1" />
+        <div className="flex justify-between items-baseline text-xs mb-1">
+          <span className="font-medium">Today's Payment</span>
+          <span className="text-sm font-bold text-[#2e1a87]">$249</span>
         </div>
-      </div>
-      
-      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
-        <DialogTrigger asChild>
-          <Button 
-            className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none" 
-            size="sm"
-          >
-            Complete Payment ➡️
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="bg-white sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Complete Your Payment</DialogTitle>
-            <DialogDescription>
-              Secure one-time payment for full course access
-            </DialogDescription>
-          </DialogHeader>
-          
-          {clientSecret && (
-            <Elements
-              stripe={stripePromise}
-              options={{
-                clientSecret,
-                appearance: {
-                  theme: 'stripe',
-                },
-              }}
-            >
-              <CheckoutForm 
-                onSuccess={handlePaymentSuccess} 
-                onCancel={() => setShowPaymentDialog(false)} 
-              />
-            </Elements>
+      </CardContent>
+      <CardFooter className="pt-0">
+        <Button 
+          onClick={handlePayment}
+          disabled={isProcessing}
+          className="w-full bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] border-none"
+          size="sm"
+        >
+          {isProcessing ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              <CreditCard className="mr-2 h-4 w-4" />
+              Complete Enrollment
+            </>
           )}
-        </DialogContent>
-      </Dialog>
-    </div>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

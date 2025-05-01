@@ -24,6 +24,7 @@ import AITestPage from "@/pages/ai-test-page";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
 import { AuthProvider } from "@/hooks/use-auth";
+import { PaymentStatusProvider } from "@/hooks/use-payment-status";
 import { ProtectedRoute } from "@/components/protected-route";
 import { RootLayout } from "@/components/RootLayout";
 
@@ -76,10 +77,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <PaymentStatusProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </PaymentStatusProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

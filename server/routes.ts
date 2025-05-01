@@ -5,6 +5,9 @@ import { z } from "zod";
 import { setupPaymentRoutes } from "./payments";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register payment routes
+  setupPaymentRoutes(app);
+
   // API routes
   
   // Get all modules
