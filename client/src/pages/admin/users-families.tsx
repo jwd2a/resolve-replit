@@ -25,8 +25,10 @@ import {
   FileText,
   Mail,
   Flag,
+  Users,
   XCircle,
 } from "lucide-react";
+import { Link } from "wouter";
 import { RootLayout } from "@/components/RootLayout";
 import { format } from "date-fns";
 import { Progress } from "@/components/ui/progress";
@@ -44,8 +46,27 @@ export default function AdminUsersFamilies() {
     searchTerm: ""
   });
 
+  // Get the family ID from URL query parameter
+  const getQueryParams = () => {
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    return { id: params.get('id') };
+  };
+
   useEffect(() => {
-    // Set the first family as selected when the page loads
+    // Try to get family ID from URL
+    const { id } = getQueryParams();
+    
+    // If ID is provided in URL, find and select that family
+    if (id && families.length > 0) {
+      const familyFromId = families.find(f => f.id === id);
+      if (familyFromId) {
+        setSelectedFamily(familyFromId);
+        return;
+      }
+    }
+    
+    // Otherwise, set the first family as selected when the page loads
     if (families.length > 0 && !selectedFamily) {
       setSelectedFamily(families[0]);
     }
@@ -167,7 +188,15 @@ export default function AdminUsersFamilies() {
   return (
     <RootLayout>
       <div className="container mx-auto py-6">
-        <h1 className="text-3xl font-bold mb-8">Admin Portal - Users & Families</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Admin Portal - Users & Families</h1>
+          <Button asChild>
+            <Link href="/admin/families">
+              <Users className="mr-2 h-4 w-4" />
+              Back to Families Overview
+            </Link>
+          </Button>
+        </div>
         
         <div className="flex gap-6">
           {/* LEFT PANEL - Family List */}

@@ -191,105 +191,105 @@ export default function AdminFamiliesList() {
             ) : (
               <div className="divide-y">
                 {filteredFamilies.map(family => (
-                  <div key={family.id} className="grid grid-cols-12 gap-2 p-4 items-center hover:bg-gray-50">
-                    <div className="col-span-2">
-                      <div className="font-medium">{family.familyName}</div>
-                      <div className="text-xs text-gray-500">ID: {family.id}</div>
-                    </div>
-                    
-                    <div className="col-span-2">
-                      {family.parents.map(parent => (
-                        <div key={parent.id} className="text-sm">
-                          {parent.name}
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <div className="col-span-1">
-                      {family.children.length > 0 ? (
-                        <div className="text-sm">
-                          {family.children.length} {family.children.length === 1 ? 'child' : 'children'}
-                        </div>
-                      ) : (
-                        <div className="text-sm text-gray-500">None</div>
-                      )}
-                    </div>
-                    
-                    <div className="col-span-1">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${getStatusBadgeClass(family.plan.status)}`}>
-                        {family.plan.status}
-                      </span>
-                    </div>
-                    
-                    <div className="col-span-1">
-                      <div className="flex items-center">
-                        <div className="w-12 bg-gray-200 rounded-full h-2 mr-2">
-                          <div 
-                            className={`h-2 rounded-full ${
-                              family.plan.status === 'Complete' ? 'bg-green-500' : 
-                              family.plan.status === 'In Progress' ? 'bg-blue-500' : 'bg-gray-300'
-                            }`}
-                            style={{ width: `${family.plan.percentComplete}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs">{family.plan.percentComplete}%</span>
+                  <Link href={`/admin/users-families?id=${family.id}`} key={family.id}>
+                    <div className="grid grid-cols-12 gap-2 p-4 items-center hover:bg-gray-50 cursor-pointer transition-colors duration-150">
+                      <div className="col-span-2">
+                        <div className="font-medium">{family.familyName}</div>
+                        <div className="text-xs text-gray-500">ID: {family.id}</div>
                       </div>
-                    </div>
-                    
-                    <div className="col-span-1">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        family.coParentStatus === 'Joined' ? 'bg-green-100 text-green-800' : 
-                        family.coParentStatus === 'Invited' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {family.coParentStatus}
-                      </span>
-                    </div>
-                    
-                    <div className="col-span-1 text-center">
-                      {family.waiverStatus ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-600 inline" />
-                      ) : (
-                        <XCircle className="h-5 w-5 text-red-500 inline" />
-                      )}
-                    </div>
-                    
-                    <div className="col-span-1 text-center">
-                      {family.course.scheduled ? (
-                        <div className="inline-flex items-center">
-                          <Calendar className="h-4 w-4 text-green-600 mr-1" />
-                          <span className="text-xs text-green-600">Scheduled</span>
+                      
+                      <div className="col-span-2">
+                        {family.parents.map(parent => (
+                          <div key={parent.id} className="text-sm">
+                            {parent.name}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="col-span-1">
+                        {family.children.length > 0 ? (
+                          <div className="text-sm">
+                            {family.children.length} {family.children.length === 1 ? 'child' : 'children'}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-gray-500">None</div>
+                        )}
+                      </div>
+                      
+                      <div className="col-span-1">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${getStatusBadgeClass(family.plan.status)}`}>
+                          {family.plan.status}
+                        </span>
+                      </div>
+                      
+                      <div className="col-span-1">
+                        <div className="flex items-center">
+                          <div className="w-12 bg-gray-200 rounded-full h-2 mr-2">
+                            <div 
+                              className={`h-2 rounded-full ${
+                                family.plan.status === 'Complete' ? 'bg-green-500' : 
+                                family.plan.status === 'In Progress' ? 'bg-blue-500' : 'bg-gray-300'
+                              }`}
+                              style={{ width: `${family.plan.percentComplete}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-xs">{family.plan.percentComplete}%</span>
                         </div>
-                      ) : (
-                        <Clock className="h-5 w-5 text-amber-500 inline" />
-                      )}
-                    </div>
-                    
-                    <div className="col-span-1">
-                      <span className="text-xs text-gray-600">
-                        {formatRelativeDate(family.lastActive)}
-                      </span>
-                    </div>
-                    
-                    <div className="col-span-1 text-center">
-                      {family.flags.length > 0 ? (
-                        <div className="inline-flex items-center justify-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-                          <Flag size={12} className="mr-1" />
-                          {family.flags.length}
-                        </div>
-                      ) : (
-                        <span className="text-xs text-gray-500">None</span>
-                      )}
-                    </div>
-                    
-                    <div className="col-span-1 text-center">
-                      <Link href={`/admin/users-families?id=${family.id}`}>
+                      </div>
+                      
+                      <div className="col-span-1">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          family.coParentStatus === 'Joined' ? 'bg-green-100 text-green-800' : 
+                          family.coParentStatus === 'Invited' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {family.coParentStatus}
+                        </span>
+                      </div>
+                      
+                      <div className="col-span-1 text-center">
+                        {family.waiverStatus ? (
+                          <CheckCircle2 className="h-5 w-5 text-green-600 inline" />
+                        ) : (
+                          <XCircle className="h-5 w-5 text-red-500 inline" />
+                        )}
+                      </div>
+                      
+                      <div className="col-span-1 text-center">
+                        {family.course.scheduled ? (
+                          <div className="inline-flex items-center">
+                            <Calendar className="h-4 w-4 text-green-600 mr-1" />
+                            <span className="text-xs text-green-600">Scheduled</span>
+                          </div>
+                        ) : (
+                          <Clock className="h-5 w-5 text-amber-500 inline" />
+                        )}
+                      </div>
+                      
+                      <div className="col-span-1">
+                        <span className="text-xs text-gray-600">
+                          {formatRelativeDate(family.lastActive)}
+                        </span>
+                      </div>
+                      
+                      <div className="col-span-1 text-center">
+                        {family.flags.length > 0 ? (
+                          <div className="inline-flex items-center justify-center px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+                            <Flag size={12} className="mr-1" />
+                            {family.flags.length}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-gray-500">None</span>
+                        )}
+                      </div>
+                      
+                      <div className="col-span-1 text-center">
                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronRight className="h-5 w-5" />
                           <span className="sr-only">View Details</span>
                         </Button>
-                      </Link>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
