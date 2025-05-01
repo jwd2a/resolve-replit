@@ -119,23 +119,34 @@ export default function Home6() {
         <div className="rounded-lg bg-[#2e1a87] p-6 mb-6 text-white relative overflow-hidden">
           <div className="relative z-10">
             <h1 className="text-xl font-medium mb-1">Welcome to Your Family's Parenting Plan</h1>
-            <p className="text-white/80 text-sm mb-6">
-              To begin your course, please complete the following steps.
+            <p className="text-white/80 text-sm mb-3">
+              To begin your course, please complete the items below.
             </p>
+            
+            {/* Progress tracker */}
+            <div className="bg-indigo-700/30 rounded-full h-2.5 mb-4">
+              <div 
+                className="bg-white rounded-full h-2.5" 
+                style={{ width: `${Math.max(25, paymentStatus ? 60 : 25)}%` }}
+              />
+            </div>
+            
             <div className="flex items-center justify-between">
               <p className="text-white/70 text-xs">
                 Your progress will be saved as you go.
               </p>
-              <Button
-                disabled={!paymentStatus}
-                className="bg-white text-[#2e1a87] hover:bg-white/90"
-              >
-                Start Course <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <div className="flex flex-col items-end">
+                <Button
+                  disabled={!paymentStatus}
+                  className="bg-white text-[#2e1a87] hover:bg-white/90"
+                >
+                  Start Course <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <p className="text-white/70 text-xs mt-1.5">
+                  All items must be completed before starting.
+                </p>
+              </div>
             </div>
-            <p className="text-white/70 text-xs mt-2">
-              All items must be completed before starting.
-            </p>
           </div>
           <div className="absolute right-0 bottom-0 w-64 h-64 bg-indigo-500/20 rounded-full -mr-32 -mb-32"></div>
         </div>
