@@ -100,14 +100,8 @@ export default function AdminFamiliesList() {
   return (
     <RootLayout>
       <div className="container mx-auto py-6">
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-bold">Admin Portal - Families Overview</h1>
-          <Button asChild>
-            <Link href="/admin/users-families">
-              <Users className="mr-2 h-4 w-4" />
-              Switch to Detail View
-            </Link>
-          </Button>
         </div>
         
         <Card className="p-6">
