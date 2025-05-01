@@ -56,14 +56,14 @@ export function NavigationMenu() {
   return (
     <div className="bg-[#2e1a87] border-b shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/">
-          <div className="flex items-center cursor-pointer">
-            <img src={resolveLogo} alt="Resolve Logo" className="h-10" />
-          </div>
-        </Link>
-        
-        <div className="flex items-center">
+        <div className="flex items-center space-x-6">
+          {/* Logo */}
+          <Link href="/">
+            <div className="flex items-center cursor-pointer">
+              <img src={resolveLogo} alt="Resolve Logo" className="h-14" />
+            </div>
+          </Link>
+          
           {/* Main navigation items */}
           <div className="hidden md:flex items-center space-x-1">
             {/* HOME dropdown */}
@@ -246,15 +246,17 @@ export function NavigationMenu() {
               </Button>
             </Link>
           </div>
-          
-          {/* User Profile */}
+        </div>
+        
+        {/* User Profile - positioned at the right */}
+        <div>
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="rounded-full w-9 h-9 p-0 ml-2 bg-white"
+                  className="rounded-full w-9 h-9 p-0 bg-white"
                 >
                   <div className="flex items-center justify-center w-full h-full text-[#2e1a87] font-medium rounded-full">
                     {getInitials(user.displayName || "User Name")}
