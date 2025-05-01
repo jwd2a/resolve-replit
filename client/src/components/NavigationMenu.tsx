@@ -54,16 +54,16 @@ export function NavigationMenu() {
   };
   
   return (
-    <div className="bg-white border-b shadow-sm">
+    <div className="bg-[#2e1a87] border-b shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-6">
-          {/* Logo */}
-          <Link href="/">
-            <div className="flex items-center cursor-pointer">
-              <img src={resolveLogo} alt="Resolve Logo" className="h-9" />
-            </div>
-          </Link>
-          
+        {/* Logo */}
+        <Link href="/">
+          <div className="flex items-center cursor-pointer">
+            <img src={resolveLogo} alt="Resolve Logo" className="h-10" />
+          </div>
+        </Link>
+        
+        <div className="flex items-center">
           {/* Main navigation items */}
           <div className="hidden md:flex items-center space-x-1">
             {/* HOME dropdown */}
@@ -73,8 +73,8 @@ export function NavigationMenu() {
                   variant="ghost" 
                   className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
                     isActive(dashboardRoute.path) || isActive(home5Route.path) 
-                      ? "bg-[#f5f0ff] text-[#2e1a87]" 
-                      : "text-[#2e1a87] hover:bg-[#f5f0ff] hover:text-[#2e1a87]"
+                      ? "bg-[#3d2a9b] text-white" 
+                      : "text-white hover:bg-[#3d2a9b]"
                   }`}
                 >
                   <Home size={16} className="mr-1.5" />
@@ -222,8 +222,8 @@ export function NavigationMenu() {
                 variant="ghost" 
                 className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
                   isActive(courseRoute.path) 
-                    ? "bg-[#f5f0ff] text-[#2e1a87]" 
-                    : "text-[#2e1a87] hover:bg-[#f5f0ff] hover:text-[#2e1a87]"
+                    ? "bg-[#3d2a9b] text-white" 
+                    : "text-white hover:bg-[#3d2a9b]"
                 }`}
               >
                 <BookOpen size={16} className="mr-1.5" />
@@ -237,8 +237,8 @@ export function NavigationMenu() {
                 variant="ghost" 
                 className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
                   isActive(parentingPlanRoute.path) 
-                    ? "bg-[#f5f0ff] text-[#2e1a87]" 
-                    : "text-[#2e1a87] hover:bg-[#f5f0ff] hover:text-[#2e1a87]"
+                    ? "bg-[#3d2a9b] text-white" 
+                    : "text-white hover:bg-[#3d2a9b]"
                 }`}
               >
                 <FileText size={16} className="mr-1.5" />
@@ -246,58 +246,58 @@ export function NavigationMenu() {
               </Button>
             </Link>
           </div>
-        </div>
-        
-        {/* User Profile */}
-        {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          
+          {/* User Profile */}
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="rounded-full w-9 h-9 p-0 ml-2 bg-white"
+                >
+                  <div className="flex items-center justify-center w-full h-full text-[#2e1a87] font-medium rounded-full">
+                    {getInitials(user.displayName || "User Name")}
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{user.displayName}</span>
+                    <span className="text-xs text-gray-500">{user.email}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  <User size={16} className="mr-2" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings size={16} className="mr-2" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <Link href="/auth">
+                  <DropdownMenuItem className="cursor-pointer text-red-600">
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/auth">
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="rounded-full w-9 h-9 p-0 ml-2"
+                className="flex items-center gap-1 px-3 py-2 text-white border border-white hover:bg-[#3d2a9b]"
               >
-                <div className="flex items-center justify-center w-full h-full bg-[#f5f0ff] text-[#2e1a87] font-medium rounded-full">
-                  {getInitials(user.displayName || "User Name")}
-                </div>
+                <User size={16} />
+                <span className="ml-1.5 font-medium">Login</span>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col">
-                  <span className="font-semibold">{user.displayName}</span>
-                  <span className="text-xs text-gray-500">{user.email}</span>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <User size={16} className="mr-2" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings size={16} className="mr-2" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <Link href="/auth">
-                <DropdownMenuItem className="cursor-pointer text-red-600">
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </Link>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <Link href="/auth">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="flex items-center gap-1 px-3 py-2 text-[#2e1a87] hover:bg-[#f5f0ff]"
-            >
-              <User size={16} />
-              <span className="ml-1.5 font-medium">Login</span>
-            </Button>
-          </Link>
-        )}
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );
