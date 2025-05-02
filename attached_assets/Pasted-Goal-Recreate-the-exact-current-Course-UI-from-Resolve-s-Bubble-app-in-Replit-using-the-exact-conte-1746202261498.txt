@@ -1,0 +1,143 @@
+Goal:
+Recreate the exact current Course UI from Resolve’s Bubble app in Replit using the exact content, structure, and styling from the screenshot. This is not a wireframe — this is a visual replica of the real product view so it can be the foundation for future design iterations.
+
+🧱 Overall Layout
+Create a 3-column responsive layout, full width (desktop view). Use flex or grid to structure columns as:
+
+Left Nav: 20–25% width
+
+Main Content Area: 50–60% width
+
+Right Panel: 25–30% width
+
+🔹 LEFT COLUMN: Course Module Navigation
+Use vertical accordion-style layout:
+
+plaintext
+Copy
+Edit
+Module 1  
+Welcome to Resolve       [+]
+
+Module 2  
+Parental Responsibility
+and Decision Making      [+]
+
+Module 3  
+Timesharing Schedule     [SELECTED]
+
+Module 4  
+Educational Decisions     [+]
+
+Module 5  
+Introduction to Final
+Considerations           [+]
+Module 3 is currently active, highlight with a blue vertical bar on the left and border or background
+
+Use proper indentation for submodules (if needed)
+
+Use light backgrounds and hover state styling
+
+🔹 MIDDLE COLUMN: Course Content
+1. Section Title (H1):
+nginx
+Copy
+Edit
+Travel & Work Restrictions
+2. Embedded Video Player:
+Use exact thumbnail and text from screenshot
+
+Title overlay:
+
+TIMESHARING
+TRAVEL AND WORK RESTRICTIONS
+
+Duration displayed as 04:10 in bottom left
+
+Include:
+
+Play/pause
+
+Volume
+
+Captions
+
+Fullscreen
+
+Settings gear
+
+Rounded corners (16px)
+
+Center video player in the column
+
+3. Tip Box (“Things to keep in mind”):
+Header: 💡 Things to keep in mind
+
+Light blue background with rounded corners
+
+Bullet points:
+
+Set clear notice requirements for travel plans.
+
+Share itineraries and emergency contacts.
+
+Discuss any restrictions on international travel.
+
+Consider cultural and logistical factors when approving trips.
+
+🔹 RIGHT COLUMN: Form + Context
+Title (H2):
+nginx
+Copy
+Edit
+Travel & Work Restrictions
+Static Instructional Text (Use exact text):
+Previously, you agreed to a right of first refusal, meaning whenever one of you is unable to care for the child(ren) during your time, the other parent should be the first one to ask for childcare.
+To change this policy, please go to section 2.7 (Child Care).
+
+Form Fields (Use exact questions and formatting):
+Short text input field:
+
+Notices are required for travel how far away?
+Placeholder: “Enter radius or 'not required'”
+(Required)
+
+Checkbox group:
+
+What information needs to be shared?
+
+Destination
+
+Contact details
+
+Itinerary
+(Required)
+
+Dropdown menu:
+
+Approval from the non-traveling parent is required for trips how far away?
+Placeholder: “Select an option”
+(Required)
+
+Dropdown numeric selector:
+
+Foreign Travel – Days notice required before travel
+Default: “30”
+
+📐 Visual & Functional Details
+Use exact styling for buttons, typography, field labels, and text as shown
+
+Left nav should remain sticky or fixed while scrolling the middle/right
+
+No dummy data — all text, labels, and content must match the screenshot exactly
+
+Use Roboto or similar sans-serif font to match style
+
+🧪 Interactivity for Prototype
+No live data or backend required
+
+Video player can be mocked with static controls and real video title
+
+Form inputs should be interactive (able to enter/select)
+
+Clicking “section 2.7” could scroll or be simulated to highlight it

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Course from "@/pages/Course";
+import CoursePage from "@/pages/course-page";
 import ParentingPlan from "@/pages/ParentingPlan";
 import AuthPage from "@/pages/auth-page";
 import BetaAuth from "@/pages/beta-auth";
@@ -72,6 +73,7 @@ function Router() {
       <Route path="/holiday-preferences" component={HolidayPreferences} />
       <Route path="/schedule-course" component={ScheduleCourse} />
       <Route path="/course" component={Course} />
+      <Route path="/course-page" component={CoursePage} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
       
