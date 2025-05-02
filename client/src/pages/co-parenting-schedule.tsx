@@ -393,7 +393,8 @@ export default function CoParentingSchedule() {
   
   // Helper functions for the custody calendar
   const getCustodyDayInfo = (dateString: string) => {
-    return mockData.custodyCalendar[dateString] || { 
+    const calendar = mockData.custodyCalendar as CustodyCalendar;
+    return calendar[dateString] || { 
       parent: "Mom", // Default to Mom if no data
       exchange: false,
       school: false
@@ -594,21 +595,35 @@ export default function CoParentingSchedule() {
                 </p>
               </div>
               
-              {/* Enhanced Calendar View */}
+              {/* Visual Custody Calendar (Fridge-friendly) */}
               <div className="bg-white border border-[#6c54da]/20 rounded-lg p-6 shadow-sm">
                 <style>{css}</style>
+                
+                {/* Tabs for different calendar views */}
+                <div className="flex mb-6 border-b border-gray-200">
+                  <button 
+                    className="mr-4 py-2 px-4 text-sm font-medium text-[#2e1a87] border-b-2 border-[#6c54da]"
+                  >
+                    Fridge Calendar
+                  </button>
+                  <button 
+                    className="mr-4 py-2 px-4 text-sm font-medium text-gray-500"
+                  >
+                    Traditional View
+                  </button>
+                </div>
                 
                 {/* Month navigation */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="text-[#2e1a87] font-medium text-xl">
-                    {format(selectedMonth, 'MMMM yyyy')}
+                    {format(custodyViewMonth, 'MMMM yyyy')}
                   </div>
                   <div className="flex gap-2">
                     <Button 
                       variant="outline" 
                       size="sm"
                       className="border-[#6c54da]/30 text-[#2e1a87]" 
-                      onClick={() => setSelectedMonth(current => addMonths(current, -1))}
+                      onClick={() => setCustodyViewMonth(current => addMonths(current, -1))}
                     >
                       <ChevronLeft className="h-4 w-4 mr-1" />
                       <span>Previous</span>
@@ -617,7 +632,7 @@ export default function CoParentingSchedule() {
                       variant="outline"
                       size="sm" 
                       className="border-[#6c54da]/30 text-[#2e1a87]" 
-                      onClick={() => setSelectedMonth(current => addMonths(current, 1))}
+                      onClick={() => setCustodyViewMonth(current => addMonths(current, 1))}
                     >
                       <span>Next</span>
                       <ChevronRight className="h-4 w-4 ml-1" />
@@ -625,127 +640,93 @@ export default function CoParentingSchedule() {
                   </div>
                 </div>
                 
-                {/* Custom styled calendar based on Week View */}
-                <div className="custom-calendar-wrapper">
-                  <div className="grid grid-cols-7 gap-1 mb-1 text-center">
-                    {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-                      <div key={`header-${day}-${index}`} className="bg-[#f5f0ff] py-2 rounded-t-md border border-[#6c54da]/20">
-                        <h3 className="font-bold text-sm text-[#2e1a87]">{day}</h3>
+                {/* Visual Custody Calendar (Fridge-friendly calendar) */}
+                <div className="custody-calendar">
+                  {/* Weekday headers */}
+                  <div className="grid grid-cols-7 gap-2 mb-2 text-center font-semibold">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+                      <div key={`header-${day}-${index}`} className="bg-gray-50 py-2 rounded text-gray-700 text-sm">
+                        {day}
                       </div>
                     ))}
                   </div>
-
-                  <DayPicker
-                    month={selectedMonth}
-                    onMonthChange={setSelectedMonth}
-                    modifiers={modifiers}
-                    modifiersClassNames={modifiersClassNames}
-                    showOutsideDays
-                    formatters={{
-                      formatCaption: () => null, // Hide default caption since we have our own
-                      formatWeekdayName: () => "" // Hide default weekday names since we have our own
-                    }}
-                    classNames={{
-                      months: "flex-1",
-                      month: "w-full",
-                      caption: "hidden", // Hide the caption
-                      head: "hidden", // Hide the default weekday header
-                      row: "grid grid-cols-7 gap-1 mb-1",
-                      cell: "min-h-[80px] p-0",
-                      day: "w-full h-full rounded-md overflow-hidden border hover:bg-gray-50 relative",
-                      day_today: "ring-2 ring-[#6c54da]"
-                    }}
-                    components={{
-                      Day: (props) => {
-                        const date = props.date;
-                        // Using getParentForDate function to determine if it's mom/dad day
-                        const parentForDay = getParentForDate(date);
-                        const isMom = parentForDay === "Sarah";
-                        const isDad = parentForDay === "Eric";
-                        const isTransition = determineIfTransitionDay(date);
-                        
-                        // Get any scheduled day info
-                        const dayEntry = scheduleDates.find(day => 
-                          isSameDay(day.fullDate, date)
-                        );
-                        
-                        return (
-                          <div 
-                            className={`
-                              relative h-full min-h-[80px] flex flex-col 
-                              ${isMom ? "border-pink-300 bg-pink-50" : ""}
-                              ${isDad ? "border-blue-300 bg-blue-50" : ""}
-                              ${!isMom && !isDad ? "border-gray-200 bg-white" : ""}
-                            `}
-                          >
-                            <div className="bg-white px-2 py-1 text-center border-b flex justify-between items-center">
-                              <span className="text-xs text-gray-500">{format(date, 'd')}</span>
-                              <h3 className="font-medium text-xs text-[#2e1a87]">
-                                {format(date, 'E').substring(0,3)}
-                              </h3>
-                            </div>
-                            <div className="p-2 text-center flex-1 flex flex-col items-center justify-center">
-                              {(isMom || isDad) && (
-                                <>
-                                  <div className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center mb-1
-                                    ${isMom ? "bg-pink-100" : "bg-blue-100"}
-                                  `}>
-                                    {isMom ? (
-                                      <Home className="h-6 w-6 text-pink-500" />
-                                    ) : (
-                                      <Home className="h-6 w-6 text-blue-500" />
-                                    )}
-                                  </div>
-                                  <p className="font-bold text-sm">
-                                    <span className={isMom ? "text-pink-600" : "text-blue-600"}>
-                                      {isMom ? "Mom" : "Dad"}
-                                    </span>
-                                  </p>
-                                  {isTransition && dayEntry?.dropoff !== "—" && (
-                                    <div className="mt-1">
-                                      <div className="bg-white rounded py-1 px-1 text-xs text-gray-600 shadow-sm border border-gray-100 tooltip" title={dayEntry?.dropoff}>
-                                        {dayEntry?.dropoff?.includes("school") ? (
-                                          <School className="h-3 w-3 text-gray-500 mx-auto" />
-                                        ) : dayEntry?.dropoff?.includes("pick") ? (
-                                          <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
-                                        ) : (
-                                          <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
-                                        )}
-                                      </div>
-                                    </div>
+                  
+                  {/* Calendar grid */}
+                  <div className="grid grid-cols-1 gap-2">
+                    {calendarWeeks.map((week, weekIndex) => (
+                      <div key={`week-${weekIndex}`} className="grid grid-cols-7 gap-2">
+                        {week.map((day, dayIndex) => {
+                          const dateStr = formatDateString(day);
+                          const dayInfo = getCustodyDayInfo(dateStr);
+                          const isExchange = dayInfo.exchange;
+                          const hasSchool = dayInfo.school;
+                          const isWithMom = dayInfo.parent === "Mom";
+                          const isWithDad = dayInfo.parent === "Dad";
+                          const isOutsideMonth = !isSameMonth(day, custodyViewMonth);
+                          
+                          return (
+                            <div 
+                              key={`day-${weekIndex}-${dayIndex}`} 
+                              className={`
+                                custody-day 
+                                ${isWithMom ? 'custody-day-mom' : ''}
+                                ${isWithDad ? 'custody-day-dad' : ''}
+                                ${isExchange ? 'custody-day-exchange' : ''}
+                                ${isOutsideMonth ? 'custody-day-outside-month' : ''}
+                              `}
+                            >
+                              <div className="custody-day-header">
+                                {format(day, 'EEE')}
+                              </div>
+                              <div className="custody-day-content">
+                                <div className="custody-day-date">
+                                  {format(day, 'd')}
+                                </div>
+                                <div className="custody-day-parent">
+                                  {isWithMom ? 'Mom' : 'Dad'}
+                                </div>
+                                <div className="custody-day-icon">
+                                  {isWithMom ? (
+                                    <Home className="h-5 w-5 text-pink-700" />
+                                  ) : (
+                                    <Home className="h-5 w-5 text-blue-700" />
                                   )}
-                                </>
-                              )}
+                                </div>
+                                {/* Indicators at the bottom */}
+                                <div className="custody-day-indicators">
+                                  {isExchange && (
+                                    <ArrowRightLeft className="h-3.5 w-3.5 text-amber-600" />
+                                  )}
+                                  {hasSchool && (
+                                    <School className="h-3.5 w-3.5 text-emerald-600" />
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      }
-                    }}
-                  />
-                </div>
-                
-                {/* Legend */}
-                <div className="mt-6 flex flex-wrap gap-6 justify-center bg-[#f9f7fe] p-4 rounded-lg border border-[#6c54da]/10">
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 bg-pink-100 border border-pink-300 rounded-md mr-2"></div>
-                    <span className="text-sm text-gray-700">Mom's House</span>
+                          );
+                        })}
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 bg-blue-100 border border-blue-300 rounded-md mr-2"></div>
-                    <span className="text-sm text-gray-700">Dad's House</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="flex items-center justify-center w-5 h-5 bg-white border border-gray-300 rounded-md mr-2">
-                      <ArrowRight className="h-3 w-3 text-gray-500" />
+                  
+                  {/* Legend */}
+                  <div className="custody-legend">
+                    <div className="custody-legend-item mom-legend">
+                      <Home className="h-4 w-4" />
+                      <span>Mom's House</span>
                     </div>
-                    <span className="text-sm text-gray-700">Exchange Day</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="flex items-center justify-center w-5 h-5 bg-white border border-gray-300 rounded-md mr-2">
-                      <School className="h-3 w-3 text-gray-500" />
+                    <div className="custody-legend-item dad-legend">
+                      <Home className="h-4 w-4" />
+                      <span>Dad's House</span>
                     </div>
-                    <span className="text-sm text-gray-700">School Pickup/Dropoff</span>
+                    <div className="custody-legend-item exchange-legend">
+                      <ArrowRightLeft className="h-4 w-4" />
+                      <span>Exchange Day</span>
+                    </div>
+                    <div className="custody-legend-item school-legend">
+                      <School className="h-4 w-4" />
+                      <span>School Pickup/Dropoff</span>
+                    </div>
                   </div>
                 </div>
               </div>
