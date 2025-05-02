@@ -348,128 +348,161 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Weekly Schedule</h2>
                 <p className="text-gray-600 text-sm">
-                  Kid-friendly calendar showing where I'll be each day
+                  Calendar showing where I'll be each day
                 </p>
               </div>
               
-              <div className="space-y-8">
-                {/* Interactive React DayPicker Calendar */}
-                <div className="bg-white border border-[#6c54da]/10 rounded-lg p-4 shadow-sm max-w-md mx-auto">
-                  <style>{css}</style>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-[#2e1a87] font-medium">
-                      {format(selectedMonth, 'MMMM yyyy')}
-                    </div>
-                    <div className="flex gap-1">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="h-7 w-7 p-0" 
-                        onClick={() => setSelectedMonth(current => addMonths(current, -1))}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="h-7 w-7 p-0" 
-                        onClick={() => setSelectedMonth(current => addMonths(current, 1))}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
+              {/* Enhanced Calendar View */}
+              <div className="bg-white border border-[#6c54da]/20 rounded-lg p-6 shadow-sm">
+                <style>{css}</style>
+                
+                {/* Month navigation */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="text-[#2e1a87] font-medium text-xl">
+                    {format(selectedMonth, 'MMMM yyyy')}
                   </div>
-                  
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="border-[#6c54da]/30 text-[#2e1a87]" 
+                      onClick={() => setSelectedMonth(current => addMonths(current, -1))}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" />
+                      <span>Previous</span>
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      size="sm" 
+                      className="border-[#6c54da]/30 text-[#2e1a87]" 
+                      onClick={() => setSelectedMonth(current => addMonths(current, 1))}
+                    >
+                      <span>Next</span>
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Custom styled calendar based on Week View */}
+                <div className="custom-calendar-wrapper">
+                  <div className="grid grid-cols-7 gap-1 mb-1 text-center">
+                    {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
+                      <div key={`header-${day}-${index}`} className="bg-[#f5f0ff] py-2 rounded-t-md border border-[#6c54da]/20">
+                        <h3 className="font-bold text-sm text-[#2e1a87]">{day}</h3>
+                      </div>
+                    ))}
+                  </div>
+
                   <DayPicker
                     month={selectedMonth}
                     onMonthChange={setSelectedMonth}
                     modifiers={modifiers}
                     modifiersClassNames={modifiersClassNames}
                     showOutsideDays
-                  />
-                  
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-                    <div className="flex items-center">
-                      <div className="w-4 h-4 bg-pink-200 rounded-sm mr-2"></div>
-                      <span className="text-sm text-gray-600">With Mom</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-4 h-4 bg-blue-200 rounded-sm mr-2"></div>
-                      <span className="text-sm text-gray-600">With Dad</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-4 h-4 bg-gradient-to-tr from-pink-200 to-blue-200 rounded-sm mr-2"></div>
-                      <span className="text-sm text-gray-600">Exchange Day</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Grid view for the month */}
-                <div className="space-y-4 mt-8">
-                  <h3 className="text-[#2e1a87] font-medium">Week View</h3>
-                  {/* Calendar Header - Days of Week */}
-                  <div className="grid grid-cols-7 gap-1 mb-1 text-center">
-                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
-                      <div key={`header-${day}-${index}`} className="bg-[#f5f0ff] py-2 rounded-t-md border border-[#6c54da]/20">
-                        <h3 className="font-bold text-sm text-[#2e1a87]">{day}</h3>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Week Grouping */}
-                  {[1, 2, 3, 4].map(weekNum => (
-                    <div key={weekNum} className="grid grid-cols-7 gap-1 mb-4">
-                      <div className="col-span-7 -mb-2 font-medium text-[#2e1a87]">Week {weekNum}</div>
-                      
-                      {/* Calendar Days - By Week */}
-                      {mockData.weeklySchedule
-                        .filter(day => day.week === weekNum)
-                        .map(day => (
+                    formatters={{
+                      formatCaption: () => null, // Hide default caption since we have our own
+                      formatWeekdayName: () => "" // Hide default weekday names since we have our own
+                    }}
+                    classNames={{
+                      months: "flex-1",
+                      month: "w-full",
+                      caption: "hidden", // Hide the caption
+                      head: "hidden", // Hide the default weekday header
+                      row: "grid grid-cols-7 gap-1 mb-1",
+                      cell: "min-h-[80px] p-0",
+                      day: "w-full h-full rounded-md overflow-hidden border hover:bg-gray-50 relative",
+                      day_today: "ring-2 ring-[#6c54da]"
+                    }}
+                    components={{
+                      Day: (props) => {
+                        const { date, activeModifiers } = props;
+                        const isMom = activeModifiers.mom;
+                        const isDad = activeModifiers.dad;
+                        const isTransition = activeModifiers.transition;
+                        
+                        // Get any scheduled day info
+                        const dayEntry = scheduleDates.find(day => 
+                          isSameDay(day.fullDate, date)
+                        );
+                        
+                        return (
                           <div 
-                            key={`${day.week}-${day.day}`} 
                             className={`
-                              rounded-md overflow-hidden shadow-sm border
-                              ${day.overnight === "Sarah" ? "border-pink-300 bg-pink-50" : "border-blue-300 bg-blue-50"}
+                              relative h-full min-h-[80px] flex flex-col 
+                              ${isMom ? "border-pink-300 bg-pink-50" : ""}
+                              ${isDad ? "border-blue-300 bg-blue-50" : ""}
+                              ${!isMom && !isDad ? "border-gray-200 bg-white" : ""}
                             `}
                           >
                             <div className="bg-white px-2 py-1 text-center border-b flex justify-between items-center">
-                              <span className="text-xs text-gray-500">{day.date}</span>
-                              <h3 className="font-medium text-xs text-[#2e1a87]">{day.day.substring(0,3)}</h3>
+                              <span className="text-xs text-gray-500">{format(date, 'd')}</span>
+                              <h3 className="font-medium text-xs text-[#2e1a87]">
+                                {format(date, 'E').substring(0,3)}
+                              </h3>
                             </div>
-                            <div className="p-2 text-center">
-                              <div className={`
-                                w-10 h-10 mx-auto rounded-full flex items-center justify-center mb-1
-                                ${day.overnight === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
-                              `}>
-                                {day.overnight === "Sarah" ? (
-                                  <Home className="h-6 w-6 text-pink-500" />
-                                ) : (
-                                  <Home className="h-6 w-6 text-blue-500" />
-                                )}
-                              </div>
-                              <p className="font-bold text-sm">
-                                <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
-                                  {day.overnight === "Sarah" ? "Mom" : "Dad"}
-                                </span>
-                              </p>
-                              {day.dropoff !== "—" && (
-                                <div className="mt-1">
-                                  <div className="bg-white rounded py-1 px-1 text-xs text-gray-600 shadow-sm border border-gray-100">
-                                    {day.dropoff.includes("school") ? (
-                                      <School className="h-3 w-3 text-gray-500 mx-auto" />
-                                    ) : day.dropoff.includes("pick") ? (
-                                      <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                            <div className="p-2 text-center flex-1 flex flex-col items-center justify-center">
+                              {(isMom || isDad) && (
+                                <>
+                                  <div className={`
+                                    w-10 h-10 rounded-full flex items-center justify-center mb-1
+                                    ${isMom ? "bg-pink-100" : "bg-blue-100"}
+                                  `}>
+                                    {isMom ? (
+                                      <Home className="h-6 w-6 text-pink-500" />
                                     ) : (
-                                      <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                                      <Home className="h-6 w-6 text-blue-500" />
                                     )}
                                   </div>
-                                </div>
+                                  <p className="font-bold text-sm">
+                                    <span className={isMom ? "text-pink-600" : "text-blue-600"}>
+                                      {isMom ? "Mom" : "Dad"}
+                                    </span>
+                                  </p>
+                                  {isTransition && dayEntry?.dropoff !== "—" && (
+                                    <div className="mt-1">
+                                      <div className="bg-white rounded py-1 px-1 text-xs text-gray-600 shadow-sm border border-gray-100 tooltip" title={dayEntry?.dropoff}>
+                                        {dayEntry?.dropoff?.includes("school") ? (
+                                          <School className="h-3 w-3 text-gray-500 mx-auto" />
+                                        ) : dayEntry?.dropoff?.includes("pick") ? (
+                                          <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                                        ) : (
+                                          <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
                               )}
                             </div>
                           </div>
-                      ))}
+                        );
+                      }
+                    }}
+                  />
+                </div>
+                
+                {/* Legend */}
+                <div className="mt-6 flex flex-wrap gap-6 justify-center bg-[#f9f7fe] p-4 rounded-lg border border-[#6c54da]/10">
+                  <div className="flex items-center">
+                    <div className="w-5 h-5 bg-pink-100 border border-pink-300 rounded-md mr-2"></div>
+                    <span className="text-sm text-gray-700">Mom's House</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-5 h-5 bg-blue-100 border border-blue-300 rounded-md mr-2"></div>
+                    <span className="text-sm text-gray-700">Dad's House</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex items-center justify-center w-5 h-5 bg-white border border-gray-300 rounded-md mr-2">
+                      <ArrowRight className="h-3 w-3 text-gray-500" />
                     </div>
-                  ))}
+                    <span className="text-sm text-gray-700">Exchange Day</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex items-center justify-center w-5 h-5 bg-white border border-gray-300 rounded-md mr-2">
+                      <School className="h-3 w-3 text-gray-500" />
+                    </div>
+                    <span className="text-sm text-gray-700">School Pickup/Dropoff</span>
+                  </div>
                 </div>
               </div>
             </TabsContent>
