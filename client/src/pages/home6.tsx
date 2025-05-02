@@ -115,79 +115,79 @@ export default function Home6() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Welcome banner */}
-        <div className="rounded-lg bg-[#2e1a87] p-7 mb-6 text-white relative overflow-hidden">
+        {/* Welcome banner - more compact design with left-aligned icons */}
+        <div className="rounded-lg bg-[#2e1a87] p-5 mb-6 text-white relative overflow-hidden">
           <div className="relative z-10">
-            <h1 className="text-xl font-medium mb-2">Welcome to Your Family's Parenting Plan</h1>
-            <p className="text-white/90 text-sm mb-6">
+            <h1 className="text-xl font-medium mb-1">Welcome to Your Family's Parenting Plan</h1>
+            <p className="text-white/90 text-sm mb-3">
               To begin your course, please complete the items below.
             </p>
             
-            {/* Progress tracker with icons - improved design */}
-            <div className="w-3/5 mx-auto mb-8">
-              <div className="relative flex items-center justify-between">
-                {/* Line connecting all steps - thicker and more visible */}
-                <div className="absolute left-6 right-6 h-1 bg-indigo-600/30"></div>
+            {/* Progress tracker with icons - left aligned */}
+            <div className="w-2/3 mb-4">
+              <div className="relative flex items-center gap-6">
+                {/* Line connecting all steps */}
+                <div className="absolute left-6 right-0 h-1 bg-indigo-600/30"></div>
                 
                 {/* Step 1: Co-Parent Registration */}
-                <div className="relative z-10 flex flex-col items-center">
+                <div className="relative z-10">
                   {/* Completed/active step indicator */}
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
                     ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
                       ? "bg-green-500 text-white ring-2 ring-white" 
                       : "bg-white/90 text-[#2e1a87]"
                     }`}>
                     {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-5 w-5" />
-                      : <Users className="h-5 w-5" />
+                      ? <CheckCircle className="h-4 w-4" />
+                      : <Users className="h-4 w-4" />
                     }
                   </div>
-                  <span className="text-xs font-medium text-white mt-2">Co-Parent</span>
+                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Co-Parent</span>
                 </div>
                 
                 {/* Step 2: Waivers */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md
+                <div className="relative z-10">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
                     ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
                       ? "bg-green-500 text-white ring-2 ring-white" 
                       : "bg-white/90 text-[#2e1a87]"
                     }`}>
                     {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-5 w-5" />
-                      : <FileText className="h-5 w-5" />
+                      ? <CheckCircle className="h-4 w-4" />
+                      : <FileText className="h-4 w-4" />
                     }
                   </div>
-                  <span className="text-xs font-medium text-white mt-2">Waivers</span>
+                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Waivers</span>
                 </div>
                 
                 {/* Step 3: Holiday Preferences */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md
+                <div className="relative z-10">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
                     ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
                       ? "bg-green-500 text-white ring-2 ring-white" 
                       : "bg-white/90 text-[#2e1a87]"
                     }`}>
                     {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-5 w-5" />
-                      : <CalendarDays className="h-5 w-5" />
+                      ? <CheckCircle className="h-4 w-4" />
+                      : <CalendarDays className="h-4 w-4" />
                     }
                   </div>
-                  <span className="text-xs font-medium text-white mt-2">Holidays</span>
+                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Holidays</span>
                 </div>
                 
                 {/* Step 4: Payment */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md
+                <div className="relative z-10">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
                     ${paymentStatus 
                       ? "bg-green-500 text-white ring-2 ring-white" 
                       : "bg-white/90 text-[#2e1a87]"
                     }`}>
                     {paymentStatus 
-                      ? <CheckCircle className="h-5 w-5" />
-                      : <CreditCard className="h-5 w-5" />
+                      ? <CheckCircle className="h-4 w-4" />
+                      : <CreditCard className="h-4 w-4" />
                     }
                   </div>
-                  <span className="text-xs font-medium text-white mt-2">Payment</span>
+                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Payment</span>
                 </div>
               </div>
             </div>
@@ -200,20 +200,19 @@ export default function Home6() {
                 <Button
                   disabled={!paymentStatus}
                   className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-md"
-                  size="lg"
+                  size="sm"
                 >
                   Start Course <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <p className="text-white/80 text-xs mt-1.5">
+                <p className="text-white/80 text-xs mt-1">
                   All items must be completed before starting.
                 </p>
               </div>
             </div>
           </div>
           
-          {/* Improved background gradient */}
-          <div className="absolute right-0 bottom-0 w-80 h-80 bg-indigo-500/20 rounded-full -mr-32 -mb-32 blur-sm"></div>
-          <div className="absolute left-1/2 top-0 w-40 h-40 bg-indigo-400/10 rounded-full -mt-20 blur-sm"></div>
+          {/* Simplified background */}
+          <div className="absolute right-0 bottom-0 w-64 h-64 bg-indigo-500/20 rounded-full -mr-32 -mb-32"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
