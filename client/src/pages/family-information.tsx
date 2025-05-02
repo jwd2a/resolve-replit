@@ -40,26 +40,37 @@ const US_STATES = [
   "District of Columbia", "Puerto Rico", "U.S. Virgin Islands"
 ];
 
-// List of holidays for parenting plan
-const US_HOLIDAYS = [
-  { id: "new_years", name: "New Year's Day" },
-  { id: "mlk_day", name: "Martin Luther King Jr. Day" },
-  { id: "presidents_day", name: "Presidents' Day" },
-  { id: "memorial_day", name: "Memorial Day" },
-  { id: "juneteenth", name: "Juneteenth" },
-  { id: "independence_day", name: "Independence Day" },
-  { id: "labor_day", name: "Labor Day" },
-  { id: "columbus_day", name: "Columbus Day / Indigenous Peoples' Day" },
-  { id: "veterans_day", name: "Veterans Day" },
-  { id: "thanksgiving", name: "Thanksgiving" },
-  { id: "christmas_eve", name: "Christmas Eve" },
-  { id: "christmas", name: "Christmas Day" },
-  { id: "new_years_eve", name: "New Year's Eve" },
-  { id: "easter", name: "Easter" },
-  { id: "halloween", name: "Halloween" },
-  { id: "valentines", name: "Valentine's Day" },
-  { id: "mothers_day", name: "Mother's Day" },
-  { id: "fathers_day", name: "Father's Day" },
+// Categories of holidays for parenting plan
+const HOLIDAY_CATEGORIES = [
+  {
+    title: "Major U.S. Holidays",
+    holidays: [
+      { id: "new_years", name: "New Year's Day" },
+      { id: "mlk_day", name: "Martin Luther King Jr. Day" },
+      { id: "presidents_day", name: "Presidents' Day" },
+      { id: "memorial_day", name: "Memorial Day" },
+      { id: "independence_day", name: "Independence Day" },
+      { id: "labor_day", name: "Labor Day" },
+      { id: "columbus_day", name: "Columbus Day / Indigenous Peoples' Day" },
+      { id: "veterans_day", name: "Veterans Day" },
+      { id: "thanksgiving", name: "Thanksgiving" },
+      { id: "christmas", name: "Christmas" }
+    ]
+  },
+  {
+    title: "Major Religious Holidays",
+    holidays: [
+      { id: "easter", name: "Easter" },
+      { id: "hanukkah", name: "Hanukkah" },
+      { id: "passover", name: "Passover" },
+      { id: "yom_kippur", name: "Yom Kippur" },
+      { id: "rosh_hashanah", name: "Rosh Hashanah" },
+      { id: "ramadan", name: "Ramadan" },
+      { id: "eid_al_fitr", name: "Eid al-Fitr" },
+      { id: "eid_al_adha", name: "Eid al-Adha" },
+      { id: "diwali", name: "Diwali" }
+    ]
+  }
 ];
 
 // Form validation schemas
@@ -100,6 +111,9 @@ export default function FamilyInformation() {
   const [selectedHolidays, setSelectedHolidays] = useState<string[]>([
     "thanksgiving", "christmas", "new_years", "easter", "independence_day"
   ]);
+  
+  // Other holidays state
+  const [otherHolidays, setOtherHolidays] = useState("");
   
   // Initialize form hooks
   const userForm = useForm({
@@ -707,29 +721,64 @@ export default function FamilyInformation() {
             
             <TabsContent value="holidays" className="space-y-6">
               <div className="space-y-6">
-                <div className="border rounded-lg p-5">
-                  <h3 className="text-base font-medium text-[#2e1a87] mb-4">Important Holidays</h3>
-                  
-                  <p className="text-sm text-gray-600 mb-4">
-                    Select the holidays you want to include in your parenting plan:
+                <div className="p-5">
+                  <h3 className="text-base font-semibold text-[#2e1a87] mb-4">Holiday Preferences</h3>
+                  <p className="text-sm text-gray-600 mb-6">
+                    Select which holidays matter to your family. This information will be used later in the course.
                   </p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {US_HOLIDAYS.map((holiday) => (
-                      <div key={holiday.id} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={holiday.id} 
-                          checked={selectedHolidays.includes(holiday.id)}
-                          onCheckedChange={() => toggleHoliday(holiday.id)}
-                        />
-                        <Label
-                          htmlFor={holiday.id}
-                          className="text-sm font-medium text-gray-700 cursor-pointer"
-                        >
-                          {holiday.name}
-                        </Label>
+                  {HOLIDAY_CATEGORIES.map((category) => (
+                    <div key={category.title} className="mb-6">
+                      <h4 className="font-medium text-sm mb-3">{category.title}</h4>
+                      <div className="space-y-2">
+                        {category.holidays.map((holiday) => {
+                          const isSelected = selectedHolidays.includes(holiday.id);
+                          return (
+                            <div 
+                              key={holiday.id} 
+                              className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-[#f5f0ff]' : 'hover:bg-gray-50'}`}
+                              onClick={() => toggleHoliday(holiday.id)}
+                            >
+                              <Checkbox 
+                                id={holiday.id} 
+                                checked={isSelected}
+                                onCheckedChange={() => toggleHoliday(holiday.id)}
+                                className="mr-3"
+                              />
+                              <Label
+                                htmlFor={holiday.id}
+                                className="text-sm cursor-pointer w-full"
+                              >
+                                {holiday.name}
+                              </Label>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
+                    </div>
+                  ))}
+                  
+                  <div className="mt-6">
+                    <Label htmlFor="otherHolidays" className="text-sm font-medium mb-2 block">
+                      Other family-specific holidays or traditions
+                    </Label>
+                    <Textarea 
+                      id="otherHolidays"
+                      placeholder="Enter any additional family-specific holidays or traditions"
+                      value={otherHolidays}
+                      onChange={(e) => setOtherHolidays(e.target.value)}
+                      className="resize-none min-h-[100px]"
+                    />
+                  </div>
+                  
+                  <div className="mt-6">
+                    <Button 
+                      type="button" 
+                      className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
+                      onClick={onHolidaysSubmit}
+                    >
+                      Save Preferences
+                    </Button>
                   </div>
                 </div>
                 
@@ -744,8 +793,8 @@ export default function FamilyInformation() {
                   </Button>
                   <Button 
                     type="button" 
-                    className="bg-[#2e1a87] hover:bg-[#25156d]"
-                    onClick={onHolidaysSubmit}
+                    variant="outline"
+                    onClick={() => setActiveTab("jurisdiction")}
                   >
                     Next
                     <ArrowRight className="ml-2 h-4 w-4" />
