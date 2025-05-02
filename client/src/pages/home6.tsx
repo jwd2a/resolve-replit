@@ -31,7 +31,10 @@ export default function Home6() {
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   
   // State for the Course Session Status Block
-  const [sessionStatus, setSessionStatus] = useState(0); // 0: No session, 1: Proposed, 2: Scheduled
+  const [sessionState, setSessionState] = useState<SessionState>('none'); // 'none', 'proposed', 'scheduled'
+  const [sessionDate, setSessionDate] = useState<Date | undefined>(
+    new Date(new Date().setDate(new Date().getDate() + 10)) // Example date 10 days in future
+  );
   
   // Step states for the badge-style progress tracker with larger icons
   const [steps, setSteps] = useState([
@@ -178,9 +181,13 @@ export default function Home6() {
     },
   ];
 
-  // Function to cycle through session states (0: No session, 1: Proposed, 2: Scheduled)
-  const toggleSessionStatus = () => {
-    setSessionStatus((prevStatus) => (prevStatus + 1) % 3);
+  // Function to cycle through session states ('none', 'proposed', 'scheduled')
+  const toggleSessionState = () => {
+    setSessionState((prevState) => {
+      if (prevState === 'none') return 'proposed';
+      if (prevState === 'proposed') return 'scheduled';
+      return 'none';
+    });
   };
 
   const handleCompletePayment = () => {
@@ -255,55 +262,18 @@ export default function Home6() {
             
             {/* Course Session Status Block - new component */}
             <div 
-              className="flex-shrink-0 rounded-md px-4 py-3 cursor-pointer transition-all duration-200 h-auto"
-              onClick={toggleSessionStatus}
+              className="flex-shrink-0 rounded-md cursor-pointer transition-all duration-200 h-auto"
+              onClick={toggleSessionState}
             >
-              {sessionStatus === 0 && (
-                <div className="bg-gray-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-white/10">
-                  <div className="bg-white/20 p-1.5 rounded-full">
-                    <Calendar className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <span className="block text-white text-xs font-medium">No course session proposed</span>
-                    <span className="block text-white/70 text-[10px]">Select a date to propose a session</span>
-                    <button className="mt-1.5 bg-white/20 hover:bg-white/30 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
-                      Propose Time <ArrowRight className="ml-1 h-2.5 w-2.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {sessionStatus === 1 && (
-                <div className="bg-amber-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-amber-200/10">
-                  <div className="bg-amber-100/20 p-1.5 rounded-full">
-                    <Clock className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <span className="block text-white text-xs font-medium">Session Proposed</span>
-                    <span className="block text-white/90 text-[10px] font-medium">Friday, April 12 at 3:00 PM</span>
-                    <span className="block text-white/70 text-[10px]">Waiting for co-parent to respond</span>
-                    <button className="mt-1.5 bg-amber-100/30 hover:bg-amber-100/40 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
-                      Change Proposal <Edit className="ml-1 h-2.5 w-2.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {sessionStatus === 2 && (
-                <div className="bg-green-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-green-200/10">
-                  <div className="bg-green-100/20 p-1.5 rounded-full">
-                    <CheckCircle className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <span className="block text-white text-xs font-medium">Course Scheduled</span>
-                    <span className="block text-white/90 text-[10px] font-medium">Friday, April 12 at 3:00 PM</span>
-                    <span className="block text-white/70 text-[10px]">In 5 days</span>
-                    <button className="mt-1.5 bg-green-100/30 hover:bg-green-100/40 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
-                      Reschedule <Calendar className="ml-1 h-2.5 w-2.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
+              <CourseSessionStatusBlock 
+                state={sessionState}
+                sessionDate={sessionDate}
+                sessionTime="3:00 PM"
+                daysRemaining={sessionState === 'scheduled' ? 2 : undefined}
+                onPropose={toggleSessionState}
+                onProposeNew={toggleSessionState}
+                onAccept={toggleSessionState}
+              />
             </div>
             
             {/* Start Course button aligned with badges */}
