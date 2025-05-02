@@ -280,7 +280,7 @@ export default function Home6() {
             
             {/* Start Course button aligned with badges */}
             <div className="flex-shrink-0 flex flex-col items-center mt-2 lg:mt-0">
-              <Link href="/course">
+              <Link href="/co-parent-verification">
                 <Button
                   disabled={!steps.every(step => step.completed)}
                   className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-5 h-10 text-sm font-medium whitespace-nowrap w-44"

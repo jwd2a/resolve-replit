@@ -94,8 +94,8 @@ export default function CoParentVerification() {
     setTimeout(() => {
       setVerifying(false);
       
-      // For this demo, we'll consider "123456" as the valid code
-      if (code === "123456") {
+      // Accept any 6-digit code for now
+      if (code.length === 6 && /^\d{6}$/.test(code)) {
         setIsSuccess(true);
         toast({
           title: "Verification Successful",
