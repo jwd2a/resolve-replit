@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
+import { CourseSessionStatusBlock, SessionState } from "@/components/CourseSessionStatusBlock";
 import {
   ArrowRight,
   CheckCircle,
