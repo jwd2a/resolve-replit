@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { NavigationMenu } from "@/components/NavigationMenu";
@@ -25,6 +25,60 @@ export default function Home6() {
   const { user } = useAuth();
   const { paymentStatus, completePayment } = usePaymentStatus();
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  
+  // Step states for the new badge-style progress tracker
+  const [steps, setSteps] = useState([
+    {
+      id: "family-info",
+      label: "Family Info",
+      icon: <Home className="h-5 w-5" />,
+      completed: true
+    },
+    {
+      id: "co-parent",
+      label: "Co-Parent",
+      icon: <Users className="h-5 w-5" />,
+      completed: true
+    },
+    {
+      id: "waivers",
+      label: "Waivers",
+      icon: <FileText className="h-5 w-5" />,
+      completed: false
+    },
+    {
+      id: "holidays",
+      label: "Holidays",
+      icon: <CalendarDays className="h-5 w-5" />,
+      completed: false
+    },
+    {
+      id: "payment",
+      label: "Payment",
+      icon: <CreditCard className="h-5 w-5" />,
+      completed: paymentStatus
+    }
+  ]);
+  
+  // Toggle function for the click-to-toggle interaction
+  const toggleStepStatus = (stepId: string) => {
+    setSteps(steps.map(step => 
+      step.id === stepId 
+        ? { ...step, completed: !step.completed } 
+        : step
+    ));
+  };
+  
+  // Update the Payment step when paymentStatus changes
+  useEffect(() => {
+    setSteps(prevSteps => 
+      prevSteps.map(step => 
+        step.id === "payment" 
+          ? { ...step, completed: paymentStatus } 
+          : step
+      )
+    );
+  }, [paymentStatus]);
 
   // Mock data for family information
   const parents = [
@@ -147,114 +201,50 @@ export default function Home6() {
             </div>
           </div>
           
-          {/* New two-row layout that makes alignment easier */}
+          {/* New modern badge-style progress tracker with click-to-toggle functionality */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-            {/* Step indicators in the first 3 columns */}
-            <div className="col-span-1 md:col-span-3 flex items-center justify-between md:justify-start space-x-6">
-              {/* Step 1: Family Info */}
-              <div className="relative flex flex-col items-center z-10">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                  ${true 
-                    ? "bg-green-500 text-white border border-white/20" 
-                    : "bg-white/10 text-white/80 border border-white/30"
-                  }`}
+            {/* Step badges in the first 3 columns */}
+            <div className="col-span-1 md:col-span-3 flex items-center justify-between md:justify-start space-x-4">
+              {steps.map((step) => (
+                <div 
+                  key={step.id} 
+                  className="relative flex flex-col items-center z-10 cursor-pointer" 
+                  onClick={() => toggleStepStatus(step.id)}
                 >
-                  {true 
-                    ? <CheckCircle className="h-4 w-4" />
-                    : <Home className="h-4 w-4" />
-                  }
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200
+                    ${step.completed 
+                      ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
+                      : "bg-white/10 text-[#2e1a87] border border-white shadow-sm"
+                    }`}
+                  >
+                    {step.icon}
+                  </div>
+                  <span className="text-xs text-white mt-1 text-center whitespace-nowrap font-medium">
+                    {step.label}
+                  </span>
+                  <span className={`text-[10px] mt-0.5 text-center whitespace-nowrap
+                    ${step.completed 
+                      ? "text-white/90 font-medium" 
+                      : "text-white/75"
+                    }`}
+                  >
+                    {step.completed ? "Completed" : "Pending"}
+                  </span>
                 </div>
-                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Family Info</span>
-              </div>
-              
-              {/* Step 2: Co-Parent Registration */}
-              <div className="relative flex flex-col items-center z-10">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                  ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                    ? "bg-green-500 text-white border border-white/20" 
-                    : "bg-white/10 text-white/80 border border-white/30"
-                  }`}
-                >
-                  {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                    ? <CheckCircle className="h-4 w-4" />
-                    : <Users className="h-4 w-4" />
-                  }
-                </div>
-                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Co-Parent</span>
-              </div>
-              
-              {/* Step 3: Waivers */}
-              <div className="relative flex flex-col items-center z-10">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                  ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                    ? "bg-green-500 text-white border border-white/20" 
-                    : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
-                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                      : "bg-white/10 text-white/80 border border-white/30"
-                  }`}
-                >
-                  {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                    ? <CheckCircle className="h-4 w-4" />
-                    : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
-                      ? <Clock className="h-4 w-4" />
-                      : <FileText className="h-4 w-4" />
-                  }
-                </div>
-                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Waivers</span>
-              </div>
-              
-              {/* Step 4: Holiday Preferences */}
-              <div className="relative flex flex-col items-center z-10">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                  ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                    ? "bg-green-500 text-white border border-white/20" 
-                    : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
-                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                      : "bg-white/10 text-white/80 border border-white/30"
-                  }`}
-                >
-                  {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                    ? <CheckCircle className="h-4 w-4" />
-                    : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
-                      ? <Clock className="h-4 w-4" />
-                      : <CalendarDays className="h-4 w-4" />
-                  }
-                </div>
-                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Holidays</span>
-              </div>
-              
-              {/* Step 5: Payment */}
-              <div className="relative flex flex-col items-center z-10">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                  ${paymentStatus 
-                    ? "bg-green-500 text-white border border-white/20" 
-                    : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
-                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                      : "bg-white/10 text-white/80 border border-white/30"
-                  }`}
-                >
-                  {paymentStatus 
-                    ? <CheckCircle className="h-4 w-4" />
-                    : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
-                      ? <Clock className="h-4 w-4" />
-                      : <CreditCard className="h-4 w-4" />
-                  }
-                </div>
-                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Payment</span>
-              </div>
+              ))}
             </div>
             
             {/* Start Course button in the last column */}
             <div className="col-span-1 flex items-center justify-center md:justify-end">
               <div>
                 <Button
-                  disabled={!paymentStatus}
+                  disabled={!steps.every(step => step.completed)}
                   className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-4 h-9 text-sm font-medium whitespace-nowrap"
                   size="sm"
                 >
                   Start Course <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
-                {!paymentStatus && (
+                {!steps.every(step => step.completed) && (
                   <p className="text-white/70 text-[10px] mt-1 flex items-center">
                     <LockIcon className="h-2.5 w-2.5 mr-0.5" />
                     All steps must be completed
