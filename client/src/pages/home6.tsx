@@ -448,7 +448,7 @@ export default function Home6() {
                   <div className="flex items-center justify-between pl-3">
                     <div>
                       <p className="text-xs font-medium text-gray-500 mb-1">Module 5</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Introduction to Final Considerations</h3>
+                      <h3 className="text-[#2e1a87] font-semibold">Final Considerations</h3>
                     </div>
                     <div className="text-gray-400 group-hover:text-[#2e1a87]">
                       <ArrowRight className="h-5 w-5" />
