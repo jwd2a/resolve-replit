@@ -19,6 +19,7 @@ import {
   Check,
   CalendarDays,
   CreditCard,
+  PlusCircle,
 } from "lucide-react";
 
 export default function Home6() {
@@ -376,67 +377,91 @@ export default function Home6() {
               </div>
             </div>
 
-            {/* Family Information section */}
+            {/* Course Outline section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Family Information</h2>
-                <Button variant="ghost" size="sm" className="h-8 gap-1">
-                  <Edit className="h-4 w-4" />
-                  Edit
-                </Button>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg font-medium text-gray-900">Course Outline</h2>
+                <Link href="/course">
+                  <Button variant="ghost" size="sm" className="h-8 gap-1">
+                    <ExternalLink className="h-4 w-4" />
+                    View Full Course
+                  </Button>
+                </Link>
               </div>
 
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-3">Parents</h3>
-                  <div className="space-y-3">
-                    {parents.map((parent) => (
-                      <div key={parent.id} className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white ${
-                            parent.status === "Active" ? "bg-green-500" : "bg-amber-400"
-                          }`}>
-                            {parent.initials}
-                          </div>
-                          <span className="ml-3 text-sm">{parent.name}</span>
-                        </div>
-                        <div className="flex items-center">
-                          {parent.status === "Active" ? (
-                            <span className="flex items-center text-xs text-green-600">
-                              <CheckCircle className="mr-1 h-3 w-3" />
-                              Active
-                            </span>
-                          ) : (
-                            <span className="text-xs text-amber-500">Pending</span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+              <div className="space-y-3">
+                {/* Module 1 */}
+                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">Module 1</p>
+                      <h3 className="text-[#2e1a87] font-semibold">Welcome to Resolve</h3>
+                    </div>
+                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
                   </div>
-                  
-                  {parents.some(p => p.status === "Pending") && (
-                    <Button variant="ghost" size="sm" className="mt-2 text-xs text-blue-600">
-                      Resend Invitation
-                    </Button>
-                  )}
                 </div>
 
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-3">Children</h3>
-                  <div className="space-y-3">
-                    {children.map((child) => (
-                      <div key={child.id} className="flex items-center">
-                        <div className="w-9 h-9 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
-                          {child.initials}
-                        </div>
-                        <span className="ml-3 text-sm">{child.name}</span>
-                        <span className="ml-2 text-xs text-gray-500">
-                          ({child.age} years old)
-                        </span>
-                      </div>
-                    ))}
+                {/* Module 2 */}
+                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">Module 2</p>
+                      <h3 className="text-[#2e1a87] font-semibold">Parental Responsibility and Decision Making</h3>
+                    </div>
+                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
                   </div>
                 </div>
+
+                {/* Module 3 */}
+                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">Module 3</p>
+                      <h3 className="text-[#2e1a87] font-semibold">Timesharing Schedule</h3>
+                    </div>
+                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Module 4 */}
+                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">Module 4</p>
+                      <h3 className="text-[#2e1a87] font-semibold">Educational Decisions</h3>
+                    </div>
+                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Module 5 */}
+                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100 relative overflow-hidden">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#2e1a87]"></div>
+                  <div className="flex items-center justify-between pl-3">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">Module 5</p>
+                      <h3 className="text-[#2e1a87] font-semibold">Introduction to Final Considerations</h3>
+                    </div>
+                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-5 pt-4 border-t border-gray-100">
+                <p className="text-sm text-gray-500">
+                  Progress through all five modules to complete your comprehensive parenting plan. 
+                  Each module covers key aspects of co-parenting arrangements.
+                </p>
               </div>
             </div>
           </div>
