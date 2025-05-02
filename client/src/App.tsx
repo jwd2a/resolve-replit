@@ -21,6 +21,11 @@ import Home5 from "@/pages/home5";
 import Home6 from "@/pages/home6";
 import CoParentVerification from "@/pages/co-parent-verification";
 import CoParentingSchedule from "@/pages/co-parenting-schedule";
+import FamilyInformation from "@/pages/family-information";
+import CoParentInvitation from "@/pages/co-parent-invitation";
+import WaiversAndAgreements from "@/pages/waivers-and-agreements";
+import HolidayPreferences from "@/pages/holiday-preferences";
+import ScheduleCourse from "@/pages/schedule-course";
 import AITestPage from "@/pages/ai-test-page";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
@@ -61,6 +66,11 @@ function Router() {
       <Route path="/home6" component={Home6} />
       <Route path="/co-parent-verification" component={CoParentVerification} />
       <Route path="/co-parenting-schedule" component={CoParentingSchedule} />
+      <Route path="/family-information" component={FamilyInformation} />
+      <Route path="/co-parent-invitation" component={CoParentInvitation} />
+      <Route path="/waivers-and-agreements" component={WaiversAndAgreements} />
+      <Route path="/holiday-preferences" component={HolidayPreferences} />
+      <Route path="/schedule-course" component={ScheduleCourse} />
       <Route path="/course" component={Course} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />

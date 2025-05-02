@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { NavigationMenu } from "@/components/NavigationMenu";
@@ -312,25 +313,26 @@ export default function Home6() {
                         </div>
                         
                         <div className="flex-shrink-0 flex flex-col items-end">
-                          <Button
-                            variant="link"
-                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
-                            onClick={() => {
-                              if (item.id === "family-info") {
-                                window.location.href = "/family-information";
-                              } else if (item.id === "co-parent") {
-                                window.location.href = "/co-parent-invitation";
-                              } else if (item.id === "waivers") {
-                                window.location.href = "/waivers-and-agreements";
-                              } else if (item.id === "holidays") {
-                                window.location.href = "/holiday-preferences";
-                              } else if (item.id === "schedule") {
-                                window.location.href = "/schedule-course";
-                              }
-                            }}
+                          <Link 
+                            href={
+                              item.id === "family-info" 
+                                ? "/family-information" 
+                                : item.id === "co-parent" 
+                                  ? "/co-parent-invitation" 
+                                  : item.id === "waivers" 
+                                    ? "/waivers-and-agreements" 
+                                    : item.id === "holidays" 
+                                      ? "/holiday-preferences" 
+                                      : "/schedule-course"
+                            }
                           >
-                            {item.action} <ArrowRight className="ml-1 h-3 w-3" />
-                          </Button>
+                            <Button
+                              variant="link"
+                              className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
+                            >
+                              {item.action} <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                       
