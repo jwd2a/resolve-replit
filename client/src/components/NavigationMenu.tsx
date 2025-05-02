@@ -152,41 +152,11 @@ export function NavigationMenu() {
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
-                <Link href={onboarding6stepRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding (6-Step)</span>
-                    {isActive(onboarding6stepRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
                 <Link href={onboarding4stepRoute.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Settings size={16} className="mr-2 text-[#6c54da]" />
                     <span>Onboarding (4-Step)</span>
                     {isActive(onboarding4stepRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={onboarding3stepRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding (3-Step)</span>
-                    {isActive(onboarding3stepRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={onboarding2Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Beta Test Onboarding</span>
-                    {isActive(onboarding2Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
