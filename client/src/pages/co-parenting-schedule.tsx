@@ -5,13 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Download, Printer, Calendar, Gift, Snowflake, Flower, Sun, AlertTriangle, 
-  Home, School, Utensils, Moon, Heart, Star, ArrowRight
+  Home, School, Utensils, Moon, Heart, Star, ArrowRight, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { NavigationMenu } from "@/components/NavigationMenu";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { PrintStyles, PrintButton } from "@/styles/printStyles";
+import { DayPicker } from 'react-day-picker';
+import { format, addMonths, isSameMonth, isSameDay, parseISO, addDays } from 'date-fns';
 
 // Mock data - replace with actual data from the parenting plan
 const mockData = {
@@ -93,7 +94,100 @@ export default function CoParentingSchedule() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("weekly");
-  const [kidFriendly, setKidFriendly] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  
+  // Define custom CSS classes for the react-day-picker
+  const css = `
+  .rdp {
+    --rdp-cell-size: 40px;
+    --rdp-accent-color: #6c54da;
+    --rdp-background-color: #f5f0ff;
+    margin: 0;
+  }
+  .rdp-day_selected, .rdp-day_selected:focus-visible, .rdp-day_selected:hover {
+    background-color: var(--rdp-accent-color);
+    color: white;
+  }
+  .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+    background-color: #f5f0ff;
+  }
+  .schedule-mom {
+    background-color: rgba(244, 114, 182, 0.2);
+    border-radius: 0;
+  }
+  .schedule-dad {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-radius: 0;
+  }
+  .transition-day {
+    position: relative;
+    overflow: hidden;
+  }
+  .transition-day::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(244, 114, 182, 0.2) 0%, rgba(244, 114, 182, 0.2) 50%, rgba(59, 130, 246, 0.2) 50%, rgba(59, 130, 246, 0.2) 100%);
+    z-index: -1;
+  }
+  `;
+  
+  // Convert string dates to real dates for the calendar
+  const scheduleDates = mockData.weeklySchedule.map(day => {
+    // For demo purposes, we'll use the current month and year
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    // Use the date string as the day of month (simplified for the example)
+    const dayNum = parseInt(day.date);
+    return {
+      ...day,
+      fullDate: new Date(year, month, dayNum)
+    };
+  });
+  
+  // Function to determine which parent has the child on a given date
+  const getParentForDate = (date: Date) => {
+    const dayEntry = scheduleDates.find(day => 
+      isSameDay(day.fullDate, date)
+    );
+    
+    if (dayEntry) {
+      return dayEntry.overnight;
+    }
+    
+    // Default pattern for days not explicitly defined
+    // This is a simplified example - real app would have more complex logic
+    const dayOfWeek = date.getDay();
+    // Monday, Tuesday, Friday, Saturday with mom
+    if ([1, 2, 5, 6].includes(dayOfWeek)) {
+      return "Sarah";
+    }
+    // Wednesday, Thursday, Sunday with dad
+    return "Eric";
+  };
+  
+  // Modifiers for the DayPicker to highlight days by parent
+  const modifiers = {
+    mom: (date: Date) => getParentForDate(date) === "Sarah",
+    dad: (date: Date) => getParentForDate(date) === "Eric",
+    transition: (date: Date) => {
+      // Days with dropoffs/exchanges
+      const dayEntry = scheduleDates.find(day => 
+        isSameDay(day.fullDate, date)
+      );
+      return dayEntry?.dropoff !== "—" && dayEntry?.dropoff !== undefined;
+    }
+  };
+  
+  const modifiersClassNames = {
+    mom: 'schedule-mom',
+    dad: 'schedule-dad',
+    transition: 'transition-day'
+  };
   
   if (!mockData.isPlanComplete) {
     return (
@@ -208,33 +302,19 @@ export default function CoParentingSchedule() {
               View your family's parenting time by category. You can download or print any section.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-start md:items-center gap-3 no-print">
-            <div className="flex items-center gap-2 bg-[#f5f0ff] px-3 py-1.5 rounded-lg border border-[#6c54da]/20">
-              <Label htmlFor="kid-friendly" className="text-sm font-medium cursor-pointer flex items-center gap-2">
-                <Heart className="h-4 w-4 text-pink-500" />
-                Kid-Friendly View
-              </Label>
-              <Switch 
-                id="kid-friendly" 
-                checked={kidFriendly} 
-                onCheckedChange={setKidFriendly} 
-                className="data-[state=checked]:bg-[#6c54da]"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
-                onClick={handleDownload}
-              >
-                <Download className="h-4 w-4" />
-                <span className="hidden sm:inline">Download</span> PDF
-              </Button>
-              <PrintButton>
-                <Printer className="h-4 w-4" />
-                <span className="hidden sm:inline">Print</span> View
-              </PrintButton>
-            </div>
+          <div className="flex gap-2 no-print">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
+              onClick={handleDownload}
+            >
+              <Download className="h-4 w-4" />
+              <span className="hidden sm:inline">Download</span> PDF
+            </Button>
+            <PrintButton>
+              <Printer className="h-4 w-4" />
+              <span className="hidden sm:inline">Print</span> View
+            </PrintButton>
           </div>
         </div>
         
@@ -268,12 +348,65 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Weekly Schedule</h2>
                 <p className="text-gray-600 text-sm">
-                  {kidFriendly ? "Where I'll be each day of the week" : `Your regular parenting schedule for ${mockData.familyName}.`}
+                  Kid-friendly calendar showing where I'll be each day
                 </p>
               </div>
               
-              {kidFriendly ? (
-                <div className="space-y-8">
+              <div className="space-y-8">
+                {/* Interactive React DayPicker Calendar */}
+                <div className="bg-white border border-[#6c54da]/10 rounded-lg p-4 shadow-sm max-w-md mx-auto">
+                  <style>{css}</style>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-[#2e1a87] font-medium">
+                      {format(selectedMonth, 'MMMM yyyy')}
+                    </div>
+                    <div className="flex gap-1">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="h-7 w-7 p-0" 
+                        onClick={() => setSelectedMonth(current => addMonths(current, -1))}
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="h-7 w-7 p-0" 
+                        onClick={() => setSelectedMonth(current => addMonths(current, 1))}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <DayPicker
+                    month={selectedMonth}
+                    onMonthChange={setSelectedMonth}
+                    modifiers={modifiers}
+                    modifiersClassNames={modifiersClassNames}
+                    showOutsideDays
+                  />
+                  
+                  <div className="mt-4 grid grid-cols-2 gap-4">
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 bg-pink-200 rounded-sm mr-2"></div>
+                      <span className="text-sm text-gray-600">With Mom</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 bg-blue-200 rounded-sm mr-2"></div>
+                      <span className="text-sm text-gray-600">With Dad</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 bg-gradient-to-tr from-pink-200 to-blue-200 rounded-sm mr-2"></div>
+                      <span className="text-sm text-gray-600">Exchange Day</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Grid view for the month */}
+                <div className="space-y-4 mt-8">
+                  <h3 className="text-[#2e1a87] font-medium">Week View</h3>
                   {/* Calendar Header - Days of Week */}
                   <div className="grid grid-cols-7 gap-1 mb-1 text-center">
                     {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
@@ -338,34 +471,7 @@ export default function CoParentingSchedule() {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-[#f5f0ff]">
-                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Day</th>
-                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Overnight With</th>
-                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Drop-off/Pick-up</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {mockData.weeklySchedule.map((day) => (
-                        <tr key={`${day.week}-${day.day}`} className="hover:bg-[#f9f7fe]">
-                          <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">
-                            {day.day} (Week {day.week}, {day.date})
-                          </td>
-                          <td className="py-3 px-4 border border-[#6c54da]/20">
-                            <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
-                              {day.overnight}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 border border-[#6c54da]/20 text-gray-600">{day.dropoff}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+              </div>
             </TabsContent>
             
             {/* Holiday Schedule Tab */}
@@ -373,11 +479,11 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Holiday Schedule</h2>
                 <p className="text-gray-600 text-sm">
-                  {kidFriendly ? "Where I'll be during holidays and special days" : "Special arrangements for holidays and special occasions in 2024-2025."}
+                  Where I'll be during holidays and special days
                 </p>
               </div>
               
-              {kidFriendly ? (
+              {true ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {mockData.holidaySchedule.map((holiday) => (
                     <div key={holiday.holiday} className={`
@@ -463,11 +569,11 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Winter Break</h2>
                 <p className="text-gray-600 text-sm">
-                  {kidFriendly ? "My winter vacation schedule" : `Winter break schedule for ${mockData.winterBreak.dateRange}.`}
+                  My winter vacation schedule
                 </p>
               </div>
               
-              {kidFriendly ? (
+              {true ? (
                 <div>
                   <div className="text-center mb-6">
                     <div className="inline-block px-4 py-2 bg-blue-50 rounded-full text-[#2e1a87] font-bold text-sm">
