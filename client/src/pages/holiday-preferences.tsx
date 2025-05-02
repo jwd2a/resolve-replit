@@ -24,135 +24,62 @@ import {
   CheckCircle
 } from "lucide-react";
 
-interface Holiday {
-  id: string;
-  name: string;
-  selected: boolean;
-  allocation: "alternate-years" | "shared" | "parent1" | "parent2" | "none";
-}
+// Categories of holidays for the preferences page
+const HOLIDAY_CATEGORIES = [
+  {
+    title: "Major U.S. Holidays",
+    holidays: [
+      { id: "new_years", name: "New Year's Day" },
+      { id: "mlk_day", name: "Martin Luther King Jr. Day" },
+      { id: "presidents_day", name: "Presidents' Day" },
+      { id: "memorial_day", name: "Memorial Day" },
+      { id: "independence_day", name: "Independence Day" },
+      { id: "labor_day", name: "Labor Day" },
+      { id: "columbus_day", name: "Columbus Day / Indigenous Peoples' Day" },
+      { id: "veterans_day", name: "Veterans Day" },
+      { id: "thanksgiving", name: "Thanksgiving" },
+      { id: "christmas", name: "Christmas" }
+    ]
+  },
+  {
+    title: "Major Religious Holidays",
+    holidays: [
+      { id: "easter", name: "Easter" },
+      { id: "hanukkah", name: "Hanukkah" },
+      { id: "passover", name: "Passover" },
+      { id: "yom_kippur", name: "Yom Kippur" },
+      { id: "rosh_hashanah", name: "Rosh Hashanah" },
+      { id: "ramadan", name: "Ramadan" },
+      { id: "eid_al_fitr", name: "Eid al-Fitr" },
+      { id: "eid_al_adha", name: "Eid al-Adha" },
+      { id: "diwali", name: "Diwali" }
+    ]
+  }
+];
 
 export default function HolidayPreferences() {
   const [_, navigate] = useLocation();
   const { toast } = useToast();
   
-  const [holidays, setHolidays] = useState<Holiday[]>([
-    { 
-      id: "christmas", 
-      name: "Christmas", 
-      selected: true, 
-      allocation: "alternate-years" 
-    },
-    { 
-      id: "thanksgiving", 
-      name: "Thanksgiving", 
-      selected: true, 
-      allocation: "alternate-years" 
-    },
-    { 
-      id: "easter", 
-      name: "Easter", 
-      selected: false, 
-      allocation: "none" 
-    },
-    { 
-      id: "newyear", 
-      name: "New Year's Day", 
-      selected: false, 
-      allocation: "none" 
-    },
-    { 
-      id: "july4th", 
-      name: "Independence Day", 
-      selected: false, 
-      allocation: "none" 
-    },
-    { 
-      id: "laborday", 
-      name: "Labor Day", 
-      selected: false, 
-      allocation: "none" 
-    },
-    { 
-      id: "memorial", 
-      name: "Memorial Day", 
-      selected: false, 
-      allocation: "none" 
-    },
-    { 
-      id: "spring", 
-      name: "Spring Break", 
-      selected: true, 
-      allocation: "alternate-years" 
-    },
-    { 
-      id: "summer", 
-      name: "Summer Break", 
-      selected: true, 
-      allocation: "shared" 
-    },
-    { 
-      id: "winter", 
-      name: "Winter Break", 
-      selected: true, 
-      allocation: "shared" 
-    }
+  // Simple list of selected holiday IDs
+  const [selectedHolidays, setSelectedHolidays] = useState<string[]>([
+    "thanksgiving", "christmas", "new_years", "easter", "independence_day"
   ]);
   
-  const [specialDays, setSpecialDays] = useState([
-    { 
-      id: "child-bday", 
-      name: "Child's Birthday", 
-      allocation: "shared" 
-    },
-    { 
-      id: "mothers-day", 
-      name: "Mother's Day", 
-      allocation: "parent2" 
-    },
-    { 
-      id: "fathers-day", 
-      name: "Father's Day", 
-      allocation: "parent1" 
-    },
-    { 
-      id: "parent1-bday", 
-      name: "Your Birthday", 
-      allocation: "parent1" 
-    },
-    { 
-      id: "parent2-bday", 
-      name: "Co-Parent's Birthday", 
-      allocation: "parent2" 
-    }
-  ]);
+  // Other holidays text field
+  const [otherHolidays, setOtherHolidays] = useState<string>("");
   
-  const [familyTraditions, setFamilyTraditions] = useState<string>("Our family has a yearly reunion in August that the children should attend. We also celebrate cultural holidays such as Diwali.");
-  
-  const toggleHoliday = (id: string) => {
-    setHolidays(holidays.map(holiday => 
-      holiday.id === id 
-        ? {...holiday, selected: !holiday.selected, allocation: !holiday.selected ? "alternate-years" : "none"} 
-        : holiday
-    ));
+  const toggleHoliday = (holidayId: string) => {
+    setSelectedHolidays(prev => {
+      if (prev.includes(holidayId)) {
+        return prev.filter(id => id !== holidayId);
+      } else {
+        return [...prev, holidayId];
+      }
+    });
   };
   
-  const updateAllocation = (id: string, allocation: string) => {
-    setHolidays(holidays.map(holiday => 
-      holiday.id === id 
-        ? {...holiday, allocation: allocation as any} 
-        : holiday
-    ));
-  };
-  
-  const updateSpecialDayAllocation = (id: string, allocation: string) => {
-    setSpecialDays(specialDays.map(day => 
-      day.id === id 
-        ? {...day, allocation: allocation as any} 
-        : day
-    ));
-  };
-  
-  const atLeastOneHolidaySelected = holidays.some(holiday => holiday.selected);
+  const atLeastOneHolidaySelected = selectedHolidays.length > 0;
   
   const handleSave = () => {
     if (!atLeastOneHolidaySelected) {
@@ -197,176 +124,87 @@ export default function HolidayPreferences() {
               <div>
                 <h1 className="text-xl font-semibold text-[#2e1a87]">Holiday Preferences</h1>
                 <p className="text-gray-600 text-sm mt-1">
-                  Select and allocate holidays for your parenting schedule.
+                  Select which holidays matter to your family.
                 </p>
               </div>
             </div>
             
-            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
-              <div className="flex items-start">
-                <Info className="h-4 w-4 text-blue-500 mt-1 mr-2 flex-shrink-0" />
-                <p className="text-sm text-blue-700">
-                  Select holidays that are important to your family and indicate how you'd like to share them. 
-                  You can always modify these preferences later in the process.
-                </p>
-              </div>
-            </div>
+            <p className="text-sm text-gray-600 mb-6">
+              This is a simple form where you select the holidays that matter to your family. 
+              The information will be used later in the course.
+            </p>
             
-            {/* Holidays selection section */}
-            <div className="border-b border-gray-200 pb-6 mb-6">
-              <h2 className="text-lg font-medium text-[#2e1a87] mb-4">
-                Major Holidays & School Breaks
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {holidays.map((holiday) => (
-                  <div key={holiday.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start space-x-3 mb-3">
-                      <Checkbox 
-                        id={holiday.id} 
-                        checked={holiday.selected}
-                        onCheckedChange={() => toggleHoliday(holiday.id)}
-                        className="mt-1"
-                      />
-                      <div className="flex-1">
-                        <label
+            {HOLIDAY_CATEGORIES.map((category) => (
+              <div key={category.title} className="mb-6">
+                <h4 className="font-medium text-sm mb-3">{category.title}</h4>
+                <div className="space-y-2">
+                  {category.holidays.map((holiday) => {
+                    const isSelected = selectedHolidays.includes(holiday.id);
+                    return (
+                      <div 
+                        key={holiday.id} 
+                        className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-[#f5f0ff]' : 'hover:bg-gray-50'}`}
+                        onClick={() => toggleHoliday(holiday.id)}
+                      >
+                        <Checkbox 
+                          id={holiday.id} 
+                          checked={isSelected}
+                          onCheckedChange={() => toggleHoliday(holiday.id)}
+                          className="mr-3"
+                        />
+                        <Label
                           htmlFor={holiday.id}
-                          className="text-sm font-medium"
+                          className="text-sm cursor-pointer w-full"
                         >
                           {holiday.name}
-                        </label>
-                        
-                        {holiday.selected && (
-                          <div className="mt-3">
-                            <Label className="text-xs text-gray-500 mb-1">Allocation</Label>
-                            <Select 
-                              value={holiday.allocation} 
-                              onValueChange={(value) => updateAllocation(holiday.id, value)}
-                            >
-                              <SelectTrigger className="h-8 text-xs">
-                                <SelectValue placeholder="Choose allocation" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="alternate-years">Alternate Years</SelectItem>
-                                <SelectItem value="shared">Shared Time</SelectItem>
-                                <SelectItem value="parent1">Always with You</SelectItem>
-                                <SelectItem value="parent2">Always with Co-Parent</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        )}
+                        </Label>
                       </div>
-                      
-                      {holiday.selected && (
-                        <div className="flex-shrink-0">
-                          <CheckCircle className="h-5 w-5 text-green-600" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            ))}
             
-            {/* Special days section */}
-            <div className="border-b border-gray-200 pb-6 mb-6">
-              <div className="flex items-center mb-4">
-                <Gift className="h-5 w-5 text-pink-500 mr-2" />
-                <h2 className="text-lg font-medium text-[#2e1a87]">Special Days</h2>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {specialDays.map((day) => (
-                  <div key={day.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <label className="text-sm font-medium">
-                        {day.name}
-                      </label>
-                    </div>
-                    
-                    <div>
-                      <Label className="text-xs text-gray-500 mb-1">Allocation</Label>
-                      <Select 
-                        value={day.allocation} 
-                        onValueChange={(value) => updateSpecialDayAllocation(day.id, value)}
-                      >
-                        <SelectTrigger className="h-8 text-xs">
-                          <SelectValue placeholder="Choose allocation" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="alternate-years">Alternate Years</SelectItem>
-                          <SelectItem value="shared">Shared Time</SelectItem>
-                          <SelectItem value="parent1">Always with You</SelectItem>
-                          <SelectItem value="parent2">Always with Co-Parent</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* School break specific allocations */}
-            <div className="border-b border-gray-200 pb-6 mb-6">
-              <div className="flex items-center mb-4">
-                <CalendarDays className="h-5 w-5 text-blue-500 mr-2" />
-                <h2 className="text-lg font-medium text-[#2e1a87]">Family Traditions</h2>
-              </div>
-              
-              <p className="text-sm text-gray-600 mb-3">
-                Describe any special family traditions or events that should be included in your parenting plan.
-              </p>
-              
+            {/* Other family-specific holidays text area */}
+            <div className="mt-6">
+              <Label htmlFor="otherHolidays" className="text-sm font-medium mb-2 block">
+                Other family-specific holidays or traditions
+              </Label>
               <Textarea 
-                placeholder="Family reunions, cultural celebrations, annual vacations, etc."
-                className="min-h-24"
-                value={familyTraditions}
-                onChange={(e) => setFamilyTraditions(e.target.value)}
+                id="otherHolidays"
+                placeholder="Enter any additional family-specific holidays or traditions"
+                value={otherHolidays}
+                onChange={(e) => setOtherHolidays(e.target.value)}
+                className="resize-none min-h-[100px]"
               />
             </div>
             
-            {/* Seasonal activities */}
-            <div>
-              <div className="flex items-center mb-4">
-                <Sparkles className="h-5 w-5 text-amber-500 mr-2" />
-                <h2 className="text-lg font-medium text-[#2e1a87]">Additional Notes</h2>
-              </div>
+            <div className="mt-6">
+              <Button 
+                className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
+                onClick={handleSave}
+                disabled={!atLeastOneHolidaySelected}
+              >
+                Save Preferences
+              </Button>
               
-              <div className="bg-amber-50 border border-amber-100 rounded-lg p-4 mb-6">
-                <div className="flex items-start">
-                  <Info className="h-4 w-4 text-amber-500 mt-1 mr-2 flex-shrink-0" />
-                  <p className="text-sm text-amber-700">
-                    These preferences help us create an initial draft of your holiday schedule. 
-                    You'll be able to refine this further with your co-parent as you complete your parenting plan.
-                  </p>
-                </div>
-              </div>
+              {!atLeastOneHolidaySelected && (
+                <p className="text-center text-amber-600 text-xs mt-3">
+                  Please select at least one holiday
+                </p>
+              )}
             </div>
             
-            <div className="mt-6 pt-6 border-t border-gray-200 flex justify-between">
+            <div className="mt-6 pt-6 border-t border-gray-200">
               <Button 
                 variant="ghost" 
-                className="text-[#2e1a87]"
+                className="text-[#2e1a87] px-0"
                 onClick={() => navigate('/')}
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Dashboard
               </Button>
-              <Button 
-                className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={handleSave}
-                disabled={!atLeastOneHolidaySelected}
-              >
-                Save Preferences
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
             </div>
-            
-            {!atLeastOneHolidaySelected && (
-              <p className="text-center text-amber-600 text-xs mt-3">
-                Please select at least one holiday
-              </p>
-            )}
           </div>
         </div>
       </main>
