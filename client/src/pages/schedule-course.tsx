@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { format, addDays, isBefore, isSameDay } from "date-fns";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, ArrowRight, Clock, Info, Calendar as CalendarIcon, Users, Check } from "lucide-react";
 
 export default function ScheduleCourse() {
-  const navigate = useNavigate();
+  const [_, navigate] = useLocation();
   const { toast } = useToast();
   
   const today = new Date();

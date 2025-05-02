@@ -315,6 +315,19 @@ export default function Home6() {
                           <Button
                             variant="link"
                             className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
+                            onClick={() => {
+                              if (item.id === "family-info") {
+                                window.location.href = "/family-information";
+                              } else if (item.id === "co-parent") {
+                                window.location.href = "/co-parent-invitation";
+                              } else if (item.id === "waivers") {
+                                window.location.href = "/waivers-and-agreements";
+                              } else if (item.id === "holidays") {
+                                window.location.href = "/holiday-preferences";
+                              } else if (item.id === "schedule") {
+                                window.location.href = "/schedule-course";
+                              }
+                            }}
                           >
                             {item.action} <ArrowRight className="ml-1 h-3 w-3" />
                           </Button>
