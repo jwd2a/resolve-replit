@@ -40,14 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mock successful login
       console.log("Logging in with email:", email);
       
-      // Mock user data
+      // Mock user data - setting onboardingComplete to true for existing users
       const mockUser: MockUser = {
         id: 1,
         username: email.split('@')[0],
         email: email,
         displayName: email.split('@')[0],
         role: "parent",
-        onboardingComplete: false,
+        onboardingComplete: true, // Existing users (login) should have completed onboarding
         createdAt: new Date(),
         password: null,
         phone: null,
@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: "user@gmail.com",
         displayName: "Google User",
         role: "parent",
-        onboardingComplete: false,
+        onboardingComplete: true, // Existing users should have completed onboarding
         createdAt: new Date(),
         authProvider: "google",
         password: null,
@@ -141,7 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: "user@icloud.com",
         displayName: "Apple User",
         role: "parent",
-        onboardingComplete: false,
+        onboardingComplete: true, // Existing users should have completed onboarding
         createdAt: new Date(),
         authProvider: "apple",
         password: null,
@@ -172,7 +172,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: "user@facebook.com",
         displayName: "Facebook User",
         role: "parent",
-        onboardingComplete: false,
+        onboardingComplete: true, // Existing users should have completed onboarding
         createdAt: new Date(),
         authProvider: "facebook",
         password: null,

@@ -68,12 +68,14 @@ export default function AuthPage() {
     await registerWithEmail(values.email, values.username, values.password, values.displayName);
   };
 
-  // If user is already logged in, redirect to dashboard
+  // If user is already logged in, redirect based on their onboarding status
   if (user) {
     if (!user.onboardingComplete) {
-      return <Redirect to="/onboarding" />;
+      // New users (from registration) need to complete onboarding
+      return <Redirect to="/onboarding6step" />;
     }
-    return <Redirect to="/dashboard" />;
+    // Existing users (from login) go straight to dashboard
+    return <Redirect to="/home6" />;
   }
 
   return (
