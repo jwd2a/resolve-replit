@@ -616,65 +616,70 @@ export default function CoParentingSchedule() {
                     </div>
                   </div>
                   
-                  <div className="relative">
-                    {/* Timeline connector */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-[#f5f0ff] -ml-0.5 hidden md:block"></div>
-                    
-                    <div className="space-y-6">
-                      {mockData.summerBreak.blocks.map((block, index) => (
-                        <div key={index} className="md:grid md:grid-cols-2 gap-5 relative">
-                          {/* Timeline dot */}
-                          <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -ml-2.5 w-5 h-5 rounded-full bg-[#6c54da]/50 z-10 hidden md:block"></div>
-                          
-                          {/* Date marker - always on left for mobile, alternating for desktop */}
-                          <div className={`mb-2 md:mb-0 ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
-                            <div className="bg-[#f5f0ff] p-3 rounded-lg text-center">
-                              <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
+                  {/* Calendar-style Summer View */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {mockData.summerBreak.blocks.map((block, index) => {
+                      // Extract month from period string (e.g., "June 10–June 24" -> "June")
+                      const month = block.period.split(" ")[0];
+                      // Extract dates from period string
+                      const dates = block.period.replace(month + " ", "").split("–");
+                      const startDate = dates[0]; // "10"
+                      const endDateFull = dates[1]; // "June 24"
+                      const endDate = endDateFull.includes(" ") ? endDateFull.split(" ")[1] : endDateFull;
+                      
+                      return (
+                        <div 
+                          key={index} 
+                          className={`
+                            rounded-xl overflow-hidden shadow-md border-2
+                            ${block.parent === "Sarah" ? "border-pink-200" : "border-blue-200"}
+                          `}
+                        >
+                          <div className={`
+                            py-3 text-center relative border-b
+                            ${block.parent === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
+                          `}>
+                            <Sun className={`
+                              absolute top-2 right-2 h-5 w-5
+                              ${block.parent === "Sarah" ? "text-pink-300" : "text-blue-300"}
+                            `} />
+                            <h3 className="font-bold text-[#2e1a87] text-sm">
+                              {month}
+                            </h3>
+                            <div className="flex items-center justify-center text-[#2e1a87] gap-2 mt-1">
+                              <span className="font-bold">{startDate}</span>
+                              <ArrowRight className="h-3 w-3" />
+                              <span className="font-bold">{endDate}</span>
                             </div>
                           </div>
                           
-                          {/* Content card - always on right for mobile, alternating for desktop */}
-                          <div className={index % 2 === 1 ? 'md:col-start-1' : 'md:col-start-2'}>
+                          <div className="p-3 bg-white text-center">
                             <div className={`
-                              rounded-xl overflow-hidden shadow-md border-2
-                              ${block.parent === "Sarah" ? "border-pink-200" : "border-blue-200"}
+                              w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-2
+                              ${block.parent === "Sarah" ? "bg-pink-50" : "bg-blue-50"}
                             `}>
-                              <div className={`
-                                p-3 text-center relative
-                                ${block.parent === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
-                              `}>
-                                <Sun className={`
-                                  absolute top-2 right-2 h-5 w-5
-                                  ${block.parent === "Sarah" ? "text-pink-300" : "text-blue-300"}
-                                `} />
-                                <h3 className="font-medium text-[#2e1a87]">
-                                  {block.parent === "Sarah" ? "Mom's House" : "Dad's House"}
-                                </h3>
-                              </div>
-                              
-                              <div className="p-4 bg-white text-center">
-                                <div className={`
-                                  inline-flex w-12 h-12 rounded-full items-center justify-center mb-2
-                                  ${block.parent === "Sarah" ? "bg-pink-50 text-pink-500" : "bg-blue-50 text-blue-500"}
-                                `}>
-                                  {index % 2 === 0 ? (
-                                    <Sun className="h-6 w-6" />
-                                  ) : (
-                                    <Moon className="h-6 w-6" />
-                                  )}
-                                </div>
-                                
-                                {block.notes && (
-                                  <p className="text-xs text-gray-600 mt-2">
-                                    {block.notes}
-                                  </p>
-                                )}
-                              </div>
+                              {index % 2 === 0 ? (
+                                <Sun className={`h-6 w-6 ${block.parent === "Sarah" ? "text-pink-500" : "text-blue-500"}`} />
+                              ) : (
+                                <Moon className={`h-6 w-6 ${block.parent === "Sarah" ? "text-pink-500" : "text-blue-500"}`} />
+                              )}
                             </div>
+                            
+                            <p className="font-bold text-sm">
+                              <span className={block.parent === "Sarah" ? "text-pink-600" : "text-blue-600"}>
+                                {block.parent === "Sarah" ? "Mom's House" : "Dad's House"}
+                              </span>
+                            </p>
+                            
+                            {block.notes && (
+                              <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded mt-2">
+                                {block.notes}
+                              </p>
+                            )}
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
                   
                   <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-amber-800 text-center mt-8 font-medium">
