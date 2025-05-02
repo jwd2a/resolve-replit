@@ -170,6 +170,16 @@ export default function CoParentingSchedule() {
     return "Eric";
   };
   
+  // Function to determine if a day is a transition day (exchange between parents)
+  const determineIfTransitionDay = (date: Date) => {
+    // Check if it has a dropoff entry
+    const dayEntry = scheduleDates.find(day => 
+      isSameDay(day.fullDate, date)
+    );
+    
+    return dayEntry?.dropoff !== "—" && dayEntry?.dropoff !== undefined;
+  };
+  
   // Modifiers for the DayPicker to highlight days by parent
   const modifiers = {
     mom: (date: Date) => getParentForDate(date) === "Sarah",
@@ -415,10 +425,12 @@ export default function CoParentingSchedule() {
                     }}
                     components={{
                       Day: (props) => {
-                        const { date, activeModifiers } = props;
-                        const isMom = activeModifiers.mom;
-                        const isDad = activeModifiers.dad;
-                        const isTransition = activeModifiers.transition;
+                        const date = props.date;
+                        // Using getParentForDate function to determine if it's mom/dad day
+                        const parentForDay = getParentForDate(date);
+                        const isMom = parentForDay === "Sarah";
+                        const isDad = parentForDay === "Eric";
+                        const isTransition = determineIfTransitionDay(date);
                         
                         // Get any scheduled day info
                         const dayEntry = scheduleDates.find(day => 
