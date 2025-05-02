@@ -20,12 +20,17 @@ import {
   CalendarDays,
   CreditCard,
   PlusCircle,
+  Calendar,
+  AlertCircle,
 } from "lucide-react";
 
 export default function Home6() {
   const { user } = useAuth();
   const { paymentStatus, completePayment } = usePaymentStatus();
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  
+  // State for the Course Session Status Block
+  const [sessionStatus, setSessionStatus] = useState(0); // 0: No session, 1: Proposed, 2: Scheduled
   
   // Step states for the badge-style progress tracker with larger icons
   const [steps, setSteps] = useState([
@@ -172,6 +177,11 @@ export default function Home6() {
     },
   ];
 
+  // Function to cycle through session states (0: No session, 1: Proposed, 2: Scheduled)
+  const toggleSessionStatus = () => {
+    setSessionStatus((prevStatus) => (prevStatus + 1) % 3);
+  };
+
   const handleCompletePayment = () => {
     setIsLoadingPayment(true);
     setTimeout(() => {
@@ -203,9 +213,9 @@ export default function Home6() {
           </div>
           
           {/* Refined badge-style progress tracker with improved layout */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-2">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mt-2">
             {/* Step badges with increased spacing */}
-            <div className="flex items-center justify-center md:justify-start md:space-x-8 space-x-5 flex-wrap w-full md:w-auto">
+            <div className="flex items-center justify-center md:justify-start md:space-x-8 space-x-5 flex-wrap">
               {steps.map((step) => (
                 <div 
                   key={step.id} 
@@ -242,8 +252,61 @@ export default function Home6() {
               ))}
             </div>
             
+            {/* Course Session Status Block - new component */}
+            <div 
+              className="flex-shrink-0 rounded-md px-4 py-3 cursor-pointer transition-all duration-200 h-auto"
+              onClick={toggleSessionStatus}
+            >
+              {sessionStatus === 0 && (
+                <div className="bg-gray-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-white/10">
+                  <div className="bg-white/20 p-1.5 rounded-full">
+                    <Calendar className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <span className="block text-white text-xs font-medium">No course session proposed</span>
+                    <span className="block text-white/70 text-[10px]">Select a date to propose a session</span>
+                    <button className="mt-1.5 bg-white/20 hover:bg-white/30 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
+                      Propose Time <ArrowRight className="ml-1 h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {sessionStatus === 1 && (
+                <div className="bg-amber-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-amber-200/10">
+                  <div className="bg-amber-100/20 p-1.5 rounded-full">
+                    <Clock className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <span className="block text-white text-xs font-medium">Session Proposed</span>
+                    <span className="block text-white/90 text-[10px] font-medium">Friday, April 12 at 3:00 PM</span>
+                    <span className="block text-white/70 text-[10px]">Waiting for co-parent to respond</span>
+                    <button className="mt-1.5 bg-amber-100/30 hover:bg-amber-100/40 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
+                      Change Proposal <Edit className="ml-1 h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {sessionStatus === 2 && (
+                <div className="bg-green-50/20 p-2.5 rounded-md flex items-center gap-2.5 border border-green-200/10">
+                  <div className="bg-green-100/20 p-1.5 rounded-full">
+                    <CheckCircle className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <span className="block text-white text-xs font-medium">Course Scheduled</span>
+                    <span className="block text-white/90 text-[10px] font-medium">Friday, April 12 at 3:00 PM</span>
+                    <span className="block text-white/70 text-[10px]">In 5 days</span>
+                    <button className="mt-1.5 bg-green-100/30 hover:bg-green-100/40 py-1 px-2 rounded text-[10px] text-white font-medium flex items-center">
+                      Reschedule <Calendar className="ml-1 h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             {/* Start Course button aligned with badges */}
-            <div className="flex-shrink-0 flex flex-col items-center mt-2 md:mt-0">
+            <div className="flex-shrink-0 flex flex-col items-center mt-2 lg:mt-0">
               <Link href="/course">
                 <Button
                   disabled={!steps.every(step => step.completed)}
