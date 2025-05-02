@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "wouter";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Select,
   SelectContent,
@@ -766,7 +767,7 @@ export default function FamilyInformation() {
                       id="otherHolidays"
                       placeholder="Enter any additional family-specific holidays or traditions"
                       value={otherHolidays}
-                      onChange={(e) => setOtherHolidays(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setOtherHolidays(e.target.value)}
                       className="resize-none min-h-[100px]"
                     />
                   </div>
