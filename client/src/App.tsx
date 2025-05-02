@@ -27,6 +27,7 @@ import CoParentInvitation from "@/pages/co-parent-invitation";
 import WaiversAndAgreements from "@/pages/waivers-and-agreements";
 import HolidayPreferences from "@/pages/holiday-preferences";
 import ScheduleCourse from "@/pages/schedule-course";
+import CourseSessionDemo from "@/pages/course-session-demo";
 import AITestPage from "@/pages/ai-test-page";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/schedule-course" component={ScheduleCourse} />
       <Route path="/course" component={Course} />
       <Route path="/course-page" component={CoursePage} />
+      <Route path="/course-session-demo" component={CourseSessionDemo} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/ai-test" component={AITestPage} />
       

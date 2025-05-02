@@ -264,3 +264,130 @@
   transform: rotate(-2deg);
   color: #0D47A1;
 }
+
+/* Visual Custody Calendar Styles */
+.custody-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.custody-day {
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+}
+
+.custody-day-mom {
+  background-color: #fce7f3;
+  border-color: #fbcfe8;
+}
+
+.custody-day-dad {
+  background-color: #dbeafe;
+  border-color: #bfdbfe;
+}
+
+.custody-day-exchange {
+  border: 2px dashed #fdba74;
+}
+
+.custody-day-outside-month {
+  opacity: 0.4;
+}
+
+.custody-day-header {
+  background-color: #f8fafc;
+  padding: 4px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custody-day-mom .custody-day-header {
+  background-color: #fdf2f8;
+  border-color: #fbcfe8;
+}
+
+.custody-day-dad .custody-day-header {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.custody-day-content {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  position: relative;
+}
+
+.custody-day-date {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #334155;
+}
+
+.custody-day-parent {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 2px;
+  color: #64748b;
+}
+
+.custody-day-mom .custody-day-parent {
+  color: #be185d;
+}
+
+.custody-day-dad .custody-day-parent {
+  color: #1e40af;
+}
+
+.custody-day-indicators {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.custody-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+}
+
+.custody-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.mom-legend {
+  color: #be185d;
+}
+
+.dad-legend {
+  color: #1e40af;
+}
+
+.exchange-legend {
+  color: #d97706;
+}
+
+.school-legend {
+  color: #059669;
+}
