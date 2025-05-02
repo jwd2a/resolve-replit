@@ -329,21 +329,21 @@ export default function Home6() {
                       <div className="flex justify-end mt-2 px-3">
                         {item.id === "family-info" ? (
                           <div className="flex flex-wrap text-[10px] gap-x-3 gap-y-1 justify-end">
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>You:</span>
-                              <span>Completed</span>
+                            <div className="flex gap-1">
+                              <span className="text-gray-700">You:</span>
+                              <span className="text-green-600 font-medium">Completed</span>
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Co-Parent:</span>
-                              <span>Completed</span>
+                            <div className="flex gap-1">
+                              <span className="text-gray-700">Co-Parent:</span>
+                              <span className="text-green-600 font-medium">Completed</span>
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Children:</span>
-                              <span>Completed</span>
+                            <div className="flex gap-1">
+                              <span className="text-gray-700">Children:</span>
+                              <span className="text-green-600 font-medium">Completed</span>
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Jurisdiction:</span>
-                              <span>Completed</span>
+                            <div className="flex gap-1">
+                              <span className="text-gray-700">Jurisdiction:</span>
+                              <span className="text-green-600 font-medium">Completed</span>
                             </div>
                           </div>
                         ) : item.id === "schedule" ? (
@@ -353,13 +353,13 @@ export default function Home6() {
                         ) : (
                           <div className="flex text-[10px] gap-3 justify-end">
                             <div className="flex gap-1">
-                              <span>You:</span>
+                              <span className="text-gray-700">You:</span>
                               <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
                                 {item.userStatus}
                               </span>
                             </div>
                             <div className="flex gap-1">
-                              <span>Co-Parent:</span>
+                              <span className="text-gray-700">Co-Parent:</span>
                               <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
                                 {item.coParentStatus}
                               </span>
