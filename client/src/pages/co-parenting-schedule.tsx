@@ -17,13 +17,41 @@ import { PrintStyles, PrintButton } from "@/styles/printStyles";
 const mockData = {
   familyName: "Smith Family",
   weeklySchedule: [
-    { day: "Monday", overnight: "Sarah", dropoff: "Eric drops off at school" },
-    { day: "Tuesday", overnight: "Sarah", dropoff: "—" },
-    { day: "Wednesday", overnight: "Eric", dropoff: "Sarah picks up at 3pm" },
-    { day: "Thursday", overnight: "Eric", dropoff: "—" },
-    { day: "Friday", overnight: "Sarah", dropoff: "Eric drops off at 6pm" },
-    { day: "Saturday", overnight: "Sarah", dropoff: "—" },
-    { day: "Sunday", overnight: "Eric", dropoff: "Sarah drops off at 5pm" }
+    // Week 1
+    { week: 1, day: "Monday", date: "1", overnight: "Sarah", dropoff: "Eric drops off at school" },
+    { week: 1, day: "Tuesday", date: "2", overnight: "Sarah", dropoff: "—" },
+    { week: 1, day: "Wednesday", date: "3", overnight: "Eric", dropoff: "Sarah picks up at 3pm" },
+    { week: 1, day: "Thursday", date: "4", overnight: "Eric", dropoff: "—" },
+    { week: 1, day: "Friday", date: "5", overnight: "Sarah", dropoff: "Eric drops off at 6pm" },
+    { week: 1, day: "Saturday", date: "6", overnight: "Sarah", dropoff: "—" },
+    { week: 1, day: "Sunday", date: "7", overnight: "Eric", dropoff: "Sarah drops off at 5pm" },
+    
+    // Week 2
+    { week: 2, day: "Monday", date: "8", overnight: "Sarah", dropoff: "Eric drops off at school" },
+    { week: 2, day: "Tuesday", date: "9", overnight: "Sarah", dropoff: "—" },
+    { week: 2, day: "Wednesday", date: "10", overnight: "Eric", dropoff: "Sarah picks up at 3pm" },
+    { week: 2, day: "Thursday", date: "11", overnight: "Eric", dropoff: "—" },
+    { week: 2, day: "Friday", date: "12", overnight: "Sarah", dropoff: "Eric drops off at 6pm" },
+    { week: 2, day: "Saturday", date: "13", overnight: "Sarah", dropoff: "—" },
+    { week: 2, day: "Sunday", date: "14", overnight: "Eric", dropoff: "Sarah drops off at 5pm" },
+    
+    // Week 3
+    { week: 3, day: "Monday", date: "15", overnight: "Sarah", dropoff: "Eric drops off at school" },
+    { week: 3, day: "Tuesday", date: "16", overnight: "Sarah", dropoff: "—" },
+    { week: 3, day: "Wednesday", date: "17", overnight: "Eric", dropoff: "Sarah picks up at 3pm" },
+    { week: 3, day: "Thursday", date: "18", overnight: "Eric", dropoff: "—" },
+    { week: 3, day: "Friday", date: "19", overnight: "Sarah", dropoff: "Eric drops off at 6pm" },
+    { week: 3, day: "Saturday", date: "20", overnight: "Sarah", dropoff: "—" },
+    { week: 3, day: "Sunday", date: "21", overnight: "Eric", dropoff: "Sarah drops off at 5pm" },
+    
+    // Week 4
+    { week: 4, day: "Monday", date: "22", overnight: "Sarah", dropoff: "Eric drops off at school" },
+    { week: 4, day: "Tuesday", date: "23", overnight: "Sarah", dropoff: "—" },
+    { week: 4, day: "Wednesday", date: "24", overnight: "Eric", dropoff: "Sarah picks up at 3pm" },
+    { week: 4, day: "Thursday", date: "25", overnight: "Eric", dropoff: "—" },
+    { week: 4, day: "Friday", date: "26", overnight: "Sarah", dropoff: "Eric drops off at 6pm" },
+    { week: 4, day: "Saturday", date: "27", overnight: "Sarah", dropoff: "—" },
+    { week: 4, day: "Sunday", date: "28", overnight: "Eric", dropoff: "Sarah drops off at 5pm" }
   ],
   holidaySchedule: [
     { holiday: "Thanksgiving", dates: "Nov 27–29", with: "Eric", notes: "Alternates annually" },
@@ -245,56 +273,68 @@ export default function CoParentingSchedule() {
               </div>
               
               {kidFriendly ? (
-                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3 mt-6 print:mt-2 print:grid-cols-7">
-                  {mockData.weeklySchedule.map((day) => (
-                    <div key={day.day} className={`
-                      rounded-xl overflow-hidden shadow-md border-2
-                      ${day.overnight === "Sarah" ? "border-pink-200 bg-pink-50" : "border-blue-200 bg-blue-50"}
-                    `}>
-                      <div className="bg-white py-2 text-center border-b">
-                        <h3 className="font-bold text-lg text-[#2e1a87]">{day.day}</h3>
+                <div className="space-y-8">
+                  {/* Calendar Header - Days of Week */}
+                  <div className="grid grid-cols-7 gap-1 mb-1 text-center">
+                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
+                      <div key={`header-${day}-${index}`} className="bg-[#f5f0ff] py-2 rounded-t-md border border-[#6c54da]/20">
+                        <h3 className="font-bold text-sm text-[#2e1a87]">{day}</h3>
                       </div>
-                      <div className="p-4">
-                        <div className={`
-                          w-20 h-20 mx-auto rounded-full flex items-center justify-center
-                          ${day.overnight === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
-                        `}>
-                          {day.overnight === "Sarah" ? (
-                            <Home className="h-12 w-12 text-pink-500" />
-                          ) : (
-                            <Home className="h-12 w-12 text-blue-500" />
-                          )}
-                        </div>
-                        <div className="text-center mt-4">
-                          <p className="font-bold text-lg">
-                            <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
-                              Mom
-                            </span>
-                          </p>
-                          {day.dropoff !== "—" && (
-                            <div className="mt-3 flex items-center justify-center">
-                              <div className="bg-white rounded-md p-2 text-xs text-gray-600 shadow-sm border border-gray-200">
-                                {day.dropoff.includes("school") ? (
-                                  <div className="flex items-center gap-1">
-                                    <School className="h-3 w-3 text-gray-500" />
-                                    <span>School drop-off</span>
-                                  </div>
-                                ) : day.dropoff.includes("pick") ? (
-                                  <div className="flex items-center gap-1">
-                                    <ArrowRight className="h-3 w-3 text-gray-500" />
-                                    <span>Pick-up at {day.dropoff.split("at ")[1]}</span>
-                                  </div>
+                    ))}
+                  </div>
+                  
+                  {/* Week Grouping */}
+                  {[1, 2, 3, 4].map(weekNum => (
+                    <div key={weekNum} className="grid grid-cols-7 gap-1 mb-4">
+                      <div className="col-span-7 -mb-2 font-medium text-[#2e1a87]">Week {weekNum}</div>
+                      
+                      {/* Calendar Days - By Week */}
+                      {mockData.weeklySchedule
+                        .filter(day => day.week === weekNum)
+                        .map(day => (
+                          <div 
+                            key={`${day.week}-${day.day}`} 
+                            className={`
+                              rounded-md overflow-hidden shadow-sm border
+                              ${day.overnight === "Sarah" ? "border-pink-300 bg-pink-50" : "border-blue-300 bg-blue-50"}
+                            `}
+                          >
+                            <div className="bg-white px-2 py-1 text-center border-b flex justify-between items-center">
+                              <span className="text-xs text-gray-500">{day.date}</span>
+                              <h3 className="font-medium text-xs text-[#2e1a87]">{day.day.substring(0,3)}</h3>
+                            </div>
+                            <div className="p-2 text-center">
+                              <div className={`
+                                w-10 h-10 mx-auto rounded-full flex items-center justify-center mb-1
+                                ${day.overnight === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
+                              `}>
+                                {day.overnight === "Sarah" ? (
+                                  <Home className="h-6 w-6 text-pink-500" />
                                 ) : (
-                                  <div className="flex items-center gap-1">
-                                    <ArrowRight className="h-3 w-3 text-gray-500" />
-                                    <span>{day.dropoff}</span>
-                                  </div>
+                                  <Home className="h-6 w-6 text-blue-500" />
                                 )}
                               </div>
+                              <p className="font-bold text-sm">
+                                <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
+                                  {day.overnight === "Sarah" ? "Mom" : "Dad"}
+                                </span>
+                              </p>
+                              {day.dropoff !== "—" && (
+                                <div className="mt-1">
+                                  <div className="bg-white rounded py-1 px-1 text-xs text-gray-600 shadow-sm border border-gray-100">
+                                    {day.dropoff.includes("school") ? (
+                                      <School className="h-3 w-3 text-gray-500 mx-auto" />
+                                    ) : day.dropoff.includes("pick") ? (
+                                      <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                                    ) : (
+                                      <ArrowRight className="h-3 w-3 text-gray-500 mx-auto" />
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </div>
+                          </div>
+                      ))}
                     </div>
                   ))}
                 </div>
@@ -310,8 +350,10 @@ export default function CoParentingSchedule() {
                     </thead>
                     <tbody>
                       {mockData.weeklySchedule.map((day) => (
-                        <tr key={day.day} className="hover:bg-[#f9f7fe]">
-                          <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">{day.day}</td>
+                        <tr key={`${day.week}-${day.day}`} className="hover:bg-[#f9f7fe]">
+                          <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">
+                            {day.day} (Week {day.week}, {day.date})
+                          </td>
                           <td className="py-3 px-4 border border-[#6c54da]/20">
                             <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
                               {day.overnight}
