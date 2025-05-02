@@ -60,11 +60,6 @@ const US_HOLIDAYS = [
   { id: "valentines", name: "Valentine's Day" },
   { id: "mothers_day", name: "Mother's Day" },
   { id: "fathers_day", name: "Father's Day" },
-  { id: "spring_break", name: "Spring Break" },
-  { id: "summer_break", name: "Summer Break" },
-  { id: "winter_break", name: "Winter Break" },
-  { id: "children_birthdays", name: "Children's Birthdays" },
-  { id: "parents_birthdays", name: "Parents' Birthdays" },
 ];
 
 // Form validation schemas
@@ -103,8 +98,7 @@ export default function FamilyInformation() {
   
   // Holidays state
   const [selectedHolidays, setSelectedHolidays] = useState<string[]>([
-    "thanksgiving", "christmas", "new_years", "easter", "independence_day", 
-    "children_birthdays", "spring_break", "summer_break", "winter_break"
+    "thanksgiving", "christmas", "new_years", "easter", "independence_day"
   ]);
   
   // Initialize form hooks
@@ -716,27 +710,21 @@ export default function FamilyInformation() {
                 <div className="border rounded-lg p-5">
                   <h3 className="text-base font-medium text-[#2e1a87] mb-4">Important Holidays</h3>
                   
-                  <div className="bg-amber-50 border border-amber-100 rounded-md p-4 mb-6">
-                    <div className="flex items-start">
-                      <Calendar className="h-4 w-4 text-amber-500 mt-1 mr-2 flex-shrink-0" />
-                      <p className="text-sm text-amber-800">
-                        Select the holidays that are important to your family. This helps us create a parenting plan that includes only the holidays you care about.
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Select the holidays you want to include in your parenting plan:
+                  </p>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {US_HOLIDAYS.map((holiday) => (
-                      <div key={holiday.id} className="flex items-start space-x-2">
+                      <div key={holiday.id} className="flex items-center space-x-2">
                         <Checkbox 
                           id={holiday.id} 
                           checked={selectedHolidays.includes(holiday.id)}
                           onCheckedChange={() => toggleHoliday(holiday.id)}
-                          className="mt-0.5"
                         />
                         <Label
                           htmlFor={holiday.id}
-                          className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          className="text-sm font-medium text-gray-700 cursor-pointer"
                         >
                           {holiday.name}
                         </Label>
