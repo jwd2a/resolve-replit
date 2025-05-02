@@ -1,0 +1,96 @@
+Goal:
+Build a visual, fridge-friendly custody calendar view that uses plan data to display which parent the child is with on each day.
+This calendar should be styled for easy reading by parents and kids, and should be printable or shareable.
+
+🧱 Layout Structure
+Top: Month/Year heading (e.g., “May 2025”)
+
+Calendar grid: 7-column week view
+
+Columns: Sun → Sat (or Mon → Sun if preferred)
+
+Each cell = one calendar day
+
+Below grid: a legend explaining icons/colors
+
+📆 Calendar Cell Design (Each Day)
+Each day block includes:
+
+Date + Day (e.g., “Mon 13”)
+
+Color-coded box:
+
+Pink = Mom’s House
+
+Blue = Dad’s House
+
+Icon:
+
+Home icon = where the child stays that night
+
+→ Arrow = exchange day
+
+🏫 = school pickup/dropoff (optional)
+
+Text Label: “Mom” or “Dad”
+
+Optional: white background or slight gradient for visual lift
+
+🔄 Navigation
+Previous / Next buttons (top right) to cycle months
+
+These buttons should re-render the full grid with data from the appropriate month
+
+🎨 Legend (Bottom of Page)
+Show a fixed legend block like this:
+
+rust
+Copy
+Edit
+🟥 Mom's House    🟦 Dad's House    ➡ Exchange Day    🏫 School Pickup/Dropoff
+Use rounded tags or chips with background color
+
+Match the exact iconography from calendar days
+
+🧪 Functionality in Replit
+Use mock plan data:
+
+json
+Copy
+Edit
+{
+  "2025-05-01": { "parent": "Mom", "exchange": false, "school": false },
+  "2025-05-02": { "parent": "Dad", "exchange": true, "school": true },
+  ...
+}
+Generate the calendar grid based on the month
+
+Style each day block dynamically using this data
+
+No backend logic needed — this is a front-end display
+
+🖼️ Design Goals
+Font: clean, readable (think kid-safe)
+
+Visual hierarchy: parent name big, icons clear, dates small
+
+Light card styling (padding, rounded corners)
+
+Even spacing so that printing doesn’t break formatting
+
+🔁 Optional Enhancements (can come later)
+Toggle between “Month View” and “List View”
+
+Export as PDF or print-friendly version
+
+Mobile responsiveness
+
+✅ Summary for Replit
+
+Feature	Details
+Monthly grid	7 columns, 5–6 rows
+Cell content	Date, parent name, icon(s)
+Color logic	Pink = Mom, Blue = Dad
+Data-driven	Use JSON input from plan
+Legend	Fixed bottom section with color+icon explanations
+Click behavior	Not required yet

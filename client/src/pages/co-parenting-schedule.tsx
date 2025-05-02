@@ -5,14 +5,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Download, Printer, Calendar, Gift, Snowflake, Flower, Sun, AlertTriangle, 
-  Home, School, Utensils, Moon, Heart, Star, ArrowRight, ChevronLeft, ChevronRight
+  Home, School, Utensils, Moon, Heart, Star, ArrowRight, ChevronLeft, ChevronRight,
+  Repeat, ArrowRightLeft
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Label } from "@/components/ui/label";
 import { PrintStyles, PrintButton } from "@/styles/printStyles";
 import { DayPicker } from 'react-day-picker';
-import { format, addMonths, isSameMonth, isSameDay, parseISO, addDays } from 'date-fns';
+import { format, addMonths, isSameMonth, isSameDay, parseISO, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameWeek, getDate, getDay } from 'date-fns';
+
+// Define the structure for custody calendar entry
+interface CustodyCalendarEntry {
+  parent: string;
+  exchange: boolean;
+  school: boolean;
+}
+
+// Type for the custody calendar object
+interface CustodyCalendar {
+  [date: string]: CustodyCalendarEntry;
+}
 
 // Mock data - replace with actual data from the parenting plan
 const mockData = {
@@ -54,6 +67,41 @@ const mockData = {
     { week: 4, day: "Saturday", date: "27", overnight: "Sarah", dropoff: "—" },
     { week: 4, day: "Sunday", date: "28", overnight: "Eric", dropoff: "Sarah drops off at 5pm" }
   ],
+  
+  // New custody calendar data structure - formatted for our visual calendar
+  custodyCalendar: {
+    "2025-05-01": { parent: "Mom", exchange: false, school: false },
+    "2025-05-02": { parent: "Dad", exchange: true, school: true },
+    "2025-05-03": { parent: "Dad", exchange: false, school: false },
+    "2025-05-04": { parent: "Dad", exchange: false, school: false },
+    "2025-05-05": { parent: "Mom", exchange: true, school: true },
+    "2025-05-06": { parent: "Mom", exchange: false, school: true },
+    "2025-05-07": { parent: "Mom", exchange: false, school: true },
+    "2025-05-08": { parent: "Dad", exchange: true, school: true },
+    "2025-05-09": { parent: "Dad", exchange: false, school: true },
+    "2025-05-10": { parent: "Dad", exchange: false, school: false },
+    "2025-05-11": { parent: "Dad", exchange: false, school: false },
+    "2025-05-12": { parent: "Mom", exchange: true, school: true },
+    "2025-05-13": { parent: "Mom", exchange: false, school: true },
+    "2025-05-14": { parent: "Mom", exchange: false, school: true },
+    "2025-05-15": { parent: "Dad", exchange: true, school: true },
+    "2025-05-16": { parent: "Dad", exchange: false, school: true },
+    "2025-05-17": { parent: "Dad", exchange: false, school: false },
+    "2025-05-18": { parent: "Dad", exchange: false, school: false },
+    "2025-05-19": { parent: "Mom", exchange: true, school: true },
+    "2025-05-20": { parent: "Mom", exchange: false, school: true },
+    "2025-05-21": { parent: "Mom", exchange: false, school: true },
+    "2025-05-22": { parent: "Dad", exchange: true, school: true },
+    "2025-05-23": { parent: "Dad", exchange: false, school: true },
+    "2025-05-24": { parent: "Dad", exchange: false, school: false },
+    "2025-05-25": { parent: "Dad", exchange: false, school: false },
+    "2025-05-26": { parent: "Mom", exchange: true, school: false },
+    "2025-05-27": { parent: "Mom", exchange: false, school: true },
+    "2025-05-28": { parent: "Mom", exchange: false, school: true },
+    "2025-05-29": { parent: "Dad", exchange: true, school: true },
+    "2025-05-30": { parent: "Dad", exchange: false, school: true },
+    "2025-05-31": { parent: "Dad", exchange: false, school: false }
+  },
   holidaySchedule: [
     { holiday: "Thanksgiving", dates: "Nov 27–29", with: "Eric", notes: "Alternates annually" },
     { holiday: "Christmas Eve", dates: "Dec 24", with: "Sarah", notes: "Fixed" },
@@ -94,9 +142,10 @@ export default function CoParentingSchedule() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("weekly");
-  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date(2025, 4, 1)); // May 2025
+  const [custodyViewMonth, setCustodyViewMonth] = useState<Date>(new Date(2025, 4, 1)); // May 2025
   
-  // Define custom CSS classes for the react-day-picker
+  // Define custom CSS classes for the react-day-picker and the custody calendar
   const css = `
   .rdp {
     --rdp-cell-size: 40px;
@@ -132,6 +181,149 @@ export default function CoParentingSchedule() {
     height: 100%;
     background: linear-gradient(45deg, rgba(244, 114, 182, 0.2) 0%, rgba(244, 114, 182, 0.2) 50%, rgba(59, 130, 246, 0.2) 50%, rgba(59, 130, 246, 0.2) 100%);
     z-index: -1;
+  }
+  
+  /* Visual custody calendar styles */
+  .custody-calendar {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  .custody-day {
+    min-height: 90px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: transform 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .custody-day:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  
+  .custody-day-mom {
+    background-color: #FDD5E5;
+    border: 1px solid #F8B4D9;
+  }
+  
+  .custody-day-dad {
+    background-color: #D4E5FF;
+    border: 1px solid #B4D4FF;
+  }
+  
+  .custody-day-header {
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  .custody-day-mom .custody-day-header {
+    background-color: #FACDE1;
+    color: #97266D;
+  }
+  
+  .custody-day-dad .custody-day-header {
+    background-color: #C6DEFF;
+    color: #1E429F;
+  }
+  
+  .custody-day-content {
+    padding: 8px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .custody-day-date {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  
+  .custody-day-mom .custody-day-date {
+    color: #97266D;
+  }
+  
+  .custody-day-dad .custody-day-date {
+    color: #1E429F;
+  }
+  
+  .custody-day-parent {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .custody-day-icon {
+    margin-top: 2px;
+  }
+  
+  .custody-day-indicators {
+    position: absolute;
+    bottom: 6px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .custody-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: #F8F9FC;
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+  
+  .custody-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 16px;
+  }
+  
+  .mom-legend {
+    background-color: #FDD5E5;
+    color: #97266D;
+  }
+  
+  .dad-legend {
+    background-color: #D4E5FF;
+    color: #1E429F;
+  }
+  
+  .exchange-legend {
+    background-color: #FFF1CD;
+    color: #92400E;
+  }
+  
+  .school-legend {
+    background-color: #E2F2E9;
+    color: #046C4E;
+  }
+  
+  /* Other day states */
+  .custody-day-exchange::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #FBBF24;
+  }
+  
+  .custody-day-outside-month {
+    opacity: 0.4;
   }
   `;
   
@@ -197,6 +389,46 @@ export default function CoParentingSchedule() {
     mom: 'schedule-mom',
     dad: 'schedule-dad',
     transition: 'transition-day'
+  };
+  
+  // Helper functions for the custody calendar
+  const getCustodyDayInfo = (dateString: string) => {
+    return mockData.custodyCalendar[dateString] || { 
+      parent: "Mom", // Default to Mom if no data
+      exchange: false,
+      school: false
+    };
+  };
+  
+  // Generate days for the custody calendar
+  const generateCalendarDays = (month: Date) => {
+    const monthStart = startOfMonth(month);
+    const monthEnd = endOfMonth(month);
+    const startDate = startOfWeek(monthStart, { weekStartsOn: 0 }); // Start from Sunday
+    const endDate = endOfWeek(monthEnd, { weekStartsOn: 0 }); // End on Saturday
+    
+    return eachDayOfInterval({ start: startDate, end: endDate });
+  };
+  
+  // Group days into weeks
+  const groupIntoWeeks = (days: Date[]) => {
+    return days.reduce((weeks: Date[][], date: Date, i: number) => {
+      if (i % 7 === 0) {
+        weeks.push([date]);
+      } else {
+        weeks[weeks.length - 1].push(date);
+      }
+      return weeks;
+    }, []);
+  };
+  
+  // Generate calendar data for the selected month
+  const calendarDays = generateCalendarDays(custodyViewMonth);
+  const calendarWeeks = groupIntoWeeks(calendarDays);
+  
+  // Format date as YYYY-MM-DD for custody calendar data lookup
+  const formatDateString = (date: Date) => {
+    return format(date, 'yyyy-MM-dd');
   };
   
   if (!mockData.isPlanComplete) {
