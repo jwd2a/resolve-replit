@@ -27,28 +27,43 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+// List of US states for form dropdowns
+const US_STATES = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", 
+  "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", 
+  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", 
+  "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", 
+  "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", 
+  "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", 
+  "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming",
+  "District of Columbia", "Puerto Rico", "U.S. Virgin Islands"
+];
+
 // Form validation schemas
 const userSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  email: z.string().email("Please enter a valid email"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
+  displayName: z.string().min(3, { message: "Full name must be at least 3 characters" }),
+  phone: z.string().min(10, { message: "Please enter a valid phone number" }),
+  address: z.string().min(5, { message: "Please enter your address" }),
+  city: z.string().min(2, { message: "City is required" }),
+  state: z.string().min(2, { message: "State is required" }),
+  zip: z.string().min(5, { message: "ZIP code is required" }),
 });
 
 const coParentSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  email: z.string().email("Please enter a valid email"),
-  phone: z.string().optional(),
+  fullName: z.string().min(3, { message: "Co-parent's name must be at least 3 characters" }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  phone: z.string().min(10, { message: "Please enter a valid phone number" }).optional(),
+  relationship: z.string().optional(),
 });
 
 const childSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  birthDate: z.string().min(1, "Birth date is required"),
-  age: z.number().min(0, "Age must be a positive number"),
+  fullName: z.string().min(3, { message: "Child's name must be at least 3 characters" }),
+  dateOfBirth: z.string().min(1, { message: "Please enter child's date of birth" }),
+  gender: z.string().optional(),
 });
 
 const jurisdictionSchema = z.object({
-  state: z.string().min(1, "State is required"),
-  county: z.string().min(1, "County is required"),
+  jurisdiction: z.string().min(1, { message: "Please select a jurisdiction" }),
 });
 
 export default function FamilyInformation() {
@@ -62,9 +77,12 @@ export default function FamilyInformation() {
   const userForm = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      fullName: "Jane Smith",
-      email: "jane.smith@example.com",
+      displayName: "Jane Smith",
       phone: "(555) 123-4567",
+      address: "123 Main Street",
+      city: "Los Angeles",
+      state: "California",
+      zip: "90001",
     },
   });
   
@@ -73,15 +91,15 @@ export default function FamilyInformation() {
     defaultValues: {
       fullName: "John Smith",
       email: "john.smith@example.com",
-      phone: "",
+      phone: "(555) 987-6543",
+      relationship: "Ex-spouse",
     },
   });
   
   const jurisdictionForm = useForm({
     resolver: zodResolver(jurisdictionSchema),
     defaultValues: {
-      state: "California",
-      county: "Los Angeles",
+      jurisdiction: "California",
     },
   });
   
@@ -246,42 +264,117 @@ export default function FamilyInformation() {
                 <form onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-4">
                   <FormField
                     control={userForm.control}
-                    name="fullName"
+                    name="displayName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Legal Name</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <div className="relative">
+                            <Input placeholder="" {...field} className="h-9 text-sm" />
+                            {field.value && (
+                              <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                ✓
+                              </div>
+                            )}
+                          </div>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
                   
-                  <FormField
-                    control={userForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                          <Input type="email" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div>
+                    <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
+                    
+                    <FormField
+                      control={userForm.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem className="mb-2">
+                          <FormControl>
+                            <div className="relative">
+                              <Input placeholder="Address" {...field} className="h-9 text-sm pl-8" />
+                              <div className="absolute left-2 top-2 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                              </div>
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                      <FormField
+                        control={userForm.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input placeholder="City" {...field} className="h-9 text-sm" />
+                            </FormControl>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={userForm.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger className="h-9 text-sm">
+                                <SelectValue placeholder="State" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {US_STATES.map((state) => (
+                                  <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
+                                    {state}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={userForm.control}
+                        name="zip"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input placeholder="ZIP" {...field} className="h-9 text-sm" />
+                            </FormControl>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                   
                   <FormField
                     control={userForm.control}
                     name="phone"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Phone number</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <div className="relative">
+                            <div className="absolute left-2 top-2 text-gray-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            </div>
+                            <Input placeholder="(555) 123-4567" {...field} className="h-9 text-sm pl-8" />
+                            {field.value && (
+                              <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                ✓
+                              </div>
+                            )}
+                          </div>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
@@ -306,12 +399,19 @@ export default function FamilyInformation() {
                     control={coParentForm.control}
                     name="fullName"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Co-Parent's Full Legal Name</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Co-Parent's Full Legal Name</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <div className="relative">
+                            <Input placeholder="" {...field} className="h-9 text-sm" />
+                            {field.value && (
+                              <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                ✓
+                              </div>
+                            )}
+                          </div>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
@@ -320,12 +420,22 @@ export default function FamilyInformation() {
                     control={coParentForm.control}
                     name="email"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Co-Parent's Email Address</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Co-Parent's Email Address</FormLabel>
                         <FormControl>
-                          <Input type="email" {...field} />
+                          <div className="relative">
+                            <div className="absolute left-2 top-2 text-gray-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            </div>
+                            <Input placeholder="co-parent@example.com" type="email" {...field} className="h-9 text-sm pl-8" />
+                            {field.value && (
+                              <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                ✓
+                              </div>
+                            )}
+                          </div>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
@@ -334,12 +444,45 @@ export default function FamilyInformation() {
                     control={coParentForm.control}
                     name="phone"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Co-Parent's Phone Number (Optional)</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Co-Parent's Phone Number</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <div className="relative">
+                            <div className="absolute left-2 top-2 text-gray-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            </div>
+                            <Input placeholder="(555) 987-6543" {...field} className="h-9 text-sm pl-8" />
+                            {field.value && (
+                              <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                ✓
+                              </div>
+                            )}
+                          </div>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={coParentForm.control}
+                    name="relationship"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Relationship to You</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger className="h-9 text-sm">
+                            <SelectValue placeholder="Select relationship" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="ex_spouse">Ex-spouse</SelectItem>
+                            <SelectItem value="ex_partner">Ex-partner</SelectItem>
+                            <SelectItem value="spouse">Current spouse</SelectItem>
+                            <SelectItem value="partner">Current partner</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
