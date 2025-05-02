@@ -277,35 +277,6 @@ export default function CoParentVerification() {
             )}
           </div>
         </div>
-        
-        <div className="bg-[#f5f0ff] rounded-xl p-5 border border-[#6c54da]/10">
-          <h3 className="font-medium text-[#2e1a87] text-sm mb-2">Don't see your co-parent?</h3>
-          <p className="text-gray-600 text-sm mb-3">
-            If your co-parent isn't available right now, you can:
-          </p>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li className="flex gap-2">
-              <span className="text-[#6c54da] font-medium">•</span>
-              <span>Reschedule for a time when you're both available</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="text-[#6c54da] font-medium">•</span>
-              <span>Make sure they have access to their email to receive the code</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="text-[#6c54da] font-medium">•</span>
-              <span>Check if the correct email address is being used</span>
-            </li>
-          </ul>
-          
-          <Button
-            variant="outline"
-            className="mt-4 w-full border-[#6c54da]/20 text-[#2e1a87] hover:bg-[#f0e6ff]"
-            onClick={() => navigate("/dashboard-simplified")}
-          >
-            Return to Dashboard
-          </Button>
-        </div>
       </main>
       
       {/* Information dialog */}
