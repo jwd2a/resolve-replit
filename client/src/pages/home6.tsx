@@ -145,10 +145,10 @@ export default function Home6() {
               </p>
             </div>
             
-            {/* Steps and button on single horizontal line */}
+            {/* Steps and button centered horizontally and vertically */}
             <div className="flex justify-between items-center">
               {/* Left side: Step indicators */}
-              <div className="flex-1 flex items-start space-x-6 relative">
+              <div className="flex-1 flex items-center justify-start space-x-6 relative">
                 
                 {/* Step 1: Family Info */}
                 <div className="relative flex flex-col items-center z-10">
@@ -247,7 +247,7 @@ export default function Home6() {
               <div className="mx-6 h-10 w-px bg-white/10 hidden md:block"></div>
               
               {/* Right side: Start Course button */}
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col justify-center items-end">
                 <Button
                   disabled={!paymentStatus}
                   className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-4 h-9 text-sm font-medium whitespace-nowrap"
