@@ -74,7 +74,7 @@ export function NavigationMenu() {
                 <Button 
                   variant="ghost" 
                   className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
-                    isActive(dashboardRoute.path) || isActive(home5Route.path) || isActive(home6Route.path)
+                    isActive(home6Route.path) || isActive(dashboardRoute.path) || isActive(home5Route.path)
                       ? "bg-[#3d2a9b] text-white" 
                       : "text-white hover:bg-[#3d2a9b]"
                   }`}
@@ -88,16 +88,26 @@ export function NavigationMenu() {
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">HOME</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
-                <Link href={dashboardRoute.path}>
+                <Link href={home6Route.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Dashboard (Main)</span>
-                    {isActive(dashboardRoute.path) && (
+                    <span>Main Dashboard</span>
+                    {isActive(home6Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
                 </Link>
                 
+                <Link href={dashboardRoute.path}>
+                  <DropdownMenuItem className="cursor-pointer py-2">
+                    <Home size={16} className="mr-2 text-[#6c54da]" />
+                    <span>Dashboard (Original)</span>
+                    {isActive(dashboardRoute.path) && (
+                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                    )}
+                  </DropdownMenuItem>
+                </Link>
+                                
                 <Link href={home2Route.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
@@ -108,41 +118,11 @@ export function NavigationMenu() {
                   </DropdownMenuItem>
                 </Link>
                 
-                <Link href={home3Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Home 3</span>
-                    {isActive(home3Route.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={home4Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Home 4</span>
-                    {isActive(home4Route.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
                 <Link href={home5Route.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
                     <span>Home 5 (Course Home)</span>
                     {isActive(home5Route.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={home6Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Home 6 (Compact Dashboard)</span>
-                    {isActive(home6Route.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
