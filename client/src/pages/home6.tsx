@@ -147,10 +147,8 @@ export default function Home6() {
             
             {/* Steps and button on single horizontal line */}
             <div className="flex justify-between items-center">
-              {/* Left side: Steps with connecting line */}
+              {/* Left side: Step indicators */}
               <div className="flex-1 flex items-start space-x-6 relative">
-                {/* Connecting line */}
-                <div className="absolute top-4 left-4 right-6 h-[1px] bg-white/20"></div>
                 
                 {/* Step 1: Family Info */}
                 <div className="relative flex flex-col items-center z-10">
