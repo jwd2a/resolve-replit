@@ -91,8 +91,8 @@ export function PrintStyles() {
         background-color: #ebf8ff !important;
       }
       
-      .bg-\\[\\#f5f0ff\\] {
-        background-color: #f9f9f9 !important;
+      [class*="bg-"] {
+        background-color: white !important;
       }
       
       /* Ensure tables print well */
@@ -136,7 +136,7 @@ export function PrintButton({ children }: { children: React.ReactNode }) {
   return (
     <button
       onClick={handlePrint}
-      className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2 no-print"
+      className="px-4 py-2 border border-[#6c54da]/30 text-[#2e1a87] rounded-md hover:bg-[#f5f0ff]/80 transition-colors flex items-center gap-2 no-print"
     >
       {children}
     </button>

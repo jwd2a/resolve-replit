@@ -18,6 +18,27 @@
   .section-status-badge {
     @apply text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap;
   }
+  
+  /* Print utility classes */
+  .print\:hide {
+    @apply print:hidden;
+  }
+  
+  .print\:show {
+    @apply hidden print:block;
+  }
+  
+  .print\:page-break-after {
+    @apply print:break-after-page;
+  }
+  
+  .print\:page-break-before {
+    @apply print:break-before-page;
+  }
+  
+  .print\:avoid-break {
+    @apply print:break-inside-avoid;
+  }
 }
 
 :root {

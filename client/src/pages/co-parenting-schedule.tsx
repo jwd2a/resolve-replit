@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { PrintStyles, PrintButton } from "@/styles/printStyles";
 
 // Mock data - replace with actual data from the parenting plan
 const mockData = {
@@ -167,7 +168,7 @@ export default function CoParentingSchedule() {
 
   return (
     <div className="min-h-screen bg-[#f9f7fe]">
-      <style>{printStyles}</style>
+      <PrintStyles />
       <div className="no-print">
         <NavigationMenu />
       </div>
@@ -201,14 +202,10 @@ export default function CoParentingSchedule() {
                 <Download className="h-4 w-4" />
                 <span className="hidden sm:inline">Download</span> PDF
               </Button>
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
-                onClick={handlePrint}
-              >
+              <PrintButton>
                 <Printer className="h-4 w-4" />
                 <span className="hidden sm:inline">Print</span> View
-              </Button>
+              </PrintButton>
             </div>
           </div>
         </div>
