@@ -647,11 +647,11 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Spring Break</h2>
                 <p className="text-gray-600 text-sm">
-                  {kidFriendly ? "My spring vacation schedule" : `Spring break schedule for ${mockData.springBreak.dateRange}.`}
+                  My spring vacation schedule
                 </p>
               </div>
               
-              {kidFriendly ? (
+              {true ? (
                 <div className="rounded-xl overflow-hidden shadow-lg border-2 border-green-200">
                   <div className="bg-green-50 p-5 text-center relative">
                     <div className="absolute top-4 right-4">
@@ -710,11 +710,11 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Summer Break</h2>
                 <p className="text-gray-600 text-sm">
-                  {kidFriendly ? "My summer vacation adventures" : `Summer schedule for ${mockData.summerBreak.dateRange}.`}
+                  My summer vacation adventures
                 </p>
               </div>
               
-              {kidFriendly ? (
+              {true ? (
                 <div>
                   <div className="text-center mb-6">
                     <div className="inline-block px-4 py-2 bg-amber-50 rounded-full text-amber-800 font-bold text-sm border border-amber-200">
