@@ -212,12 +212,17 @@ export default function Home6() {
                   className="relative flex flex-col items-center z-10 cursor-pointer py-2 mb-1" 
                   onClick={() => toggleStepStatus(step.id)}
                 >
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200
+                  <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200
                     ${step.completed 
                       ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
                       : "bg-white/30 text-white border-[1.5px] border-white/60 shadow-sm"
                     }`}
                   >
+                    {step.completed && (
+                      <div className="absolute -top-1 -left-1 w-[14px] h-[14px] bg-green-500 rounded-full flex items-center justify-center z-20">
+                        <Check className="h-2.5 w-2.5 text-white" />
+                      </div>
+                    )}
                     <div className={`w-6 h-6 ${!step.completed ? "opacity-80" : ""}`}>
                       {step.icon}
                     </div>
