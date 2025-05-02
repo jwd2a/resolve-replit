@@ -4,6 +4,7 @@ import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Select,
   SelectContent,
@@ -22,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, ArrowRight, Home, User, Users, MapPin, Info, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Home, User, Users, MapPin, Info, Plus, Trash2, Check, Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +38,33 @@ const US_STATES = [
   "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", 
   "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming",
   "District of Columbia", "Puerto Rico", "U.S. Virgin Islands"
+];
+
+// List of holidays for parenting plan
+const US_HOLIDAYS = [
+  { id: "new_years", name: "New Year's Day" },
+  { id: "mlk_day", name: "Martin Luther King Jr. Day" },
+  { id: "presidents_day", name: "Presidents' Day" },
+  { id: "memorial_day", name: "Memorial Day" },
+  { id: "juneteenth", name: "Juneteenth" },
+  { id: "independence_day", name: "Independence Day" },
+  { id: "labor_day", name: "Labor Day" },
+  { id: "columbus_day", name: "Columbus Day / Indigenous Peoples' Day" },
+  { id: "veterans_day", name: "Veterans Day" },
+  { id: "thanksgiving", name: "Thanksgiving" },
+  { id: "christmas_eve", name: "Christmas Eve" },
+  { id: "christmas", name: "Christmas Day" },
+  { id: "new_years_eve", name: "New Year's Eve" },
+  { id: "easter", name: "Easter" },
+  { id: "halloween", name: "Halloween" },
+  { id: "valentines", name: "Valentine's Day" },
+  { id: "mothers_day", name: "Mother's Day" },
+  { id: "fathers_day", name: "Father's Day" },
+  { id: "spring_break", name: "Spring Break" },
+  { id: "summer_break", name: "Summer Break" },
+  { id: "winter_break", name: "Winter Break" },
+  { id: "children_birthdays", name: "Children's Birthdays" },
+  { id: "parents_birthdays", name: "Parents' Birthdays" },
 ];
 
 // Form validation schemas
@@ -72,6 +100,12 @@ export default function FamilyInformation() {
   
   // Initialize tabs state
   const [activeTab, setActiveTab] = useState("you");
+  
+  // Holidays state
+  const [selectedHolidays, setSelectedHolidays] = useState<string[]>([
+    "thanksgiving", "christmas", "new_years", "easter", "independence_day", 
+    "children_birthdays", "spring_break", "summer_break", "winter_break"
+  ]);
   
   // Initialize form hooks
   const userForm = useForm({
@@ -243,7 +277,7 @@ export default function FamilyInformation() {
           </div>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-4 bg-[#f5f0ff]">
+            <TabsList className="grid grid-cols-5 bg-[#f5f0ff]">
               <TabsTrigger value="you" className="data-[state=active]:bg-[#6c54da] data-[state=active]:text-white">
                 <User className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Your Info</span>
@@ -262,6 +296,11 @@ export default function FamilyInformation() {
                 <MapPin className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Jurisdiction</span>
                 <span className="sm:hidden">Location</span>
+              </TabsTrigger>
+              <TabsTrigger value="holidays" className="data-[state=active]:bg-[#6c54da] data-[state=active]:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span className="hidden sm:inline">Holidays</span>
+                <span className="sm:hidden">Holidays</span>
               </TabsTrigger>
             </TabsList>
             
