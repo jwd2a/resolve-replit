@@ -119,12 +119,20 @@ export default function HolidayPreferences() {
                       <Checkbox 
                         id={holiday.id} 
                         checked={isSelected}
-                        onCheckedChange={() => toggleHoliday(holiday.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedHolidays(prev => [...prev, holiday.id]);
+                          } else {
+                            setSelectedHolidays(prev => prev.filter(id => id !== holiday.id));
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()} 
                         className="mr-3"
                       />
                       <Label
                         htmlFor={holiday.id}
                         className="text-sm cursor-pointer w-full"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         {holiday.name}
                       </Label>
@@ -149,7 +157,7 @@ export default function HolidayPreferences() {
           </div>
           
           <Button 
-            className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
+            className="bg-[#2e1a87] hover:bg-[#25156d] w-full py-6 text-base font-medium"
             onClick={handleSave}
           >
             Save Preferences
