@@ -115,104 +115,162 @@ export default function Home6() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Welcome banner - more compact design with left-aligned icons */}
-        <div className="rounded-lg bg-[#2e1a87] p-5 mb-6 text-white relative overflow-hidden">
+        {/* Welcome banner - completely redesigned course readiness tracker */}
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] p-6 py-6 mb-6 text-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute right-0 bottom-0 w-64 h-64 bg-indigo-500/20 rounded-full -mr-20 -mb-20"></div>
+          <div className="absolute left-1/2 top-0 w-32 h-32 bg-purple-400/10 rounded-full -mt-10"></div>
+          
           <div className="relative z-10">
-            <h1 className="text-xl font-medium mb-1">Welcome to Your Family's Parenting Plan</h1>
-            <p className="text-white/90 text-sm mb-3">
-              To begin your course, please complete the items below.
-            </p>
+            {/* Top Section - Title and subtitle */}
+            <div className="mb-5">
+              <h1 className="text-xl font-medium mb-1">Welcome to Your Family's Parenting Plan</h1>
+              <p className="text-white/90 text-sm">
+                To begin your course, please complete the steps below.
+              </p>
+            </div>
             
-            {/* Progress tracker with icons - left aligned */}
-            <div className="w-2/3 mb-4">
-              <div className="relative flex items-center gap-6">
-                {/* Line connecting all steps */}
-                <div className="absolute left-6 right-0 h-1 bg-indigo-600/30"></div>
+            {/* Middle Section - Progress tracker */}
+            <div className="mb-5">
+              {/* Overall progress bar */}
+              <div className="mb-5 relative">
+                <div className="h-1.5 bg-white/20 rounded-full overflow-hidden w-full">
+                  <div 
+                    className="h-full bg-green-400 rounded-full transition-all duration-500" 
+                    style={{ 
+                      width: `${
+                        (((requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" ? 1 : 0) + 
+                        (requirements.find(r => r.id === "waivers")?.userStatus === "Completed" ? 1 : 0) + 
+                        (requirements.find(r => r.id === "holidays")?.userStatus === "Completed" ? 1 : 0) + 
+                        (paymentStatus ? 1 : 0)) / 4) * 100
+                      }%` 
+                    }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs text-white/70 px-1 mt-1">
+                  <span>0%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+              
+              {/* 4-step progress tracker with arrows */}
+              <div className="grid grid-cols-4 relative">
+                {/* Connecting line */}
+                <div className="absolute top-5 left-[calc(10%+8px)] right-[calc(10%+8px)] h-0.5 bg-white/20"></div>
                 
                 {/* Step 1: Co-Parent Registration */}
-                <div className="relative z-10">
-                  {/* Completed/active step indicator */}
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
-                    ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white ring-2 ring-white" 
-                      : "bg-white/90 text-[#2e1a87]"
-                    }`}>
-                    {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <Users className="h-4 w-4" />
-                    }
+                <div className="relative flex flex-col items-center">
+                  <div className="tooltip-container" title={requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" ? "Completed" : "Co-parent invited but not yet joined"}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center relative z-10
+                      ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
+                        ? "bg-green-500 text-white" 
+                        : "bg-white/20 text-white border-2 border-white/40"
+                      } transition-all duration-300`}
+                    >
+                      {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
+                        ? <CheckCircle className="h-5 w-5" />
+                        : <Users className="h-5 w-5" />
+                      }
+                    </div>
                   </div>
-                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Co-Parent</span>
+                  <span className="text-xs font-medium text-white mt-2 text-center">Co-Parent</span>
                 </div>
                 
                 {/* Step 2: Waivers */}
-                <div className="relative z-10">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
-                    ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white ring-2 ring-white" 
-                      : "bg-white/90 text-[#2e1a87]"
-                    }`}>
-                    {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <FileText className="h-4 w-4" />
-                    }
+                <div className="relative flex flex-col items-center">
+                  <div className="tooltip-container" title={requirements.find(r => r.id === "waivers")?.userStatus === "Completed" ? "Completed" : "Sign required waivers"}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center relative z-10
+                      ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
+                        ? "bg-green-500 text-white" 
+                        : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
+                          ? "bg-white text-[#2e1a87] animate-pulse" 
+                          : "bg-white/20 text-white border-2 border-white/40"
+                      } transition-all duration-300`}
+                    >
+                      {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
+                        ? <CheckCircle className="h-5 w-5" />
+                        : <FileText className="h-5 w-5" />
+                      }
+                    </div>
                   </div>
-                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Waivers</span>
+                  <span className="text-xs font-medium text-white mt-2 text-center">Waivers</span>
                 </div>
                 
                 {/* Step 3: Holiday Preferences */}
-                <div className="relative z-10">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
-                    ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white ring-2 ring-white" 
-                      : "bg-white/90 text-[#2e1a87]"
-                    }`}>
-                    {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <CalendarDays className="h-4 w-4" />
-                    }
+                <div className="relative flex flex-col items-center">
+                  <div className="tooltip-container" title={requirements.find(r => r.id === "holidays")?.userStatus === "Completed" ? "Completed" : "Select holiday preferences"}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center relative z-10
+                      ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
+                        ? "bg-green-500 text-white" 
+                        : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
+                          ? "bg-white text-[#2e1a87] animate-pulse" 
+                          : "bg-white/20 text-white border-2 border-white/40"
+                      } transition-all duration-300`}
+                    >
+                      {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
+                        ? <CheckCircle className="h-5 w-5" />
+                        : <CalendarDays className="h-5 w-5" />
+                      }
+                    </div>
                   </div>
-                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Holidays</span>
+                  <span className="text-xs font-medium text-white mt-2 text-center">Holidays</span>
                 </div>
                 
                 {/* Step 4: Payment */}
-                <div className="relative z-10">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md
-                    ${paymentStatus 
-                      ? "bg-green-500 text-white ring-2 ring-white" 
-                      : "bg-white/90 text-[#2e1a87]"
-                    }`}>
-                    {paymentStatus 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <CreditCard className="h-4 w-4" />
-                    }
+                <div className="relative flex flex-col items-center">
+                  <div className="tooltip-container" title={paymentStatus ? "Completed" : "Complete payment to access course"}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center relative z-10
+                      ${paymentStatus 
+                        ? "bg-green-500 text-white" 
+                        : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
+                          ? "bg-white text-[#2e1a87] animate-pulse" 
+                          : "bg-white/20 text-white border-2 border-white/40"
+                      } transition-all duration-300`}
+                    >
+                      {paymentStatus 
+                        ? <CheckCircle className="h-5 w-5" />
+                        : <CreditCard className="h-5 w-5" />
+                      }
+                    </div>
                   </div>
-                  <span className="text-[10px] font-medium text-white block mt-1 text-center">Payment</span>
+                  <span className="text-xs font-medium text-white mt-2 text-center">Payment</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center justify-between">
-              <p className="text-white/80 text-xs">
-                Your progress will be saved as you go.
-              </p>
+            {/* Bottom Section - CTA and text */}
+            <div className="flex items-center justify-between mt-6">
+              <div>
+                <p className="text-white/80 text-xs flex items-center">
+                  <Clock className="h-3.5 w-3.5 mr-1.5 inline" />
+                  <span>Estimated time to complete: 10-15 minutes</span>
+                </p>
+                <p className="text-white/80 text-xs mt-1">
+                  Your progress will be saved as you go.
+                </p>
+              </div>
+              
               <div className="flex flex-col items-end">
                 <Button
                   disabled={!paymentStatus}
-                  className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-md"
-                  size="sm"
+                  className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-md px-6 h-10 font-medium"
+                  size="default"
                 >
-                  Start Course <ArrowRight className="ml-2 h-4 w-4" />
+                  {paymentStatus ? (
+                    <>Start Course <ArrowRight className="ml-2 h-4 w-4" /></>
+                  ) : (
+                    <>Complete Required Steps</>
+                  )}
                 </Button>
-                <p className="text-white/80 text-xs mt-1">
-                  All items must be completed before starting.
-                </p>
+                {!paymentStatus && (
+                  <p className="text-white/80 text-xs mt-1.5 flex items-center">
+                    <LockIcon className="h-3 w-3 mr-1" />
+                    All steps must be completed before starting
+                  </p>
+                )}
               </div>
             </div>
           </div>
-          
-          {/* Simplified background */}
-          <div className="absolute right-0 bottom-0 w-64 h-64 bg-indigo-500/20 rounded-full -mr-32 -mb-32"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
