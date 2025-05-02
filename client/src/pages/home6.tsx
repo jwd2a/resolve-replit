@@ -131,123 +131,121 @@ export default function Home6() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Welcome banner - single row layout with icons and button on the same line */}
-        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-3 px-5 mb-6 text-white relative overflow-hidden">
+        {/* Welcome banner with true vertical alignment */}
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-5 px-5 mb-6 text-white relative overflow-hidden flex flex-col">
           {/* Background decorative element - subtle and minimal */}
           <div className="absolute right-0 bottom-0 w-48 h-48 bg-indigo-500/10 rounded-full -mr-16 -mb-16"></div>
           
           <div className="relative z-10">
             {/* Title section */}
-            <div className="mb-4">
+            <div className="mb-6">
               <h1 className="text-lg font-medium mb-0.5">Welcome to Your Family's Parenting Plan</h1>
               <p className="text-white/80 text-xs">
                 To begin your course, please complete the steps below.
               </p>
             </div>
-            
-            {/* Steps and button centered horizontally and vertically */}
-            <div className="flex justify-between items-center">
-              {/* Left side: Step indicators */}
-              <div className="flex-1 flex items-center justify-start space-x-6 relative">
-                
-                {/* Step 1: Family Info */}
-                <div className="relative flex flex-col items-center z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                    ${true 
-                      ? "bg-green-500 text-white border border-white/20" 
-                      : "bg-white/10 text-white/80 border border-white/30"
-                    }`}
-                  >
-                    {true 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <Home className="h-4 w-4" />
-                    }
-                  </div>
-                  <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Family Info</span>
+          </div>
+          
+          {/* New two-row layout that makes alignment easier */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+            {/* Step indicators in the first 3 columns */}
+            <div className="col-span-1 md:col-span-3 flex items-center justify-between md:justify-start space-x-6">
+              {/* Step 1: Family Info */}
+              <div className="relative flex flex-col items-center z-10">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                  ${true 
+                    ? "bg-green-500 text-white border border-white/20" 
+                    : "bg-white/10 text-white/80 border border-white/30"
+                  }`}
+                >
+                  {true 
+                    ? <CheckCircle className="h-4 w-4" />
+                    : <Home className="h-4 w-4" />
+                  }
                 </div>
-                
-                {/* Step 2: Co-Parent Registration */}
-                <div className="relative flex flex-col items-center z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                    ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white border border-white/20" 
-                      : "bg-white/10 text-white/80 border border-white/30"
-                    }`}
-                  >
-                    {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : <Users className="h-4 w-4" />
-                    }
-                  </div>
-                  <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Co-Parent</span>
-                </div>
-                
-                {/* Step 3: Waivers */}
-                <div className="relative flex flex-col items-center z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                    ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white border border-white/20" 
-                      : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
-                        ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                        : "bg-white/10 text-white/80 border border-white/30"
-                    }`}
-                  >
-                    {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
-                        ? <Clock className="h-4 w-4" />
-                        : <FileText className="h-4 w-4" />
-                    }
-                  </div>
-                  <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Waivers</span>
-                </div>
-                
-                {/* Step 4: Holiday Preferences */}
-                <div className="relative flex flex-col items-center z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                    ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                      ? "bg-green-500 text-white border border-white/20" 
-                      : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
-                        ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                        : "bg-white/10 text-white/80 border border-white/30"
-                    }`}
-                  >
-                    {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
-                        ? <Clock className="h-4 w-4" />
-                        : <CalendarDays className="h-4 w-4" />
-                    }
-                  </div>
-                  <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Holidays</span>
-                </div>
-                
-                {/* Step 5: Payment */}
-                <div className="relative flex flex-col items-center z-10">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center
-                    ${paymentStatus 
-                      ? "bg-green-500 text-white border border-white/20" 
-                      : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
-                        ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
-                        : "bg-white/10 text-white/80 border border-white/30"
-                    }`}
-                  >
-                    {paymentStatus 
-                      ? <CheckCircle className="h-4 w-4" />
-                      : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
-                        ? <Clock className="h-4 w-4" />
-                        : <CreditCard className="h-4 w-4" />
-                    }
-                  </div>
-                  <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Payment</span>
-                </div>
+                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Family Info</span>
               </div>
               
-              {/* Divider */}
-              <div className="mx-6 h-10 w-px bg-white/10 hidden md:block"></div>
+              {/* Step 2: Co-Parent Registration */}
+              <div className="relative flex flex-col items-center z-10">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                  ${requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
+                    ? "bg-green-500 text-white border border-white/20" 
+                    : "bg-white/10 text-white/80 border border-white/30"
+                  }`}
+                >
+                  {requirements.find(r => r.id === "co-parent")?.userStatus === "Completed" 
+                    ? <CheckCircle className="h-4 w-4" />
+                    : <Users className="h-4 w-4" />
+                  }
+                </div>
+                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Co-Parent</span>
+              </div>
               
-              {/* Right side: Start Course button */}
-              <div className="flex flex-col justify-center items-end">
+              {/* Step 3: Waivers */}
+              <div className="relative flex flex-col items-center z-10">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                  ${requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
+                    ? "bg-green-500 text-white border border-white/20" 
+                    : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
+                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
+                      : "bg-white/10 text-white/80 border border-white/30"
+                  }`}
+                >
+                  {requirements.find(r => r.id === "waivers")?.userStatus === "Completed" 
+                    ? <CheckCircle className="h-4 w-4" />
+                    : requirements.find(r => r.id === "co-parent")?.userStatus === "Completed"
+                      ? <Clock className="h-4 w-4" />
+                      : <FileText className="h-4 w-4" />
+                  }
+                </div>
+                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Waivers</span>
+              </div>
+              
+              {/* Step 4: Holiday Preferences */}
+              <div className="relative flex flex-col items-center z-10">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                  ${requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
+                    ? "bg-green-500 text-white border border-white/20" 
+                    : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
+                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
+                      : "bg-white/10 text-white/80 border border-white/30"
+                  }`}
+                >
+                  {requirements.find(r => r.id === "holidays")?.userStatus === "Completed" 
+                    ? <CheckCircle className="h-4 w-4" />
+                    : requirements.find(r => r.id === "waivers")?.userStatus === "Completed"
+                      ? <Clock className="h-4 w-4" />
+                      : <CalendarDays className="h-4 w-4" />
+                  }
+                </div>
+                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Holidays</span>
+              </div>
+              
+              {/* Step 5: Payment */}
+              <div className="relative flex flex-col items-center z-10">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                  ${paymentStatus 
+                    ? "bg-green-500 text-white border border-white/20" 
+                    : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
+                      ? "bg-white/90 text-[#2e1a87] border-2 border-white" 
+                      : "bg-white/10 text-white/80 border border-white/30"
+                  }`}
+                >
+                  {paymentStatus 
+                    ? <CheckCircle className="h-4 w-4" />
+                    : requirements.find(r => r.id === "holidays")?.userStatus === "Completed"
+                      ? <Clock className="h-4 w-4" />
+                      : <CreditCard className="h-4 w-4" />
+                  }
+                </div>
+                <span className="text-[10px] text-white/90 mt-1 text-center whitespace-nowrap">Payment</span>
+              </div>
+            </div>
+            
+            {/* Start Course button in the last column */}
+            <div className="col-span-1 flex items-center justify-center md:justify-end">
+              <div>
                 <Button
                   disabled={!paymentStatus}
                   className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-4 h-9 text-sm font-medium whitespace-nowrap"
