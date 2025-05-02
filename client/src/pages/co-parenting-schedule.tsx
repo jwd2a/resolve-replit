@@ -3,9 +3,14 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Download, Printer, Calendar, Gift, Snowflake, Flower, Sun, AlertTriangle } from "lucide-react";
+import { 
+  Download, Printer, Calendar, Gift, Snowflake, Flower, Sun, AlertTriangle, 
+  Home, School, Utensils, Moon, Heart, Star, ArrowRight
+} from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { NavigationMenu } from "@/components/NavigationMenu";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 // Mock data - replace with actual data from the parenting plan
 const mockData = {
@@ -59,6 +64,7 @@ export default function CoParentingSchedule() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("weekly");
+  const [kidFriendly, setKidFriendly] = useState(false);
   
   if (!mockData.isPlanComplete) {
     return (
@@ -108,10 +114,64 @@ export default function CoParentingSchedule() {
     }
   };
   
+  // Add print-specific styles
+  const printStyles = `
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      
+      body {
+        background: white !important;
+        font-size: 12pt;
+      }
+      
+      .print-container {
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      
+      .page-break {
+        page-break-after: always;
+      }
+      
+      .print-title {
+        font-size: 18pt !important;
+        color: black !important;
+      }
+      
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+      }
+      
+      th, td {
+        border: 1px solid #ccc !important;
+        padding: 0.25rem !important;
+      }
+      
+      .print-enlarge {
+        transform: scale(1.1);
+        transform-origin: top center;
+      }
+      
+      .print-full-width {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+  `;
+
   return (
     <div className="min-h-screen bg-[#f9f7fe]">
-      <NavigationMenu />
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <style>{printStyles}</style>
+      <div className="no-print">
+        <NavigationMenu />
+      </div>
+      <div className="max-w-5xl mx-auto px-4 py-8 print-container">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-[#2e1a87]">Your Co-Parenting Schedule</h1>
@@ -119,23 +179,37 @@ export default function CoParentingSchedule() {
               View your family's parenting time by category. You can download or print any section.
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
-              onClick={handleDownload}
-            >
-              <Download className="h-4 w-4" />
-              Download PDF
-            </Button>
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
-              onClick={handlePrint}
-            >
-              <Printer className="h-4 w-4" />
-              Print View
-            </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-[#f5f0ff] px-3 py-1.5 rounded-lg border border-[#6c54da]/20">
+              <Label htmlFor="kid-friendly" className="text-sm font-medium cursor-pointer flex items-center gap-2">
+                <Heart className="h-4 w-4 text-pink-500" />
+                Kid-Friendly View
+              </Label>
+              <Switch 
+                id="kid-friendly" 
+                checked={kidFriendly} 
+                onCheckedChange={setKidFriendly} 
+                className="data-[state=checked]:bg-[#6c54da]"
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
+                onClick={handleDownload}
+              >
+                <Download className="h-4 w-4" />
+                Download PDF
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2 border-[#6c54da]/30 text-[#2e1a87]"
+                onClick={handlePrint}
+              >
+                <Printer className="h-4 w-4" />
+                Print View
+              </Button>
+            </div>
           </div>
         </div>
         
@@ -169,33 +243,90 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Weekly Schedule</h2>
                 <p className="text-gray-600 text-sm">
-                  Your regular parenting schedule for {mockData.familyName}.
+                  {kidFriendly ? "Where I'll be each day of the week" : `Your regular parenting schedule for ${mockData.familyName}.`}
                 </p>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-[#f5f0ff]">
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Day</th>
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Overnight With</th>
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Drop-off/Pick-up</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockData.weeklySchedule.map((day) => (
-                      <tr key={day.day} className="hover:bg-[#f9f7fe]">
-                        <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">{day.day}</td>
-                        <td className="py-3 px-4 border border-[#6c54da]/20">
-                          <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
-                            {day.overnight}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 border border-[#6c54da]/20 text-gray-600">{day.dropoff}</td>
+              
+              {kidFriendly ? (
+                <div className="grid grid-cols-7 gap-3 mt-6 print:mt-2">
+                  {mockData.weeklySchedule.map((day) => (
+                    <div key={day.day} className={`
+                      rounded-xl overflow-hidden shadow-md border-2 
+                      ${day.overnight === "Sarah" ? "border-pink-200 bg-pink-50" : "border-blue-200 bg-blue-50"}
+                    `}>
+                      <div className="bg-white py-2 text-center border-b">
+                        <h3 className="font-bold text-lg text-[#2e1a87]">{day.day}</h3>
+                      </div>
+                      <div className="p-4">
+                        <div className={`
+                          w-20 h-20 mx-auto rounded-full flex items-center justify-center
+                          ${day.overnight === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
+                        `}>
+                          {day.overnight === "Sarah" ? (
+                            <Home className="h-12 w-12 text-pink-500" />
+                          ) : (
+                            <Home className="h-12 w-12 text-blue-500" />
+                          )}
+                        </div>
+                        <div className="text-center mt-4">
+                          <p className="font-bold text-lg">
+                            <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
+                              Mom
+                            </span>
+                          </p>
+                          {day.dropoff !== "—" && (
+                            <div className="mt-3 flex items-center justify-center">
+                              <div className="bg-white rounded-md p-2 text-xs text-gray-600 shadow-sm border border-gray-200">
+                                {day.dropoff.includes("school") ? (
+                                  <div className="flex items-center gap-1">
+                                    <School className="h-3 w-3 text-gray-500" />
+                                    <span>School drop-off</span>
+                                  </div>
+                                ) : day.dropoff.includes("pick") ? (
+                                  <div className="flex items-center gap-1">
+                                    <ArrowRight className="h-3 w-3 text-gray-500" />
+                                    <span>Pick-up at {day.dropoff.split("at ")[1]}</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1">
+                                    <ArrowRight className="h-3 w-3 text-gray-500" />
+                                    <span>{day.dropoff}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-[#f5f0ff]">
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Day</th>
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Overnight With</th>
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Drop-off/Pick-up</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {mockData.weeklySchedule.map((day) => (
+                        <tr key={day.day} className="hover:bg-[#f9f7fe]">
+                          <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">{day.day}</td>
+                          <td className="py-3 px-4 border border-[#6c54da]/20">
+                            <span className={day.overnight === "Sarah" ? "text-pink-600" : "text-blue-600"}>
+                              {day.overnight}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 border border-[#6c54da]/20 text-gray-600">{day.dropoff}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </TabsContent>
             
             {/* Holiday Schedule Tab */}
@@ -203,38 +334,89 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Holiday Schedule</h2>
                 <p className="text-gray-600 text-sm">
-                  Special arrangements for holidays and special occasions in 2024-2025.
+                  {kidFriendly ? "Where I'll be during holidays and special days" : "Special arrangements for holidays and special occasions in 2024-2025."}
                 </p>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-[#f5f0ff]">
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Holiday</th>
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Dates</th>
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">With</th>
-                      <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockData.holidaySchedule.map((holiday) => (
-                      <tr key={holiday.holiday} className="hover:bg-[#f9f7fe]">
-                        <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">{holiday.holiday}</td>
-                        <td className="py-3 px-4 border border-[#6c54da]/20">{holiday.dates}</td>
-                        <td className="py-3 px-4 border border-[#6c54da]/20">
-                          <span className={
-                            holiday.with === "Sarah" ? "text-pink-600" : 
-                            holiday.with === "Eric" ? "text-blue-600" : "text-purple-600"
-                          }>
-                            {holiday.with}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 border border-[#6c54da]/20 text-gray-600">{holiday.notes}</td>
+              
+              {kidFriendly ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {mockData.holidaySchedule.map((holiday) => (
+                    <div key={holiday.holiday} className={`
+                      rounded-xl overflow-hidden shadow-md border-2
+                      ${holiday.with === "Sarah" ? "border-pink-200" : 
+                        holiday.with === "Eric" ? "border-blue-200" : "border-purple-200"}
+                    `}>
+                      <div className={`py-3 text-center border-b ${
+                        holiday.with === "Sarah" ? "bg-pink-100" : 
+                        holiday.with === "Eric" ? "bg-blue-100" : "bg-purple-100"
+                      }`}>
+                        <h3 className="font-bold text-lg text-[#2e1a87]">{holiday.holiday}</h3>
+                      </div>
+                      <div className="p-4 bg-white">
+                        <div className="text-center">
+                          <div className="mb-3 inline-block px-3 py-1 rounded-full bg-gray-100 text-gray-800">
+                            {holiday.dates}
+                          </div>
+                          <div className="mb-3">
+                            <div className={`
+                              inline-flex items-center gap-2 px-3 py-1 rounded-md
+                              ${holiday.with === "Sarah" ? "bg-pink-50 text-pink-700" : 
+                                holiday.with === "Eric" ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700"}
+                            `}>
+                              {holiday.with === "Both" ? (
+                                <>
+                                  <Star className="h-4 w-4" /> 
+                                  <span>Both Mom & Dad</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Heart className="h-4 w-4" /> 
+                                  <span>{holiday.with === "Sarah" ? "Mom" : "Dad"}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          {holiday.notes && (
+                            <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded-md">
+                              {holiday.notes}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-[#f5f0ff]">
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Holiday</th>
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Dates</th>
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">With</th>
+                        <th className="py-3 px-4 text-left text-[#2e1a87] font-medium border border-[#6c54da]/20">Notes</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {mockData.holidaySchedule.map((holiday) => (
+                        <tr key={holiday.holiday} className="hover:bg-[#f9f7fe]">
+                          <td className="py-3 px-4 border border-[#6c54da]/20 font-medium">{holiday.holiday}</td>
+                          <td className="py-3 px-4 border border-[#6c54da]/20">{holiday.dates}</td>
+                          <td className="py-3 px-4 border border-[#6c54da]/20">
+                            <span className={
+                              holiday.with === "Sarah" ? "text-pink-600" : 
+                              holiday.with === "Eric" ? "text-blue-600" : "text-purple-600"
+                            }>
+                              {holiday.with}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 border border-[#6c54da]/20 text-gray-600">{holiday.notes}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </TabsContent>
             
             {/* Winter Break Tab */}
@@ -242,25 +424,77 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Winter Break</h2>
                 <p className="text-gray-600 text-sm">
-                  Winter break schedule for {mockData.winterBreak.dateRange}.
+                  {kidFriendly ? "My winter vacation schedule" : `Winter break schedule for ${mockData.winterBreak.dateRange}.`}
                 </p>
               </div>
-              <div className="grid grid-cols-1 gap-4">
-                {mockData.winterBreak.blocks.map((block, index) => (
-                  <div key={index} className="bg-[#f5f0ff] rounded-lg p-5 border border-[#6c54da]/20">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
-                        <p className="text-gray-600 mt-1">
-                          With <span className={block.parent === "Sarah" ? "text-pink-600 font-medium" : "text-blue-600 font-medium"}>{block.parent}</span>
-                        </p>
-                      </div>
-                      <Snowflake className="h-8 w-8 text-[#6c54da] opacity-50" />
+              
+              {kidFriendly ? (
+                <div>
+                  <div className="text-center mb-6">
+                    <div className="inline-block px-4 py-2 bg-blue-50 rounded-full text-[#2e1a87] font-bold text-sm">
+                      Winter Break: {mockData.winterBreak.dateRange}
                     </div>
-                    <p className="text-sm text-gray-600 mt-3">{block.notes}</p>
                   </div>
-                ))}
-              </div>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    {mockData.winterBreak.blocks.map((block, index) => (
+                      <div key={index} className={`
+                        flex-1 rounded-xl overflow-hidden shadow-lg border-2
+                        ${block.parent === "Sarah" ? "border-pink-200" : "border-blue-200"}
+                      `}>
+                        <div className={`
+                          py-4 text-center relative
+                          ${block.parent === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
+                        `}>
+                          <Snowflake className={`
+                            absolute top-2 right-2 h-6 w-6 
+                            ${block.parent === "Sarah" ? "text-pink-300" : "text-blue-300"}
+                          `} />
+                          <h3 className="font-bold text-xl text-[#2e1a87]">
+                            {block.period}
+                          </h3>
+                        </div>
+                        <div className="p-6 bg-white text-center">
+                          <div className={`
+                            w-24 h-24 mx-auto mb-4 rounded-full flex items-center justify-center
+                            ${block.parent === "Sarah" ? "bg-pink-50" : "bg-blue-50"}
+                          `}>
+                            {block.parent === "Sarah" ? (
+                              <Heart className="h-12 w-12 text-pink-500" />
+                            ) : (
+                              <Heart className="h-12 w-12 text-blue-500" />
+                            )}
+                          </div>
+                          <p className="text-lg font-medium mb-3">
+                            <span className={block.parent === "Sarah" ? "text-pink-600" : "text-blue-600"}>
+                              {block.parent === "Sarah" ? "Mom's House" : "Dad's House"}
+                            </span>
+                          </p>
+                          <div className="mt-4 px-4 py-2 bg-gray-50 rounded-md text-sm text-gray-600">
+                            {block.notes}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {mockData.winterBreak.blocks.map((block, index) => (
+                    <div key={index} className="bg-[#f5f0ff] rounded-lg p-5 border border-[#6c54da]/20">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
+                          <p className="text-gray-600 mt-1">
+                            With <span className={block.parent === "Sarah" ? "text-pink-600 font-medium" : "text-blue-600 font-medium"}>{block.parent}</span>
+                          </p>
+                        </div>
+                        <Snowflake className="h-8 w-8 text-[#6c54da] opacity-50" />
+                      </div>
+                      <p className="text-sm text-gray-600 mt-3">{block.notes}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </TabsContent>
             
             {/* Spring Break Tab */}
