@@ -30,12 +30,12 @@ export function NavigationMenu() {
   const { user } = useAuth();
   
   // Define all routes
-  const dashboardRoute = { name: "Dashboard", path: "/" };
+  const dashboardRoute = { name: "Dashboard", path: "/" }; // Now points to Home6
   const home2Route = { name: "Home 2", path: "/home2" };
   const home3Route = { name: "Home 3", path: "/home3" };
   const home4Route = { name: "Home 4", path: "/home4" };
   const home5Route = { name: "Home 5", path: "/home5" };
-  const home6Route = { name: "Home 6", path: "/home6" };
+  const home6Route = { name: "Home 6", path: "/home6" }; // Same as root path now
   
   // Course related routes
   const courseRoute = { name: "Course", path: "/course" };
@@ -88,21 +88,21 @@ export function NavigationMenu() {
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">HOME</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
-                <Link href={home6Route.path}>
+                <Link href={dashboardRoute.path}>
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Main Dashboard</span>
-                    {isActive(home6Route.path) && (
+                    <span>Main Dashboard (Home 6)</span>
+                    {isActive(dashboardRoute.path) && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>
                 </Link>
                 
-                <Link href={dashboardRoute.path}>
+                <Link href="/dashboard-new">
                   <DropdownMenuItem className="cursor-pointer py-2">
                     <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Dashboard (Original)</span>
-                    {isActive(dashboardRoute.path) && (
+                    <span>Dashboard (Simplified)</span>
+                    {isActive("/dashboard-new") && (
                       <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                     )}
                   </DropdownMenuItem>

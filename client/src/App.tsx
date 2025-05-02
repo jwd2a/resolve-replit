@@ -53,7 +53,7 @@ function Router() {
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
       <Route path="/dashboard-new" component={DashboardSimplified} />
-      <Route path="/" component={DashboardSimplified} />
+      <Route path="/" component={Home6} />
       <Route path="/home2" component={Home2} />
       <Route path="/home3" component={Home3} />
       <Route path="/home4" component={Home4} />
