@@ -172,14 +172,14 @@ export default function CoParentingSchedule() {
         <NavigationMenu />
       </div>
       <div className="max-w-5xl mx-auto px-4 py-8 print-container">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-[#2e1a87]">Your Co-Parenting Schedule</h1>
+            <h1 className="text-3xl font-bold text-[#2e1a87] print-title">Your Co-Parenting Schedule</h1>
             <p className="text-gray-600 mt-2">
               View your family's parenting time by category. You can download or print any section.
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start md:items-center gap-3 no-print">
             <div className="flex items-center gap-2 bg-[#f5f0ff] px-3 py-1.5 rounded-lg border border-[#6c54da]/20">
               <Label htmlFor="kid-friendly" className="text-sm font-medium cursor-pointer flex items-center gap-2">
                 <Heart className="h-4 w-4 text-pink-500" />
@@ -199,7 +199,7 @@ export default function CoParentingSchedule() {
                 onClick={handleDownload}
               >
                 <Download className="h-4 w-4" />
-                Download PDF
+                <span className="hidden sm:inline">Download</span> PDF
               </Button>
               <Button 
                 variant="outline" 
@@ -207,7 +207,7 @@ export default function CoParentingSchedule() {
                 onClick={handlePrint}
               >
                 <Printer className="h-4 w-4" />
-                Print View
+                <span className="hidden sm:inline">Print</span> View
               </Button>
             </div>
           </div>
@@ -215,26 +215,26 @@ export default function CoParentingSchedule() {
         
         <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm mb-6">
           <Tabs defaultValue="weekly" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="w-full mb-6 bg-[#f5f0ff] border border-[#6c54da]/20 rounded-lg p-1">
-              <TabsTrigger value="weekly" className="flex items-center gap-2 data-[state=active]:bg-white">
-                <Calendar className="h-4 w-4" />
-                Weekly Schedule
+            <TabsList className="w-full mb-6 bg-[#f5f0ff] border border-[#6c54da]/20 rounded-lg p-1 flex flex-wrap sm:flex-nowrap gap-1">
+              <TabsTrigger value="weekly" className="flex-1 flex items-center justify-center gap-1 text-xs sm:text-sm md:text-base data-[state=active]:bg-white">
+                <Calendar className="h-4 w-4 flex-shrink-0" />
+                <span>Weekly</span>
               </TabsTrigger>
-              <TabsTrigger value="holidays" className="flex items-center gap-2 data-[state=active]:bg-white">
-                <Gift className="h-4 w-4" />
-                Holiday Schedule
+              <TabsTrigger value="holidays" className="flex-1 flex items-center justify-center gap-1 text-xs sm:text-sm md:text-base data-[state=active]:bg-white">
+                <Gift className="h-4 w-4 flex-shrink-0" />
+                <span>Holidays</span>
               </TabsTrigger>
-              <TabsTrigger value="winter" className="flex items-center gap-2 data-[state=active]:bg-white">
-                <Snowflake className="h-4 w-4" />
-                Winter Break
+              <TabsTrigger value="winter" className="flex-1 flex items-center justify-center gap-1 text-xs sm:text-sm md:text-base data-[state=active]:bg-white">
+                <Snowflake className="h-4 w-4 flex-shrink-0" />
+                <span>Winter</span>
               </TabsTrigger>
-              <TabsTrigger value="spring" className="flex items-center gap-2 data-[state=active]:bg-white">
-                <Flower className="h-4 w-4" />
-                Spring Break
+              <TabsTrigger value="spring" className="flex-1 flex items-center justify-center gap-1 text-xs sm:text-sm md:text-base data-[state=active]:bg-white">
+                <Flower className="h-4 w-4 flex-shrink-0" />
+                <span>Spring</span>
               </TabsTrigger>
-              <TabsTrigger value="summer" className="flex items-center gap-2 data-[state=active]:bg-white">
-                <Sun className="h-4 w-4" />
-                Summer Break
+              <TabsTrigger value="summer" className="flex-1 flex items-center justify-center gap-1 text-xs sm:text-sm md:text-base data-[state=active]:bg-white">
+                <Sun className="h-4 w-4 flex-shrink-0" />
+                <span>Summer</span>
               </TabsTrigger>
             </TabsList>
             
@@ -248,10 +248,10 @@ export default function CoParentingSchedule() {
               </div>
               
               {kidFriendly ? (
-                <div className="grid grid-cols-7 gap-3 mt-6 print:mt-2">
+                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3 mt-6 print:mt-2 print:grid-cols-7">
                   {mockData.weeklySchedule.map((day) => (
                     <div key={day.day} className={`
-                      rounded-xl overflow-hidden shadow-md border-2 
+                      rounded-xl overflow-hidden shadow-md border-2
                       ${day.overnight === "Sarah" ? "border-pink-200 bg-pink-50" : "border-blue-200 bg-blue-50"}
                     `}>
                       <div className="bg-white py-2 text-center border-b">
@@ -502,23 +502,62 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Spring Break</h2>
                 <p className="text-gray-600 text-sm">
-                  Spring break schedule for {mockData.springBreak.dateRange}.
+                  {kidFriendly ? "My spring vacation schedule" : `Spring break schedule for ${mockData.springBreak.dateRange}.`}
                 </p>
               </div>
-              <div className="bg-[#f0fff5] rounded-lg p-6 border border-green-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-[#2e1a87]">{mockData.springBreak.dateRange}</h3>
-                    <p className="text-gray-700 mt-2 text-lg">
-                      {mockData.springBreak.schedule}
-                    </p>
+              
+              {kidFriendly ? (
+                <div className="rounded-xl overflow-hidden shadow-lg border-2 border-green-200">
+                  <div className="bg-green-50 p-5 text-center relative">
+                    <div className="absolute top-4 right-4">
+                      <Flower className="h-10 w-10 text-green-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2e1a87] mt-2 mb-3">Spring Break!</h3>
+                    <div className="inline-block px-4 py-2 bg-white rounded-full text-[#2e1a87] font-medium text-sm border border-green-200 shadow-sm">
+                      {mockData.springBreak.dateRange}
+                    </div>
                   </div>
-                  <Flower className="h-12 w-12 text-green-400" />
+                  
+                  <div className="bg-white p-6 text-center">
+                    <div className="mb-6">
+                      <div className={`
+                        w-32 h-32 mx-auto rounded-full flex items-center justify-center mb-4
+                        ${mockData.springBreak.schedule.includes("Sarah") ? "bg-pink-100" : "bg-blue-100"}
+                      `}>
+                        {mockData.springBreak.schedule.includes("Sarah") ? (
+                          <Heart className="h-16 w-16 text-pink-500" />
+                        ) : (
+                          <Heart className="h-16 w-16 text-blue-500" />
+                        )}
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">
+                        <span className={mockData.springBreak.schedule.includes("Sarah") ? "text-pink-600" : "text-blue-600"}>
+                          {mockData.springBreak.schedule.replace("with", "with ")}
+                        </span>
+                      </h3>
+                    </div>
+                    
+                    <div className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-700 border border-gray-100">
+                      <p className="font-medium">{mockData.springBreak.notes}</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-4 bg-[#f9f9f9] p-3 rounded-md">
-                  Note: {mockData.springBreak.notes}
-                </p>
-              </div>
+              ) : (
+                <div className="bg-[#f0fff5] rounded-lg p-6 border border-green-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-bold text-[#2e1a87]">{mockData.springBreak.dateRange}</h3>
+                      <p className="text-gray-700 mt-2 text-lg">
+                        {mockData.springBreak.schedule}
+                      </p>
+                    </div>
+                    <Flower className="h-12 w-12 text-green-400" />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-4 bg-[#f9f9f9] p-3 rounded-md">
+                    Note: {mockData.springBreak.notes}
+                  </p>
+                </div>
+              )}
             </TabsContent>
             
             {/* Summer Break Tab */}
@@ -526,34 +565,110 @@ export default function CoParentingSchedule() {
               <div className="mb-4">
                 <h2 className="text-lg font-medium text-[#2e1a87] mb-2">Summer Break</h2>
                 <p className="text-gray-600 text-sm">
-                  Summer schedule for {mockData.summerBreak.dateRange}.
+                  {kidFriendly ? "My summer vacation adventures" : `Summer schedule for ${mockData.summerBreak.dateRange}.`}
                 </p>
               </div>
-              <div className="space-y-4">
-                {mockData.summerBreak.blocks.map((block, index) => (
-                  <div key={index} className={`rounded-lg p-5 border ${
-                    block.parent === "Sarah" ? "bg-pink-50 border-pink-200" : "bg-blue-50 border-blue-200"
-                  }`}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
-                        <p className={`mt-1 ${
-                          block.parent === "Sarah" ? "text-pink-600" : "text-blue-600"
-                        } font-medium`}>
-                          With {block.parent}
-                        </p>
-                      </div>
-                      <Sun className={`h-8 w-8 ${
-                        block.parent === "Sarah" ? "text-pink-400" : "text-blue-400"
-                      } opacity-70`} />
+              
+              {kidFriendly ? (
+                <div>
+                  <div className="text-center mb-6">
+                    <div className="inline-block px-4 py-2 bg-amber-50 rounded-full text-amber-800 font-bold text-sm border border-amber-200">
+                      Summer Break: {mockData.summerBreak.dateRange}
                     </div>
-                    <p className="text-sm text-gray-600 mt-3">{block.notes}</p>
                   </div>
-                ))}
-                <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-amber-800 text-sm mt-6">
-                  <p>Regular weekly schedule resumes on August 16, 2025.</p>
+                  
+                  <div className="relative">
+                    {/* Timeline connector */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-[#f5f0ff] -ml-0.5 hidden md:block"></div>
+                    
+                    <div className="space-y-6">
+                      {mockData.summerBreak.blocks.map((block, index) => (
+                        <div key={index} className="md:grid md:grid-cols-2 gap-5 relative">
+                          {/* Timeline dot */}
+                          <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -ml-2.5 w-5 h-5 rounded-full bg-[#6c54da]/50 z-10 hidden md:block"></div>
+                          
+                          {/* Date marker - always on left for mobile, alternating for desktop */}
+                          <div className={`mb-2 md:mb-0 ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
+                            <div className="bg-[#f5f0ff] p-3 rounded-lg text-center">
+                              <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
+                            </div>
+                          </div>
+                          
+                          {/* Content card - always on right for mobile, alternating for desktop */}
+                          <div className={index % 2 === 1 ? 'md:col-start-1' : 'md:col-start-2'}>
+                            <div className={`
+                              rounded-xl overflow-hidden shadow-md border-2
+                              ${block.parent === "Sarah" ? "border-pink-200" : "border-blue-200"}
+                            `}>
+                              <div className={`
+                                p-3 text-center relative
+                                ${block.parent === "Sarah" ? "bg-pink-100" : "bg-blue-100"}
+                              `}>
+                                <Sun className={`
+                                  absolute top-2 right-2 h-5 w-5
+                                  ${block.parent === "Sarah" ? "text-pink-300" : "text-blue-300"}
+                                `} />
+                                <h3 className="font-medium text-[#2e1a87]">
+                                  {block.parent === "Sarah" ? "Mom's House" : "Dad's House"}
+                                </h3>
+                              </div>
+                              
+                              <div className="p-4 bg-white text-center">
+                                <div className={`
+                                  inline-flex w-12 h-12 rounded-full items-center justify-center mb-2
+                                  ${block.parent === "Sarah" ? "bg-pink-50 text-pink-500" : "bg-blue-50 text-blue-500"}
+                                `}>
+                                  {index % 2 === 0 ? (
+                                    <Sun className="h-6 w-6" />
+                                  ) : (
+                                    <Moon className="h-6 w-6" />
+                                  )}
+                                </div>
+                                
+                                {block.notes && (
+                                  <p className="text-xs text-gray-600 mt-2">
+                                    {block.notes}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-amber-800 text-center mt-8 font-medium">
+                    Back to regular schedule on August 16, 2025
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-4">
+                  {mockData.summerBreak.blocks.map((block, index) => (
+                    <div key={index} className={`rounded-lg p-5 border ${
+                      block.parent === "Sarah" ? "bg-pink-50 border-pink-200" : "bg-blue-50 border-blue-200"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-bold text-[#2e1a87]">{block.period}</h3>
+                          <p className={`mt-1 ${
+                            block.parent === "Sarah" ? "text-pink-600" : "text-blue-600"
+                          } font-medium`}>
+                            With {block.parent}
+                          </p>
+                        </div>
+                        <Sun className={`h-8 w-8 ${
+                          block.parent === "Sarah" ? "text-pink-400" : "text-blue-400"
+                        } opacity-70`} />
+                      </div>
+                      <p className="text-sm text-gray-600 mt-3">{block.notes}</p>
+                    </div>
+                  ))}
+                  <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-amber-800 text-sm mt-6">
+                    <p>Regular weekly schedule resumes on August 16, 2025.</p>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
