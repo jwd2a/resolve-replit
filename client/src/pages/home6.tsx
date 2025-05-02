@@ -260,7 +260,8 @@ export default function Home6() {
               ))}
             </div>
             
-            {/* Course Session Status Block - new component */}
+            {/* Course Session Status Block - hidden for now */}
+            {/* 
             <div 
               className="flex-shrink-0 rounded-md cursor-pointer transition-all duration-200 h-auto"
               onClick={toggleSessionState}
@@ -275,6 +276,7 @@ export default function Home6() {
                 onAccept={toggleSessionState}
               />
             </div>
+            */}
             
             {/* Start Course button aligned with badges */}
             <div className="flex-shrink-0 flex flex-col items-center mt-2 lg:mt-0">
