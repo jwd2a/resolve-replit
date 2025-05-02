@@ -5,23 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Calendar, 
-  Info, 
-  ArrowLeft, 
-  ArrowRight, 
-  Gift, 
-  CalendarDays, 
-  Sparkles, 
-  CheckCircle
+  ArrowLeft
 } from "lucide-react";
 
 // Categories of holidays for the preferences page
@@ -79,18 +66,7 @@ export default function HolidayPreferences() {
     });
   };
   
-  const atLeastOneHolidaySelected = selectedHolidays.length > 0;
-  
   const handleSave = () => {
-    if (!atLeastOneHolidaySelected) {
-      toast({
-        title: "Selection Required",
-        description: "Please select at least one holiday.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     toast({
       title: "Preferences Saved",
       description: "Your holiday preferences have been saved successfully."
@@ -115,97 +91,69 @@ export default function HolidayPreferences() {
           </Button>
         </div>
         
-        <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-[#6c54da]/20 p-6 shadow-sm">
-            <div className="flex items-start gap-3 mb-5">
-              <div className="bg-[#f5f0ff] p-2 rounded-md">
-                <Calendar className="h-5 w-5 text-[#6c54da]" />
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold text-[#2e1a87]">Holiday Preferences</h1>
-                <p className="text-gray-600 text-sm mt-1">
-                  Select which holidays matter to your family.
-                </p>
-              </div>
+        <div className="bg-white rounded-xl border border-[#6c54da]/20 p-6 shadow-sm">
+          <div className="flex items-start gap-3 mb-5">
+            <div className="bg-[#f5f0ff] p-2 rounded-md">
+              <Calendar className="h-5 w-5 text-[#6c54da]" />
             </div>
-            
-            <p className="text-sm text-gray-600 mb-6">
-              This is a simple form where you select the holidays that matter to your family. 
-              The information will be used later in the course.
-            </p>
-            
-            {HOLIDAY_CATEGORIES.map((category) => (
-              <div key={category.title} className="mb-6">
-                <h4 className="font-medium text-sm mb-3">{category.title}</h4>
-                <div className="space-y-2">
-                  {category.holidays.map((holiday) => {
-                    const isSelected = selectedHolidays.includes(holiday.id);
-                    return (
-                      <div 
-                        key={holiday.id} 
-                        className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-[#f5f0ff]' : 'hover:bg-gray-50'}`}
-                        onClick={() => toggleHoliday(holiday.id)}
-                      >
-                        <Checkbox 
-                          id={holiday.id} 
-                          checked={isSelected}
-                          onCheckedChange={() => toggleHoliday(holiday.id)}
-                          className="mr-3"
-                        />
-                        <Label
-                          htmlFor={holiday.id}
-                          className="text-sm cursor-pointer w-full"
-                        >
-                          {holiday.name}
-                        </Label>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-            
-            {/* Other family-specific holidays text area */}
-            <div className="mt-6">
-              <Label htmlFor="otherHolidays" className="text-sm font-medium mb-2 block">
-                Other family-specific holidays or traditions
-              </Label>
-              <Textarea 
-                id="otherHolidays"
-                placeholder="Enter any additional family-specific holidays or traditions"
-                value={otherHolidays}
-                onChange={(e) => setOtherHolidays(e.target.value)}
-                className="resize-none min-h-[100px]"
-              />
-            </div>
-            
-            <div className="mt-6">
-              <Button 
-                className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
-                onClick={handleSave}
-                disabled={!atLeastOneHolidaySelected}
-              >
-                Save Preferences
-              </Button>
-              
-              {!atLeastOneHolidaySelected && (
-                <p className="text-center text-amber-600 text-xs mt-3">
-                  Please select at least one holiday
-                </p>
-              )}
-            </div>
-            
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <Button 
-                variant="ghost" 
-                className="text-[#2e1a87] px-0"
-                onClick={() => navigate('/')}
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Button>
+            <div>
+              <h1 className="text-xl font-semibold text-[#2e1a87]">Holiday Preferences</h1>
+              <p className="text-gray-600 text-sm mt-1">
+                Select which holidays matter to your family.
+              </p>
             </div>
           </div>
+          
+          {HOLIDAY_CATEGORIES.map((category) => (
+            <div key={category.title} className="mb-8">
+              <h2 className="font-medium text-base mb-4">{category.title}</h2>
+              <div className="space-y-2">
+                {category.holidays.map((holiday) => {
+                  const isSelected = selectedHolidays.includes(holiday.id);
+                  return (
+                    <div 
+                      key={holiday.id} 
+                      className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-[#f5f0ff]' : 'hover:bg-gray-50'}`}
+                      onClick={() => toggleHoliday(holiday.id)}
+                    >
+                      <Checkbox 
+                        id={holiday.id} 
+                        checked={isSelected}
+                        onCheckedChange={() => toggleHoliday(holiday.id)}
+                        className="mr-3"
+                      />
+                      <Label
+                        htmlFor={holiday.id}
+                        className="text-sm cursor-pointer w-full"
+                      >
+                        {holiday.name}
+                      </Label>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          
+          <div className="mt-6 mb-8">
+            <Label htmlFor="otherHolidays" className="text-sm font-medium mb-2 block">
+              Other family-specific holidays or traditions
+            </Label>
+            <Textarea 
+              id="otherHolidays"
+              placeholder="Enter any additional family-specific holidays or traditions"
+              value={otherHolidays}
+              onChange={(e) => setOtherHolidays(e.target.value)}
+              className="resize-none min-h-[100px]"
+            />
+          </div>
+          
+          <Button 
+            className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
+            onClick={handleSave}
+          >
+            Save Preferences
+          </Button>
         </div>
       </main>
     </div>
