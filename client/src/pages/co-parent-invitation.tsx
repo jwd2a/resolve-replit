@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 export default function CoParentInvitation() {
-  const navigate = useNavigate();
+  const [_, navigate] = useLocation();
   const { toast } = useToast();
   
   const [coParentEmail, setCoParentEmail] = useState<string>("john.smith@example.com");

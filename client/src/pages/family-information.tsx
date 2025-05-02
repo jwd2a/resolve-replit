@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +52,7 @@ const jurisdictionSchema = z.object({
 });
 
 export default function FamilyInformation() {
-  const navigate = useNavigate();
+  const [_, navigate] = useLocation();
   const { toast } = useToast();
   
   // Initialize tabs state
