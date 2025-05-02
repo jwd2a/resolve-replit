@@ -26,36 +26,36 @@ export default function Home6() {
   const { paymentStatus, completePayment } = usePaymentStatus();
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   
-  // Step states for the new badge-style progress tracker
+  // Step states for the badge-style progress tracker with larger icons
   const [steps, setSteps] = useState([
     {
       id: "family-info",
       label: "Family Info",
-      icon: <Home className="h-5 w-5" />,
+      icon: <Home className="h-6 w-6" />,
       completed: true
     },
     {
       id: "co-parent",
       label: "Co-Parent",
-      icon: <Users className="h-5 w-5" />,
+      icon: <Users className="h-6 w-6" />,
       completed: true
     },
     {
       id: "waivers",
       label: "Waivers",
-      icon: <FileText className="h-5 w-5" />,
+      icon: <FileText className="h-6 w-6" />,
       completed: false
     },
     {
       id: "holidays",
       label: "Holidays",
-      icon: <CalendarDays className="h-5 w-5" />,
+      icon: <CalendarDays className="h-6 w-6" />,
       completed: false
     },
     {
       id: "payment",
       label: "Payment",
-      icon: <CreditCard className="h-5 w-5" />,
+      icon: <CreditCard className="h-6 w-6" />,
       completed: paymentStatus
     }
   ]);
@@ -201,25 +201,27 @@ export default function Home6() {
             </div>
           </div>
           
-          {/* New modern badge-style progress tracker with click-to-toggle functionality */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-            {/* Step badges in the first 3 columns */}
-            <div className="col-span-1 md:col-span-3 flex items-center justify-between md:justify-start space-x-4">
+          {/* Refined badge-style progress tracker with improved layout */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-2">
+            {/* Step badges with increased spacing */}
+            <div className="flex items-center justify-center md:justify-start md:space-x-8 space-x-5 flex-wrap w-full md:w-auto">
               {steps.map((step) => (
                 <div 
                   key={step.id} 
-                  className="relative flex flex-col items-center z-10 cursor-pointer" 
+                  className="relative flex flex-col items-center z-10 cursor-pointer py-2 mb-1" 
                   onClick={() => toggleStepStatus(step.id)}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200
                     ${step.completed 
                       ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
-                      : "bg-white/10 text-[#2e1a87] border border-white shadow-sm"
+                      : "bg-white/30 text-white border-[1.5px] border-white/60 shadow-sm"
                     }`}
                   >
-                    {step.icon}
+                    <div className={`w-6 h-6 ${!step.completed ? "opacity-80" : ""}`}>
+                      {step.icon}
+                    </div>
                   </div>
-                  <span className="text-xs text-white mt-1 text-center whitespace-nowrap font-medium">
+                  <span className="text-xs text-white mt-1.5 text-center whitespace-nowrap font-medium">
                     {step.label}
                   </span>
                   <span className={`text-[10px] mt-0.5 text-center whitespace-nowrap
@@ -234,23 +236,23 @@ export default function Home6() {
               ))}
             </div>
             
-            {/* Start Course button in the last column */}
-            <div className="col-span-1 flex items-center justify-center md:justify-end">
-              <div>
+            {/* Start Course button aligned with badges */}
+            <div className="flex-shrink-0 flex flex-col items-center mt-2 md:mt-0">
+              <Link href="/course">
                 <Button
                   disabled={!steps.every(step => step.completed)}
-                  className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-4 h-9 text-sm font-medium whitespace-nowrap"
-                  size="sm"
+                  className="bg-white text-[#2e1a87] hover:bg-white/90 shadow-sm px-5 h-10 text-sm font-medium whitespace-nowrap w-44"
+                  size="default"
                 >
                   Start Course <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
-                {!steps.every(step => step.completed) && (
-                  <p className="text-white/70 text-[10px] mt-1 flex items-center">
-                    <LockIcon className="h-2.5 w-2.5 mr-0.5" />
-                    All steps must be completed
-                  </p>
-                )}
-              </div>
+              </Link>
+              {!steps.every(step => step.completed) && (
+                <p className="text-white/70 text-[10px] mt-2 flex items-center text-center">
+                  <LockIcon className="h-2.5 w-2.5 mr-0.5" />
+                  All steps must be completed
+                </p>
+              )}
             </div>
           </div>
         </div>
