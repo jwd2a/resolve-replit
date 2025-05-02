@@ -55,28 +55,28 @@ export function CourseSessionStatusBlock({
   };
 
   return (
-    <div className="relative bg-[#4c37ae] rounded-xl border border-white/20 text-white p-6 shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className="flex-shrink-0 bg-[#5a45c0] rounded-full p-4 h-24 w-24 flex items-center justify-center">
+    <div className="relative bg-[#4c37ae] rounded-xl border border-white/20 text-white p-3 shadow-sm text-sm">
+      <div className="flex items-center gap-2">
+        <div className="flex-shrink-0 bg-[#5a45c0] rounded-full p-2 h-12 w-12 flex items-center justify-center">
           <div className="flex flex-col items-center justify-center">
-            <Calendar className="h-8 w-8 mb-1 text-white" />
-            <div className="text-white font-medium text-lg leading-none">{getCalendarMonth()}</div>
-            <div className="text-white font-bold text-lg leading-none">{getCalendarDay()}</div>
+            <Calendar className="h-4 w-4 mb-0.5 text-white" />
+            <div className="text-white font-medium text-xs leading-none">{getCalendarMonth()}</div>
+            <div className="text-white font-bold text-xs leading-none">{getCalendarDay()}</div>
           </div>
         </div>
         
         <div className="flex-grow">
           {state === 'none' && (
             <>
-              <h3 className="text-xl font-semibold mb-1">No course session proposed</h3>
-              <p className="text-white/80">Select a date to propose a session.</p>
+              <h3 className="text-sm font-semibold mb-0.5">No course session proposed</h3>
+              <p className="text-white/80 text-xs">Select a date to propose a session.</p>
             </>
           )}
           
           {state === 'proposed' && (
             <>
-              <h3 className="text-xl font-semibold mb-1">Course session proposed</h3>
-              <p className="text-white/80">
+              <h3 className="text-sm font-semibold mb-0.5">Course session proposed</h3>
+              <p className="text-white/80 text-xs">
                 {getFormattedWeekday()}, {getFormattedDate()} at {sessionTime}
               </p>
             </>
@@ -84,12 +84,12 @@ export function CourseSessionStatusBlock({
           
           {state === 'scheduled' && (
             <>
-              <h3 className="text-xl font-semibold mb-1">Course session scheduled for:</h3>
-              <p className="text-white/80">
+              <h3 className="text-sm font-semibold mb-0.5">Course session scheduled for:</h3>
+              <p className="text-white/80 text-xs">
                 {getFormattedWeekday()}, {getFormattedDate()} at {sessionTime}
               </p>
               {daysRemaining !== undefined && (
-                <p className="text-white/90 mt-1 font-medium">
+                <p className="text-white/90 mt-0.5 text-xs font-medium">
                   {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining
                 </p>
               )}
@@ -99,10 +99,11 @@ export function CourseSessionStatusBlock({
       </div>
       
       {state === 'none' && (
-        <div className="mt-4 flex justify-end">
+        <div className="mt-2 flex justify-end">
           <Button 
             onClick={onPropose}
-            className="bg-white text-[#4c37ae] hover:bg-white/90"
+            size="sm"
+            className="bg-white text-[#4c37ae] hover:bg-white/90 h-7 text-xs px-2"
           >
             Propose Time
           </Button>
@@ -110,17 +111,19 @@ export function CourseSessionStatusBlock({
       )}
       
       {state === 'proposed' && (
-        <div className="mt-4 flex justify-end gap-3">
+        <div className="mt-2 flex justify-end gap-2">
           <Button 
             variant="secondary"
             onClick={onAccept}
-            className="bg-[#5a46c1] text-white hover:bg-[#5a46c1]/90 border border-white/10"
+            size="sm"
+            className="bg-[#5a46c1] text-white hover:bg-[#5a46c1]/90 border border-white/10 h-7 text-xs px-2"
           >
             Accept
           </Button>
           <Button 
             onClick={onProposeNew}
-            className="bg-white text-[#4c37ae] hover:bg-white/90"
+            size="sm"
+            className="bg-white text-[#4c37ae] hover:bg-white/90 h-7 text-xs px-2"
           >
             Propose New Time
           </Button>
@@ -128,13 +131,13 @@ export function CourseSessionStatusBlock({
       )}
       
       {state === 'scheduled' && (
-        <div className="mt-4 flex justify-end">
+        <div className="mt-2 flex justify-end">
           <Button 
             variant="ghost"
             size="sm"
-            className="text-white/80 hover:text-white hover:bg-[#5a46c1]/50"
+            className="text-white/80 hover:text-white hover:bg-[#5a46c1]/50 h-6 text-xs"
           >
-            <Calendar className="h-4 w-4 mr-2" />
+            <Calendar className="h-3 w-3 mr-1" />
             Add to calendar
           </Button>
         </div>
