@@ -38,6 +38,21 @@ export default function Home6() {
   // Mock data for pre-course requirements
   const requirements = [
     {
+      id: "family-info",
+      icon: <Home className="h-5 w-5 text-indigo-600" />,
+      title: "Family Information",
+      description: "Review the family details you provided during onboarding.",
+      userStatus: "Completed",
+      coParentStatus: "Completed",
+      familyMetadata: {
+        children: "Completed",
+        jurisdiction: "Completed"
+      },
+      action: "Review & Edit",
+      actionLink: "/family-edit",
+      required: true,
+    },
+    {
       id: "co-parent",
       icon: <Users className="h-5 w-5 text-indigo-600" />,
       title: "Co-Parent Registration",
@@ -263,79 +278,93 @@ export default function Home6() {
                   <FileText className="h-5 w-5 text-indigo-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-medium text-gray-900">Before You Start the Course</h2>
+                  <h2 className="text-lg font-medium text-gray-900">Pre-Course Checklist</h2>
                   <p className="text-gray-600 text-sm">
                     Please complete these preparation steps for the best experience.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-md p-4 mb-4">
-                <h3 className="text-sm font-medium text-gray-700 flex items-center mb-3">
-                  <Check className="h-4 w-4 mr-2 text-indigo-600" />
-                  Pre-Course Checklist
-                </h3>
-
-                <div className="space-y-4">
-                  {requirements.map((item) => (
-                    <div 
-                      key={item.id} 
-                      className="bg-white rounded-md p-4 border border-gray-100"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 mt-1">
-                          {item.icon}
-                        </div>
-                        
-                        <div className="flex-grow">
-                          <div className="flex items-center flex-wrap gap-2 mb-1">
-                            <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
-                            {item.required && (
-                              <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
-                                Required
-                              </span>
-                            )}
-                            {!item.required && (
-                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                                Optional
-                              </span>
-                            )}
-                          </div>
-                          
-                          <p className="text-xs text-gray-600 mb-2">{item.description}</p>
-                          
-                          {item.id !== "schedule" ? (
-                            <div className="flex text-xs text-gray-500 mb-2">
-                              <span className="mr-3">
-                                You: <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                  {item.userStatus}
-                                </span>
-                              </span>
-                              <span>
-                                Co-Parent: <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                  {item.coParentStatus}
-                                </span>
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="text-xs text-amber-500 font-medium mb-2">
-                              {item.userStatus}
-                            </div>
+              <div className="space-y-3">
+                {requirements.map((item) => (
+                  <div 
+                    key={item.id} 
+                    className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-0.5">
+                        {item.icon}
+                      </div>
+                      
+                      <div className="flex-grow">
+                        <div className="flex items-center flex-wrap gap-2 mb-0.5">
+                          <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
+                          {item.required && (
+                            <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
+                              Required
+                            </span>
+                          )}
+                          {!item.required && (
+                            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                              Optional
+                            </span>
                           )}
                         </div>
                         
-                        <div className="flex-shrink-0">
-                          <Button
-                            variant="link"
-                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
-                          >
-                            {item.action} <ArrowRight className="ml-1 h-3 w-3" />
-                          </Button>
-                        </div>
+                        <p className="text-xs text-gray-600">{item.description}</p>
+                      </div>
+                      
+                      <div className="flex-shrink-0 flex flex-col items-end">
+                        <Button
+                          variant="link"
+                          className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center mb-1"
+                        >
+                          {item.action} <ArrowRight className="ml-1 h-3 w-3" />
+                        </Button>
+                        
+                        {item.id === "family-info" ? (
+                          <div className="flex flex-col text-[10px] items-end mt-1">
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>You:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Co-Parent:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Children:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Jurisdiction:</span>
+                              <span>Completed</span>
+                            </div>
+                          </div>
+                        ) : item.id === "schedule" ? (
+                          <div className="text-[10px] text-amber-500 font-medium mt-1">
+                            {item.userStatus}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col text-[10px] items-end mt-1">
+                            <div className="flex gap-1">
+                              <span>You:</span>
+                              <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                {item.userStatus}
+                              </span>
+                            </div>
+                            <div className="flex gap-1">
+                              <span>Co-Parent:</span>
+                              <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                {item.coParentStatus}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
 

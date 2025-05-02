@@ -1,0 +1,77 @@
+Redesign the Pre-Course Checklist Panel for Resolve
+Goal:
+Update the Pre-Course Checklist section to reduce vertical height, streamline layout, and include a new item for Family Information.
+This section helps users track their readiness to start the course by showing completed steps and guiding them to finish the rest.
+
+🧱 Layout & Component Updates
+1. Section Title
+Change the title from:
+“Before You Start the Course”
+to:
+“Pre-Course Checklist”
+
+Remove the current subheading below it (the one that repeats "Pre-Course Checklist")
+
+2. Add New Checklist Item: Family Information
+Position: First in the list (above Co-Parent Registration)
+
+Label: Family Information
+
+Description: “Review the family details you provided during onboarding.”
+
+Status Tags (Right-Aligned, Smaller Font):
+
+makefile
+Copy
+Edit
+You: Completed  
+Co-Parent: Completed  
+Children: Completed  
+Jurisdiction: Completed
+💡 Design Note:
+For now, assume all four statuses show as "Completed", but this should support Pending for any of them in the future.
+
+CTA (Right-Aligned):
+[ Review & Edit ]
+
+3. Adjust All Checklist Items
+For every checklist item (Family Info, Co-Parent, Waivers, Holidays, Course Session):
+
+Reduce vertical padding and spacing (match the compact styling shown in the second screenshot)
+
+Move the status tags (e.g., "You: Pending", "Co-Parent: Pending") to the bottom right, directly beneath the CTA
+
+Maintain left-aligned icons and right-aligned actions
+
+Use a uniform card height for all items
+
+🗂️ Final Checklist Item Order
+Family Information
+
+Co-Parent Registration
+
+Waivers & Agreements
+
+Holiday Preferences
+
+Schedule Course Session (Optional)
+
+📐 Design Style Notes
+Use subtle shadows or light borders to keep card separation clean
+
+Icons should remain on the left (match current Resolve icon style)
+
+Status tags should:
+
+Use green for "Completed"
+
+Use orange for "Pending"
+
+Be styled in smaller text, stacked or inline depending on length
+
+✅ Interaction Behavior
+Family Info: Always clickable via [ Review & Edit ]
+
+Other items: Keep existing action links (e.g., [Invite Co-Parent], [Review & Sign])
+
+All statuses should update dynamically based on user progress
