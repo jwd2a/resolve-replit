@@ -285,86 +285,88 @@ export default function Home6() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {requirements.map((item) => (
-                  <div 
-                    key={item.id} 
-                    className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-0.5">
-                        {item.icon}
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <div className="flex items-center flex-wrap gap-2 mb-0.5">
-                          <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
-                          {item.required && (
-                            <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
-                              Required
-                            </span>
-                          )}
-                          {!item.required && (
-                            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                              Optional
-                            </span>
-                          )}
+              <div className="bg-gray-50 rounded-md p-4">
+                <div className="space-y-3">
+                  {requirements.map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 mt-0.5">
+                          {item.icon}
                         </div>
                         
-                        <p className="text-xs text-gray-600">{item.description}</p>
-                      </div>
-                      
-                      <div className="flex-shrink-0 flex flex-col items-end">
-                        <Button
-                          variant="link"
-                          className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center mb-1"
-                        >
-                          {item.action} <ArrowRight className="ml-1 h-3 w-3" />
-                        </Button>
+                        <div className="flex-grow">
+                          <div className="flex items-center flex-wrap gap-2 mb-0.5">
+                            <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
+                            {item.required && (
+                              <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
+                                Required
+                              </span>
+                            )}
+                            {!item.required && (
+                              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                                Optional
+                              </span>
+                            )}
+                          </div>
+                          
+                          <p className="text-xs text-gray-600">{item.description}</p>
+                        </div>
                         
-                        {item.id === "family-info" ? (
-                          <div className="flex flex-col text-[10px] items-end mt-1">
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>You:</span>
-                              <span>Completed</span>
+                        <div className="flex-shrink-0 flex flex-col items-end">
+                          <Button
+                            variant="link"
+                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center mb-1"
+                          >
+                            {item.action} <ArrowRight className="ml-1 h-3 w-3" />
+                          </Button>
+                          
+                          {item.id === "family-info" ? (
+                            <div className="flex flex-wrap text-[10px] gap-x-3 gap-y-1 justify-end mt-1 max-w-[280px]">
+                              <div className="flex gap-1 text-green-600 font-medium">
+                                <span>You:</span>
+                                <span>Completed</span>
+                              </div>
+                              <div className="flex gap-1 text-green-600 font-medium">
+                                <span>Co-Parent:</span>
+                                <span>Completed</span>
+                              </div>
+                              <div className="flex gap-1 text-green-600 font-medium">
+                                <span>Children:</span>
+                                <span>Completed</span>
+                              </div>
+                              <div className="flex gap-1 text-green-600 font-medium">
+                                <span>Jurisdiction:</span>
+                                <span>Completed</span>
+                              </div>
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Co-Parent:</span>
-                              <span>Completed</span>
+                          ) : item.id === "schedule" ? (
+                            <div className="text-[10px] text-amber-500 font-medium mt-1">
+                              {item.userStatus}
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Children:</span>
-                              <span>Completed</span>
+                          ) : (
+                            <div className="flex text-[10px] gap-3 justify-end mt-1">
+                              <div className="flex gap-1">
+                                <span>You:</span>
+                                <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                  {item.userStatus}
+                                </span>
+                              </div>
+                              <div className="flex gap-1">
+                                <span>Co-Parent:</span>
+                                <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                  {item.coParentStatus}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex gap-1 text-green-600 font-medium">
-                              <span>Jurisdiction:</span>
-                              <span>Completed</span>
-                            </div>
-                          </div>
-                        ) : item.id === "schedule" ? (
-                          <div className="text-[10px] text-amber-500 font-medium mt-1">
-                            {item.userStatus}
-                          </div>
-                        ) : (
-                          <div className="flex flex-col text-[10px] items-end mt-1">
-                            <div className="flex gap-1">
-                              <span>You:</span>
-                              <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                {item.userStatus}
-                              </span>
-                            </div>
-                            <div className="flex gap-1">
-                              <span>Co-Parent:</span>
-                              <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                {item.coParentStatus}
-                              </span>
-                            </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
