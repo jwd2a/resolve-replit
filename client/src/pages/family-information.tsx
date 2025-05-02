@@ -105,14 +105,15 @@ export default function FamilyInformation() {
   
   // Children form state
   const [children, setChildren] = useState([
-    { id: 1, fullName: "Emma Smith", birthDate: "2018-05-15", age: 6 },
-    { id: 2, fullName: "Noah Smith", birthDate: "2020-09-23", age: 3 },
+    { id: 1, fullName: "Emma Smith", birthDate: "2018-05-15", age: 6, gender: "female" },
+    { id: 2, fullName: "Noah Smith", birthDate: "2020-09-23", age: 3, gender: "male" },
   ]);
   
   const [newChild, setNewChild] = useState({
     fullName: "",
     birthDate: "",
     age: 0,
+    gender: "",
   });
   
   // Form handlers
@@ -146,10 +147,11 @@ export default function FamilyInformation() {
       fullName: newChild.fullName,
       birthDate: newChild.birthDate,
       age: calculateAge(newChild.birthDate),
+      gender: newChild.gender,
     };
     
     setChildren([...children, childFormData]);
-    setNewChild({ fullName: "", birthDate: "", age: 0 });
+    setNewChild({ fullName: "", birthDate: "", age: 0, gender: "" });
   };
   
   const removeChild = (id: number) => {
@@ -176,6 +178,10 @@ export default function FamilyInformation() {
     const birthDate = e.target.value;
     const age = calculateAge(birthDate);
     setNewChild({ ...newChild, birthDate, age });
+  };
+  
+  const handleGenderChange = (value: string) => {
+    setNewChild({ ...newChild, gender: value });
   };
   
   const canAddChild = () => {
@@ -521,6 +527,7 @@ export default function FamilyInformation() {
                             <h4 className="text-sm font-medium">{child.fullName}</h4>
                             <p className="text-xs text-gray-500">
                               {new Date(child.birthDate).toLocaleDateString()} • {child.age} years old
+                              {child.gender && ` • ${child.gender.charAt(0).toUpperCase()}${child.gender.slice(1)}`}
                             </p>
                           </div>
                           <Button 
@@ -548,24 +555,38 @@ export default function FamilyInformation() {
                     <div className="grid grid-cols-12 gap-3">
                       <div className="col-span-12 md:col-span-6">
                         <Label htmlFor="childName" className="text-xs">Full Name</Label>
-                        <Input 
-                          id="childName" 
-                          value={newChild.fullName}
-                          onChange={(e) => setNewChild({...newChild, fullName: e.target.value})}
-                          placeholder="Child's full name"
-                          className="h-9 text-sm"
-                        />
+                        <div className="relative">
+                          <Input 
+                            id="childName" 
+                            value={newChild.fullName}
+                            onChange={(e) => setNewChild({...newChild, fullName: e.target.value})}
+                            placeholder="Child's full name"
+                            className="h-9 text-sm"
+                          />
+                          {newChild.fullName.length >= 2 && (
+                            <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                              ✓
+                            </div>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="col-span-7 md:col-span-4">
                         <Label htmlFor="birthDate" className="text-xs">Birth Date</Label>
-                        <Input 
-                          id="birthDate" 
-                          type="date"
-                          value={newChild.birthDate}
-                          onChange={handleBirthDateChange}
-                          className="h-9 text-sm"
-                        />
+                        <div className="relative">
+                          <Input 
+                            id="birthDate" 
+                            type="date"
+                            value={newChild.birthDate}
+                            onChange={handleBirthDateChange}
+                            className="h-9 text-sm"
+                          />
+                          {newChild.birthDate && (
+                            <div className="absolute right-2 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                              ✓
+                            </div>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="col-span-5 md:col-span-2">
@@ -577,6 +598,20 @@ export default function FamilyInformation() {
                           readOnly
                           className="h-9 text-sm bg-gray-50"
                         />
+                      </div>
+                      
+                      <div className="col-span-12">
+                        <Label htmlFor="gender" className="text-xs">Gender</Label>
+                        <Select value={newChild.gender} onValueChange={handleGenderChange}>
+                          <SelectTrigger id="gender" className="h-9 text-sm">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                     
@@ -623,50 +658,47 @@ export default function FamilyInformation() {
                 <form onSubmit={jurisdictionForm.handleSubmit(onJurisdictionSubmit)} className="space-y-4">
                   <FormField
                     control={jurisdictionForm.control}
-                    name="state"
+                    name="jurisdiction"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>State/Province</FormLabel>
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-xs font-medium">Where do your children primarily reside?</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select a state" />
-                            </SelectTrigger>
+                            <div className="relative">
+                              <SelectTrigger className="h-9 text-sm w-full">
+                                <SelectValue placeholder="Select a jurisdiction" />
+                              </SelectTrigger>
+                              {field.value && (
+                                <div className="absolute right-8 top-2 text-white bg-green-500 w-5 h-5 rounded-full flex items-center justify-center text-xs">
+                                  ✓
+                                </div>
+                              )}
+                            </div>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="California">California</SelectItem>
-                            <SelectItem value="Texas">Texas</SelectItem>
-                            <SelectItem value="Florida">Florida</SelectItem>
-                            <SelectItem value="New York">New York</SelectItem>
-                            <SelectItem value="Virginia">Virginia</SelectItem>
-                            <SelectItem value="Washington">Washington</SelectItem>
-                            <SelectItem value="Oregon">Oregon</SelectItem>
+                            {US_STATES.map((state) => (
+                              <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
+                                {state}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
-                        <FormDescription>
-                          Select the state where your children primarily reside
+                        <FormDescription className="text-xs text-gray-500">
+                          Select the state/jurisdiction where your children primarily reside. This helps us ensure your parenting plan complies with local laws.
                         </FormDescription>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
                   
-                  <FormField
-                    control={jurisdictionForm.control}
-                    name="county"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>County</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Enter the county where your children primarily reside
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="bg-amber-50 border border-amber-100 rounded-md p-4 my-6">
+                    <div className="flex items-start">
+                      <Info className="h-4 w-4 text-amber-500 mt-1 mr-2 flex-shrink-0" />
+                      <p className="text-sm text-amber-800">
+                        Jurisdiction is important for your parenting plan as it determines which state's laws will apply. Make sure to select the state where your children spend the majority of their time.
+                      </p>
+                    </div>
+                  </div>
                   
                   <div className="pt-4 flex justify-between">
                     <Button 
