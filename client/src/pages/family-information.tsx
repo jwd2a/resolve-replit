@@ -88,7 +88,10 @@ const coParentSchema = z.object({
   fullName: z.string().min(3, { message: "Co-parent's name must be at least 3 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
   phone: z.string().min(10, { message: "Please enter a valid phone number" }).optional(),
-  relationship: z.string().optional(),
+  address: z.string().min(5, { message: "Please enter your address" }),
+  city: z.string().min(2, { message: "City is required" }),
+  state: z.string().min(2, { message: "State is required" }),
+  zip: z.string().min(5, { message: "ZIP code is required" }),
 });
 
 const childSchema = z.object({
@@ -135,7 +138,10 @@ export default function FamilyInformation() {
       fullName: "John Smith",
       email: "john.smith@example.com",
       phone: "(555) 987-6543",
-      relationship: "Ex-spouse",
+      address: "456 Oak Avenue",
+      city: "Los Angeles",
+      state: "California",
+      zip: "90002",
     },
   });
   
@@ -537,28 +543,77 @@ export default function FamilyInformation() {
                     )}
                   />
                   
-                  <FormField
-                    control={coParentForm.control}
-                    name="relationship"
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormLabel className="text-xs font-medium">Relationship to You</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <SelectTrigger className="h-9 text-sm">
-                            <SelectValue placeholder="Select relationship" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="ex_spouse">Ex-spouse</SelectItem>
-                            <SelectItem value="ex_partner">Ex-partner</SelectItem>
-                            <SelectItem value="spouse">Current spouse</SelectItem>
-                            <SelectItem value="partner">Current partner</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
+                  <div>
+                    <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
+                    
+                    <FormField
+                      control={coParentForm.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem className="mb-2">
+                          <FormControl>
+                            <div className="relative">
+                              <Input placeholder="Address" {...field} className="h-9 text-sm pl-8" />
+                              <div className="absolute left-2 top-2 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                              </div>
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                      <FormField
+                        control={coParentForm.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input placeholder="City" {...field} className="h-9 text-sm" />
+                            </FormControl>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={coParentForm.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger className="h-9 text-sm">
+                                <SelectValue placeholder="State" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {US_STATES.map((state) => (
+                                  <SelectItem key={state} value={state.toLowerCase().replace(/\s/g, '_')}>
+                                    {state}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={coParentForm.control}
+                        name="zip"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormControl>
+                              <Input placeholder="ZIP" {...field} className="h-9 text-sm" />
+                            </FormControl>
+                            <FormMessage className="text-xs" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                   
                   <div className="pt-4 flex justify-between">
                     <Button 
