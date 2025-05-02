@@ -318,51 +318,54 @@ export default function Home6() {
                         <div className="flex-shrink-0 flex flex-col items-end">
                           <Button
                             variant="link"
-                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center mb-1"
+                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
                           >
                             {item.action} <ArrowRight className="ml-1 h-3 w-3" />
                           </Button>
-                          
-                          {item.id === "family-info" ? (
-                            <div className="flex flex-wrap text-[10px] gap-x-3 gap-y-1 justify-end mt-1 max-w-[280px]">
-                              <div className="flex gap-1 text-green-600 font-medium">
-                                <span>You:</span>
-                                <span>Completed</span>
-                              </div>
-                              <div className="flex gap-1 text-green-600 font-medium">
-                                <span>Co-Parent:</span>
-                                <span>Completed</span>
-                              </div>
-                              <div className="flex gap-1 text-green-600 font-medium">
-                                <span>Children:</span>
-                                <span>Completed</span>
-                              </div>
-                              <div className="flex gap-1 text-green-600 font-medium">
-                                <span>Jurisdiction:</span>
-                                <span>Completed</span>
-                              </div>
-                            </div>
-                          ) : item.id === "schedule" ? (
-                            <div className="text-[10px] text-amber-500 font-medium mt-1">
-                              {item.userStatus}
-                            </div>
-                          ) : (
-                            <div className="flex text-[10px] gap-3 justify-end mt-1">
-                              <div className="flex gap-1">
-                                <span>You:</span>
-                                <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                  {item.userStatus}
-                                </span>
-                              </div>
-                              <div className="flex gap-1">
-                                <span>Co-Parent:</span>
-                                <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                                  {item.coParentStatus}
-                                </span>
-                              </div>
-                            </div>
-                          )}
                         </div>
+                      </div>
+                      
+                      {/* Status tags in a separate row */}
+                      <div className="flex justify-end mt-2 px-3">
+                        {item.id === "family-info" ? (
+                          <div className="flex flex-wrap text-[10px] gap-x-3 gap-y-1 justify-end">
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>You:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Co-Parent:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Children:</span>
+                              <span>Completed</span>
+                            </div>
+                            <div className="flex gap-1 text-green-600 font-medium">
+                              <span>Jurisdiction:</span>
+                              <span>Completed</span>
+                            </div>
+                          </div>
+                        ) : item.id === "schedule" ? (
+                          <div className="text-[10px] text-amber-500 font-medium">
+                            {item.userStatus}
+                          </div>
+                        ) : (
+                          <div className="flex text-[10px] gap-3 justify-end">
+                            <div className="flex gap-1">
+                              <span>You:</span>
+                              <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                {item.userStatus}
+                              </span>
+                            </div>
+                            <div className="flex gap-1">
+                              <span>Co-Parent:</span>
+                              <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                                {item.coParentStatus}
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
