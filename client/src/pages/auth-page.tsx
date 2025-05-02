@@ -72,7 +72,7 @@ export default function AuthPage() {
   if (user) {
     if (!user.onboardingComplete) {
       // New users (from registration) need to complete onboarding
-      return <Redirect to="/onboarding-page-3step" />; // Using the 4-step onboarding as requested
+      return <Redirect to="/onboarding" />; // Using the 4-step onboarding as requested
     }
     // Existing users (from login) go straight to dashboard
     return <Redirect to="/home6" />;
