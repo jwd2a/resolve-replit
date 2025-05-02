@@ -218,6 +218,24 @@ export default function FamilyInformation() {
     setNewChild({ ...newChild, gender: value });
   };
   
+  const toggleHoliday = (holidayId: string) => {
+    setSelectedHolidays(prev => {
+      if (prev.includes(holidayId)) {
+        return prev.filter(id => id !== holidayId);
+      } else {
+        return [...prev, holidayId];
+      }
+    });
+  };
+  
+  const onHolidaysSubmit = () => {
+    toast({
+      title: "Holiday Preferences Saved",
+      description: "Your holiday preferences have been saved. We'll use this to customize your parenting plan.",
+    });
+    setActiveTab("jurisdiction");
+  };
+  
   const canAddChild = () => {
     return newChild.fullName.length >= 2 && newChild.birthDate;
   };
@@ -234,6 +252,7 @@ export default function FamilyInformation() {
     return userForm.formState.isValid && 
            coParentForm.formState.isValid && 
            children.length > 0 &&
+           selectedHolidays.length > 0 &&
            jurisdictionForm.formState.isValid;
   };
   
@@ -683,7 +702,62 @@ export default function FamilyInformation() {
                     type="button" 
                     className="bg-[#2e1a87] hover:bg-[#25156d]"
                     disabled={children.length === 0}
-                    onClick={() => setActiveTab("jurisdiction")}
+                    onClick={() => setActiveTab("holidays")}
+                  >
+                    Next
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="holidays" className="space-y-6">
+              <div className="space-y-6">
+                <div className="border rounded-lg p-5">
+                  <h3 className="text-base font-medium text-[#2e1a87] mb-4">Important Holidays</h3>
+                  
+                  <div className="bg-amber-50 border border-amber-100 rounded-md p-4 mb-6">
+                    <div className="flex items-start">
+                      <Calendar className="h-4 w-4 text-amber-500 mt-1 mr-2 flex-shrink-0" />
+                      <p className="text-sm text-amber-800">
+                        Select the holidays that are important to your family. This helps us create a parenting plan that includes only the holidays you care about.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {US_HOLIDAYS.map((holiday) => (
+                      <div key={holiday.id} className="flex items-start space-x-2">
+                        <Checkbox 
+                          id={holiday.id} 
+                          checked={selectedHolidays.includes(holiday.id)}
+                          onCheckedChange={() => toggleHoliday(holiday.id)}
+                          className="mt-0.5"
+                        />
+                        <Label
+                          htmlFor={holiday.id}
+                          className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {holiday.name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="pt-4 flex justify-between">
+                  <Button 
+                    type="button" 
+                    variant="outline"
+                    onClick={() => setActiveTab("children")}
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
+                  </Button>
+                  <Button 
+                    type="button" 
+                    className="bg-[#2e1a87] hover:bg-[#25156d]"
+                    onClick={onHolidaysSubmit}
                   >
                     Next
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -743,7 +817,7 @@ export default function FamilyInformation() {
                     <Button 
                       type="button" 
                       variant="outline"
-                      onClick={() => setActiveTab("children")}
+                      onClick={() => setActiveTab("holidays")}
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Back
