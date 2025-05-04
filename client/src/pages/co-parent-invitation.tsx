@@ -99,9 +99,6 @@ export default function CoParentInvitation() {
                     Both parents need to be registered on the platform to create a complete and
                     effective parenting plan. Your co-parent will be guided through their own setup process.
                   </p>
-                  <p className="text-sm text-blue-700">
-                    All communication remains respectful and focused on your children's best interests.
-                  </p>
                 </div>
               </div>
             </div>
