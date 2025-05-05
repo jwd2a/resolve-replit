@@ -284,13 +284,13 @@ export default function WaiversAndAgreements() {
             Set Up Your Signature & Initials
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Signature */}
-            <div className="border border-gray-200 rounded-lg p-4">
-              <h3 className="font-medium text-gray-700 mb-3">Your Signature</h3>
-              
-              <Tabs defaultValue="draw" onValueChange={(value) => setSignatureMethod(value as 'draw' | 'type')}>
-                <TabsList className="w-full grid grid-cols-2 mb-4">
+          <div className="border border-gray-200 rounded-lg p-6">
+            <Tabs defaultValue="draw" onValueChange={(value) => {
+              setSignatureMethod(value as 'draw' | 'type');
+              setInitialsMethod(value as 'draw' | 'type');
+            }}>
+              <div className="flex items-center justify-between mb-6">
+                <TabsList className="grid grid-cols-2 w-48">
                   <TabsTrigger value="draw" className="flex items-center justify-center">
                     <PenTool className="mr-2 h-4 w-4" />
                     Draw
@@ -301,55 +301,13 @@ export default function WaiversAndAgreements() {
                   </TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="draw" className="mt-0">
-                  <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
-                    <SignatureCanvas
-                      ref={signatureCanvasRef}
-                      canvasProps={{
-                        width: 300,
-                        height: 150,
-                        className: 'signature-canvas w-full',
-                      }}
-                      backgroundColor="rgba(247, 248, 249, 1)"
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={clearSignature}
-                    >
-                      Clear
-                    </Button>
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d]"
-                      onClick={saveSignature}
-                    >
-                      Use This Signature
-                    </Button>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="type" className="mt-0">
-                  <div className="mb-4">
-                    <label className="block text-sm text-gray-600 mb-1">Type your full name</label>
-                    <input
-                      type="text"
-                      value={typedSignature}
-                      onChange={(e) => setTypedSignature(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm text-gray-600 mb-1">Select a signature style</label>
+                {signatureMethod === 'type' && (
+                  <div className="flex items-center space-x-3">
+                    <label className="text-sm text-gray-600 whitespace-nowrap">Font Style:</label>
                     <select
                       value={signatureFont}
                       onChange={(e) => setSignatureFont(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
+                      className="p-1 border border-gray-300 rounded-md text-sm"
                     >
                       {fonts.map((font) => (
                         <option key={font.name} value={font.name}>
@@ -358,162 +316,240 @@ export default function WaiversAndAgreements() {
                       ))}
                     </select>
                   </div>
-                  
-                  <div className="border border-gray-200 rounded-md p-3 bg-gray-50 mb-3 h-20 flex items-center justify-center">
-                    <p 
-                      style={{ 
-                        fontFamily: signatureFont, 
-                        fontSize: '28px',
-                        lineHeight: 1.2 
-                      }}
-                    >
-                      {typedSignature || 'Your signature will appear here'}
-                    </p>
-                  </div>
-                  
-                  <div className="flex justify-end">
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d]"
-                      onClick={saveSignature}
-                      disabled={!typedSignature.trim()}
-                    >
-                      Use This Signature
-                    </Button>
-                  </div>
-                </TabsContent>
-              </Tabs>
-
-              {signature && (
-                <div className="mt-4 border-t border-gray-100 pt-4">
-                  <h4 className="text-sm font-medium text-gray-700 flex items-center mb-2">
-                    <Check className="h-4 w-4 text-green-500 mr-1" />
-                    Signature Saved
-                  </h4>
-                  <div className="border border-gray-200 rounded-md p-2 bg-white">
-                    <img src={signature} alt="Your signature" className="max-h-16" />
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-2 text-xs flex items-center"
-                    onClick={() => setSignature(null)}
-                  >
-                    <Edit className="h-3 w-3 mr-1" />
-                    Edit Signature
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            {/* Initials */}
-            <div className="border border-gray-200 rounded-lg p-4">
-              <h3 className="font-medium text-gray-700 mb-3">Your Initials</h3>
+                )}
+              </div>
               
-              <Tabs defaultValue="draw" onValueChange={(value) => setInitialsMethod(value as 'draw' | 'type')}>
-                <TabsList className="w-full grid grid-cols-2 mb-4">
-                  <TabsTrigger value="draw" className="flex items-center justify-center">
-                    <PenTool className="mr-2 h-4 w-4" />
-                    Draw
-                  </TabsTrigger>
-                  <TabsTrigger value="type" className="flex items-center justify-center">
-                    <Keyboard className="mr-2 h-4 w-4" />
-                    Type
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="draw" className="mt-0">
-                  <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
-                    <SignatureCanvas
-                      ref={initialsCanvasRef}
-                      canvasProps={{
-                        width: 150,
-                        height: 80,
-                        className: 'signature-canvas w-full',
-                      }}
-                      backgroundColor="rgba(247, 248, 249, 1)"
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={clearInitials}
-                    >
-                      Clear
-                    </Button>
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d]"
-                      onClick={saveInitials}
-                    >
-                      Use These Initials
-                    </Button>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="type" className="mt-0">
-                  <div className="mb-4">
-                    <label className="block text-sm text-gray-600 mb-1">Type your initials</label>
-                    <input
-                      type="text"
-                      value={typedInitials}
-                      onChange={(e) => setTypedInitials(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                      placeholder="JD"
-                      maxLength={3}
-                    />
+              <TabsContent value="draw" className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Signature Drawing Panel */}
+                  <div className="md:col-span-2">
+                    <h3 className="font-medium text-gray-700 mb-2">Your Signature</h3>
+                    <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
+                      <SignatureCanvas
+                        ref={signatureCanvasRef}
+                        canvasProps={{
+                          width: 300,
+                          height: 150,
+                          className: 'signature-canvas w-full',
+                        }}
+                        backgroundColor="rgba(247, 248, 249, 1)"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={clearSignature}
+                      >
+                        Clear
+                      </Button>
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="bg-[#2e1a87] hover:bg-[#25156d]"
+                        onClick={saveSignature}
+                      >
+                        Save Signature
+                      </Button>
+                    </div>
+                    
+                    {signature && (
+                      <div className="mt-4 pt-2">
+                        <h4 className="text-sm font-medium text-green-600 flex items-center">
+                          <Check className="h-4 w-4 mr-1" />
+                          Signature Saved
+                        </h4>
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="border border-gray-200 rounded-md p-3 bg-gray-50 mb-3 h-16 flex items-center justify-center">
-                    <p 
-                      style={{ 
-                        fontFamily: signatureFont, 
-                        fontSize: '24px',
-                        lineHeight: 1.2 
-                      }}
-                    >
-                      {typedInitials || 'JD'}
-                    </p>
+                  {/* Initials Drawing Panel */}
+                  <div>
+                    <h3 className="font-medium text-gray-700 mb-2">Your Initials</h3>
+                    <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
+                      <SignatureCanvas
+                        ref={initialsCanvasRef}
+                        canvasProps={{
+                          width: 150,
+                          height: 80,
+                          className: 'signature-canvas w-full',
+                        }}
+                        backgroundColor="rgba(247, 248, 249, 1)"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={clearInitials}
+                      >
+                        Clear
+                      </Button>
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="bg-[#2e1a87] hover:bg-[#25156d]"
+                        onClick={saveInitials}
+                      >
+                        Save Initials
+                      </Button>
+                    </div>
+                    
+                    {initials && (
+                      <div className="mt-4 pt-2">
+                        <h4 className="text-sm font-medium text-green-600 flex items-center">
+                          <Check className="h-4 w-4 mr-1" />
+                          Initials Saved
+                        </h4>
+                      </div>
+                    )}
                   </div>
-                  
-                  <div className="flex justify-end">
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d]"
-                      onClick={saveInitials}
-                      disabled={!typedInitials.trim()}
-                    >
-                      Use These Initials
-                    </Button>
-                  </div>
-                </TabsContent>
-              </Tabs>
-
-              {initials && (
-                <div className="mt-4 border-t border-gray-100 pt-4">
-                  <h4 className="text-sm font-medium text-gray-700 flex items-center mb-2">
-                    <Check className="h-4 w-4 text-green-500 mr-1" />
-                    Initials Saved
-                  </h4>
-                  <div className="border border-gray-200 rounded-md p-2 bg-white">
-                    <img src={initials} alt="Your initials" className="max-h-12" />
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-2 text-xs flex items-center"
-                    onClick={() => setInitials(null)}
-                  >
-                    <Edit className="h-3 w-3 mr-1" />
-                    Edit Initials
-                  </Button>
                 </div>
-              )}
-            </div>
+              </TabsContent>
+              
+              <TabsContent value="type" className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Signature Typing Panel */}
+                  <div className="md:col-span-2">
+                    <h3 className="font-medium text-gray-700 mb-2">Your Signature</h3>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        value={typedSignature}
+                        onChange={(e) => setTypedSignature(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        placeholder="Type your full name"
+                      />
+                    </div>
+                    
+                    <div className="border border-gray-200 rounded-md p-4 bg-gray-50 mb-3 h-24 flex items-center justify-center">
+                      <p 
+                        style={{ 
+                          fontFamily: signatureFont, 
+                          fontSize: '28px',
+                          lineHeight: 1.2 
+                        }}
+                      >
+                        {typedSignature || 'Your signature will appear here'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex justify-end">
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="bg-[#2e1a87] hover:bg-[#25156d]"
+                        onClick={saveSignature}
+                        disabled={!typedSignature.trim()}
+                      >
+                        Save Signature
+                      </Button>
+                    </div>
+                    
+                    {signature && (
+                      <div className="mt-4 pt-2">
+                        <h4 className="text-sm font-medium text-green-600 flex items-center">
+                          <Check className="h-4 w-4 mr-1" />
+                          Signature Saved
+                        </h4>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Initials Typing Panel */}
+                  <div>
+                    <h3 className="font-medium text-gray-700 mb-2">Your Initials</h3>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        value={typedInitials}
+                        onChange={(e) => setTypedInitials(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        placeholder="Type your initials (e.g., JD)"
+                        maxLength={3}
+                      />
+                    </div>
+                    
+                    <div className="border border-gray-200 rounded-md p-4 bg-gray-50 mb-3 h-24 flex items-center justify-center">
+                      <p 
+                        style={{ 
+                          fontFamily: signatureFont, 
+                          fontSize: '32px',
+                          lineHeight: 1.2 
+                        }}
+                      >
+                        {typedInitials || 'JD'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex justify-end">
+                      <Button 
+                        variant="default" 
+                        size="sm" 
+                        className="bg-[#2e1a87] hover:bg-[#25156d]"
+                        onClick={saveInitials}
+                        disabled={!typedInitials.trim()}
+                      >
+                        Save Initials
+                      </Button>
+                    </div>
+                    
+                    {initials && (
+                      <div className="mt-4 pt-2">
+                        <h4 className="text-sm font-medium text-green-600 flex items-center">
+                          <Check className="h-4 w-4 mr-1" />
+                          Initials Saved
+                        </h4>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+            
+            {/* Preview Section */}
+            {(signature || initials) && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3 className="font-medium text-gray-700 mb-4">Signature Preview</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {signature && (
+                    <div>
+                      <h4 className="text-sm text-gray-600 mb-1">Your Signature</h4>
+                      <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
+                        <img src={signature} alt="Your signature" className="max-h-16" />
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="mt-2 text-xs flex items-center text-blue-600"
+                        onClick={() => setSignature(null)}
+                      >
+                        <Edit className="h-3 w-3 mr-1" />
+                        Edit Signature
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {initials && (
+                    <div>
+                      <h4 className="text-sm text-gray-600 mb-1">Your Initials</h4>
+                      <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
+                        <img src={initials} alt="Your initials" className="max-h-12" />
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="mt-2 text-xs flex items-center text-blue-600"
+                        onClick={() => setInitials(null)}
+                      >
+                        <Edit className="h-3 w-3 mr-1" />
+                        Edit Initials
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
