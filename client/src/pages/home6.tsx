@@ -461,52 +461,7 @@ export default function Home6() {
               ))}
             </div>
 
-            {/* Course Outline section */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-medium text-gray-900">Course Outline</h2>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="text-xs text-[#2e1a87] px-2 h-7"
-                >
-                  View Full Course <ExternalLink className="h-3 w-3 ml-1" />
-                </Button>
-              </div>
 
-              <div className="space-y-3">
-                {courseModules.map((module) => (
-                  <div 
-                    key={module.id}
-                    className={`flex items-center justify-between p-3 border rounded-md transition-all hover:border-[#2e1a87]/30 ${
-                      module.active ? 'bg-[#f5f0ff] border-[#2e1a87]/30' : 'bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
-                        module.active 
-                          ? 'bg-[#2e1a87] text-white' 
-                          : 'bg-gray-100 text-gray-500'
-                      }`}>
-                        <span className="text-xs font-medium">{module.id}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">{module.title}</h3>
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0">
-                      {module.hasChevron && (
-                        <ArrowRight className="h-4 w-4 text-gray-400" />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-4 pt-4 border-t text-xs text-gray-600">
-                <p>Progress through all five modules to complete your comprehensive parenting plan. Each module covers key aspects of co-parenting arrangements.</p>
-              </div>
-            </div>
           </div>
 
           {/* Sidebar content - spans 1 column */}
