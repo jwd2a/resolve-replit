@@ -61,6 +61,12 @@ export default function Home6() {
       completed: isWaiverCompleted
     },
     {
+      id: "holidays",
+      label: "Holidays",
+      icon: <CalendarDays className="h-6 w-6" />,
+      completed: false
+    },
+    {
       id: "payment",
       label: "Payment",
       icon: <CreditCard className="h-6 w-6" />,
