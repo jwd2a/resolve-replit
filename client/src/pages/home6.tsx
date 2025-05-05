@@ -189,6 +189,40 @@ export default function Home6() {
       icon: <MessageCircle className="h-5 w-5 text-blue-400" />,
     },
   ];
+  
+  // Module data for course outline
+  const courseModules = [
+    {
+      id: 1,
+      title: "Welcome to Resolve",
+      active: true,
+      hasChevron: true
+    },
+    {
+      id: 2,
+      title: "Parental Responsibility and Decision Making",
+      active: false,
+      hasChevron: true
+    },
+    {
+      id: 3,
+      title: "Timesharing Schedule",
+      active: false,
+      hasChevron: true
+    },
+    {
+      id: 4,
+      title: "Educational Decisions",
+      active: false,
+      hasChevron: true
+    },
+    {
+      id: 5,
+      title: "Final Considerations",
+      active: false,
+      hasChevron: true
+    }
+  ];
 
   // Function to cycle through session states ('none', 'proposed', 'scheduled')
   const toggleSessionState = () => {
@@ -607,53 +641,80 @@ export default function Home6() {
             </div>
 
             {/* Resources Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="bg-indigo-50 p-2 rounded-md">
-                  <FileText className="h-5 w-5 text-indigo-600" />
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-medium text-gray-900">Resources</h2>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                  2 Available
+                </span>
+              </div>
+
+              {/* Co-Parenting Guide */}
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mb-2 flex items-start">
+                <div className="bg-red-100 p-1.5 rounded-md mr-3 flex-shrink-0">
+                  <FileText className="h-4 w-4 text-red-600" />
                 </div>
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">Resources</h2>
-                  <p className="text-gray-600 text-sm">
-                    Helpful materials for your journey.
-                  </p>
+                <div className="flex-grow">
+                  <h3 className="text-sm font-medium text-gray-900">Co-Parenting Guide</h3>
+                  <div className="flex items-center mt-1">
+                    <span className="text-xs text-gray-600">PDF • 15 pages</span>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-blue-600"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
                 </div>
               </div>
 
-              <div className="mt-3">
-                <Button
-                  variant="outline"
-                  className="w-full text-blue-600 font-medium"
-                >
-                  View resources <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </Button>
+              {/* Communication Toolkit */}
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mb-3 flex items-start">
+                <div className="bg-blue-100 p-1.5 rounded-md mr-3 flex-shrink-0">
+                  <MessageCircle className="h-4 w-4 text-blue-600" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-sm font-medium text-gray-900">Communication Toolkit</h3>
+                  <div className="flex items-center mt-1">
+                    <span className="text-xs text-gray-600">Article • 10 min read</span>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-blue-600"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               </div>
             </div>
 
-            {/* Help Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="bg-indigo-50 p-2 rounded-md">
-                    <HelpCircle className="h-5 w-5 text-indigo-600" />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
-                    <p className="text-gray-600 text-sm mt-1">
-                      Contact our support team
-                    </p>
-                  </div>
+            {/* Need assistance */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <Clock className="h-4 w-4 text-[#2e1a87]" />
+                </div>
+                <div>
+                  <h2 className="text-base font-medium text-gray-900">Need assistance?</h2>
+                  <p className="text-gray-600 text-xs mt-1">
+                    Our support team is always ready to help with your questions.
+                  </p>
                 </div>
               </div>
               
-              <div className="mt-4">
-                <Button
-                  className="w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5"
-                  variant="outline"
-                >
-                  Contact Support
-                </Button>
-              </div>
+              <Button
+                className="w-full mt-2 border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5 font-medium"
+                variant="outline"
+                size="sm"
+              >
+                Contact Support <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
+              </Button>
             </div>
           </div>
         </div>
