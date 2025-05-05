@@ -521,11 +521,11 @@ export default function Home6() {
 
           {/* Sidebar content - spans 1 column */}
           <div className="space-y-6">
-            {/* Payment section with increased height */}
-            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col">
+            {/* Payment section with increased height - exactly matching Schedule Course Session */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col min-h-[420px]">
               {paymentStatus ? (
                 <>
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between mb-6">
                     <div>
                       <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
                       <p className="text-gray-600 text-xs mt-1">
@@ -538,15 +538,40 @@ export default function Home6() {
                     </div>
                   </div>
                   
-                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2">
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2 mb-6">
                     <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
                     <p className="text-green-800 text-sm font-medium">
                       Payment processed successfully
                     </p>
                   </div>
                   
-                  {/* Added padding at the bottom for increased height */}
-                  <div className="flex-grow pt-10"></div>
+                  {/* Added more prominent features section for better spacing */}
+                  <div className="mb-5 mt-2">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Course includes:</h3>
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 text-sm">Comprehensive Course Materials</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 text-sm">Interactive Parenting Exercises</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 text-sm">Expert-Reviewed Agreement Templates</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Filling space */}
+                  <div className="flex-grow"></div>
                   
                   <Button
                     className="w-full mt-4 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
@@ -556,7 +581,7 @@ export default function Home6() {
                 </>
               ) : (
                 <>
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-start justify-between mb-4">
                     <div>
                       <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
                       <p className="text-gray-600 text-xs mt-1">
@@ -569,16 +594,16 @@ export default function Home6() {
                     </div>
                   </div>
                   
-                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-2.5 flex items-center gap-2 mb-4">
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-2.5 flex items-center gap-2 mb-5">
                     <CreditCard className="h-4 w-4 text-amber-600 flex-shrink-0" />
                     <p className="text-amber-800 text-sm font-medium">
                       Your course access is pending payment
                     </p>
                   </div>
                   
-                  <div className="mb-4">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Included in your enrollment:</h3>
-                    <div className="space-y-1.5">
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Included in your enrollment:</h3>
+                    <div className="space-y-2.5">
                       <div className="flex items-center gap-1.5">
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
@@ -597,18 +622,24 @@ export default function Home6() {
                         </div>
                         <span className="text-gray-700 text-sm">Lifetime Access to Your Plan & Resources</span>
                       </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
+                        </div>
+                        <span className="text-gray-700 text-sm">Access to Co-Parenting Templates</span>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Added extra space to match the height with the checklist */}
                   <div className="flex-grow"></div>
                   
-                  <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between">
+                  <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between mt-2">
                     <span className="text-sm font-medium">Course Enrollment</span>
                     <span className="text-xl font-bold text-[#2e1a87]">$600</span>
                   </div>
                   
-                  <div className="text-center mt-2">
+                  <div className="text-center mt-2 mb-2">
                     <span className="text-xs text-gray-500">Enrollment can be completed by either parent.</span>
                   </div>
                   
