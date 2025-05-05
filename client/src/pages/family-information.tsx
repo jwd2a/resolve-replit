@@ -331,11 +331,7 @@ export default function FamilyInformation() {
                 <span className="hidden sm:inline">Jurisdiction</span>
                 <span className="sm:hidden">Location</span>
               </TabsTrigger>
-              <TabsTrigger value="holidays" className="data-[state=active]:bg-[#6c54da] data-[state=active]:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <span className="hidden sm:inline">Holidays</span>
-                <span className="sm:hidden">Holidays</span>
-              </TabsTrigger>
+
             </TabsList>
             
             <TabsContent value="you" className="space-y-6">
@@ -766,90 +762,6 @@ export default function FamilyInformation() {
                     type="button" 
                     className="bg-[#2e1a87] hover:bg-[#25156d]"
                     disabled={children.length === 0}
-                    onClick={() => setActiveTab("holidays")}
-                  >
-                    Next
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="holidays" className="space-y-6">
-              <div className="space-y-6">
-                <div className="p-5">
-                  <h3 className="text-base font-semibold text-[#2e1a87] mb-4">Holiday Preferences</h3>
-                  <p className="text-sm text-gray-600 mb-6">
-                    Select which holidays matter to your family. This information will be used later in the course.
-                  </p>
-                  
-                  {HOLIDAY_CATEGORIES.map((category) => (
-                    <div key={category.title} className="mb-6">
-                      <h4 className="font-medium text-sm mb-3">{category.title}</h4>
-                      <div className="space-y-2">
-                        {category.holidays.map((holiday) => {
-                          const isSelected = selectedHolidays.includes(holiday.id);
-                          return (
-                            <div 
-                              key={holiday.id} 
-                              className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-[#f5f0ff]' : 'hover:bg-gray-50'}`}
-                              onClick={() => toggleHoliday(holiday.id)}
-                            >
-                              <Checkbox 
-                                id={holiday.id} 
-                                checked={isSelected}
-                                onCheckedChange={() => toggleHoliday(holiday.id)}
-                                className="mr-3"
-                              />
-                              <Label
-                                htmlFor={holiday.id}
-                                className="text-sm cursor-pointer w-full"
-                              >
-                                {holiday.name}
-                              </Label>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  <div className="mt-6">
-                    <Label htmlFor="otherHolidays" className="text-sm font-medium mb-2 block">
-                      Other family-specific holidays or traditions
-                    </Label>
-                    <Textarea 
-                      id="otherHolidays"
-                      placeholder="Enter any additional family-specific holidays or traditions"
-                      value={otherHolidays}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setOtherHolidays(e.target.value)}
-                      className="resize-none min-h-[100px]"
-                    />
-                  </div>
-                  
-                  <div className="mt-6">
-                    <Button 
-                      type="button" 
-                      className="bg-[#2e1a87] hover:bg-[#25156d] w-full"
-                      onClick={onHolidaysSubmit}
-                    >
-                      Save Preferences
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="pt-4 flex justify-between">
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    onClick={() => setActiveTab("children")}
-                  >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline"
                     onClick={() => setActiveTab("jurisdiction")}
                   >
                     Next
@@ -858,6 +770,8 @@ export default function FamilyInformation() {
                 </div>
               </div>
             </TabsContent>
+            
+
             
             <TabsContent value="jurisdiction" className="space-y-6">
               <Form {...jurisdictionForm}>
@@ -910,7 +824,7 @@ export default function FamilyInformation() {
                     <Button 
                       type="button" 
                       variant="outline"
-                      onClick={() => setActiveTab("holidays")}
+                      onClick={() => setActiveTab("children")}
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Back

@@ -109,7 +109,17 @@ export default function Home6() {
       actionLink: "/waivers-and-agreements",
       required: true,
     },
-
+    {
+      id: "holidays",
+      icon: <CalendarDays className="h-5 w-5 text-indigo-600" />,
+      title: "Holiday Preferences",
+      description: "Select your preferences for holiday schedules.",
+      userStatus: "Pending",
+      coParentStatus: "Pending",
+      action: "Select Preferences",
+      actionLink: "/holiday-preferences",
+      required: true,
+    },
     {
       id: "schedule",
       icon: <Clock className="h-5 w-5 text-gray-500" />,
@@ -382,7 +392,9 @@ export default function Home6() {
                                   ? "/co-parent-invitation" 
                                   : item.id === "waivers" 
                                     ? "/waivers-and-agreements" 
-                                    : "/schedule-course"
+                                    : item.id === "holidays" 
+                                      ? "/holiday-preferences" 
+                                      : "/schedule-course"
                             }
                           >
                             <Button
