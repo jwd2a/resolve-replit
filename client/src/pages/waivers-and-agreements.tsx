@@ -19,6 +19,22 @@ export default function WaiversAndAgreements() {
   const [signatureFont, setSignatureFont] = useState('Dancing Script');
   const [iframeLoaded, setIframeLoaded] = useState(false);
   
+  // Generate initials from full name
+  useEffect(() => {
+    if (signatureMethod === 'type' && typedSignature) {
+      const nameParts = typedSignature.trim().split(' ').filter(part => part.length > 0);
+      if (nameParts.length >= 2) {
+        // Get first letter of first name and first letter of last name
+        const firstInitial = nameParts[0][0] || '';
+        const lastInitial = nameParts[nameParts.length - 1][0] || '';
+        setTypedInitials(firstInitial + lastInitial);
+      } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+        // If only one word, use first letter
+        setTypedInitials(nameParts[0][0] || '');
+      }
+    }
+  }, [signatureMethod, typedSignature]);
+  
   const agreementRef = useRef<HTMLDivElement>(null);
   const signatureCanvasRef = useRef<SignatureCanvas>(null);
   const initialsCanvasRef = useRef<SignatureCanvas>(null);
@@ -460,14 +476,10 @@ export default function WaiversAndAgreements() {
                   <div>
                     <h3 className="font-medium text-gray-700 mb-2">Your Initials</h3>
                     <div className="mb-3">
-                      <input
-                        type="text"
-                        value={typedInitials}
-                        onChange={(e) => setTypedInitials(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        placeholder="Type your initials (e.g., JD)"
-                        maxLength={3}
-                      />
+                      <p className="text-sm text-gray-600 mb-1">Initials (auto-generated from name)</p>
+                      <div className="w-full p-2 border border-gray-200 rounded-md bg-gray-100 text-gray-700">
+                        {typedInitials || 'Enter your full name above'}
+                      </div>
                     </div>
                     
                     <div className="border border-gray-200 rounded-md p-4 bg-gray-50 mb-3 h-24 flex items-center justify-center">
