@@ -1,0 +1,36 @@
+            {/* Resources Card */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="bg-indigo-50 p-2 rounded-md">
+                  <FileText className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">Resources</h2>
+                  <p className="text-gray-600 text-sm">
+                    Helpful materials for your journey.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  className="w-full text-blue-600 font-medium"
+                >
+                  View resources <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Help Card */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="bg-indigo-50 p-2 rounded-md">
+                    <HelpCircle className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Contact our support team
+                    </p>
