@@ -39,6 +39,9 @@ export default function Home6() {
   // Check if waiver is completed from localStorage
   const isWaiverCompleted = typeof window !== 'undefined' ? 
     localStorage.getItem('waiverCompleted') === 'true' : false;
+    
+  // Feature flags
+  const showHolidaySelector = false; // Temporarily hidden — toggle `showHolidaySelector` to true to re-enable this section.
   
   // Step states for the badge-style progress tracker with larger icons
   const [steps, setSteps] = useState([
@@ -60,12 +63,13 @@ export default function Home6() {
       icon: <FileText className="h-6 w-6" />,
       completed: isWaiverCompleted
     },
-    {
+    // Temporarily hidden holiday step - toggle showHolidaySelector to true to re-enable
+    ...(showHolidaySelector ? [{
       id: "holidays",
       label: "Holidays",
       icon: <CalendarDays className="h-6 w-6" />,
       completed: false
-    },
+    }] : []),
     {
       id: "payment",
       label: "Payment",
@@ -115,7 +119,8 @@ export default function Home6() {
       actionLink: "/waivers-and-agreements",
       required: true,
     },
-    {
+    // Temporarily hidden holiday preferences - toggle showHolidaySelector to true to re-enable
+    ...(showHolidaySelector ? [{
       id: "holidays",
       icon: <CalendarDays className="h-5 w-5 text-indigo-600" />,
       title: "Holiday Preferences",
@@ -125,7 +130,7 @@ export default function Home6() {
       action: "Select Preferences",
       actionLink: "/holiday-preferences",
       required: true,
-    },
+    }] : []),
     {
       id: "schedule",
       icon: <Clock className="h-5 w-5 text-gray-500" />,
