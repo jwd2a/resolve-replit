@@ -505,88 +505,88 @@ export default function Home6() {
           {/* Sidebar content - spans 1 column */}
           <div className="space-y-6">
             {/* Payment section */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
               {paymentStatus ? (
                 <>
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h2 className="text-2xl font-medium text-gray-900">Course Access</h2>
-                      <p className="text-gray-600 text-sm mt-2">
+                      <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
+                      <p className="text-gray-600 text-xs mt-1">
                         You have full access to all course materials
                       </p>
                     </div>
-                    <div className="bg-green-50 rounded-full px-4 py-1.5 flex items-center text-green-700 font-medium text-sm">
-                      <CheckCircle className="h-4 w-4 mr-1.5" />
+                    <div className="bg-green-50 rounded-full px-3 py-1 flex items-center text-green-700 font-medium text-xs">
+                      <CheckCircle className="h-3.5 w-3.5 mr-1" />
                       Unlocked
                     </div>
                   </div>
                   
-                  <div className="bg-green-50 border border-green-100 rounded-lg p-4 mt-6 flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-green-800 font-medium">
-                      Your payment has been processed successfully
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+                    <p className="text-green-800 text-sm font-medium">
+                      Payment processed successfully
                     </p>
                   </div>
                   
                   <Button
-                    className="w-full mt-6 py-6 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
+                    className="w-full mt-4 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
                   >
                     Begin Course
                   </Button>
                 </>
               ) : (
                 <>
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h2 className="text-2xl font-medium text-gray-900">Course Access</h2>
-                      <p className="text-gray-600 text-sm mt-2">
+                      <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
+                      <p className="text-gray-600 text-xs mt-1">
                         Complete the course enrollment to continue your family's journey
                       </p>
                     </div>
-                    <div className="bg-amber-50 rounded-full px-4 py-1.5 flex items-center text-amber-700 font-medium text-sm">
-                      <LockIcon className="h-4 w-4 mr-1.5" />
+                    <div className="bg-amber-50 rounded-full px-3 py-1 flex items-center text-amber-700 font-medium text-xs">
+                      <LockIcon className="h-3.5 w-3.5 mr-1" />
                       Locked
                     </div>
                   </div>
                   
-                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-4 mt-6 flex items-start gap-3">
-                    <CreditCard className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-amber-800 font-medium">
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-2.5 flex items-center gap-2 mb-4">
+                    <CreditCard className="h-4 w-4 text-amber-600 flex-shrink-0" />
+                    <p className="text-amber-800 text-sm font-medium">
                       Your course access is pending payment
                     </p>
                   </div>
                   
-                  <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-                    <h3 className="text-lg font-medium text-gray-700 mb-3">Included in your enrollment:</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2">
-                        <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="h-3.5 w-3.5 text-green-600" />
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Included in your enrollment:</h3>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700">Comprehensive co-parenting course</span>
+                        <span className="text-gray-700 text-sm">Comprehensive co-parenting course</span>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="h-3.5 w-3.5 text-green-600" />
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700">Legal template creation tools</span>
+                        <span className="text-gray-700 text-sm">Legal template creation tools</span>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="h-3.5 w-3.5 text-green-600" />
+                      <div className="flex items-center gap-1.5">
+                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
+                          <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700">Lifetime access to resources</span>
+                        <span className="text-gray-700 text-sm">Lifetime access to resources</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-gray-100 rounded-lg p-4 mt-4 flex items-center justify-between">
-                    <span className="text-lg font-medium">Course Enrollment</span>
-                    <span className="text-2xl font-bold text-[#2e1a87]">$600</span>
+                  <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between">
+                    <span className="text-sm font-medium">Course Enrollment</span>
+                    <span className="text-xl font-bold text-[#2e1a87]">$600</span>
                   </div>
                   
                   <Button
-                    className="w-full mt-4 py-6 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
+                    className="w-full mt-3 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
                     onClick={handleCompletePayment}
                     disabled={isLoadingPayment}
                   >
@@ -597,7 +597,7 @@ export default function Home6() {
                       </>
                     ) : (
                       <>
-                        <CreditCard className="h-5 w-5 mr-2" />
+                        <CreditCard className="h-4 w-4 mr-1.5" />
                         Complete Enrollment
                       </>
                     )}
