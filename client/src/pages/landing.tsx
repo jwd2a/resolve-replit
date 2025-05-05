@@ -58,17 +58,16 @@ export default function LandingPage() {
               </div>
             </div>
             
-            <div className="relative">
-              <img 
-                src={MomChildren} 
-                alt="Mother with children" 
-                className="w-full rounded-lg"
-              />
+            <div className="relative h-80 md:h-96 bg-gray-100 rounded-lg flex items-center justify-center">
               <div className="absolute top-6 right-16 text-gray-500 text-sm max-w-[180px]">
                 <p className="cursive-text text-base">It's not about winning. It's about what's best for them.</p>
                 <svg className="w-12 h-12 transform rotate-45 ml-8 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                 </svg>
+              </div>
+              <div className="text-center text-gray-500">
+                <p className="text-sm">Image placeholder</p>
+                <p className="text-xs">Please add a photo of a mother with two children here</p>
               </div>
               <div className="absolute bottom-2 right-2 text-[10px] text-gray-400">
                 <p>iStock</p>
