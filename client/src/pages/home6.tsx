@@ -566,19 +566,19 @@ export default function Home6() {
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700 text-sm">Comprehensive co-parenting course</span>
+                        <span className="text-gray-700 text-sm">Expert-Guided Interactive Course</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700 text-sm">Legal template creation tools</span>
+                        <span className="text-gray-700 text-sm">Legal-Ready Parenting Agreement</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
                         </div>
-                        <span className="text-gray-700 text-sm">Lifetime access to resources</span>
+                        <span className="text-gray-700 text-sm">Lifetime Access to Your Plan & Resources</span>
                       </div>
                     </div>
                   </div>
@@ -586,6 +586,10 @@ export default function Home6() {
                   <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between">
                     <span className="text-sm font-medium">Course Enrollment</span>
                     <span className="text-xl font-bold text-[#2e1a87]">$600</span>
+                  </div>
+                  
+                  <div className="text-center mt-2">
+                    <span className="text-xs text-gray-500">Enrollment can be completed by either parent.</span>
                   </div>
                   
                   <Button
