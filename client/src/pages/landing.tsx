@@ -55,31 +55,39 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 md:py-32 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-[#2D1582] leading-tight mb-6">
-            Your Family Deserves a Better Way to Move Forward
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-4xl mx-auto">
-            Resolve helps parents build thoughtful co-parenting plans—together, without court battles.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg"
-              className="bg-[#5F3DC4] hover:bg-[#4F3294] text-white px-8 py-6 rounded-full text-lg font-medium transition-transform hover:scale-105"
-              onClick={() => navigate('/auth')}
-            >
-              Start Your Plan
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              variant="outline"
-              size="lg"
-              className="border-[#A59CFF] text-[#2D1582] hover:bg-[#A59CFF]/10 px-8 py-6 rounded-full text-lg font-medium"
-              onClick={() => scrollToSection('how-it-works')}
-            >
-              How It Works
-            </Button>
+      <section className="py-20 md:py-24 px-4 relative overflow-hidden">
+        <div className="absolute w-full h-full top-0 left-0 bg-gradient-to-br from-[#F5F4FA] to-[#EAE7F9] opacity-60 z-0"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left order-2 md:order-1">
+              <h1 className="text-4xl md:text-6xl font-bold text-[#2D1582] leading-tight mb-6">
+                Your Family Deserves a Better Way to Move Forward
+              </h1>
+              <p className="text-xl text-gray-700 mb-10">
+                Resolve helps parents build thoughtful co-parenting plans—together, without court battles.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start gap-4">
+                <Button 
+                  size="lg"
+                  className="bg-[#5F3DC4] hover:bg-[#4F3294] text-white px-8 py-6 rounded-full text-lg font-medium transition-transform hover:scale-105"
+                  onClick={() => navigate('/auth')}
+                >
+                  Start Your Plan
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="lg"
+                  className="border-[#A59CFF] text-[#2D1582] hover:bg-[#A59CFF]/10 px-8 py-6 rounded-full text-lg font-medium"
+                  onClick={() => scrollToSection('how-it-works')}
+                >
+                  How It Works
+                </Button>
+              </div>
+            </div>
+            <div className="flex justify-center order-1 md:order-2">
+              <img src={FamilyIllustration} alt="Family illustration" className="max-w-full h-auto max-h-[400px] transform transition-transform hover:scale-105 duration-300"/>
+            </div>
           </div>
         </div>
       </section>
@@ -304,13 +312,8 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
             <div className="mb-8 md:mb-0">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-[#2D1582] flex items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-[#A59CFF] flex items-center justify-center">
-                    <span className="text-[#2D1582] font-bold text-xs">R</span>
-                  </div>
-                </div>
-                <span className="text-[#2D1582] font-bold text-xl">Resolve</span>
+              <div className="mb-4">
+                <img src={ResolveLogo} alt="Resolve" className="h-8" />
               </div>
               <p className="text-gray-600 max-w-xs text-center md:text-left">
                 Helping parents build thoughtful co-parenting plans together.
