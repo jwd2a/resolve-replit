@@ -29,6 +29,7 @@ import HolidayPreferences from "@/pages/holiday-preferences";
 import ScheduleCourse from "@/pages/schedule-course";
 import CourseSessionDemo from "@/pages/course-session-demo";
 import AITestPage from "@/pages/ai-test-page";
+import LandingPage from "@/pages/landing";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -60,6 +61,7 @@ function Router() {
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
       <Route path="/dashboard-new" component={DashboardSimplified} />
+      <Route path="/landing" component={LandingPage} />
       <Route path="/" component={Home6} />
       <Route path="/home2" component={Home2} />
       <Route path="/home3" component={Home3} />

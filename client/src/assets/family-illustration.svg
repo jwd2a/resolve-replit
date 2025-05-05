@@ -1,0 +1,31 @@
+<svg width="500" height="400" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background elements -->
+  <circle cx="250" cy="200" r="190" fill="#F5F4FA" />
+  <circle cx="250" cy="200" r="150" fill="#EAE7F9" />
+  
+  <!-- Adult figure 1 -->
+  <circle cx="180" cy="160" r="30" fill="#A59CFF" />
+  <rect x="165" y="190" width="30" height="100" rx="15" fill="#A59CFF" />
+  <rect x="150" y="220" width="20" height="80" rx="10" fill="#A59CFF" />
+  <rect x="190" y="220" width="20" height="80" rx="10" fill="#A59CFF" />
+  
+  <!-- Adult figure 2 -->
+  <circle cx="320" cy="160" r="30" fill="#2D1582" />
+  <rect x="305" y="190" width="30" height="100" rx="15" fill="#2D1582" />
+  <rect x="290" y="220" width="20" height="80" rx="10" fill="#2D1582" />
+  <rect x="330" y="220" width="20" height="80" rx="10" fill="#2D1582" />
+  
+  <!-- Child figure -->
+  <circle cx="250" cy="180" r="20" fill="#FFC341" />
+  <rect x="240" y="200" width="20" height="70" rx="10" fill="#FFC341" />
+  <rect x="230" y="220" width="15" height="60" rx="7.5" fill="#FFC341" />
+  <rect x="255" y="220" width="15" height="60" rx="7.5" fill="#FFC341" />
+  
+  <!-- Connecting elements -->
+  <path d="M200 210C220 190 230 190 250 210" stroke="#A59CFF" stroke-width="4" stroke-linecap="round" />
+  <path d="M250 210C270 190 280 190 300 210" stroke="#2D1582" stroke-width="4" stroke-linecap="round" />
+  
+  <!-- Plant/growth symbol -->
+  <path d="M250 330C250 330 230 310 250 290C270 310 250 330 250 330Z" fill="#A59CFF" />
+  <rect x="248" y="330" width="4" height="20" rx="2" fill="#2D1582" />
+</svg>

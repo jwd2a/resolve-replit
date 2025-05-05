@@ -1,0 +1,102 @@
+Please design a modern, emotionally resonant landing page for Resolve, a platform that helps parents collaboratively build a thoughtful co-parenting plan without going through adversarial family court.
+
+🎯 Purpose:
+This is the very first page users will see. Its goal is to clearly:
+
+Convey Resolve’s mission
+
+Instill trust and credibility
+
+Inspire action (clicking "Get Started")
+
+Gently guide users toward beginning the onboarding flow
+
+🎨 Use the Following Brand Guidelines:
+Logo: Top-left, use space for brand logo (assume logo file is available)
+
+Primary Colors:
+
+Deep Purple: #2D1582
+
+Lavender Accent: #A59CFF
+
+Soft Background: #F5F4FA
+
+CTA Button Purple: #5F3DC4
+
+Typography:
+
+Headlines: Soft, rounded sans-serif (similar to Poppins or DM Sans)
+
+Body: Neutral sans-serif (like Inter or Open Sans)
+
+Design Language:
+
+Clean, warm, and modern
+
+Emotionally supportive without being childish
+
+Avoid sterile SaaS or overly legalistic aesthetics
+
+Use illustrations or iconography that subtly reference parenting, family, and cooperation
+
+🧱 Layout Sections:
+1. Hero Section (Top)
+Headline:
+“Your Family Deserves a Better Way to Move Forward”
+
+Subhead:
+Resolve helps parents build thoughtful co-parenting plans—together, without court battles.
+
+CTA Button:
+
+Text: Start Your Plan
+
+Style: Prominent, rounded, soft hover animation
+
+Secondary CTA: How It Works scroll link
+
+2. How It Works (Anchor Section)
+3 visually separated steps (simple icons or illustrations):
+
+Learn Together – Take a guided video course, built by family law experts
+
+Build Your Plan – Create a legally sound co-parenting plan tailored to your needs
+
+Move Forward With Confidence – Use tools and resources to stay aligned over time
+
+3. Why Resolve
+Use 3-4 highlight boxes with titles like:
+
+Child-Centered Approach
+
+Save Time and Money
+
+Avoid Conflict and Court
+
+Built by Legal and Mental Health Experts
+
+4. Testimonials
+Short quotes from parents who have used the platform (can use placeholder text)
+
+Style: Rounded card, soft background, italicized testimonial
+
+5. Call-to-Action Footer
+Another CTA banner with centered copy: “Start building your co-parenting plan today—your kids will thank you for it.”
+
+Primary CTA Button: Get Started
+
+📱 Responsive Notes:
+Mobile-friendly
+
+Stack hero and CTA elements
+
+Collapse navigation into hamburger menu on small screens
+
+❌ Do Not Include:
+Legal disclaimers or heavy legal copy
+
+Signup/login forms on this screen
+
+Distracting animations
+
