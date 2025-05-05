@@ -152,6 +152,9 @@ export default function WaiversAndAgreements() {
   };
 
   const handleSubmit = () => {
+    // Save the waiver status to localStorage
+    localStorage.setItem('waiverCompleted', 'true');
+    
     // Here you would typically send the signature and initials to your backend
     // For now, we'll just navigate back to the home page
     navigate('/home6');

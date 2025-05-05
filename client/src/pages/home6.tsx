@@ -36,6 +36,10 @@ export default function Home6() {
     new Date(new Date().setDate(new Date().getDate() + 10)) // Example date 10 days in future
   );
   
+  // Check if waiver is completed from localStorage
+  const isWaiverCompleted = typeof window !== 'undefined' ? 
+    localStorage.getItem('waiverCompleted') === 'true' : false;
+  
   // Step states for the badge-style progress tracker with larger icons
   const [steps, setSteps] = useState([
     {
@@ -54,7 +58,7 @@ export default function Home6() {
       id: "waivers",
       label: "Waivers",
       icon: <FileText className="h-6 w-6" />,
-      completed: false
+      completed: isWaiverCompleted
     },
     {
       id: "holidays",
@@ -70,38 +74,8 @@ export default function Home6() {
     }
   ]);
   
-  // Toggle function for the click-to-toggle interaction
-  const toggleStepStatus = (stepId: string) => {
-    setSteps(steps.map(step => 
-      step.id === stepId 
-        ? { ...step, completed: !step.completed } 
-        : step
-    ));
-  };
-  
-  // Update the Payment step when paymentStatus changes
-  useEffect(() => {
-    setSteps(prevSteps => 
-      prevSteps.map(step => 
-        step.id === "payment" 
-          ? { ...step, completed: paymentStatus } 
-          : step
-      )
-    );
-  }, [paymentStatus]);
-
-  // Mock data for family information
-  const parents = [
-    { id: 1, initials: "ER", name: "Eric Robinson", status: "Active" },
-    { id: 2, initials: "SP", name: "Sarah Parker", status: "Pending" },
-  ];
-
-  const children = [
-    { id: 1, initials: "MR", name: "Mila Robinson", age: 6 },
-  ];
-
-  // Mock data for pre-course requirements
-  const requirements = [
+  // Requirements for the pre-course checklist
+  const [requirements, setRequirements] = useState([
     {
       id: "family-info",
       icon: <Home className="h-5 w-5 text-indigo-600" />,
@@ -135,10 +109,10 @@ export default function Home6() {
       icon: <FileText className="h-5 w-5 text-indigo-600" />,
       title: "Waivers & Agreements",
       description: "Review and sign the required legal agreements.",
-      userStatus: "Pending",
+      userStatus: isWaiverCompleted ? "Completed" : "Pending",
       coParentStatus: "Pending",
-      action: "Review & Sign",
-      actionLink: "/waivers",
+      action: isWaiverCompleted ? "View" : "Review & Sign",
+      actionLink: "/waivers-and-agreements",
       required: true,
     },
     {
@@ -160,9 +134,42 @@ export default function Home6() {
       userStatus: "No session scheduled",
       coParentStatus: "",
       action: "Schedule Now",
-      actionLink: "/schedule",
+      actionLink: "/schedule-course",
       required: false,
     },
+  ]);
+  
+  // Toggle function for the click-to-toggle interaction
+  const toggleStepStatus = (stepId: string) => {
+    setSteps(steps.map(step => 
+      step.id === stepId 
+        ? { ...step, completed: !step.completed } 
+        : step
+    ));
+  };
+  
+  // Update the Payment step when paymentStatus changes
+  useEffect(() => {
+    setSteps(prevSteps => 
+      prevSteps.map(step => {
+        if (step.id === "payment") {
+          return { ...step, completed: paymentStatus };
+        } else if (step.id === "waivers") {
+          return { ...step, completed: isWaiverCompleted };
+        }
+        return step;
+      })
+    );
+  }, [paymentStatus, isWaiverCompleted]);
+
+  // Mock data for family information
+  const parents = [
+    { id: 1, initials: "ER", name: "Eric Robinson", status: "Active" },
+    { id: 2, initials: "SP", name: "Sarah Parker", status: "Pending" },
+  ];
+
+  const children = [
+    { id: 1, initials: "MR", name: "Mila Robinson", age: 6 },
   ];
 
   // Mock data for resources
@@ -403,7 +410,7 @@ export default function Home6() {
                             </div>
                             <div className="flex gap-1">
                               <span className="text-gray-700">Co-Parent:</span>
-                              <span className={item.coParentStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                              <span className="text-amber-500 font-medium">
                                 {item.coParentStatus}
                               </span>
                             </div>
@@ -416,248 +423,207 @@ export default function Home6() {
               </div>
             </div>
 
-            {/* Course Outline section */}
+            {/* Family & Status section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-medium text-gray-900">Course Outline</h2>
-                <Link href="/course">
-                  <Button variant="ghost" size="sm" className="h-8 gap-1">
-                    <ExternalLink className="h-4 w-4" />
-                    View Full Course
-                  </Button>
-                </Link>
-              </div>
-
-              <div className="space-y-3">
-                {/* Module 1 */}
-                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">Module 1</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Welcome to Resolve</h3>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
+              <div className="flex items-start gap-3 mb-5">
+                <div className="bg-indigo-50 p-2 rounded-md">
+                  <Users className="h-5 w-5 text-indigo-600" />
                 </div>
-
-                {/* Module 2 */}
-                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">Module 2</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Parental Responsibility and Decision Making</h3>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Module 3 */}
-                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">Module 3</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Timesharing Schedule</h3>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Module 4 */}
-                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">Module 4</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Educational Decisions</h3>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Module 5 */}
-                <div className="group bg-gray-50 hover:bg-gray-100 transition-colors rounded-lg p-4 border border-gray-100 relative overflow-hidden">
-                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#2e1a87]"></div>
-                  <div className="flex items-center justify-between pl-3">
-                    <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">Module 5</p>
-                      <h3 className="text-[#2e1a87] font-semibold">Final Considerations</h3>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-[#2e1a87]">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">Your Family</h2>
+                  <p className="text-gray-600 text-sm">
+                    Family members included in your agreement.
+                  </p>
                 </div>
               </div>
-              
-              <div className="mt-5 pt-4 border-t border-gray-100">
-                <p className="text-sm text-gray-500">
-                  Progress through all five modules to complete your comprehensive parenting plan. 
-                  Each module covers key aspects of co-parenting arrangements.
-                </p>
+
+              <div className="space-y-5">
+                {/* Parents */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">Parents</h3>
+                  <div className="space-y-2">
+                    {parents.map((parent) => (
+                      <div key={parent.id} className="flex items-center justify-between bg-gray-50 rounded-md py-2 px-3">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-indigo-100 h-8 w-8 rounded-full flex items-center justify-center text-xs font-medium text-indigo-800">
+                            {parent.initials}
+                          </div>
+                          <span className="text-sm font-medium text-gray-900">{parent.name}</span>
+                        </div>
+                        <div className={`text-xs px-2 py-0.5 rounded-full ${
+                          parent.status === "Active" 
+                            ? "bg-green-100 text-green-700" 
+                            : "bg-amber-100 text-amber-700"
+                        }`}>
+                          {parent.status}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Children */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-medium text-gray-700">Children</h3>
+                    <Button 
+                      variant="ghost"
+                      size="sm" 
+                      className="h-7 text-xs text-blue-600 hover:text-blue-700 px-2 flex items-center"
+                    >
+                      <PlusCircle className="h-3.5 w-3.5 mr-1" />
+                      Add Child
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {children.map((child) => (
+                      <div key={child.id} className="flex items-center justify-between bg-gray-50 rounded-md py-2 px-3">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-pink-100 h-8 w-8 rounded-full flex items-center justify-center text-xs font-medium text-pink-800">
+                            {child.initials}
+                          </div>
+                          <div>
+                            <span className="text-sm font-medium text-gray-900 block">{child.name}</span>
+                            <span className="text-xs text-gray-500">Age: {child.age}</span>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="ghost"
+                          size="sm" 
+                          className="h-7 text-xs text-gray-500 hover:text-gray-700 px-2"
+                        >
+                          <Edit className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Sidebar - spans 1 column */}
+          {/* Sidebar content - spans 1 column */}
           <div className="space-y-6">
-            {/* Course Access section - improved design */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm overflow-hidden relative">
-              {/* Header with status badge */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
-                {paymentStatus ? (
-                  <span className="flex items-center px-3 py-1 rounded-full bg-green-100 text-green-600 text-xs font-medium">
-                    <CheckCircle className="h-3.5 w-3.5 mr-1" />
-                    Unlocked
-                  </span>
-                ) : (
-                  <span className="flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-600 text-xs font-medium">
-                    <LockIcon className="h-3.5 w-3.5 mr-1" />
-                    Locked
-                  </span>
-                )}
-              </div>
-              
-              <p className="text-sm text-gray-600 mb-5">
-                Complete the course enrollment to continue your family's journey
-              </p>
-              
-              {!paymentStatus && (
-                <div className="bg-amber-50 p-4 rounded-md mb-5 border border-amber-100">
-                  <p className="text-amber-700 text-sm flex items-center font-medium">
-                    <CreditCard className="h-4 w-4 mr-2 flex-shrink-0" />
-                    Your course access is pending payment
+            {/* Payment section */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="bg-indigo-50 p-2 rounded-md">
+                  <CreditCard className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">Payment</h2>
+                  <p className="text-gray-600 text-sm">
+                    Complete payment to unlock course access.
                   </p>
                 </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-md p-4 mb-4">
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm text-gray-600">Course Fee</span>
+                  <span className="text-sm font-medium text-gray-900">$299.00</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Payment Status</span>
+                  <span className={paymentStatus ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                    {paymentStatus ? "Paid" : "Pending"}
+                  </span>
+                </div>
+              </div>
+
+              {!paymentStatus && (
+                <Button
+                  className="w-full justify-center mt-2 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium"
+                  onClick={handleCompletePayment}
+                  disabled={isLoadingPayment}
+                >
+                  {isLoadingPayment ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      Complete Payment
+                    </>
+                  )}
+                </Button>
               )}
-              
-              {/* Course features with improved styling */}
-              <div className="space-y-3 mb-6 bg-gray-50 p-4 rounded-md">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Included in your enrollment:</h3>
-                <div className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3 w-3 text-green-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Comprehensive co-parenting course</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3 w-3 text-green-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Legal template creation tools</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3 w-3 text-green-600" />
-                  </div>
-                  <span className="text-sm text-gray-600">Lifetime access to resources</span>
-                </div>
-              </div>
-              
-              {/* Pricing with improved design */}
-              <div className="bg-[#2e1a87]/5 p-4 rounded-md mb-5 border border-[#2e1a87]/10">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">Course Enrollment</span>
-                  <span className="text-xl font-bold text-[#2e1a87]">$600</span>
-                </div>
-              </div>
-              
-              {/* Enrollment button */}
-              <Button 
-                className="w-full bg-[#2e1a87] hover:bg-[#25156d] shadow-md h-11"
-                disabled={paymentStatus || isLoadingPayment}
-                onClick={handleCompletePayment}
-                size="lg"
-              >
-                {isLoadingPayment ? (
-                  <>
-                    <span className="animate-spin mr-2">⏳</span>
-                    Processing...
-                  </>
-                ) : (
-                  <div className="flex items-center">
-                    <CreditCard className="mr-2 h-5 w-5" /> 
-                    Complete Enrollment
-                  </div>
-                )}
-              </Button>
-              
-              {/* Decorative element */}
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#2e1a87]/5 rounded-full"></div>
             </div>
-            
-            {/* Resources section - improved design */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm overflow-hidden relative">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-medium text-gray-900 flex items-center">
-                  <FileText className="h-5 w-5 text-indigo-600 mr-2" />
-                  Resources
-                </h2>
-                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-                  2 Available
-                </span>
+
+            {/* Resources Card */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="bg-indigo-50 p-2 rounded-md">
+                  <FileText className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">Resources</h2>
+                  <p className="text-gray-600 text-sm">
+                    Helpful materials for your journey.
+                  </p>
+                </div>
               </div>
-              
+
               <div className="space-y-3">
                 {resources.map((resource) => (
-                  <div 
-                    key={resource.id} 
-                    className="flex items-start p-4 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
-                  >
-                    <div className="flex-shrink-0 mr-3 bg-indigo-100 p-2.5 rounded-md">
+                  <div key={resource.id} className="group flex items-start p-3 border border-gray-100 hover:border-gray-200 rounded-md transition-all hover:shadow-sm bg-gray-50">
+                    <div className="flex-shrink-0 p-1.5 rounded-md bg-white border border-gray-100 mr-3">
                       {resource.icon}
                     </div>
-                    
                     <div className="flex-grow">
-                      <h3 className="text-sm font-medium text-gray-900 mb-1">{resource.title}</h3>
-                      <div className="flex items-center text-xs text-gray-500">
-                        <span className="font-medium text-indigo-600">{resource.type}</span>
-                        {resource.pages && (
-                          <span className="ml-2 text-gray-500">• {resource.pages} pages</span>
-                        )}
-                        {resource.minutes && (
-                          <span className="ml-2 text-gray-500">• {resource.minutes} min read</span>
+                      <h4 className="text-sm font-medium text-gray-900">{resource.title}</h4>
+                      <div className="flex items-center mt-1">
+                        {resource.type === "PDF" ? (
+                          <span className="text-xs text-gray-600">{resource.pages} pages • PDF</span>
+                        ) : (
+                          <span className="text-xs text-gray-600">{resource.minutes} min read</span>
                         )}
                       </div>
                     </div>
-                    <ExternalLink className="h-4 w-4 text-indigo-500 ml-2 flex-shrink-0" />
+                    <div className="flex-shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
               
-              {/* Decorative element */}
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-50 rounded-full opacity-50"></div>
+              <div className="mt-3">
+                <Button
+                  variant="link"
+                  className="text-blue-600 font-medium p-0 h-auto text-sm"
+                >
+                  View all resources <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
-            
-            {/* Help section - improved design */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50/50 rounded-lg p-5 border border-blue-100 shadow-sm relative overflow-hidden">
-              <div className="flex items-start gap-4 relative z-10">
-                <div className="bg-white p-3 rounded-full shadow-sm flex-shrink-0">
-                  <HelpCircle className="h-5 w-5 text-[#2e1a87]" />
+
+            {/* Help & Support Card */}
+            <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="bg-indigo-50 p-2 rounded-md">
+                  <HelpCircle className="h-5 w-5 text-indigo-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-1.5">Need assistance?</h3>
-                  <p className="text-sm text-gray-600 mb-3">Our support team is always ready to help with your questions.</p>
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    className="text-[#2e1a87] border-[#2e1a87] hover:bg-[#2e1a87]/5 flex items-center text-xs shadow-sm"
-                  >
-                    Contact Support <ExternalLink className="ml-1.5 h-3 w-3" />
-                  </Button>
+                  <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
+                  <p className="text-gray-600 text-sm">
+                    We're here to assist you on your journey.
+                  </p>
                 </div>
               </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute bottom-0 right-0 w-24 h-24 bg-blue-100/50 rounded-full -mb-12 -mr-12"></div>
-              <div className="absolute top-0 right-10 w-10 h-10 bg-indigo-100/50 rounded-full -mt-5"></div>
+
+              <Button
+                className="w-full justify-center mt-2 border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5"
+                variant="outline"
+              >
+                Contact Support
+              </Button>
             </div>
           </div>
         </div>
