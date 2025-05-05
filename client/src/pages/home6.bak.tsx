@@ -366,8 +366,8 @@ export default function Home6() {
             </div>
             
             <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-              <div className="space-y-3">
-                {requirements.map((item) => (
+                <div className="space-y-3">
+                  {requirements.map((item) => (
                     <div 
                       key={item.id} 
                       className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
@@ -458,7 +458,8 @@ export default function Home6() {
                         )}
                       </div>
                     </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
