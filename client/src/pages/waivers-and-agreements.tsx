@@ -102,7 +102,8 @@ export default function WaiversAndAgreements() {
     }
   };
 
-  const saveSignature = () => {
+  const saveSignatureAndInitials = () => {
+    // Save signature
     if (signatureMethod === 'draw' && signatureCanvasRef.current) {
       if (!signatureCanvasRef.current.isEmpty()) {
         setSignature(signatureCanvasRef.current.toDataURL());
@@ -121,9 +122,8 @@ export default function WaiversAndAgreements() {
         setSignature(canvas.toDataURL());
       }
     }
-  };
-
-  const saveInitials = () => {
+    
+    // Save initials
     if (initialsMethod === 'draw' && initialsCanvasRef.current) {
       if (!initialsCanvasRef.current.isEmpty()) {
         setInitials(initialsCanvasRef.current.toDataURL());
@@ -141,6 +141,13 @@ export default function WaiversAndAgreements() {
         ctx.fillText(typedInitials, 10, 35);
         setInitials(canvas.toDataURL());
       }
+    }
+    
+    // Close the modal
+    if ((signatureMethod === 'draw' && signatureCanvasRef.current && !signatureCanvasRef.current.isEmpty() && 
+         initialsCanvasRef.current && !initialsCanvasRef.current.isEmpty()) ||
+        (signatureMethod === 'type' && typedSignature.trim() !== '' && typedInitials.trim() !== '')) {
+      setSignatureModalOpen(false);
     }
   };
 
@@ -160,10 +167,9 @@ export default function WaiversAndAgreements() {
     }
   };
   
+  // No longer needed as saveSignatureAndInitials does this
   const completeSignatureSetup = () => {
-    if (signature && initials) {
-      setSignatureModalOpen(false);
-    }
+    saveSignatureAndInitials();
   };
 
   const fonts = [
@@ -443,7 +449,7 @@ export default function WaiversAndAgreements() {
                           backgroundColor="rgba(247, 248, 249, 1)"
                         />
                       </div>
-                      <div className="flex justify-between">
+                      <div>
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -451,24 +457,7 @@ export default function WaiversAndAgreements() {
                         >
                           Clear
                         </Button>
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="bg-[#2e1a87] hover:bg-[#25156d]"
-                          onClick={saveSignature}
-                        >
-                          Save Signature
-                        </Button>
                       </div>
-                      
-                      {signature && (
-                        <div className="mt-4 pt-2">
-                          <h4 className="text-sm font-medium text-green-600 flex items-center">
-                            <Check className="h-4 w-4 mr-1" />
-                            Signature Saved
-                          </h4>
-                        </div>
-                      )}
                     </div>
                     
                     {/* Initials Drawing Panel */}
@@ -485,7 +474,7 @@ export default function WaiversAndAgreements() {
                           backgroundColor="rgba(247, 248, 249, 1)"
                         />
                       </div>
-                      <div className="flex justify-between">
+                      <div>
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -493,24 +482,7 @@ export default function WaiversAndAgreements() {
                         >
                           Clear
                         </Button>
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="bg-[#2e1a87] hover:bg-[#25156d]"
-                          onClick={saveInitials}
-                        >
-                          Save Initials
-                        </Button>
                       </div>
-                      
-                      {initials && (
-                        <div className="mt-4 pt-2">
-                          <h4 className="text-sm font-medium text-green-600 flex items-center">
-                            <Check className="h-4 w-4 mr-1" />
-                            Initials Saved
-                          </h4>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </TabsContent>
@@ -541,27 +513,6 @@ export default function WaiversAndAgreements() {
                           {typedSignature || 'Your signature will appear here'}
                         </p>
                       </div>
-                      
-                      <div className="flex justify-end">
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="bg-[#2e1a87] hover:bg-[#25156d]"
-                          onClick={saveSignature}
-                          disabled={!typedSignature.trim()}
-                        >
-                          Save Signature
-                        </Button>
-                      </div>
-                      
-                      {signature && (
-                        <div className="mt-4 pt-2">
-                          <h4 className="text-sm font-medium text-green-600 flex items-center">
-                            <Check className="h-4 w-4 mr-1" />
-                            Signature Saved
-                          </h4>
-                        </div>
-                      )}
                     </div>
                     
                     {/* Initials Typing Panel */}
@@ -585,57 +536,10 @@ export default function WaiversAndAgreements() {
                           {typedInitials || 'JD'}
                         </p>
                       </div>
-                      
-                      <div className="flex justify-end">
-                        <Button 
-                          variant="default" 
-                          size="sm" 
-                          className="bg-[#2e1a87] hover:bg-[#25156d]"
-                          onClick={saveInitials}
-                          disabled={!typedInitials.trim()}
-                        >
-                          Save Initials
-                        </Button>
-                      </div>
-                      
-                      {initials && (
-                        <div className="mt-4 pt-2">
-                          <h4 className="text-sm font-medium text-green-600 flex items-center">
-                            <Check className="h-4 w-4 mr-1" />
-                            Initials Saved
-                          </h4>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </TabsContent>
               </Tabs>
-              
-              {/* Preview Section */}
-              {(signature || initials) && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h3 className="font-medium text-gray-700 mb-4">Signature Preview</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {signature && (
-                      <div>
-                        <h4 className="text-sm text-gray-600 mb-1">Your Signature</h4>
-                        <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
-                          <img src={signature} alt="Your signature" className="max-h-16" />
-                        </div>
-                      </div>
-                    )}
-                    
-                    {initials && (
-                      <div>
-                        <h4 className="text-sm text-gray-600 mb-1">Your Initials</h4>
-                        <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
-                          <img src={initials} alt="Your initials" className="max-h-12" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
             
             <DialogFooter>
@@ -646,11 +550,10 @@ export default function WaiversAndAgreements() {
                 Cancel
               </Button>
               <Button 
-                onClick={completeSignatureSetup}
+                onClick={saveSignatureAndInitials}
                 className="bg-[#2e1a87] hover:bg-[#25156d]"
-                disabled={!signature || !initials}
               >
-                Apply and Continue
+                Save and Continue
               </Button>
             </DialogFooter>
           </DialogContent>
