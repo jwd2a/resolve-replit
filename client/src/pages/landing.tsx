@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import ResolveLogo from "../assets/resolve-logo.svg";
+import ResolveLogo from "../assets/resolve-logo-color.png";
 
 export default function LandingPage() {
   const [location, navigate] = useLocation();
@@ -10,7 +10,7 @@ export default function LandingPage() {
       {/* Header */}
       <header className="py-4 px-6 flex justify-between items-center">
         <div className="flex items-center">
-          <img src={ResolveLogo} alt="Resolve" className="h-8" />
+          <img src={ResolveLogo} alt="Resolve" className="h-10" />
         </div>
         <div>
           <Button 
