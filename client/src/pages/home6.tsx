@@ -506,49 +506,72 @@ export default function Home6() {
           <div className="space-y-6">
             {/* Payment section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="bg-indigo-50 p-2 rounded-md">
-                  <CreditCard className="h-5 w-5 text-indigo-600" />
-                </div>
+              <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-medium text-gray-900">Payment</h2>
-                  <p className="text-gray-600 text-sm">
-                    Complete payment to unlock course access.
+                  <h2 className="text-2xl font-medium text-gray-900">Course Access</h2>
+                  <p className="text-gray-600 text-sm mt-2">
+                    Complete the course enrollment to continue your family's journey
                   </p>
                 </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-md p-4 mb-4">
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm text-gray-600">Course Fee</span>
-                  <span className="text-sm font-medium text-gray-900">$299.00</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Payment Status</span>
-                  <span className={paymentStatus ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                    {paymentStatus ? "Paid" : "Pending"}
-                  </span>
+                <div className="bg-amber-50 rounded-full px-4 py-1.5 flex items-center text-amber-700 font-medium text-sm">
+                  <LockIcon className="h-4 w-4 mr-1.5" />
+                  Locked
                 </div>
               </div>
-
-              {!paymentStatus && (
-                <Button
-                  className="w-full justify-center mt-2 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium"
-                  onClick={handleCompletePayment}
-                  disabled={isLoadingPayment}
-                >
-                  {isLoadingPayment ? (
-                    <>
-                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      Complete Payment
-                    </>
-                  )}
-                </Button>
-              )}
+              
+              <div className="bg-amber-50 border border-amber-100 rounded-lg p-4 mt-6 flex items-start gap-3">
+                <CreditCard className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                <p className="text-amber-800 font-medium">
+                  Your course access is pending payment
+                </p>
+              </div>
+              
+              <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-700 mb-3">Included in your enrollment:</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="h-3.5 w-3.5 text-green-600" />
+                    </div>
+                    <span className="text-gray-700">Comprehensive co-parenting course</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="h-3.5 w-3.5 text-green-600" />
+                    </div>
+                    <span className="text-gray-700">Legal template creation tools</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="bg-green-100 p-1 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="h-3.5 w-3.5 text-green-600" />
+                    </div>
+                    <span className="text-gray-700">Lifetime access to resources</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-100 rounded-lg p-4 mt-4 flex items-center justify-between">
+                <span className="text-lg font-medium">Course Enrollment</span>
+                <span className="text-2xl font-bold text-[#2e1a87]">$600</span>
+              </div>
+              
+              <Button
+                className="w-full mt-4 py-6 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
+                onClick={handleCompletePayment}
+                disabled={isLoadingPayment}
+              >
+                {isLoadingPayment ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-5 w-5 mr-2" />
+                    Complete Enrollment
+                  </>
+                )}
+              </Button>
             </div>
 
             {/* Resources Card */}
@@ -565,65 +588,40 @@ export default function Home6() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {resources.map((resource) => (
-                  <div key={resource.id} className="group flex items-start p-3 border border-gray-100 hover:border-gray-200 rounded-md transition-all hover:shadow-sm bg-gray-50">
-                    <div className="flex-shrink-0 p-1.5 rounded-md bg-white border border-gray-100 mr-3">
-                      {resource.icon}
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-medium text-gray-900">{resource.title}</h4>
-                      <div className="flex items-center mt-1">
-                        {resource.type === "PDF" ? (
-                          <span className="text-xs text-gray-600">{resource.pages} pages • PDF</span>
-                        ) : (
-                          <span className="text-xs text-gray-600">{resource.minutes} min read</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
               <div className="mt-3">
                 <Button
-                  variant="link"
-                  className="text-blue-600 font-medium p-0 h-auto text-sm"
+                  variant="outline"
+                  className="w-full text-blue-600 font-medium"
                 >
-                  View all resources <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                  View resources <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
 
-            {/* Help & Support Card */}
+            {/* Help Card */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="bg-indigo-50 p-2 rounded-md">
-                  <HelpCircle className="h-5 w-5 text-indigo-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
-                  <p className="text-gray-600 text-sm">
-                    We're here to assist you on your journey.
-                  </p>
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3">
+                  <div className="bg-indigo-50 p-2 rounded-md">
+                    <HelpCircle className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Contact our support team
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <Button
-                className="w-full justify-center mt-2 border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5"
-                variant="outline"
-              >
-                Contact Support
-              </Button>
+              
+              <div className="mt-4">
+                <Button
+                  className="w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5"
+                  variant="outline"
+                >
+                  Contact Support
+                </Button>
+              </div>
             </div>
           </div>
         </div>
