@@ -461,13 +461,68 @@ export default function Home6() {
               ))}
             </div>
 
+            {/* Resources Section - Moved here from sidebar and made full-width */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm mt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-medium text-gray-900">Resources</h2>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                  2 Available
+                </span>
+              </div>
 
+              {/* Resources Grid - 2 items per row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Co-Parenting Guide */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
+                  <div className="bg-red-100 p-1.5 rounded-md mr-3 flex-shrink-0">
+                    <FileText className="h-4 w-4 text-red-600" />
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-sm font-medium text-gray-900">Co-Parenting Guide</h3>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs text-gray-600">PDF • 15 pages</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-blue-600"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Communication Toolkit */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
+                  <div className="bg-blue-100 p-1.5 rounded-md mr-3 flex-shrink-0">
+                    <MessageCircle className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-sm font-medium text-gray-900">Communication Toolkit</h3>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs text-gray-600">Article • 10 min read</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-blue-600"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Sidebar content - spans 1 column */}
           <div className="space-y-6">
-            {/* Payment section */}
-            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+            {/* Payment section with increased height */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col">
               {paymentStatus ? (
                 <>
                   <div className="flex items-start justify-between mb-4">
@@ -489,6 +544,9 @@ export default function Home6() {
                       Payment processed successfully
                     </p>
                   </div>
+                  
+                  {/* Added padding at the bottom for increased height */}
+                  <div className="flex-grow pt-10"></div>
                   
                   <Button
                     className="w-full mt-4 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
@@ -542,6 +600,9 @@ export default function Home6() {
                     </div>
                   </div>
                   
+                  {/* Added extra space to match the height with the checklist */}
+                  <div className="flex-grow"></div>
+                  
                   <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between">
                     <span className="text-sm font-medium">Course Enrollment</span>
                     <span className="text-xl font-bold text-[#2e1a87]">$600</span>
@@ -572,65 +633,11 @@ export default function Home6() {
               )}
             </div>
 
-            {/* Resources Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-medium text-gray-900">Resources</h2>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                  2 Available
-                </span>
-              </div>
-
-              {/* Co-Parenting Guide */}
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mb-2 flex items-start">
-                <div className="bg-red-100 p-1.5 rounded-md mr-3 flex-shrink-0">
-                  <FileText className="h-4 w-4 text-red-600" />
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-sm font-medium text-gray-900">Co-Parenting Guide</h3>
-                  <div className="flex items-center mt-1">
-                    <span className="text-xs text-gray-600">PDF • 15 pages</span>
-                  </div>
-                </div>
-                <div className="flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 px-2 text-blue-600"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Communication Toolkit */}
-              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mb-3 flex items-start">
-                <div className="bg-blue-100 p-1.5 rounded-md mr-3 flex-shrink-0">
-                  <MessageCircle className="h-4 w-4 text-blue-600" />
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-sm font-medium text-gray-900">Communication Toolkit</h3>
-                  <div className="flex items-center mt-1">
-                    <span className="text-xs text-gray-600">Article • 10 min read</span>
-                  </div>
-                </div>
-                <div className="flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 px-2 text-blue-600"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Need assistance */}
+            {/* Need assistance - Moved below Course Access */}
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                  <Clock className="h-4 w-4 text-[#2e1a87]" />
+                  <HelpCircle className="h-4 w-4 text-[#2e1a87]" />
                 </div>
                 <div>
                   <h2 className="text-base font-medium text-gray-900">Need assistance?</h2>
