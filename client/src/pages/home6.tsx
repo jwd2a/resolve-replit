@@ -457,81 +457,50 @@ export default function Home6() {
               </div>
             </div>
 
-            {/* Family & Status section */}
+            {/* Course Outline section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <div className="flex items-start gap-3 mb-5">
-                <div className="bg-indigo-50 p-2 rounded-md">
-                  <Users className="h-5 w-5 text-indigo-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">Your Family</h2>
-                  <p className="text-gray-600 text-sm">
-                    Family members included in your agreement.
-                  </p>
-                </div>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg font-medium text-gray-900">Course Outline</h2>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="text-xs text-[#2e1a87] px-2 h-7"
+                >
+                  View Full Course <ExternalLink className="h-3 w-3 ml-1" />
+                </Button>
               </div>
 
-              <div className="space-y-5">
-                {/* Parents */}
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Parents</h3>
-                  <div className="space-y-2">
-                    {parents.map((parent) => (
-                      <div key={parent.id} className="flex items-center justify-between bg-gray-50 rounded-md py-2 px-3">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-indigo-100 h-8 w-8 rounded-full flex items-center justify-center text-xs font-medium text-indigo-800">
-                            {parent.initials}
-                          </div>
-                          <span className="text-sm font-medium text-gray-900">{parent.name}</span>
-                        </div>
-                        <div className={`text-xs px-2 py-0.5 rounded-full ${
-                          parent.status === "Active" 
-                            ? "bg-green-100 text-green-700" 
-                            : "bg-amber-100 text-amber-700"
-                        }`}>
-                          {parent.status}
-                        </div>
+              <div className="space-y-3">
+                {courseModules.map((module) => (
+                  <div 
+                    key={module.id}
+                    className={`flex items-center justify-between p-3 border rounded-md transition-all hover:border-[#2e1a87]/30 ${
+                      module.active ? 'bg-[#f5f0ff] border-[#2e1a87]/30' : 'bg-white'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
+                        module.active 
+                          ? 'bg-[#2e1a87] text-white' 
+                          : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        <span className="text-xs font-medium">{module.id}</span>
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Children */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-medium text-gray-700">Children</h3>
-                    <Button 
-                      variant="ghost"
-                      size="sm" 
-                      className="h-7 text-xs text-blue-600 hover:text-blue-700 px-2 flex items-center"
-                    >
-                      <PlusCircle className="h-3.5 w-3.5 mr-1" />
-                      Add Child
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    {children.map((child) => (
-                      <div key={child.id} className="flex items-center justify-between bg-gray-50 rounded-md py-2 px-3">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-pink-100 h-8 w-8 rounded-full flex items-center justify-center text-xs font-medium text-pink-800">
-                            {child.initials}
-                          </div>
-                          <div>
-                            <span className="text-sm font-medium text-gray-900 block">{child.name}</span>
-                            <span className="text-xs text-gray-500">Age: {child.age}</span>
-                          </div>
-                        </div>
-                        <Button 
-                          variant="ghost"
-                          size="sm" 
-                          className="h-7 text-xs text-gray-500 hover:text-gray-700 px-2"
-                        >
-                          <Edit className="h-3.5 w-3.5" />
-                        </Button>
+                      <div>
+                        <h3 className="text-sm font-medium">{module.title}</h3>
                       </div>
-                    ))}
+                    </div>
+                    <div className="flex-shrink-0">
+                      {module.hasChevron && (
+                        <ArrowRight className="h-4 w-4 text-gray-400" />
+                      )}
+                    </div>
                   </div>
-                </div>
+                ))}
+              </div>
+              
+              <div className="mt-4 pt-4 border-t text-xs text-gray-600">
+                <p>Progress through all five modules to complete your comprehensive parenting plan. Each module covers key aspects of co-parenting arrangements.</p>
               </div>
             </div>
           </div>
