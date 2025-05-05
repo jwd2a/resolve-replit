@@ -116,6 +116,8 @@ export default function Home6() {
       action: "Review & Edit",
       actionLink: "/family-edit",
       required: true,
+      totalSteps: 4,
+      completedSteps: 4,
     },
     {
       id: "co-parent",
@@ -373,23 +375,19 @@ export default function Home6() {
                       {/* Status tags in a separate row */}
                       <div className="flex justify-end mt-2 px-3">
                         {item.id === "family-info" ? (
-                          <div className="flex flex-wrap text-[10px] gap-x-3 gap-y-1 justify-end">
-                            <div className="flex gap-1">
-                              <span className="text-gray-700">You:</span>
-                              <span className="text-green-600 font-medium">Completed</span>
+                          <div className="text-[10px] justify-end flex items-center gap-1.5">
+                            <div className="flex items-center">
+                              <div className={`h-3 w-3 rounded-full ${item.completedSteps === item.totalSteps ? 'bg-green-100' : 'bg-amber-100'} flex items-center justify-center`}>
+                                {item.completedSteps === item.totalSteps ? (
+                                  <Check className="h-2 w-2 text-green-600" />
+                                ) : (
+                                  <div className="h-1.5 w-1.5 rounded-full bg-amber-500"></div>
+                                )}
+                              </div>
                             </div>
-                            <div className="flex gap-1">
-                              <span className="text-gray-700">Co-Parent:</span>
-                              <span className="text-green-600 font-medium">Completed</span>
-                            </div>
-                            <div className="flex gap-1">
-                              <span className="text-gray-700">Children:</span>
-                              <span className="text-green-600 font-medium">Completed</span>
-                            </div>
-                            <div className="flex gap-1">
-                              <span className="text-gray-700">Jurisdiction:</span>
-                              <span className="text-green-600 font-medium">Completed</span>
-                            </div>
+                            <span className={`${item.completedSteps === item.totalSteps ? 'text-green-600' : 'text-amber-500'} font-medium`}>
+                              {item.completedSteps}/{item.totalSteps} {item.completedSteps === item.totalSteps ? 'Completed' : 'Pending'}
+                            </span>
                           </div>
                         ) : item.id === "schedule" ? (
                           <div className="text-[10px] text-amber-500 font-medium">
