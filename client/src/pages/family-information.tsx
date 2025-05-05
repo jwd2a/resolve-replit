@@ -311,7 +311,7 @@ export default function FamilyInformation() {
           </div>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-5 bg-[#f5f0ff]">
+            <TabsList className="grid grid-cols-4 bg-[#f5f0ff]">
               <TabsTrigger value="you" className="data-[state=active]:bg-[#6c54da] data-[state=active]:text-white">
                 <User className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Your Info</span>
