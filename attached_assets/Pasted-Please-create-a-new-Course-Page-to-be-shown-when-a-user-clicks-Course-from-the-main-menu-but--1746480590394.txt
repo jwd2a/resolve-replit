@@ -1,0 +1,88 @@
+Please create a new **Course Page** to be shown when a user clicks “Course” from the main menu, but has **not yet completed** required items (waivers, family info, or payment).
+
+This is a **pre-launch version** of the course page — designed to preview the full curriculum, promote the value of the course, and remind users what’s left to do before they can start.
+
+---
+
+🧱 Layout Structure:
+
+1. 🟣 Hero Header Section
+   - Title: “Your Co-Parenting Course”
+   - Subtitle: “Guided by experts. Built to help families move forward together.”
+
+2. 📘 Course Outline Section
+   - Display the full outline using this structure:
+     - Break content into 5 modules (as listed below)
+     - Each module should have a heading (e.g., **Module Two: Making Decisions Together**) followed by a bulleted or numbered list of lesson titles (e.g., “2.1 We Are Well on Our Way. Let’s Dig Into Your Agreement”)
+   - Use indentation or visual hierarchy to make modules and lessons easy to scan
+   - Optional: gray-out or add lock icons to indicate steps are not yet accessible
+
+3. ⚠️ Access Reminder Banner
+   - Display a card or banner styled with a warning or blocked-access indicator
+   - Message:  
+     **“Complete required items to unlock your course.”**  
+     _You still need to finish: Waivers, Family Info, Payment_
+   - Dynamically show only incomplete items
+   - CTA button: `Go to Checklist` (primary style)
+
+4. 💡 Value Reminder Section (Below or Sidebar)
+   - Show a short list (no icons needed) emphasizing course value:
+     - Expert-Guided Interactive Course  
+     - Legal-Ready Parenting Agreement  
+     - Lifetime Access to Your Plan & Resources
+
+---
+
+📚 Course Content (Use Exactly As Shown):
+
+**Module One: Welcome to Resolve**
+- 1.1 A New Path Forward for You and Your Children
+- 1.2 Course Expectations
+- 1.3 A Message to My Co-Parent
+
+**Module Two: Making Decisions Together**
+- 2.1 We Are Well on Our Way. Let’s Dig Into Your Agreement
+- 2.2 Shared Decision-Making for Major Decisions
+- 2.3 A Process for Decision-Making When We Don’t Immediately Agree
+- 2.4 Day-to-Day Decision-Making
+- 2.5 Extra-Curricular Activities
+- 2.6 Sharing Information & Important Records
+- 2.7 Communication
+- 2.8 Child Care
+
+**Module Three: How Will We Share Time with the Kids?**
+- 3.1 Introduction to Timesharing & Travel
+- 3.2 Scheduling and Our Shared Calendar
+- 3.3 Weekday and Weekend Schedules
+- 3.4 The Holiday Schedule
+- 3.5 School Breaks
+- 3.6 Transportation and Exchange
+- 3.7 Travel and Work Restrictions
+
+**Module Four: Education Decisions**
+- 4.1 Introduction to Education Decisions
+- 4.2 School Choice and Enrollment
+- 4.3 Academic Performance and Support
+- 4.4 Parent-Teacher Communications
+- 4.5 Special Education Needs
+
+**Module Five: Final Considerations**
+- 5.1 Introduction to Final Considerations
+- 5.2 Designation for Other Legal Purposes
+- 5.3 Relocation
+- 5.4 Changes or Modifications to the Agreement
+- 5.5 Any Other Special Issues
+- 5.6 Finalizing and Signing the Agreement
+- 5.7 Course Conclusion and Next Steps
+- 5.8 What if You Didn’t Finish?
+
+---
+
+🚫 Do Not Include:
+- Video player
+- Edit icons or progress indicators
+- Course access or launch button
+- Any “Start Course” logic
+
+✅ This page should clearly communicate what the course includes and motivate users to complete their pre-course steps in order to begin.
+
