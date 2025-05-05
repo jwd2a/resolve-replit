@@ -1,75 +1,90 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 import ResolveLogo from "../assets/resolve-logo.svg";
-import FamilyIllustration from "../assets/family-illustration.svg";
 
 export default function LandingPage() {
   const [location, navigate] = useLocation();
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F5F4FA] to-white flex flex-col">
-      {/* Minimal Navigation */}
-      <nav className="py-6 px-6 md:px-10">
-        <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#F7F2EA] flex flex-col">
+      {/* Header */}
+      <header className="py-4 px-6 flex justify-between items-center">
+        <div className="flex items-center">
           <img src={ResolveLogo} alt="Resolve" className="h-8" />
         </div>
-      </nav>
+        <div>
+          <Button 
+            className="bg-[#FFC341] hover:bg-[#F5B730] text-black font-semibold rounded-full"
+            onClick={() => navigate('/auth')}
+          >
+            GET THE COURSE!
+          </Button>
+        </div>
+      </header>
 
-      {/* Centered Hero Section */}
-      <div className="flex-grow flex items-center justify-center px-6 md:px-10">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2D1582] leading-tight mb-6">
-                A better way to co-parent
+      {/* Main Content */}
+      <main className="flex-grow flex items-center justify-center p-6">
+        <div className="bg-white max-w-6xl w-full mx-auto rounded-3xl p-8 md:p-12 shadow-sm">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2D1582] leading-tight mb-6">
+                Stop the Custody Battle Before It Starts
               </h1>
-              <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-lg mx-auto md:mx-0">
-                Create thoughtful parenting plans together, without the conflict and cost of court.
+              
+              <p className="text-gray-700 mb-4">
+                Every year, thousands of parents spend tens of thousands of dollars on 
+                devastating custody battles that tear families apart.
               </p>
-              <div className="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row md:items-center">
+              
+              <p className="text-gray-700 mb-8">
+                What if you could <span className="text-[#2D1582] font-medium">protect your children</span> from the trauma... in just one day?
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  size="lg"
-                  className="bg-[#2D1582] hover:bg-[#231061] text-white px-8 py-6 rounded-md text-lg"
+                  className="bg-[#FFC341] hover:bg-[#F5B730] text-black font-semibold rounded-full"
                   onClick={() => navigate('/auth')}
                 >
-                  Join Beta
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  GET THE COURSE TODAY!
                 </Button>
                 <Button 
                   variant="outline"
-                  size="lg"
-                  className="border-[#A59CFF] text-[#2D1582] hover:bg-[#A59CFF]/10 px-8 py-6 rounded-md text-lg"
+                  className="bg-[#5F78FF] hover:bg-[#4A5FD9] text-white border-0 rounded-full"
                   onClick={() => navigate('/auth')}
                 >
-                  Sign In
+                  Learn More
                 </Button>
               </div>
             </div>
-            <div className="hidden md:flex justify-center items-center">
-              <img 
-                src={FamilyIllustration} 
-                alt="Family illustration" 
-                className="max-w-full h-auto"
-              />
+            
+            <div className="relative">
+              <div className="relative bg-pink-50 rounded-lg overflow-hidden" style={{paddingBottom: '80%'}}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 bg-pink-200 rounded-full mb-2"></div>
+                    <div className="w-32 h-6 bg-pink-100 rounded mb-6"></div>
+                    <div className="flex space-x-4">
+                      <div className="w-12 h-12 bg-amber-200 rounded-full"></div>
+                      <div className="w-10 h-10 bg-blue-200 rounded-full"></div>
+                      <div className="w-12 h-12 bg-amber-200 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-6 right-16 text-gray-500 italic text-sm max-w-[180px]">
+                <p>It's not about winning. It's about what's best for them.</p>
+                <svg className="w-12 h-12 transform rotate-45 ml-8 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                </svg>
+              </div>
+              <div className="absolute bottom-2 right-2 text-[10px] text-gray-400">
+                <p>iStock</p>
+                <p>Credit: LightFieldStudios</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Minimal Footer */}
-      <footer className="py-6 px-6 md:px-10 text-center md:text-left">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} Resolve. All rights reserved.</p>
-            <div className="mt-4 md:mt-0">
-              <a href="mailto:support@resolve.co" className="text-[#2D1582] hover:text-[#A59CFF]">
-                support@resolve.co
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      </main>
     </div>
   );
 }
