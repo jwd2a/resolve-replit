@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import ResolveLogo from "../assets/resolve-logo.svg";
+import MomChildren from "../assets/mom-children.svg";
+import "../assets/cursive-font.css";
 
 export default function LandingPage() {
   const [location, navigate] = useLocation();
@@ -24,7 +26,7 @@ export default function LandingPage() {
 
       {/* Main Content */}
       <main className="flex-grow flex items-center justify-center p-6">
-        <div className="bg-white max-w-6xl w-full mx-auto rounded-3xl p-8 md:p-12 shadow-sm">
+        <div className="bg-white w-full max-w-7xl mx-auto rounded-3xl p-8 md:p-12 shadow-sm flex-grow">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2D1582] leading-tight mb-6">
@@ -48,7 +50,6 @@ export default function LandingPage() {
                   GET THE COURSE TODAY!
                 </Button>
                 <Button 
-                  variant="outline"
                   className="bg-[#5F78FF] hover:bg-[#4A5FD9] text-white border-0 rounded-full"
                   onClick={() => navigate('/auth')}
                 >
@@ -58,21 +59,13 @@ export default function LandingPage() {
             </div>
             
             <div className="relative">
-              <div className="relative bg-pink-50 rounded-lg overflow-hidden" style={{paddingBottom: '80%'}}>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 bg-pink-200 rounded-full mb-2"></div>
-                    <div className="w-32 h-6 bg-pink-100 rounded mb-6"></div>
-                    <div className="flex space-x-4">
-                      <div className="w-12 h-12 bg-amber-200 rounded-full"></div>
-                      <div className="w-10 h-10 bg-blue-200 rounded-full"></div>
-                      <div className="w-12 h-12 bg-amber-200 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute top-6 right-16 text-gray-500 italic text-sm max-w-[180px]">
-                <p>It's not about winning. It's about what's best for them.</p>
+              <img 
+                src={MomChildren} 
+                alt="Mother with children" 
+                className="w-full rounded-lg"
+              />
+              <div className="absolute top-6 right-16 text-gray-500 text-sm max-w-[180px]">
+                <p className="cursive-text text-base">It's not about winning. It's about what's best for them.</p>
                 <svg className="w-12 h-12 transform rotate-45 ml-8 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                 </svg>

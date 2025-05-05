@@ -1,0 +1,37 @@
+<svg width="440" height="360" viewBox="0 0 440 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="440" height="360" fill="#FAFAFA" />
+  
+  <!-- Mom -->
+  <ellipse cx="240" cy="130" rx="40" ry="45" fill="#FFDBB5" />
+  <path d="M220 160C220 160 210 180 210 200C210 220 220 240 240 240C260 240 270 220 270 200C270 180 260 160 260 160" fill="#F9B8D5" />
+  <rect x="210" y="160" width="60" height="80" rx="30" fill="#F9B8D5" />
+  <path d="M220 130C220 130 230 145 240 145C250 145 260 130 260 130" stroke="#5E4B56" stroke-width="2" stroke-linecap="round" />
+  <circle cx="225" cy="120" r="3" fill="#5E4B56" />
+  <circle cx="255" cy="120" r="3" fill="#5E4B56" />
+  <path d="M205 110C205 110 210 100 220 100C230 100 240 90 250 90C260 90 270 100 280 100" stroke="#5E4B56" stroke-width="2" />
+  
+  <!-- Left Child -->
+  <ellipse cx="160" cy="220" rx="25" ry="30" fill="#FFDBB5" />
+  <rect x="145" y="240" width="30" height="60" rx="15" fill="#B7C6E8" />
+  <path d="M150 220C150 220 155 230 160 230C165 230 170 220 170 220" stroke="#5E4B56" stroke-width="1.5" stroke-linecap="round" />
+  <circle cx="152" cy="213" r="2" fill="#5E4B56" />
+  <circle cx="168" cy="213" r="2" fill="#5E4B56" />
+  <path d="M140 205C140 205 145 195 155 195C165 195 170 190 180 200" stroke="#5E4B56" stroke-width="1.5" />
+  
+  <!-- Right Child -->
+  <ellipse cx="320" cy="200" rx="25" ry="30" fill="#FFDBB5" />
+  <rect x="305" y="220" width="30" height="60" rx="15" fill="#FFD8A9" />
+  <path d="M310 200C310 200 315 210 320 210C325 210 330 200 330 200" stroke="#5E4B56" stroke-width="1.5" stroke-linecap="round" />
+  <circle cx="312" cy="193" r="2" fill="#5E4B56" />
+  <circle cx="328" cy="193" r="2" fill="#5E4B56" />
+  <path d="M300 185C300 185 305 175 315 175C325 175 330 170 340 180" stroke="#5E4B56" stroke-width="1.5" />
+  
+  <!-- Arms -->
+  <path d="M210 180C210 180 190 200 160 210" stroke="#F9B8D5" stroke-width="10" stroke-linecap="round" />
+  <path d="M270 180C270 180 290 200 320 190" stroke="#F9B8D5" stroke-width="10" stroke-linecap="round" />
+
+  <!-- Stock Photo Credit -->
+  <text x="360" y="350" font-family="Arial" font-size="10" fill="#999999">iStock</text>
+  <text x="322" y="360" font-family="Arial" font-size="8" fill="#999999">Credit: LightFieldStudios</text>
+</svg>
