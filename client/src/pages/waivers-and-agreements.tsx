@@ -1,367 +1,547 @@
-import { useState } from "react";
-import { useLocation } from "wouter";
-import { NavigationMenu } from "@/components/NavigationMenu";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
-import { FileText, Info, Check, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
-
-interface Waiver {
-  id: string;
-  title: string;
-  description: string;
-  signed: boolean;
-  signedDate: Date | null;
-  content: string;
-}
+import { useState, useRef, useEffect } from 'react';
+import { NavigationMenu } from '@/components/NavigationMenu';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, ArrowDown, Check, Edit, PenTool, Keyboard } from 'lucide-react';
+import { useLocation } from 'wouter';
+import Player from '@vimeo/player';
+import SignatureCanvas from 'react-signature-canvas';
 
 export default function WaiversAndAgreements() {
-  const [_, navigate] = useLocation();
-  const { toast } = useToast();
+  const [location, navigate] = useLocation();
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const [signature, setSignature] = useState<string | null>(null);
+  const [initials, setInitials] = useState<string | null>(null);
+  const [signatureMethod, setSignatureMethod] = useState<'draw' | 'type'>('draw');
+  const [initialsMethod, setInitialsMethod] = useState<'draw' | 'type'>('draw');
+  const [typedSignature, setTypedSignature] = useState('');
+  const [typedInitials, setTypedInitials] = useState('');
+  const [signatureFont, setSignatureFont] = useState('Dancing Script');
+  const [iframeLoaded, setIframeLoaded] = useState(false);
   
-  const [waivers, setWaivers] = useState<Waiver[]>([
-    {
-      id: "confidentiality",
-      title: "Confidentiality Agreement",
-      description: "Agreement to keep all shared information confidential during the course and parenting plan development.",
-      signed: false,
-      signedDate: null,
-      content: `CONFIDENTIALITY AGREEMENT
+  const agreementRef = useRef<HTMLDivElement>(null);
+  const signatureCanvasRef = useRef<SignatureCanvas>(null);
+  const initialsCanvasRef = useRef<SignatureCanvas>(null);
+  const vimeoContainerRef = useRef<HTMLDivElement>(null);
+  const vimeoPlayerRef = useRef<any>(null);
 
-This Confidentiality Agreement (the "Agreement") is entered into by you as a participant in the Resolve Parenting Agreement Platform.
-
-1. CONFIDENTIAL INFORMATION
-   During the course of using the Resolve platform and developing your parenting plan, you will have access to sensitive information about your co-parent and children. This may include personal details, preferences, concerns, and other private information shared in good faith.
-
-2. OBLIGATIONS
-   You agree to:
-   a) Keep all information shared strictly confidential
-   b) Not disclose any information to third parties without explicit consent
-   c) Use the information solely for the purpose of creating an effective parenting plan
-   d) Take reasonable measures to protect the information from unauthorized access
-
-3. EXCEPTIONS
-   These confidentiality obligations do not apply to information that:
-   a) Is required to be disclosed by law or court order
-   b) Relates to potential harm to a child (which must be reported to appropriate authorities)
-   c) Is necessary to share with legal counsel engaged in representing you
-
-4. TERM
-   This confidentiality obligation continues even after your participation in the platform ends or your parenting plan is finalized.
-
-5. ACKNOWLEDGEMENT
-   By signing this Agreement, you acknowledge that you understand your confidentiality obligations and the importance of maintaining privacy throughout this process.`
-    },
-    {
-      id: "termsConditions",
-      title: "Terms & Conditions",
-      description: "Agreement to participate in good faith in the mediation process if needed during the course.",
-      signed: false,
-      signedDate: null,
-      content: `TERMS AND CONDITIONS
-
-These Terms and Conditions ("Terms") govern your use of the Resolve Parenting Agreement Platform (the "Platform").
-
-1. GOOD FAITH PARTICIPATION
-   You agree to participate in the parenting agreement process in good faith, with the primary goal of developing arrangements that serve the best interests of your child(ren).
-
-2. MEDIATION ACKNOWLEDGEMENT
-   If disagreements arise that cannot be resolved directly, you agree to consider mediation before pursuing litigation. The platform may recommend mediation resources, but you are not obligated to use any specific service.
-
-3. LEGAL ADVICE
-   The Platform provides a framework for creating parenting agreements but does not provide legal advice. You are encouraged to consult with an attorney regarding the legal implications of your parenting arrangements.
-
-4. ACCURACY OF INFORMATION
-   You agree to provide accurate information throughout the process. Falsifying information may invalidate agreements reached through the Platform.
-
-5. COLLABORATIVE APPROACH
-   You acknowledge that successful co-parenting requires a collaborative approach, and you commit to working with your co-parent with respect and consideration.
-
-6. NO GUARANTEE
-   While the Platform is designed to facilitate productive co-parenting arrangements, we cannot guarantee specific outcomes or that agreements reached will be recognized by courts without formal legal procedures.
-
-7. ACKNOWLEDGEMENT
-   By signing these Terms, you acknowledge that you have read, understood, and agree to be bound by these conditions while using the Platform.`
-    },
-    {
-      id: "mediation",
-      title: "Mediation Agreement",
-      description: "Agreement to use mediation to resolve disputes before resorting to litigation.",
-      signed: false,
-      signedDate: null,
-      content: `MEDIATION AGREEMENT
-
-This Mediation Agreement (the "Agreement") establishes guidelines for dispute resolution between co-parents using the Resolve Parenting Agreement Platform.
-
-1. COMMITMENT TO MEDIATION
-   You agree to attempt mediation before initiating court proceedings for disputes related to your parenting arrangements, except in cases of emergency or where safety is at risk.
-
-2. MEDIATOR SELECTION
-   Both parents must agree on the selection of a qualified family mediator. The Platform may provide a list of recommended mediators, but you are free to select any qualified professional.
-
-3. MEDIATION PROCESS
-   Mediation sessions will be scheduled at mutually convenient times. Both parties agree to:
-   a) Participate fully and honestly in the process
-   b) Provide all information relevant to the dispute
-   c) Consider the mediator's recommendations in good faith
-   d) Focus on the best interests of the child(ren)
-
-4. COSTS
-   Unless otherwise agreed, mediation costs will be shared equally between both parents.
-
-5. CONFIDENTIALITY
-   Discussions during mediation sessions will remain confidential to the extent permitted by law, with exceptions for information related to child abuse or threats of harm.
-
-6. OUTCOME
-   You understand that mediation is non-binding unless both parties agree to the terms reached and formalize them appropriately.
-
-7. ACKNOWLEDGEMENT
-   By signing this Agreement, you acknowledge your commitment to attempt mediation before litigation for co-parenting disputes.`
-    }
-  ]);
-  
-  const [activeWaiver, setActiveWaiver] = useState<Waiver | null>(null);
-  
-  const handleSignWaiver = (waiverId: string) => {
-    setWaivers(waivers.map(waiver => 
-      waiver.id === waiverId 
-        ? {...waiver, signed: true, signedDate: new Date()} 
-        : waiver
-    ));
-    
-    toast({
-      title: "Agreement Signed",
-      description: "Thank you for signing this agreement."
-    });
-    
-    // Close the active waiver view
-    setActiveWaiver(null);
-  };
-  
-  const allSigned = waivers.every(waiver => waiver.signed);
-  
-  const handleComplete = () => {
-    if (allSigned) {
-      toast({
-        title: "All Agreements Completed",
-        description: "Thank you for reviewing and signing all the necessary agreements."
-      });
-      navigate('/');
-    } else {
-      toast({
-        title: "Agreements Required",
-        description: "Please sign all agreements before continuing.",
-        variant: "destructive"
-      });
-    }
-  };
-  
-  return (
-    <div className="min-h-screen bg-[#f9f7fe]">
-      <NavigationMenu />
+  // Initialize Vimeo player
+  useEffect(() => {
+    if (vimeoContainerRef.current && !vimeoPlayerRef.current) {
+      // Replace with your actual Vimeo video ID
+      const videoId = '824804226'; 
       
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      const options = {
+        id: videoId,
+        width: vimeoContainerRef.current.offsetWidth,
+        responsive: true
+      };
+      
+      vimeoPlayerRef.current = new Player(vimeoContainerRef.current, options);
+      vimeoPlayerRef.current.on('loaded', () => {
+        setIframeLoaded(true);
+      });
+    }
+
+    return () => {
+      if (vimeoPlayerRef.current) {
+        vimeoPlayerRef.current.destroy();
+      }
+    };
+  }, []);
+
+  // Check if user has scrolled to the bottom of the agreement
+  const handleScroll = () => {
+    if (agreementRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = agreementRef.current;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 20;
+      
+      if (isAtBottom && !hasScrolledToBottom) {
+        setHasScrolledToBottom(true);
+      }
+    }
+  };
+
+  // Clear and save signature functions
+  const clearSignature = () => {
+    if (signatureCanvasRef.current) {
+      signatureCanvasRef.current.clear();
+      setSignature(null);
+    }
+  };
+
+  const clearInitials = () => {
+    if (initialsCanvasRef.current) {
+      initialsCanvasRef.current.clear();
+      setInitials(null);
+    }
+  };
+
+  const saveSignature = () => {
+    if (signatureMethod === 'draw' && signatureCanvasRef.current) {
+      if (!signatureCanvasRef.current.isEmpty()) {
+        setSignature(signatureCanvasRef.current.toDataURL());
+      }
+    } else if (signatureMethod === 'type' && typedSignature.trim() !== '') {
+      // Create a canvas to convert the typed signature to an image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 300;
+      canvas.height = 100;
+      
+      if (ctx) {
+        ctx.font = `30px ${signatureFont}`;
+        ctx.fillStyle = '#000';
+        ctx.fillText(typedSignature, 10, 50);
+        setSignature(canvas.toDataURL());
+      }
+    }
+  };
+
+  const saveInitials = () => {
+    if (initialsMethod === 'draw' && initialsCanvasRef.current) {
+      if (!initialsCanvasRef.current.isEmpty()) {
+        setInitials(initialsCanvasRef.current.toDataURL());
+      }
+    } else if (initialsMethod === 'type' && typedInitials.trim() !== '') {
+      // Create a canvas to convert the typed initials to an image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 100;
+      canvas.height = 60;
+      
+      if (ctx) {
+        ctx.font = `28px ${signatureFont}`;
+        ctx.fillStyle = '#000';
+        ctx.fillText(typedInitials, 10, 35);
+        setInitials(canvas.toDataURL());
+      }
+    }
+  };
+
+  const handleSubmit = () => {
+    // Here you would typically send the signature and initials to your backend
+    // For now, we'll just navigate back to the home page
+    navigate('/home6');
+  };
+
+  const fonts = [
+    { name: 'Dancing Script', label: 'Handwritten 1' },
+    { name: 'Pacifico', label: 'Handwritten 2' },
+    { name: 'Caveat', label: 'Casual' },
+    { name: 'Homemade Apple', label: 'Elegant' }
+  ];
+
+  // Load fonts
+  useEffect(() => {
+    const fontLink = document.createElement('link');
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script&family=Pacifico&family=Caveat&family=Homemade+Apple&display=swap';
+    fontLink.rel = 'stylesheet';
+    document.head.appendChild(fontLink);
+
+    return () => {
+      document.head.removeChild(fontLink);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation Menu */}
+      <NavigationMenu />
+
+      {/* Main content */}
+      <main className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
+        {/* Back button */}
         <div className="mb-6">
-          <Button 
-            variant="ghost" 
-            className="text-[#2e1a87] hover:text-[#2e1a87]/80 hover:bg-[#f5f0ff]"
-            onClick={() => navigate('/')}
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/home6')}
+            className="flex items-center text-gray-600 hover:text-gray-900"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
           </Button>
         </div>
-        
-        {activeWaiver ? (
-          <div className="bg-white rounded-xl border border-[#6c54da]/20 p-6 shadow-sm">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-[#2e1a87]">{activeWaiver.title}</h2>
-              <p className="text-gray-600 text-sm mt-1">{activeWaiver.description}</p>
+
+        {/* Page title */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-[#2e1a87]">Waivers & Agreements</h1>
+          <p className="mt-2 text-gray-600">
+            Review and sign the required legal agreements to continue with the co-parenting process.
+          </p>
+        </div>
+
+        {/* Video section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Watch: Waiver & Agreement Overview
+          </h2>
+
+          <div 
+            ref={vimeoContainerRef} 
+            className="w-full aspect-video bg-gray-100 rounded-md overflow-hidden mb-4"
+          >
+            {!iframeLoaded && (
+              <div className="flex items-center justify-center h-full">
+                <div className="animate-spin h-8 w-8 border-4 border-[#2e1a87] border-t-transparent rounded-full"></div>
+              </div>
+            )}
+          </div>
+
+          <p className="text-gray-600 text-sm italic">
+            Please watch this short video before signing the agreement below.
+          </p>
+        </div>
+
+        {/* Agreement section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Resolve Co-Parenting Agreement
+          </h2>
+
+          <div className="relative">
+            <div
+              ref={agreementRef}
+              onScroll={handleScroll}
+              className="prose prose-slate h-80 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif"
+            >
+              <h3>TERMS AND CONDITIONS AGREEMENT</h3>
+              
+              <p>
+                This Agreement (the "Agreement") is entered into between you, the user ("User"), and Resolve Co-Parenting Solutions, Inc. ("Resolve"), regarding your access to and use of the Resolve co-parenting platform (the "Platform").
+              </p>
+              
+              <h4>1. ACCEPTANCE OF TERMS</h4>
+              <p>
+                By accessing or using the Platform, you agree to be bound by this Agreement and all applicable laws and regulations. If you do not agree with any part of this Agreement, you must not use the Platform.
+              </p>
+              
+              <h4>2. PLATFORM DESCRIPTION</h4>
+              <p>
+                The Platform is designed to facilitate co-parenting arrangements and communication. Resolve does not provide legal advice, and the use of the Platform does not create an attorney-client relationship.
+              </p>
+              
+              <h4>3. USER RESPONSIBILITIES</h4>
+              <p>
+                You agree to provide accurate information when using the Platform. You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
+              </p>
+              
+              <h4>4. PRIVACY POLICY</h4>
+              <p>
+                Your use of the Platform is also governed by our Privacy Policy, which is incorporated by reference into this Agreement. The Privacy Policy can be found on our website.
+              </p>
+              
+              <h4>5. INTELLECTUAL PROPERTY</h4>
+              <p>
+                All content on the Platform, including but not limited to text, graphics, logos, and software, is the property of Resolve and is protected by intellectual property laws.
+              </p>
+              
+              <h4>6. LIMITATION OF LIABILITY</h4>
+              <p>
+                To the maximum extent permitted by law, Resolve shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, arising out of or relating to your use of the Platform.
+              </p>
+              
+              <h4>7. DISPUTE RESOLUTION</h4>
+              <p>
+                Any dispute arising from this Agreement shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.
+              </p>
+              
+              <h4>8. TERMINATION</h4>
+              <p>
+                Resolve reserves the right, at its sole discretion, to terminate your access to the Platform, without notice, for any reason or no reason.
+              </p>
+              
+              <h4>9. GOVERNING LAW</h4>
+              <p>
+                This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law principles.
+              </p>
+              
+              <h4>10. AMENDMENTS</h4>
+              <p>
+                Resolve may amend this Agreement at any time by posting the amended terms on the Platform. Your continued use of the Platform following any amendments indicates your acceptance of the amended terms.
+              </p>
+              
+              <h4>11. ENTIRE AGREEMENT</h4>
+              <p>
+                This Agreement constitutes the entire agreement between you and Resolve regarding your use of the Platform, superseding any prior agreements between you and Resolve.
+              </p>
             </div>
-            
-            <div className="bg-gray-50 border border-gray-100 rounded-lg p-5 mb-6 overflow-y-auto h-96 whitespace-pre-line text-sm">
-              {activeWaiver.content}
-            </div>
-            
-            <div className="flex items-start space-x-2 mb-6">
-              <Checkbox 
-                id={`sign-${activeWaiver.id}`} 
-                checked={activeWaiver.signed}
-                onCheckedChange={() => handleSignWaiver(activeWaiver.id)}
-                className="mt-1"
-              />
-              <div>
-                <label
-                  htmlFor={`sign-${activeWaiver.id}`}
-                  className="text-sm font-medium"
-                >
-                  I have read and agree to the terms of this agreement
-                </label>
-                <p className="text-xs text-gray-500 mt-1">
-                  By checking this box, you agree to be bound by the terms of this agreement.
+
+            {/* Sticky scroll indicator */}
+            {!hasScrolledToBottom && (
+              <div className="sticky bottom-0 w-full text-center py-2 bg-gradient-to-t from-white via-white to-transparent">
+                <p className="text-sm text-[#2e1a87] font-medium flex items-center justify-center">
+                  Scroll to bottom to sign <ArrowDown className="ml-1 h-4 w-4 animate-bounce" />
                 </p>
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Signature section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            Set Up Your Signature & Initials
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Signature */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="font-medium text-gray-700 mb-3">Your Signature</h3>
+              
+              <Tabs defaultValue="draw" onValueChange={(value) => setSignatureMethod(value as 'draw' | 'type')}>
+                <TabsList className="w-full grid grid-cols-2 mb-4">
+                  <TabsTrigger value="draw" className="flex items-center justify-center">
+                    <PenTool className="mr-2 h-4 w-4" />
+                    Draw
+                  </TabsTrigger>
+                  <TabsTrigger value="type" className="flex items-center justify-center">
+                    <Keyboard className="mr-2 h-4 w-4" />
+                    Type
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="draw" className="mt-0">
+                  <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
+                    <SignatureCanvas
+                      ref={signatureCanvasRef}
+                      canvasProps={{
+                        width: 300,
+                        height: 150,
+                        className: 'signature-canvas w-full',
+                      }}
+                      backgroundColor="rgba(247, 248, 249, 1)"
+                    />
+                  </div>
+                  <div className="flex justify-between">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={clearSignature}
+                    >
+                      Clear
+                    </Button>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="bg-[#2e1a87] hover:bg-[#25156d]"
+                      onClick={saveSignature}
+                    >
+                      Use This Signature
+                    </Button>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="type" className="mt-0">
+                  <div className="mb-4">
+                    <label className="block text-sm text-gray-600 mb-1">Type your full name</label>
+                    <input
+                      type="text"
+                      value={typedSignature}
+                      onChange={(e) => setTypedSignature(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label className="block text-sm text-gray-600 mb-1">Select a signature style</label>
+                    <select
+                      value={signatureFont}
+                      onChange={(e) => setSignatureFont(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    >
+                      {fonts.map((font) => (
+                        <option key={font.name} value={font.name}>
+                          {font.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="border border-gray-200 rounded-md p-3 bg-gray-50 mb-3 h-20 flex items-center justify-center">
+                    <p 
+                      style={{ 
+                        fontFamily: signatureFont, 
+                        fontSize: '28px',
+                        lineHeight: 1.2 
+                      }}
+                    >
+                      {typedSignature || 'Your signature will appear here'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="bg-[#2e1a87] hover:bg-[#25156d]"
+                      onClick={saveSignature}
+                      disabled={!typedSignature.trim()}
+                    >
+                      Use This Signature
+                    </Button>
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {signature && (
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <h4 className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                    <Check className="h-4 w-4 text-green-500 mr-1" />
+                    Signature Saved
+                  </h4>
+                  <div className="border border-gray-200 rounded-md p-2 bg-white">
+                    <img src={signature} alt="Your signature" className="max-h-16" />
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2 text-xs flex items-center"
+                    onClick={() => setSignature(null)}
+                  >
+                    <Edit className="h-3 w-3 mr-1" />
+                    Edit Signature
+                  </Button>
+                </div>
+              )}
             </div>
-            
-            <div className="flex justify-between">
-              <Button 
-                variant="outline" 
-                onClick={() => setActiveWaiver(null)}
-              >
-                Back to Agreements
-              </Button>
-              <Button 
-                variant={activeWaiver.signed ? "default" : "outline"}
-                className={activeWaiver.signed ? "bg-[#2e1a87] hover:bg-[#25156d]" : ""}
-                onClick={() => activeWaiver.signed 
-                  ? setActiveWaiver(null) 
-                  : handleSignWaiver(activeWaiver.id)
-                }
-              >
-                {activeWaiver.signed ? "Continue" : "Sign Agreement"}
-              </Button>
+
+            {/* Initials */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="font-medium text-gray-700 mb-3">Your Initials</h3>
+              
+              <Tabs defaultValue="draw" onValueChange={(value) => setInitialsMethod(value as 'draw' | 'type')}>
+                <TabsList className="w-full grid grid-cols-2 mb-4">
+                  <TabsTrigger value="draw" className="flex items-center justify-center">
+                    <PenTool className="mr-2 h-4 w-4" />
+                    Draw
+                  </TabsTrigger>
+                  <TabsTrigger value="type" className="flex items-center justify-center">
+                    <Keyboard className="mr-2 h-4 w-4" />
+                    Type
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="draw" className="mt-0">
+                  <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
+                    <SignatureCanvas
+                      ref={initialsCanvasRef}
+                      canvasProps={{
+                        width: 150,
+                        height: 80,
+                        className: 'signature-canvas w-full',
+                      }}
+                      backgroundColor="rgba(247, 248, 249, 1)"
+                    />
+                  </div>
+                  <div className="flex justify-between">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={clearInitials}
+                    >
+                      Clear
+                    </Button>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="bg-[#2e1a87] hover:bg-[#25156d]"
+                      onClick={saveInitials}
+                    >
+                      Use These Initials
+                    </Button>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="type" className="mt-0">
+                  <div className="mb-4">
+                    <label className="block text-sm text-gray-600 mb-1">Type your initials</label>
+                    <input
+                      type="text"
+                      value={typedInitials}
+                      onChange={(e) => setTypedInitials(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      placeholder="JD"
+                      maxLength={3}
+                    />
+                  </div>
+                  
+                  <div className="border border-gray-200 rounded-md p-3 bg-gray-50 mb-3 h-16 flex items-center justify-center">
+                    <p 
+                      style={{ 
+                        fontFamily: signatureFont, 
+                        fontSize: '24px',
+                        lineHeight: 1.2 
+                      }}
+                    >
+                      {typedInitials || 'JD'}
+                    </p>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="bg-[#2e1a87] hover:bg-[#25156d]"
+                      onClick={saveInitials}
+                      disabled={!typedInitials.trim()}
+                    >
+                      Use These Initials
+                    </Button>
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {initials && (
+                <div className="mt-4 border-t border-gray-100 pt-4">
+                  <h4 className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                    <Check className="h-4 w-4 text-green-500 mr-1" />
+                    Initials Saved
+                  </h4>
+                  <div className="border border-gray-200 rounded-md p-2 bg-white">
+                    <img src={initials} alt="Your initials" className="max-h-12" />
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-2 text-xs flex items-center"
+                    onClick={() => setInitials(null)}
+                  >
+                    <Edit className="h-3 w-3 mr-1" />
+                    Edit Initials
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
-        ) : (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-[#6c54da]/20 p-6 shadow-sm">
-              <div className="flex items-start gap-3 mb-5">
-                <div className="bg-[#f5f0ff] p-2 rounded-md">
-                  <FileText className="h-5 w-5 text-[#6c54da]" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-[#2e1a87]">Waivers & Agreements</h1>
-                  <p className="text-gray-600 text-sm mt-1">
-                    Please review and sign the following agreements before proceeding with your parenting plan.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
-                <div className="flex items-start">
-                  <Info className="h-4 w-4 text-blue-500 mt-1 mr-2 flex-shrink-0" />
-                  <p className="text-sm text-blue-700">
-                    These agreements establish the framework for your participation on the Resolve platform. 
-                    Please read each document carefully before signing.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                {waivers.map((waiver) => (
-                  <div 
-                    key={waiver.id} 
-                    className="border border-gray-200 rounded-lg p-4 hover:border-[#6c54da]/30 hover:shadow-sm transition-all cursor-pointer"
-                    onClick={() => setActiveWaiver(waiver)}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-start space-x-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center mt-0.5 ${
-                          waiver.signed 
-                            ? "bg-green-100 text-green-600" 
-                            : "bg-gray-100 text-gray-400"
-                        }`}>
-                          {waiver.signed 
-                            ? <CheckCircle className="h-4 w-4" /> 
-                            : <FileText className="h-4 w-4" />
-                          }
-                        </div>
-                        <div>
-                          <h3 className="text-[#2e1a87] font-medium">{waiver.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{waiver.description}</p>
-                        </div>
-                      </div>
-                      <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-                        waiver.signed 
-                          ? "bg-green-100 text-green-600" 
-                          : "bg-amber-100 text-amber-600"
-                      }`}>
-                        {waiver.signed ? "Signed" : "Unsigned"}
-                      </div>
-                    </div>
-                    
-                    {waiver.signed && (
-                      <div className="mt-3 ml-11 text-xs text-gray-500">
-                        Signed on {waiver.signedDate?.toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-6 pt-6 border-t border-gray-200 flex justify-between">
-                <Button 
-                  variant="ghost" 
-                  className="text-[#2e1a87]"
-                  onClick={() => navigate('/')}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-                <Button 
-                  className={`${allSigned 
-                    ? "bg-[#2e1a87] hover:bg-[#25156d]" 
-                    : "bg-gray-300 hover:bg-gray-300 cursor-not-allowed"
-                  }`}
-                  onClick={handleComplete}
-                  disabled={!allSigned}
-                >
-                  Complete
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-              
-              {!allSigned && (
-                <p className="text-center text-amber-600 text-xs mt-3">
-                  Please sign all agreements before continuing
+        </div>
+
+        {/* Submit button */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <Button
+            onClick={handleSubmit}
+            className="w-full h-14 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium text-lg shadow-md"
+            disabled={!hasScrolledToBottom || !signature || !initials}
+          >
+            Sign & Continue
+          </Button>
+          
+          {(!hasScrolledToBottom || !signature || !initials) && (
+            <div className="mt-3 text-center">
+              {!hasScrolledToBottom && (
+                <p className="text-amber-600 text-sm">
+                  Please read the entire agreement before signing
+                </p>
+              )}
+              {hasScrolledToBottom && (!signature || !initials) && (
+                <p className="text-amber-600 text-sm">
+                  Please create both your signature and initials
                 </p>
               )}
             </div>
-            
-            <div className="bg-white rounded-xl border border-[#6c54da]/20 p-6 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="bg-[#f5f0ff] p-2 rounded-md">
-                  <Check className="h-5 w-5 text-[#6c54da]" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-[#2e1a87]">Progress</h2>
-                  <div className="mt-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Confidentiality Agreement</span>
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                        waivers[0].signed 
-                          ? "bg-green-100 text-green-600" 
-                          : "bg-gray-100 text-gray-500"
-                      }`}>
-                        {waivers[0].signed ? "Completed" : "Pending"}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Terms & Conditions</span>
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                        waivers[1].signed 
-                          ? "bg-green-100 text-green-600" 
-                          : "bg-gray-100 text-gray-500"
-                      }`}>
-                        {waivers[1].signed ? "Completed" : "Pending"}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Mediation Agreement</span>
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                        waivers[2].signed 
-                          ? "bg-green-100 text-green-600" 
-                          : "bg-gray-100 text-gray-500"
-                      }`}>
-                        {waivers[2].signed ? "Completed" : "Pending"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
     </div>
   );
