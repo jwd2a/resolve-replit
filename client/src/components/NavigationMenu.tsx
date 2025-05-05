@@ -203,11 +203,11 @@ export function NavigationMenu() {
             </DropdownMenu>
             
             {/* COURSE button */}
-            <Link href="/course-page">
+            <Link href="/course">
               <Button 
                 variant="ghost" 
                 className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
-                  isActive("/course-page") 
+                  isActive("/course") 
                     ? "bg-[#3d2a9b] text-white" 
                     : "text-white hover:bg-[#3d2a9b]"
                 }`}

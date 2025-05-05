@@ -11,8 +11,13 @@ import {
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 
 export default function CoursePreview() {
-  const [, navigate] = useLocation();
+  const [, setLocation] = useLocation();
   const { paymentStatus } = usePaymentStatus();
+  
+  // Function to navigate to a specific path
+  const navigate = (path: string) => {
+    setLocation(path);
+  };
   
   // Check which items are completed
   const isWaiverCompleted = typeof window !== 'undefined' ? 
