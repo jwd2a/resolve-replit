@@ -83,6 +83,7 @@ function Router() {
       <Route path="/course-session-demo" component={CourseSessionDemo} />
       <Route path="/parenting-plan" component={ParentingPlan} />
       <Route path="/resources" component={ResourcesPage} />
+      <Route path="/resources/:id" component={ResourcesPage} />
       <Route path="/ai-test" component={AITestPage} />
       
       {/* Admin routes */}

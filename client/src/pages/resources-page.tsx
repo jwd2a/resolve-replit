@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "wouter";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { 
   Select, 
@@ -155,6 +155,7 @@ export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const params = useParams();
 
   // Get unique categories for filter dropdown - store them directly in the array
   const uniqueCategories = resources.reduce<string[]>((acc, resource) => {
@@ -163,6 +164,22 @@ export default function ResourcesPage() {
     }
     return acc;
   }, []);
+  
+  // Check if a resource ID was passed in the URL (/resources/:id)
+  useEffect(() => {
+    // Check if we have an ID parameter
+    if (params.id) {
+      const resourceId = parseInt(params.id, 10);
+      if (!isNaN(resourceId)) {
+        // Find the resource with matching ID
+        const resource = resources.find(r => r.id === resourceId);
+        if (resource) {
+          setSelectedResource(resource);
+          setIsDialogOpen(true);
+        }
+      }
+    }
+  }, [params.id]);
   
   // Filter resources based on selected category
   const filteredResources = selectedCategory === "all" 
@@ -183,6 +200,9 @@ export default function ResourcesPage() {
   const handleResourceClick = (resource: Resource) => {
     setSelectedResource(resource);
     setIsDialogOpen(true);
+    
+    // Update URL without navigating
+    window.history.pushState({}, "", `/resources/${resource.id}`);
   };
 
   return (
@@ -280,7 +300,16 @@ export default function ResourcesPage() {
         </div>
 
         {/* Resource Viewer Dialog */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog 
+          open={isDialogOpen} 
+          onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) {
+              // When closing, update URL back to base resources page
+              window.history.pushState({}, "", "/resources");
+            }
+          }}
+        >
           <DialogContent className="max-w-4xl">
             {selectedResource && (
               <>
@@ -354,6 +383,7 @@ export default function ResourcesPage() {
                           className="flex items-center gap-3 p-3 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50"
                           onClick={() => {
                             setSelectedResource(r);
+                            window.history.pushState({}, "", `/resources/${r.id}`);
                           }}
                         >
                           <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
