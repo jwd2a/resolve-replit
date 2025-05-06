@@ -230,7 +230,8 @@ export default function WaiversAndAgreements() {
 
           <div 
             ref={vimeoContainerRef} 
-            className="w-full aspect-video bg-gray-100 rounded-md overflow-hidden mb-4"
+            className="w-[80%] mx-auto aspect-[16/9] bg-gray-100 rounded-md overflow-hidden mb-4"
+            style={{maxHeight: "220px"}}
           >
             {!iframeLoaded && (
               <div className="flex items-center justify-center h-full relative">
@@ -247,10 +248,6 @@ export default function WaiversAndAgreements() {
               </div>
             )}
           </div>
-
-          <p className="text-gray-600 text-sm italic">
-            Please watch this short video before signing the agreement below.
-          </p>
         </div>
 
         {/* Agreement section */}
