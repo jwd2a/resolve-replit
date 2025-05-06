@@ -230,15 +230,15 @@ export default function WaiversAndAgreements() {
 
           <div 
             ref={vimeoContainerRef} 
-            className="w-[80%] mx-auto aspect-[16/9] bg-gray-100 rounded-md overflow-hidden mb-4"
-            style={{maxHeight: "220px"}}
+            className="w-[85%] mx-auto bg-gray-100 rounded-md overflow-hidden mb-4"
+            style={{height: "260px"}}
           >
             {!iframeLoaded && (
               <div className="flex items-center justify-center h-full relative">
                 <img 
                   src={michaelLundyVideo} 
                   alt="Michael Lundy - Resolve Co-Founder" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
