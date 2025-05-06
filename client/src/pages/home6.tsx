@@ -6,6 +6,7 @@ import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { CourseSessionStatusBlock, SessionState } from "@/components/CourseSessionStatusBlock";
 import familyLawThumbnail from "@/assets/family_law_thumbnail.jpg";
+import parentingPlanThumbnail from "@/assets/parenting_plan_thumbnail.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -542,8 +543,13 @@ export default function Home6() {
 
                 {/* Video 2: What is a Parenting Plan */}
                 <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-                  <div className="relative aspect-video bg-gray-900">
-                    {/* Video thumbnail placeholder */}
+                  <div className="relative aspect-video">
+                    {/* Video thumbnail */}
+                    <img 
+                      src={parentingPlanThumbnail} 
+                      alt="What is a Parenting Plan" 
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                         <Play className="h-5 w-5 text-white fill-white" />
