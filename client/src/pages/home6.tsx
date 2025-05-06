@@ -531,13 +531,15 @@ export default function Home6() {
                     </div>
                   </div>
                   <div className="flex-shrink-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-blue-600"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </Button>
+                    <Link href="/resources/2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
@@ -563,13 +565,15 @@ export default function Home6() {
                     </div>
                   </div>
                   <div className="flex-shrink-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-blue-600"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </Button>
+                    <Link href="/resources/1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
@@ -585,13 +589,15 @@ export default function Home6() {
                     </div>
                   </div>
                   <div className="flex-shrink-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-blue-600"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </Button>
+                    <Link href="/resources/3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
@@ -607,13 +613,15 @@ export default function Home6() {
                     </div>
                   </div>
                   <div className="flex-shrink-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-blue-600"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </Button>
+                    <Link href="/resources/4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
