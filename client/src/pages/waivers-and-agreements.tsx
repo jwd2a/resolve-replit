@@ -225,7 +225,7 @@ export default function WaiversAndAgreements() {
         {/* Video section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Watch: Waiver & Agreement Overview
+            Watch: Resolve Legal Disclaimer
           </h2>
 
           <div 
