@@ -1,22 +1,10 @@
-import { useState } from 'react';
-import { CalendarIcon, Clock, Calendar, Check, X, ArrowRight, CalendarPlus, Share } from 'lucide-react';
-import { Button } from './ui/button';
-import { format, addDays, differenceInDays } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from 'lucide-react';
+import { format } from 'date-fns';
 
-// Define the different session states
 export type SessionState = 'none' | 'proposed' | 'scheduled';
 
-// Props for the CourseSessionStatusBlock component
 interface CourseSessionStatusBlockProps {
   state: SessionState;
   sessionDate?: Date;
@@ -30,268 +18,130 @@ interface CourseSessionStatusBlockProps {
 export function CourseSessionStatusBlock({
   state = 'none',
   sessionDate,
-  sessionTime,
+  sessionTime = '3:00 PM',
   daysRemaining,
   onAccept,
   onProposeNew,
   onPropose,
 }: CourseSessionStatusBlockProps) {
-  const [proposeDialogOpen, setProposeDialogOpen] = useState(false);
-  const [proposedDate, setProposedDate] = useState('');
-  const [proposedTime, setProposedTime] = useState('');
   
-  // Format the date for display
-  const formattedDate = sessionDate 
-    ? format(sessionDate, 'EEEE, MMMM d, yyyy') 
-    : '';
-
-  // Handle propose submission
-  const handleProposeSubmit = () => {
-    // Here you would normally send the proposed date/time to the backend
-    if (onPropose) {
-      onPropose();
+  const getFormattedDate = () => {
+    if (sessionDate) {
+      return format(sessionDate, 'MMMM d');
     }
-    setProposeDialogOpen(false);
+    return '--';
+  };
+  
+  const getFormattedWeekday = () => {
+    if (sessionDate) {
+      return format(sessionDate, 'EEEE');
+    }
+    return '';
+  };
+  
+  const getCalendarMonth = () => {
+    if (sessionDate) {
+      return format(sessionDate, 'MMM');
+    }
+    // Current month if no date
+    return format(new Date(), 'MMM');
+  };
+  
+  const getCalendarDay = () => {
+    if (sessionDate) {
+      return format(sessionDate, 'd');
+    }
+    return '--';
   };
 
   return (
-    <div className="relative">
-      {/* The main session status card with different states */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-        {/* Card header with state-specific styling */}
-        <div className={`px-4 py-3 flex items-center justify-between ${
-          state === 'scheduled' 
-            ? 'bg-green-50 border-b border-green-100' 
-            : state === 'proposed' 
-              ? 'bg-blue-50 border-b border-blue-100' 
-              : 'bg-gray-50 border-b border-gray-100'
-        }`}>
-          <div className="flex items-center space-x-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              state === 'scheduled' 
-                ? 'bg-green-100' 
-                : state === 'proposed' 
-                  ? 'bg-blue-100' 
-                  : 'bg-gray-100'
-            }`}>
-              {state === 'scheduled' ? (
-                <Calendar className={`h-4 w-4 text-green-600`} />
-              ) : state === 'proposed' ? (
-                <CalendarPlus className={`h-4 w-4 text-blue-600`} />
-              ) : (
-                <CalendarIcon className={`h-4 w-4 text-gray-600`} />
-              )}
-            </div>
-            <div>
-              <h3 className="font-medium text-sm">
-                {state === 'scheduled' 
-                  ? 'Course Session Scheduled' 
-                  : state === 'proposed' 
-                    ? 'Course Session Proposed' 
-                    : 'Schedule Course Session'}
-              </h3>
-              <p className="text-xs text-gray-500">
-                {state === 'scheduled' 
-                  ? 'Get ready for your upcoming session' 
-                  : state === 'proposed' 
-                    ? 'Waiting for response' 
-                    : 'Set a time for your 2-hour learning session'}
-              </p>
-            </div>
+    <div className="relative bg-[#4c37ae] rounded-xl border border-white/20 text-white p-3 shadow-sm text-sm">
+      <div className="flex items-center gap-2">
+        <div className="flex-shrink-0 bg-[#5a45c0] rounded-full p-2 h-12 w-12 flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
+            <Calendar className="h-4 w-4 mb-0.5 text-white" />
+            <div className="text-white font-medium text-xs leading-none">{getCalendarMonth()}</div>
+            <div className="text-white font-bold text-xs leading-none">{getCalendarDay()}</div>
           </div>
-          
-          {/* State indicator */}
-          {state === 'scheduled' && (
-            <div className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-              Confirmed
-            </div>
-          )}
-          {state === 'proposed' && (
-            <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-              Pending
-            </div>
-          )}
         </div>
         
-        {/* Card body content based on state */}
-        <div className="p-4">
+        <div className="flex-grow">
           {state === 'none' && (
-            <div className="space-y-3">
-              <p className="text-sm text-gray-600">
-                The course requires a 2-hour live session with both parents. Propose a time that works for you and your co-parent.
+            <>
+              <h3 className="text-sm font-semibold mb-0.5">No course session proposed</h3>
+              <p className="text-white/80 text-xs">Select a date to propose a session.</p>
+            </>
+          )}
+          
+          {state === 'proposed' && (
+            <>
+              <h3 className="text-sm font-semibold mb-0.5">Course session proposed</h3>
+              <p className="text-white/80 text-xs">
+                {getFormattedWeekday()}, {getFormattedDate()} at {sessionTime}
               </p>
-              <Button 
-                onClick={() => setProposeDialogOpen(true)}
-                className="w-full bg-[#2e1a87] hover:bg-[#25156d] mt-2"
-              >
-                <CalendarPlus className="mr-2 h-4 w-4" />
-                Propose a Session Time
-              </Button>
-            </div>
+            </>
           )}
           
-          {state === 'proposed' && sessionDate && sessionTime && (
-            <div className="space-y-3">
-              <div className="bg-blue-50 rounded-md p-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center text-blue-700 text-sm font-medium mb-1">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      <span>Proposed Session</span>
-                    </div>
-                    <p className="text-sm font-medium">{formattedDate}</p>
-                    <div className="flex items-center text-sm text-gray-600 mt-1">
-                      <Clock className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{sessionTime}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex space-x-2 mt-4">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 border-gray-300 text-gray-600 hover:bg-gray-50"
-                  onClick={() => setProposeDialogOpen(true)}
-                >
-                  Change Proposal
-                </Button>
-              </div>
-              
-              <p className="text-xs text-gray-500 italic text-center">
-                Waiting for your co-parent to respond...
+          {state === 'scheduled' && (
+            <>
+              <h3 className="text-sm font-semibold mb-0.5">Course session scheduled for:</h3>
+              <p className="text-white/80 text-xs">
+                {getFormattedWeekday()}, {getFormattedDate()} at {sessionTime}
               </p>
-            </div>
-          )}
-          
-          {state === 'scheduled' && sessionDate && sessionTime && (
-            <div className="space-y-3">
-              <div className="rounded-md border border-green-100 p-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center text-green-700 text-sm font-medium mb-1">
-                      <Calendar className="h-4 w-4 mr-1.5" />
-                      <span>Confirmed Session</span>
-                    </div>
-                    <p className="text-sm font-medium">{formattedDate}</p>
-                    <div className="flex items-center text-sm text-gray-600 mt-1">
-                      <Clock className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{sessionTime}</span>
-                    </div>
-                  </div>
-                  
-                  {daysRemaining !== undefined && (
-                    <div className="bg-green-50 px-2 py-1 rounded-md text-center">
-                      <span className="block text-sm font-bold text-green-700">{daysRemaining}</span>
-                      <span className="text-xs text-green-600">days left</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex space-x-2 mt-4">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 border-gray-300 text-gray-600 hover:bg-gray-50"
-                  onClick={() => setProposeDialogOpen(true)}
-                >
-                  Reschedule
-                </Button>
-                <Button className="flex-1 bg-[#2e1a87] hover:bg-[#25156d]">
-                  <Share className="mr-1.5 h-4 w-4" />
-                  Add to Calendar
-                </Button>
-              </div>
-            </div>
-          )}
-          
-          {/* Respond to proposal section - special case when co-parent proposed */}
-          {state === 'proposed' && onAccept && onProposeNew && (
-            <div className="space-y-3 border-t border-gray-100 mt-3 pt-3">
-              <h4 className="font-medium text-sm">Respond to Proposal</h4>
-              
-              <div className="bg-blue-50 rounded-md p-3">
-                <div className="flex items-start">
-                  <div>
-                    <div className="flex items-center text-blue-700 text-sm font-medium mb-1">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      <span>Proposed by Co-Parent</span>
-                    </div>
-                    <p className="text-sm font-medium">{formattedDate}</p>
-                    <div className="flex items-center text-sm text-gray-600 mt-1">
-                      <Clock className="h-3.5 w-3.5 mr-1.5" />
-                      <span>{sessionTime}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex space-x-2 mt-4">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 border-gray-300 text-gray-600 hover:bg-gray-50"
-                  onClick={onProposeNew}
-                >
-                  Propose New Time
-                </Button>
-                <Button 
-                  className="flex-1 bg-green-600 hover:bg-green-700"
-                  onClick={onAccept}
-                >
-                  <Check className="mr-1.5 h-4 w-4" />
-                  Accept
-                </Button>
-              </div>
-            </div>
+              {daysRemaining !== undefined && (
+                <p className="text-white/90 mt-0.5 text-xs font-medium">
+                  {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>
       
-      {/* Propose session dialog */}
-      <Dialog open={proposeDialogOpen} onOpenChange={setProposeDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Propose Course Session</DialogTitle>
-            <DialogDescription>
-              Choose a date and time that works for you and your co-parent for the 2-hour course session.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                type="date"
-                value={proposedDate}
-                onChange={(e) => setProposedDate(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="time">Time</Label>
-              <Input
-                id="time"
-                type="time"
-                value={proposedTime}
-                onChange={(e) => setProposedTime(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <p className="text-sm text-gray-500">
-              The session will last approximately 2 hours. Make sure both you and your co-parent have sufficient time set aside.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setProposeDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleProposeSubmit} className="bg-[#2e1a87] hover:bg-[#25156d]">
-              Propose Session
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {state === 'none' && (
+        <div className="mt-2 flex justify-end">
+          <Button 
+            onClick={onPropose}
+            size="sm"
+            className="bg-white text-[#4c37ae] hover:bg-white/90 h-7 text-xs px-2"
+          >
+            Propose Time
+          </Button>
+        </div>
+      )}
+      
+      {state === 'proposed' && (
+        <div className="mt-2 flex justify-end gap-2">
+          <Button 
+            variant="secondary"
+            onClick={onAccept}
+            size="sm"
+            className="bg-[#5a46c1] text-white hover:bg-[#5a46c1]/90 border border-white/10 h-7 text-xs px-2"
+          >
+            Accept
+          </Button>
+          <Button 
+            onClick={onProposeNew}
+            size="sm"
+            className="bg-white text-[#4c37ae] hover:bg-white/90 h-7 text-xs px-2"
+          >
+            Propose New Time
+          </Button>
+        </div>
+      )}
+      
+      {state === 'scheduled' && (
+        <div className="mt-2 flex justify-end">
+          <Button 
+            variant="ghost"
+            size="sm"
+            className="text-white/80 hover:text-white hover:bg-[#5a46c1]/50 h-6 text-xs"
+          >
+            <Calendar className="h-3 w-3 mr-1" />
+            Add to calendar
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
