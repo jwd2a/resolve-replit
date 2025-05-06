@@ -113,23 +113,25 @@ export default function CoursePreview() {
         {/* Hero Header Section with Warning Banner */}
         <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-6 px-6 mb-6 text-white">
           <div className="flex justify-between items-center">
-            <div>
+            <div className="flex-shrink-1 mr-3">
               <h1 className="text-2xl font-semibold mb-1">Your Co-Parenting Course</h1>
               <p className="text-white/80 text-sm">
                 Guided by experts. Built to help families move forward together.
               </p>
             </div>
             
-            {/* Access Warning Banner - single line with expanded text */}
+            {/* Access Warning Banner - single line with proper sizing */}
             {incompleteItems.length > 0 && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 ml-3 max-w-[330px] flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
-                  <span className="font-medium text-amber-800 text-[11px] whitespace-nowrap">
-                    Complete required items to unlock the course.
-                  </span>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 flex-shrink-0 w-auto min-w-[370px]">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2 flex-1">
+                    <AlertTriangle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
+                    <span className="font-medium text-amber-800 text-[11px] whitespace-nowrap mr-2">
+                      Complete required items to unlock the course.
+                    </span>
+                  </div>
                   <Button 
-                    className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px] ml-1 whitespace-nowrap"
+                    className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px] whitespace-nowrap flex-shrink-0"
                     onClick={() => navigate("/")}
                   >
                     Back to Checklist
