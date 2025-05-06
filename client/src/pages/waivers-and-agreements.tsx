@@ -230,15 +230,14 @@ export default function WaiversAndAgreements() {
 
           <div 
             ref={vimeoContainerRef} 
-            className="w-[85%] mx-auto bg-gray-100 rounded-md overflow-hidden mb-4"
-            style={{height: "260px"}}
+            className="w-full aspect-video bg-gray-100 rounded-md overflow-hidden mb-4"
           >
             {!iframeLoaded && (
               <div className="flex items-center justify-center h-full relative">
                 <img 
                   src={michaelLundyVideo} 
                   alt="Michael Lundy - Resolve Co-Founder" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
@@ -248,6 +247,10 @@ export default function WaiversAndAgreements() {
               </div>
             )}
           </div>
+
+          <p className="text-gray-600 text-sm italic">
+            Please watch this short video before signing the agreement below.
+          </p>
         </div>
 
         {/* Agreement section */}
