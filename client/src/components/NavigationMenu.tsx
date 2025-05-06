@@ -83,92 +83,6 @@ export function NavigationMenu() {
               </Button>
             </Link>
             
-            {/* OTHER STUFF dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center gap-1 font-medium px-4 py-2 h-10 text-white hover:bg-[#3d2a9b]"
-                >
-                  <Settings size={16} className="mr-1.5" />
-                  OTHER STUFF
-                  <ChevronDown size={14} className="ml-1 opacity-70" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link href={onboarding4stepRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Settings size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Onboarding (4-Step)</span>
-                    {isActive(onboarding4stepRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={courseEntryCodeRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <MessageSquare size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Course Verification</span>
-                    {isActive(courseEntryCodeRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">OTHER</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link href={scheduleRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Calendar size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Co-Parenting Schedule</span>
-                    {isActive(scheduleRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={aiTestRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
-                    <span>AI Assistant</span>
-                    {isActive(aiTestRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link href="/admin/families">
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Users size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Families Overview</span>
-                    {isActive("/admin/families") && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href="/admin/users-families">
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <User size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Users & Families Detail</span>
-                    {isActive("/admin/users-families") && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
             {/* COURSE button */}
             <Link href="/course">
               <Button 
@@ -201,8 +115,95 @@ export function NavigationMenu() {
           </div>
         </div>
         
-        {/* User Profile - positioned at the right */}
-        <div>
+        {/* User Profile and OTHER STUFF - positioned at the right */}
+        <div className="flex items-center gap-3">
+          {/* OTHER STUFF dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className="flex items-center gap-1 font-medium px-3 py-2 h-9 text-white hover:bg-[#3d2a9b]"
+              >
+                <Settings size={14} className="mr-1" />
+                OTHER STUFF
+                <ChevronDown size={12} className="ml-1 opacity-70" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              <Link href={onboarding4stepRoute.path}>
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <Settings size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Onboarding (4-Step)</span>
+                  {isActive(onboarding4stepRoute.path) && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={courseEntryCodeRoute.path}>
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <MessageSquare size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Course Verification</span>
+                  {isActive(courseEntryCodeRoute.path) && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-xs font-semibold text-gray-500">OTHER</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              <Link href={scheduleRoute.path}>
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <Calendar size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Co-Parenting Schedule</span>
+                  {isActive(scheduleRoute.path) && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={aiTestRoute.path}>
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
+                  <span>AI Assistant</span>
+                  {isActive(aiTestRoute.path) && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              <Link href="/admin/families">
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <Users size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Families Overview</span>
+                  {isActive("/admin/families") && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href="/admin/users-families">
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <User size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Users & Families Detail</span>
+                  {isActive("/admin/users-families") && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          {/* User login/profile */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
