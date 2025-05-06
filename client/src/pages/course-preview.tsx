@@ -110,12 +110,35 @@ export default function CoursePreview() {
       <NavigationMenu />
       
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Hero Header Section */}
+        {/* Hero Header Section with Warning Banner */}
         <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-8 px-6 mb-6 text-white">
           <h1 className="text-2xl font-semibold mb-2">Your Co-Parenting Course</h1>
-          <p className="text-white/80">
+          <p className="text-white/80 mb-4">
             Guided by experts. Built to help families move forward together.
           </p>
+          
+          {/* Access Warning Banner - moved to hero section */}
+          {incompleteItems.length > 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
+              <div className="flex items-start">
+                <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
+                <div>
+                  <h3 className="font-medium text-amber-800 mb-1 text-sm">
+                    Complete required items to unlock your course.
+                  </h3>
+                  <p className="text-sm text-amber-700 mb-3">
+                    You still need to finish: {incompleteItems.join(", ")}
+                  </p>
+                  <Button 
+                    className="bg-[#2e1a87] hover:bg-[#25156d]"
+                    onClick={() => navigate("/")}
+                  >
+                    Go to Checklist
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -178,32 +201,9 @@ export default function CoursePreview() {
               </div>
             </div>
             
-            {/* Additional resources card with warning banner moved here */}
+            {/* Additional resources card */}
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
               <h3 className="text-base font-medium text-gray-900 mb-3">Need Assistance?</h3>
-              
-              {/* Access Warning Banner - moved to this box */}
-              {incompleteItems.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                  <div className="flex items-start">
-                    <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-medium text-amber-800 mb-1 text-sm">
-                        Complete required items to unlock your course.
-                      </h3>
-                      <p className="text-xs text-amber-700 mb-2">
-                        You still need to finish: {incompleteItems.join(", ")}
-                      </p>
-                      <Button 
-                        className="bg-[#2e1a87] hover:bg-[#25156d] text-sm py-1 h-8"
-                        onClick={() => navigate("/")}
-                      >
-                        Go to Checklist
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
               
               <p className="text-sm text-gray-600 mb-4">
                 Our team is here to help you with any questions about the course.
