@@ -111,33 +111,32 @@ export default function CoursePreview() {
       
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* Hero Header Section with Warning Banner */}
-        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-8 px-6 mb-6 text-white">
-          <div className="flex justify-between items-start">
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-6 px-6 mb-6 text-white">
+          <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-semibold mb-2">Your Co-Parenting Course</h1>
-              <p className="text-white/80">
+              <h1 className="text-2xl font-semibold mb-1">Your Co-Parenting Course</h1>
+              <p className="text-white/80 text-sm">
                 Guided by experts. Built to help families move forward together.
               </p>
             </div>
             
-            {/* Access Warning Banner - moved to hero section and made compact */}
+            {/* Access Warning Banner - moved to hero section and made very compact */}
             {incompleteItems.length > 0 && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 ml-4 max-w-xs flex-shrink-0">
-                <div className="flex items-start">
-                  <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
+              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 ml-3 max-w-[240px] flex-shrink-0">
+                <div className="flex items-center">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mr-2 flex-shrink-0" />
                   <div>
-                    <h3 className="font-medium text-amber-800 mb-0.5 text-xs">
-                      Complete required items to unlock your course.
+                    <h3 className="font-medium text-amber-800 text-[11px] leading-tight">
+                      Complete items to unlock course
                     </h3>
-                    <p className="text-xs text-amber-700 mb-2">
-                      Still needed: {incompleteItems.join(", ")}
-                    </p>
-                    <Button 
-                      className="bg-[#2e1a87] hover:bg-[#25156d] py-1 h-7 text-xs"
-                      onClick={() => navigate("/")}
-                    >
-                      Go to Checklist
-                    </Button>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Button 
+                        className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px]"
+                        onClick={() => navigate("/")}
+                      >
+                        Go to Checklist
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
