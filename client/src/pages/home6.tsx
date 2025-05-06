@@ -351,7 +351,7 @@ export default function Home6() {
           {/* Main content area - spans 2 columns on large screens */}
           <div className="lg:col-span-2 space-y-6">
             {/* Pre-course checklist section */}
-            <div className="mb-5">
+            <div>
               <div className="flex items-start gap-3 mb-2">
                 <div className="bg-indigo-50 p-2 rounded-md">
                   <FileText className="h-5 w-5 text-indigo-600" />
@@ -365,7 +365,7 @@ export default function Home6() {
               </div>
             </div>
             
-            {/* Removed the white container div */}
+            {/* Checklist items */}
             <div className="space-y-3">
               {requirements.map((item) => (
                 <div 
@@ -520,12 +520,12 @@ export default function Home6() {
           </div>
 
           {/* Sidebar content - spans 1 column */}
-          <div className="space-y-6">
-            {/* Payment section with increased height - exactly matching Schedule Course Session */}
-            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col min-h-[420px]">
+          <div className="lg:pt-0">
+            {/* Course Access section - aligned with top of checklist */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col" style={{ minHeight: '355px' }}>
               {paymentStatus ? (
                 <>
-                  <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-start justify-between mb-4">
                     <div>
                       <h2 className="text-lg font-medium text-gray-900">Course Access</h2>
                       <p className="text-gray-600 text-xs mt-1">
@@ -538,17 +538,17 @@ export default function Home6() {
                     </div>
                   </div>
                   
-                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2 mb-6">
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2 mb-4">
                     <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
                     <p className="text-green-800 text-sm font-medium">
                       Payment processed successfully
                     </p>
                   </div>
                   
-                  {/* Added more prominent features section for better spacing */}
-                  <div className="mb-5 mt-2">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">Course includes:</h3>
-                    <div className="space-y-2.5">
+                  {/* Course features section with normal spacing */}
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Course includes:</h3>
+                    <div className="space-y-2">
                       <div className="flex items-center gap-1.5">
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
@@ -594,16 +594,16 @@ export default function Home6() {
                     </div>
                   </div>
                   
-                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-2.5 flex items-center gap-2 mb-5">
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-2.5 flex items-center gap-2 mb-4">
                     <CreditCard className="h-4 w-4 text-amber-600 flex-shrink-0" />
                     <p className="text-amber-800 text-sm font-medium">
                       Your course access is pending payment
                     </p>
                   </div>
                   
-                  <div className="mb-6">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">Included in your enrollment:</h3>
-                    <div className="space-y-2.5">
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Included in your enrollment:</h3>
+                    <div className="space-y-1.5">
                       <div className="flex items-center gap-1.5">
                         <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
                           <Check className="h-3 w-3 text-green-600" />
@@ -631,20 +631,20 @@ export default function Home6() {
                     </div>
                   </div>
                   
-                  {/* Added extra space to match the height with the checklist */}
+                  {/* Dynamic space filling */}
                   <div className="flex-grow"></div>
                   
-                  <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between mt-2">
+                  <div className="bg-gray-100 rounded-lg p-2.5 flex items-center justify-between">
                     <span className="text-sm font-medium">Course Enrollment</span>
                     <span className="text-xl font-bold text-[#2e1a87]">$600</span>
                   </div>
                   
-                  <div className="text-center mt-2 mb-2">
+                  <div className="text-center mt-2 mb-1">
                     <span className="text-xs text-gray-500">Enrollment can be completed by either parent.</span>
                   </div>
                   
                   <Button
-                    className="w-full mt-3 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
+                    className="w-full mt-2 py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium flex items-center justify-center"
                     onClick={handleCompletePayment}
                     disabled={isLoadingPayment}
                   >
@@ -664,8 +664,8 @@ export default function Home6() {
               )}
             </div>
 
-            {/* Need assistance - Moved below Course Access */}
-            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+            {/* Need assistance - Now aligned with Resources section */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm mt-6" style={{ height: '150px' }}>
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="h-4 w-4 text-[#2e1a87]" />
@@ -679,7 +679,7 @@ export default function Home6() {
               </div>
               
               <Button
-                className="w-full mt-2 border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5 font-medium"
+                className="w-full mt-4 border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87]/5 font-medium"
                 variant="outline"
                 size="sm"
               >
