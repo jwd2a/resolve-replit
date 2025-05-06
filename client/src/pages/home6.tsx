@@ -507,43 +507,43 @@ export default function Home6() {
                 </span>
               </div>
 
-              {/* Resources Grid - 2x2 layout */}
+              {/* Resources - uniform horizontal layout */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Video 1: The Truth About the Family Law System */}
-                <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-                  <div className="relative aspect-video">
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
+                  <div className="relative rounded-md overflow-hidden mr-3 flex-shrink-0" style={{ width: "50px", height: "50px" }}>
                     {/* Video thumbnail */}
                     <img 
                       src={familyLawThumbnail} 
-                      alt="Navigating Family Law: A Complimentary, Candid Overview" 
+                      alt="Navigating Family Law" 
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                        <Play className="h-5 w-5 text-white fill-white" />
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <Play className="h-3 w-3 text-white fill-white" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-3">
+                  <div className="flex-grow">
                     <h3 className="text-sm font-medium text-gray-900">The Truth About the Family Law System</h3>
                     <div className="flex items-center mt-1">
                       <span className="text-xs text-gray-600">Video • 8 min</span>
                     </div>
-                    <div className="flex justify-end mt-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-blue-600"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-blue-600"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </div>
 
                 {/* Video 2: What is a Parenting Plan */}
-                <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-                  <div className="relative aspect-video">
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
+                  <div className="relative rounded-md overflow-hidden mr-3 flex-shrink-0" style={{ width: "50px", height: "50px" }}>
                     {/* Video thumbnail */}
                     <img 
                       src={parentingPlanThumbnail} 
@@ -551,32 +551,32 @@ export default function Home6() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                        <Play className="h-5 w-5 text-white fill-white" />
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <Play className="h-3 w-3 text-white fill-white" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-3">
+                  <div className="flex-grow">
                     <h3 className="text-sm font-medium text-gray-900">What is a Parenting Plan</h3>
                     <div className="flex items-center mt-1">
                       <span className="text-xs text-gray-600">Video • 5 min</span>
                     </div>
-                    <div className="flex justify-end mt-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-blue-600"
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-blue-600"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </div>
 
                 {/* Co-Parenting Guide */}
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
-                  <div className="bg-red-100 p-1.5 rounded-md mr-3 flex-shrink-0">
-                    <FileText className="h-4 w-4 text-red-600" />
+                  <div className="relative bg-red-100 rounded-md mr-3 flex-shrink-0" style={{ width: "50px", height: "50px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <FileText className="h-5 w-5 text-red-600" />
                   </div>
                   <div className="flex-grow">
                     <h3 className="text-sm font-medium text-gray-900">Co-Parenting Guide</h3>
@@ -597,8 +597,8 @@ export default function Home6() {
 
                 {/* Communication Toolkit */}
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
-                  <div className="bg-blue-100 p-1.5 rounded-md mr-3 flex-shrink-0">
-                    <MessageCircle className="h-4 w-4 text-blue-600" />
+                  <div className="relative bg-blue-100 rounded-md mr-3 flex-shrink-0" style={{ width: "50px", height: "50px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <MessageCircle className="h-5 w-5 text-blue-600" />
                   </div>
                   <div className="flex-grow">
                     <h3 className="text-sm font-medium text-gray-900">Communication Toolkit</h3>
