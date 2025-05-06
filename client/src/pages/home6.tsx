@@ -82,7 +82,7 @@ export default function Home6() {
   const [requirements, setRequirements] = useState([
     {
       id: "family-info",
-      icon: <Home className="h-5 w-5 text-indigo-600" />,
+      icon: <Home className="h-4 w-4 text-current" />,
       title: "Family Information",
       description: "Review the family details you provided during onboarding.",
       userStatus: "Completed",
@@ -99,7 +99,7 @@ export default function Home6() {
     },
     {
       id: "co-parent",
-      icon: <Users className="h-5 w-5 text-indigo-600" />,
+      icon: <Users className="h-4 w-4 text-current" />,
       title: "Co-Parent Registration",
       description: "Invite your co-parent to join the platform.",
       userStatus: "Completed",
@@ -110,7 +110,7 @@ export default function Home6() {
     },
     {
       id: "waivers",
-      icon: <FileText className="h-5 w-5 text-indigo-600" />,
+      icon: <FileText className="h-4 w-4 text-current" />,
       title: "Waivers & Agreements",
       description: "Review and sign the required legal agreements.",
       userStatus: isWaiverCompleted ? "Completed" : "Pending",
@@ -122,7 +122,7 @@ export default function Home6() {
     // Temporarily hidden holiday preferences - toggle showHolidaySelector to true to re-enable
     ...(showHolidaySelector ? [{
       id: "holidays",
-      icon: <CalendarDays className="h-5 w-5 text-indigo-600" />,
+      icon: <CalendarDays className="h-4 w-4 text-current" />,
       title: "Holiday Preferences",
       description: "Select your preferences for holiday schedules.",
       userStatus: "Pending",
@@ -133,7 +133,7 @@ export default function Home6() {
     }] : []),
     {
       id: "schedule",
-      icon: <Clock className="h-5 w-5 text-gray-500" />,
+      icon: <Clock className="h-4 w-4 text-current" />,
       title: "Schedule Course Session",
       description: "Pick a date and time to complete the course with your co-parent.",
       userStatus: "No session scheduled",
@@ -373,8 +373,28 @@ export default function Home6() {
                   className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-0.5">
-                      {item.icon}
+                    <div className="flex-shrink-0 mt-0.5 relative">
+                      <div className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200
+                        ${(item.id === "family-info" && item.userStatus === "Completed") || 
+                          (item.id === "co-parent" && item.userStatus === "Completed") || 
+                          (item.id === "waivers" && item.userStatus === "Completed")
+                          ? "bg-[#2e1a87] text-white border border-[#2e1a87]/20 shadow-sm" 
+                          : "bg-white text-[#6c54da] border-[1.5px] border-[#6c54da]/30 shadow-sm"
+                        }`}
+                      >
+                        {((item.id === "family-info" && item.userStatus === "Completed") || 
+                          (item.id === "co-parent" && item.userStatus === "Completed") || 
+                          (item.id === "waivers" && item.userStatus === "Completed")) && (
+                          <div className="absolute -top-1 -left-1 w-[12px] h-[12px] bg-green-500 rounded-full flex items-center justify-center z-20">
+                            <Check className="h-2 w-2 text-white" />
+                          </div>
+                        )}
+                        <div className={`w-5 h-5 ${(item.id === "family-info" && item.userStatus !== "Completed") || 
+                            (item.id === "co-parent" && item.userStatus !== "Completed") || 
+                            (item.id === "waivers" && item.userStatus !== "Completed") ? "opacity-80" : ""}`}>
+                          {item.icon}
+                        </div>
+                      </div>
                     </div>
                     
                     <div className="flex-grow">
