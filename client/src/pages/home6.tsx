@@ -723,12 +723,7 @@ export default function Home6() {
                         </div>
                         <span className="text-gray-700 text-sm">Lifetime Access to Your Plan & Resources</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="bg-green-100 p-0.5 rounded-full flex items-center justify-center">
-                          <Check className="h-3 w-3 text-green-600" />
-                        </div>
-                        <span className="text-gray-700 text-sm">Access to Co-Parenting Templates</span>
-                      </div>
+
                     </div>
                   </div>
                   
