@@ -68,67 +68,34 @@ export function NavigationMenu() {
           
           {/* Main navigation items */}
           <div className="hidden md:flex items-center space-x-1">
-            {/* HOME dropdown */}
+            {/* HOME button - Direct link without dropdown */}
+            <Link href={dashboardRoute.path}>
+              <Button 
+                variant="ghost" 
+                className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
+                  isActive(home6Route.path) || isActive(dashboardRoute.path)
+                    ? "bg-[#3d2a9b] text-white" 
+                    : "text-white hover:bg-[#3d2a9b]"
+                }`}
+              >
+                <Home size={16} className="mr-1.5" />
+                HOME
+              </Button>
+            </Link>
+            
+            {/* OTHER STUFF dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
-                    isActive(home6Route.path) || isActive(dashboardRoute.path) || isActive(home5Route.path)
-                      ? "bg-[#3d2a9b] text-white" 
-                      : "text-white hover:bg-[#3d2a9b]"
-                  }`}
+                  className="flex items-center gap-1 font-medium px-4 py-2 h-10 text-white hover:bg-[#3d2a9b]"
                 >
-                  <Home size={16} className="mr-1.5" />
-                  HOME
+                  <Settings size={16} className="mr-1.5" />
+                  OTHER STUFF
                   <ChevronDown size={14} className="ml-1 opacity-70" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuLabel className="text-xs font-semibold text-gray-500">HOME</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <Link href={dashboardRoute.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Main Dashboard (Home 6)</span>
-                    {isActive(dashboardRoute.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href="/dashboard-new">
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Dashboard (Simplified)</span>
-                    {isActive("/dashboard-new") && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                                
-                <Link href={home2Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Home 2</span>
-                    {isActive(home2Route.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <Link href={home5Route.path}>
-                  <DropdownMenuItem className="cursor-pointer py-2">
-                    <Home size={16} className="mr-2 text-[#6c54da]" />
-                    <span>Home 5 (Course Home)</span>
-                    {isActive(home5Route.path) && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
-                    )}
-                  </DropdownMenuItem>
-                </Link>
-                
-                <DropdownMenuSeparator />
                 <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ONBOARDING</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 
