@@ -5,6 +5,7 @@ import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import { Button } from "@/components/ui/button";
 import { CourseSessionStatusBlock, SessionState } from "@/components/CourseSessionStatusBlock";
+import familyLawThumbnail from "@/assets/family_law_thumbnail.jpg";
 import {
   ArrowRight,
   CheckCircle,
@@ -509,8 +510,13 @@ export default function Home6() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Video 1: The Truth About the Family Law System */}
                 <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-                  <div className="relative aspect-video bg-gray-900">
-                    {/* Video thumbnail placeholder */}
+                  <div className="relative aspect-video">
+                    {/* Video thumbnail */}
+                    <img 
+                      src={familyLawThumbnail} 
+                      alt="Navigating Family Law: A Complimentary, Candid Overview" 
+                      className="w-full h-full object-cover"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                         <Play className="h-5 w-5 text-white fill-white" />
