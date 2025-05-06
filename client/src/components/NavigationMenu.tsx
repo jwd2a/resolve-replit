@@ -40,6 +40,7 @@ export function NavigationMenu() {
   // Course related routes
   const courseRoute = { name: "Course", path: "/course" };
   const parentingPlanRoute = { name: "Parenting Plan", path: "/parenting-plan" };
+  const resourcesRoute = { name: "Resources", path: "/resources" };
   
   // Onboarding related routes
   const onboarding6stepRoute = { name: "6-Step Onboarding", path: "/onboarding6step" };
@@ -110,6 +111,21 @@ export function NavigationMenu() {
               >
                 <FileText size={16} className="mr-1.5" />
                 PARENTING PLAN
+              </Button>
+            </Link>
+            
+            {/* RESOURCES button */}
+            <Link href="/resources">
+              <Button 
+                variant="ghost" 
+                className={`flex items-center gap-1 font-medium px-4 py-2 h-10 ${
+                  isActive(resourcesRoute.path) 
+                    ? "bg-[#3d2a9b] text-white" 
+                    : "text-white hover:bg-[#3d2a9b]"
+                }`}
+              >
+                <HelpCircle size={16} className="mr-1.5" />
+                RESOURCES
               </Button>
             </Link>
           </div>

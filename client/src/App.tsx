@@ -30,6 +30,7 @@ import HolidayPreferences from "@/pages/holiday-preferences";
 import ScheduleCourse from "@/pages/schedule-course";
 import CourseSessionDemo from "@/pages/course-session-demo";
 import AITestPage from "@/pages/ai-test-page";
+import ResourcesPage from "@/pages/resources-page";
 import LandingPage from "@/pages/landing";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
@@ -81,6 +82,7 @@ function Router() {
       <Route path="/course-page" component={CoursePage} />
       <Route path="/course-session-demo" component={CourseSessionDemo} />
       <Route path="/parenting-plan" component={ParentingPlan} />
+      <Route path="/resources" component={ResourcesPage} />
       <Route path="/ai-test" component={AITestPage} />
       
       {/* Admin routes */}
