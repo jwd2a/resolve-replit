@@ -429,7 +429,7 @@ export default function OnboardingPage() {
                         name="fullName"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-medium">Legal Name</FormLabel>
+                            <FormLabel className="text-xs font-medium">Co-Parent Legal Name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input placeholder="Full name" {...field} className="h-9 text-sm" />
@@ -447,7 +447,7 @@ export default function OnboardingPage() {
                     </div>
                     
                     <div>
-                      <FormLabel className="text-xs font-medium">Legal Address</FormLabel>
+                      <FormLabel className="text-xs font-medium">Co-Parent Legal Address</FormLabel>
                       
                       <FormItem className="mb-2">
                         <div className="relative">
@@ -493,7 +493,7 @@ export default function OnboardingPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem className="space-y-1">
-                          <FormLabel className="text-xs font-medium">Phone number</FormLabel>
+                          <FormLabel className="text-xs font-medium">Co-Parent Phone Number</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="absolute left-0 top-0 h-9 w-8 flex items-center justify-center">
@@ -517,7 +517,7 @@ export default function OnboardingPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem className="space-y-1">
-                          <FormLabel className="text-xs font-medium">Email</FormLabel>
+                          <FormLabel className="text-xs font-medium">Co-Parent Email</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="absolute left-2 top-2 text-gray-400">
