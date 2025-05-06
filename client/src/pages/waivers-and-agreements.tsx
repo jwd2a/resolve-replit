@@ -259,7 +259,7 @@ export default function WaiversAndAgreements() {
             <div
               ref={agreementRef}
               onScroll={handleScroll}
-              className="prose prose-slate h-96 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif"
+              className="prose prose-slate h-96 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif max-w-none"
             >
               <h3>TERMS AND CONDITIONS AGREEMENT</h3>
               
