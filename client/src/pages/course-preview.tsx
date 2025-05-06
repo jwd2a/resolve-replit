@@ -116,7 +116,7 @@ export default function CoursePreview() {
             <div className="flex-shrink-1 mr-3">
               <h1 className="text-2xl font-semibold mb-1">Your Co-Parenting Course</h1>
               <p className="text-white/80 text-sm">
-                Guided by experts. Built to help families move forward together.
+                Built to help families move forward together.
               </p>
             </div>
             
