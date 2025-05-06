@@ -324,23 +324,20 @@ export default function Home6() {
               ))}
             </div>
             
-            {/* Course Session Status Block - hidden for now */}
-            {/* 
+            {/* Course Session Status Block */}
             <div 
-              className="flex-shrink-0 rounded-md cursor-pointer transition-all duration-200 h-auto"
-              onClick={toggleSessionState}
+              className="flex-shrink-0 rounded-md transition-all duration-200 h-auto"
             >
               <CourseSessionStatusBlock 
                 state={sessionState}
                 sessionDate={sessionDate}
                 sessionTime="3:00 PM"
-                daysRemaining={sessionState === 'scheduled' ? 2 : undefined}
+                daysRemaining={sessionState === 'scheduled' ? 10 : undefined}
                 onPropose={toggleSessionState}
                 onProposeNew={toggleSessionState}
                 onAccept={toggleSessionState}
               />
             </div>
-            */}
             
             {/* Start Course button aligned with badges */}
             <div className="flex-shrink-0 flex flex-col items-center mt-2 lg:mt-0">
@@ -384,117 +381,127 @@ export default function Home6() {
             {/* Checklist items */}
             <div className="space-y-3">
               {requirements.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-start gap-3">
-                    <div 
-                      className="flex-shrink-0 mt-0.5 relative cursor-pointer"
-                      onClick={() => toggleStepStatus(item.id)}
-                    >
-                      <div className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200
-                        ${(item.id === "family-info" && item.userStatus === "Completed") || 
-                          (item.id === "co-parent" && item.userStatus === "Completed") || 
-                          (item.id === "waivers" && item.userStatus === "Completed")
-                          ? "bg-[#2e1a87] text-white border border-[#2e1a87]/20 shadow-sm" 
-                          : "bg-white text-[#6c54da] border-[1.5px] border-[#6c54da]/30 shadow-sm"
-                        }`}
+                item.id === "schedule" ? (
+                  <div key={item.id} className="bg-white rounded-md border border-gray-100 shadow-sm transition-shadow p-0 overflow-hidden">
+                    <CourseSessionStatusBlock 
+                      state={sessionState}
+                      sessionDate={sessionDate}
+                      sessionTime="3:00 PM"
+                      daysRemaining={sessionState === 'scheduled' ? 10 : undefined}
+                      onPropose={toggleSessionState}
+                      onProposeNew={toggleSessionState}
+                      onAccept={toggleSessionState}
+                    />
+                  </div>
+                ) : (
+                  <div 
+                    key={item.id} 
+                    className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div 
+                        className="flex-shrink-0 mt-0.5 relative cursor-pointer"
+                        onClick={() => toggleStepStatus(item.id)}
                       >
-                        {((item.id === "family-info" && item.userStatus === "Completed") || 
-                          (item.id === "co-parent" && item.userStatus === "Completed") || 
-                          (item.id === "waivers" && item.userStatus === "Completed")) && (
-                          <div className="absolute -top-1 -left-1 w-[12px] h-[12px] bg-green-500 rounded-full flex items-center justify-center z-20">
-                            <Check className="h-2 w-2 text-white" />
+                        <div className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200
+                          ${(item.id === "family-info" && item.userStatus === "Completed") || 
+                            (item.id === "co-parent" && item.userStatus === "Completed") || 
+                            (item.id === "waivers" && item.userStatus === "Completed")
+                            ? "bg-[#2e1a87] text-white border border-[#2e1a87]/20 shadow-sm" 
+                            : "bg-white text-[#6c54da] border-[1.5px] border-[#6c54da]/30 shadow-sm"
+                          }`}
+                        >
+                          {((item.id === "family-info" && item.userStatus === "Completed") || 
+                            (item.id === "co-parent" && item.userStatus === "Completed") || 
+                            (item.id === "waivers" && item.userStatus === "Completed")) && (
+                            <div className="absolute -top-1 -left-1 w-[12px] h-[12px] bg-green-500 rounded-full flex items-center justify-center z-20">
+                              <Check className="h-2 w-2 text-white" />
+                            </div>
+                          )}
+                          <div className="flex items-center justify-center">
+                            {item.icon}
                           </div>
-                        )}
-                        <div className="flex items-center justify-center">
-                          {item.icon}
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex-grow">
-                      <div className="flex items-center flex-wrap gap-2 mb-0.5">
-                        <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
-                        {item.required && (
-                          <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
-                            Required
-                          </span>
-                        )}
-                        {!item.required && (
-                          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                            Optional
-                          </span>
-                        )}
                       </div>
                       
-                      <p className="text-xs text-gray-600">{item.description}</p>
+                      <div className="flex-grow">
+                        <div className="flex items-center flex-wrap gap-2 mb-0.5">
+                          <h4 className="text-sm font-medium text-gray-900">{item.title}</h4>
+                          {item.required && (
+                            <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
+                              Required
+                            </span>
+                          )}
+                          {!item.required && (
+                            <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                              Optional
+                            </span>
+                          )}
+                        </div>
+                        
+                        <p className="text-xs text-gray-600">{item.description}</p>
+                      </div>
+                      
+                      <div className="flex-shrink-0 flex flex-col items-end">
+                        <Link 
+                          href={
+                            item.id === "family-info" 
+                              ? "/family-information" 
+                              : item.id === "co-parent" 
+                                ? "/co-parent-invitation" 
+                                : item.id === "waivers" 
+                                  ? "/waivers-and-agreements" 
+                                  : item.id === "holidays" 
+                                    ? "/holiday-preferences" 
+                                    : "/schedule-course"
+                          }
+                        >
+                          <Button
+                            variant="link"
+                            className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
+                          >
+                            {item.action} <ArrowRight className="ml-1 h-3 w-3" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                     
-                    <div className="flex-shrink-0 flex flex-col items-end">
-                      <Link 
-                        href={
-                          item.id === "family-info" 
-                            ? "/family-information" 
-                            : item.id === "co-parent" 
-                              ? "/co-parent-invitation" 
-                              : item.id === "waivers" 
-                                ? "/waivers-and-agreements" 
-                                : item.id === "holidays" 
-                                  ? "/holiday-preferences" 
-                                  : "/schedule-course"
-                        }
-                      >
-                        <Button
-                          variant="link"
-                          className="text-blue-600 hover:text-blue-800 p-0 h-auto text-xs font-medium flex items-center"
-                        >
-                          {item.action} <ArrowRight className="ml-1 h-3 w-3" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                  
-                  {/* Status tags in a separate row */}
-                  <div className="flex justify-end mt-2 px-3">
-                    {item.id === "family-info" ? (
-                      <div className="text-[10px] justify-end flex items-center gap-1.5">
-                        <div className="flex items-center">
-                          <div className={`h-3 w-3 rounded-full ${item.completedSteps === item.totalSteps ? 'bg-green-100' : 'bg-amber-100'} flex items-center justify-center`}>
-                            {item.completedSteps === item.totalSteps ? (
-                              <Check className="h-2 w-2 text-green-600" />
-                            ) : (
-                              <div className="h-1.5 w-1.5 rounded-full bg-amber-500"></div>
-                            )}
+                    {/* Status tags in a separate row */}
+                    <div className="flex justify-end mt-2 px-3">
+                      {item.id === "family-info" ? (
+                        <div className="text-[10px] justify-end flex items-center gap-1.5">
+                          <div className="flex items-center">
+                            <div className={`h-3 w-3 rounded-full ${item.completedSteps === item.totalSteps ? 'bg-green-100' : 'bg-amber-100'} flex items-center justify-center`}>
+                              {item.completedSteps === item.totalSteps ? (
+                                <Check className="h-2 w-2 text-green-600" />
+                              ) : (
+                                <div className="h-1.5 w-1.5 rounded-full bg-amber-500"></div>
+                              )}
+                            </div>
+                          </div>
+                          <span className={`${item.completedSteps === item.totalSteps ? 'text-green-600' : 'text-amber-500'} font-medium`}>
+                            {item.completedSteps}/{item.totalSteps} {item.completedSteps === item.totalSteps ? 'Completed' : 'Pending'}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex text-[10px] gap-3 justify-end">
+                          <div className="flex gap-1">
+                            <span className="text-gray-700">You:</span>
+                            <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
+                              {item.userStatus}
+                            </span>
+                          </div>
+                          <div className="flex gap-1">
+                            <span className="text-gray-700">Co-Parent:</span>
+                            <span className="text-amber-500 font-medium">
+                              {item.coParentStatus}
+                            </span>
                           </div>
                         </div>
-                        <span className={`${item.completedSteps === item.totalSteps ? 'text-green-600' : 'text-amber-500'} font-medium`}>
-                          {item.completedSteps}/{item.totalSteps} {item.completedSteps === item.totalSteps ? 'Completed' : 'Pending'}
-                        </span>
-                      </div>
-                    ) : item.id === "schedule" ? (
-                      <div className="text-[10px] text-amber-500 font-medium">
-                        {item.userStatus}
-                      </div>
-                    ) : (
-                      <div className="flex text-[10px] gap-3 justify-end">
-                        <div className="flex gap-1">
-                          <span className="text-gray-700">You:</span>
-                          <span className={item.userStatus === "Completed" ? "text-green-600 font-medium" : "text-amber-500 font-medium"}>
-                            {item.userStatus}
-                          </span>
-                        </div>
-                        <div className="flex gap-1">
-                          <span className="text-gray-700">Co-Parent:</span>
-                          <span className="text-amber-500 font-medium">
-                            {item.coParentStatus}
-                          </span>
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
+                )
               ))}
             </div>
 
