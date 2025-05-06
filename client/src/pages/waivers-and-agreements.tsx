@@ -10,7 +10,8 @@ import {
   DialogDescription,
   DialogFooter
 } from "@/components/ui/dialog";
-import { ArrowLeft, ArrowDown, Check, Edit, PenTool, Keyboard, FilePenLine } from 'lucide-react';
+import { ArrowLeft, ArrowDown, Check, Edit, PenTool, Keyboard, FilePenLine, Play } from 'lucide-react';
+import michaelLundyVideo from '@/assets/michael_lundy_video.jpg';
 import { useLocation } from 'wouter';
 import Player from '@vimeo/player';
 import SignatureCanvas from 'react-signature-canvas';
@@ -232,8 +233,17 @@ export default function WaiversAndAgreements() {
             className="w-full aspect-video bg-gray-100 rounded-md overflow-hidden mb-4"
           >
             {!iframeLoaded && (
-              <div className="flex items-center justify-center h-full">
-                <div className="animate-spin h-8 w-8 border-4 border-[#2e1a87] border-t-transparent rounded-full"></div>
+              <div className="flex items-center justify-center h-full relative">
+                <img 
+                  src={michaelLundyVideo} 
+                  alt="Michael Lundy - Resolve Co-Founder" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <Play className="h-7 w-7 text-white fill-white" />
+                  </div>
+                </div>
               </div>
             )}
           </div>
