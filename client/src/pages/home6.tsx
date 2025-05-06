@@ -16,6 +16,7 @@ import {
   Home,
   LockIcon,
   MessageCircle,
+  Play,
   Users,
   Check,
   CalendarDays,
@@ -500,12 +501,66 @@ export default function Home6() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-medium text-gray-900">Resources</h2>
                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                  2 Available
+                  4 Available
                 </span>
               </div>
 
-              {/* Resources Grid - 2 items per row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Resources Grid - 2x2 layout */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Video 1: The Truth About the Family Law System */}
+                <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
+                  <div className="relative aspect-video bg-gray-900">
+                    {/* Video thumbnail placeholder */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <Play className="h-5 w-5 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-sm font-medium text-gray-900">The Truth About the Family Law System</h3>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs text-gray-600">Video • 8 min</span>
+                    </div>
+                    <div className="flex justify-end mt-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Video 2: What is a Parenting Plan */}
+                <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden flex flex-col h-full">
+                  <div className="relative aspect-video bg-gray-900">
+                    {/* Video thumbnail placeholder */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <Play className="h-5 w-5 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-sm font-medium text-gray-900">What is a Parenting Plan</h3>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs text-gray-600">Video • 5 min</span>
+                    </div>
+                    <div className="flex justify-end mt-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-blue-600"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Co-Parenting Guide */}
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 flex items-start h-full">
                   <div className="bg-red-100 p-1.5 rounded-md mr-3 flex-shrink-0">
