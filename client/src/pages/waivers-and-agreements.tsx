@@ -255,15 +255,11 @@ export default function WaiversAndAgreements() {
 
         {/* Agreement section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Resolve Co-Parenting Agreement
-          </h2>
-
           <div className="relative">
             <div
               ref={agreementRef}
               onScroll={handleScroll}
-              className="prose prose-slate h-80 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif"
+              className="prose prose-slate h-96 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif"
             >
               <h3>TERMS AND CONDITIONS AGREEMENT</h3>
               
