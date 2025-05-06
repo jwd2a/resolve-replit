@@ -120,24 +120,20 @@ export default function CoursePreview() {
               </p>
             </div>
             
-            {/* Access Warning Banner - moved to hero section and made very compact */}
+            {/* Access Warning Banner - single line with everything inline */}
             {incompleteItems.length > 0 && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 ml-3 max-w-[240px] flex-shrink-0">
-                <div className="flex items-center">
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mr-2 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-medium text-amber-800 text-[11px] leading-tight">
-                      Complete items to unlock course
-                    </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Button 
-                        className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px]"
-                        onClick={() => navigate("/")}
-                      >
-                        Go to Checklist
-                      </Button>
-                    </div>
-                  </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 ml-3 max-w-xs flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
+                  <span className="font-medium text-amber-800 text-[11px] whitespace-nowrap">
+                    Complete items to unlock
+                  </span>
+                  <Button 
+                    className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px] ml-1"
+                    onClick={() => navigate("/")}
+                  >
+                    Go to Checklist
+                  </Button>
                 </div>
               </div>
             )}
