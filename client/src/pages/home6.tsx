@@ -146,11 +146,24 @@ export default function Home6() {
   
   // Toggle function for the click-to-toggle interaction
   const toggleStepStatus = (stepId: string) => {
+    // Update the top progress bar steps
     setSteps(steps.map(step => 
       step.id === stepId 
         ? { ...step, completed: !step.completed } 
         : step
     ));
+    
+    // Also update the corresponding checklist item
+    setRequirements(requirements.map(req => {
+      if (req.id === stepId) {
+        const newStatus = req.userStatus === "Completed" ? "Pending" : "Completed";
+        return { 
+          ...req, 
+          userStatus: newStatus
+        };
+      }
+      return req;
+    }));
   };
   
   // Update the Payment step when paymentStatus changes
@@ -373,7 +386,10 @@ export default function Home6() {
                   className="bg-white rounded-md p-3 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-0.5 relative">
+                    <div 
+                      className="flex-shrink-0 mt-0.5 relative cursor-pointer"
+                      onClick={() => toggleStepStatus(item.id)}
+                    >
                       <div className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200
                         ${(item.id === "family-info" && item.userStatus === "Completed") || 
                           (item.id === "co-parent" && item.userStatus === "Completed") || 
@@ -389,9 +405,7 @@ export default function Home6() {
                             <Check className="h-2 w-2 text-white" />
                           </div>
                         )}
-                        <div className={`w-5 h-5 ${(item.id === "family-info" && item.userStatus !== "Completed") || 
-                            (item.id === "co-parent" && item.userStatus !== "Completed") || 
-                            (item.id === "waivers" && item.userStatus !== "Completed") ? "opacity-80" : ""}`}>
+                        <div className="flex items-center justify-center">
                           {item.icon}
                         </div>
                       </div>
