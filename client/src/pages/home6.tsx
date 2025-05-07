@@ -38,6 +38,7 @@ export default function Home6() {
   const [sessionDate, setSessionDate] = useState<Date | undefined>(
     new Date(new Date().setDate(new Date().getDate() + 10)) // Example date 10 days in future
   );
+  const [isSchedulingSession, setIsSchedulingSession] = useState(false); // For scheduling modal
   
   // Check if waiver is completed from localStorage
   const isWaiverCompleted = typeof window !== 'undefined' ? 
@@ -768,6 +769,56 @@ export default function Home6() {
               )}
             </div>
 
+            {/* Schedule Course Session Card */}
+            <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm mt-6">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h2 className="text-base font-medium text-gray-900">Schedule Course Session</h2>
+                  <p className="text-gray-600 text-xs mt-1">
+                    Plan ahead for uninterrupted focus time
+                  </p>
+                </div>
+                <div className="bg-indigo-50 rounded-full px-3 py-1 flex items-center text-indigo-700 font-medium text-xs">
+                  <Clock className="h-3.5 w-3.5 mr-1" />
+                  Optional
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5 mb-3">
+                <p className="text-blue-800 text-xs">
+                  The course requires several hours of focused attention. Setting aside dedicated time will help you complete it effectively.
+                </p>
+              </div>
+              
+              <Button
+                className="w-full py-2 bg-indigo-50 text-[#2e1a87] hover:bg-indigo-100 border border-indigo-100 font-medium flex items-center justify-center text-sm"
+                onClick={() => {
+                  setIsSchedulingSession(true);
+                  // For demo purposes, let's simulate scheduling by changing the session state
+                  if (sessionState === 'none') {
+                    setTimeout(() => {
+                      setSessionState('proposed');
+                      setIsSchedulingSession(false);
+                    }, 1000);
+                  } else {
+                    setIsSchedulingSession(false);
+                  }
+                }}
+              >
+                {isSchedulingSession ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 border-2 border-[#2e1a87] border-t-transparent rounded-full mr-2"></div>
+                    Scheduling...
+                  </>
+                ) : (
+                  <>
+                    <Calendar className="h-4 w-4 mr-1.5" />
+                    Schedule Course Time
+                  </>
+                )}
+              </Button>
+            </div>
+            
             {/* Need assistance - Now aligned with Resources section */}
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm mt-6" style={{ height: '150px' }}>
               <div className="flex items-start gap-3 mb-3">
