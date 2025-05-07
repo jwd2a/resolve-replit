@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { differenceInCalendarDays } from "date-fns";
 import { useAuth } from "@/hooks/use-auth";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
 import { NavigationMenu } from "@/components/NavigationMenu";
@@ -35,10 +36,36 @@ export default function Home6() {
   
   // State for the Course Session Status Block
   const [sessionState, setSessionState] = useState<SessionState>('none'); // 'none', 'proposed', 'scheduled'
-  const [sessionDate, setSessionDate] = useState<Date | undefined>(
-    new Date(new Date().setDate(new Date().getDate() + 10)) // Example date 10 days in future
-  );
+  const [sessionDate, setSessionDate] = useState<Date | undefined>(undefined);
+  const [sessionTime, setSessionTime] = useState<string | undefined>(undefined);
   const [isSchedulingSession, setIsSchedulingSession] = useState(false); // For scheduling modal
+  const [daysRemaining, setDaysRemaining] = useState<number | undefined>(undefined);
+  
+  // Check localStorage for session state on load
+  useEffect(() => {
+    const storedState = localStorage.getItem('courseSessionState');
+    const storedDate = localStorage.getItem('courseSessionDate');
+    const storedTime = localStorage.getItem('courseSessionTime');
+    
+    if (storedState) {
+      setSessionState(storedState as SessionState);
+    }
+    
+    if (storedDate) {
+      const date = new Date(storedDate);
+      setSessionDate(date);
+      
+      // Calculate days remaining
+      if (date) {
+        const days = differenceInCalendarDays(date, new Date());
+        setDaysRemaining(days > 0 ? days : undefined);
+      }
+    }
+    
+    if (storedTime) {
+      setSessionTime(storedTime);
+    }
+  }, []);
   
   // Check if waiver is completed from localStorage
   const isWaiverCompleted = typeof window !== 'undefined' ? 
@@ -140,9 +167,15 @@ export default function Home6() {
       icon: <Clock className="h-4 w-4 text-current" />,
       title: "Schedule Course Session",
       description: "Pick a date and time to complete the course with your co-parent.",
-      userStatus: "No session scheduled",
-      coParentStatus: "",
-      action: "Schedule Now",
+      userStatus: sessionState === 'none' ? "No session scheduled" : 
+                 sessionState === 'proposed' ? "Session proposed" : 
+                 "Session scheduled",
+      coParentStatus: sessionState === 'scheduled' ? "Confirmed" : 
+                     sessionState === 'proposed' ? "Pending" : 
+                     "",
+      action: sessionState === 'none' ? "Schedule Now" : 
+             sessionState === 'proposed' ? "View Proposal" :
+             "View Schedule",
       actionLink: "/schedule-course",
       required: false,
     },
@@ -773,50 +806,141 @@ export default function Home6() {
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm mt-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h2 className="text-base font-medium text-gray-900">Schedule Course Session</h2>
+                  <h2 className="text-base font-medium text-gray-900">Course Session</h2>
                   <p className="text-gray-600 text-xs mt-1">
-                    Plan ahead for uninterrupted focus time
+                    {sessionState === 'none' ? 'Plan ahead for uninterrupted focus time' : 
+                     sessionState === 'proposed' ? 'Session time proposed - waiting for response' :
+                     'Your scheduled session is confirmed'}
                   </p>
                 </div>
-                <div className="bg-indigo-50 rounded-full px-3 py-1 flex items-center text-indigo-700 font-medium text-xs">
-                  <Clock className="h-3.5 w-3.5 mr-1" />
-                  Optional
-                </div>
-              </div>
-              
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5 mb-3">
-                <p className="text-blue-800 text-xs">
-                  The course requires several hours of focused attention. Setting aside dedicated time will help you complete it effectively.
-                </p>
-              </div>
-              
-              <Button
-                className="w-full py-2 bg-indigo-50 text-[#2e1a87] hover:bg-indigo-100 border border-indigo-100 font-medium flex items-center justify-center text-sm"
-                onClick={() => {
-                  setIsSchedulingSession(true);
-                  // For demo purposes, let's simulate scheduling by changing the session state
-                  if (sessionState === 'none') {
-                    setTimeout(() => {
-                      setSessionState('proposed');
-                      setIsSchedulingSession(false);
-                    }, 1000);
-                  } else {
-                    setIsSchedulingSession(false);
-                  }
-                }}
-              >
-                {isSchedulingSession ? (
-                  <>
-                    <div className="animate-spin h-4 w-4 border-2 border-[#2e1a87] border-t-transparent rounded-full mr-2"></div>
-                    Scheduling...
-                  </>
-                ) : (
-                  <>
-                    <Calendar className="h-4 w-4 mr-1.5" />
-                    Schedule Course Time
-                  </>
+                {sessionState === 'none' && (
+                  <div className="bg-indigo-50 rounded-full px-3 py-1 flex items-center text-indigo-700 font-medium text-xs">
+                    <Clock className="h-3.5 w-3.5 mr-1" />
+                    Optional
+                  </div>
                 )}
-              </Button>
+                {sessionState === 'proposed' && (
+                  <div className="bg-amber-50 rounded-full px-3 py-1 flex items-center text-amber-700 font-medium text-xs">
+                    <Clock className="h-3.5 w-3.5 mr-1" />
+                    Pending
+                  </div>
+                )}
+                {sessionState === 'scheduled' && (
+                  <div className="bg-green-50 rounded-full px-3 py-1 flex items-center text-green-700 font-medium text-xs">
+                    <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                    Confirmed
+                  </div>
+                )}
+              </div>
+              
+              {/* No session scheduled state */}
+              {sessionState === 'none' && (
+                <>
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5 mb-3">
+                    <p className="text-blue-800 text-xs">
+                      The course requires several hours of focused attention. Setting aside dedicated time will help you complete it effectively.
+                    </p>
+                  </div>
+                  
+                  <Link href="/schedule-course">
+                    <Button
+                      className="w-full py-2 bg-indigo-50 text-[#2e1a87] hover:bg-indigo-100 border border-indigo-100 font-medium flex items-center justify-center text-sm"
+                      onClick={() => {
+                        setIsSchedulingSession(true);
+                      }}
+                    >
+                      {isSchedulingSession ? (
+                        <>
+                          <div className="animate-spin h-4 w-4 border-2 border-[#2e1a87] border-t-transparent rounded-full mr-2"></div>
+                          Scheduling...
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="h-4 w-4 mr-1.5" />
+                          Schedule Course Time
+                        </>
+                      )}
+                    </Button>
+                  </Link>
+                </>
+              )}
+              
+              {/* Session proposed state */}
+              {sessionState === 'proposed' && (
+                <>
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 mb-3">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-amber-800 text-xs font-medium mb-1">Session Proposed</p>
+                        <div className="flex items-center">
+                          <Calendar className="h-3.5 w-3.5 text-amber-700 mr-1.5" />
+                          <span className="text-amber-800 text-xs">{sessionDate?.toLocaleDateString()} at 3:00 PM</span>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
+                        <AlertCircle className="h-4 w-4 text-amber-500" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link href="/schedule-course">
+                      <Button
+                        className="w-full py-2 border-indigo-200 text-[#2e1a87] hover:bg-indigo-50 font-medium text-xs"
+                        variant="outline"
+                        onClick={() => {
+                          // Demo purposes - this would go to the scheduling page in reality
+                        }}
+                      >
+                        Propose New Time
+                      </Button>
+                    </Link>
+                    
+                    <Button
+                      className="w-full py-2 bg-[#2e1a87] hover:bg-[#25156d] text-white font-medium text-xs"
+                      onClick={() => {
+                        setSessionState('scheduled');
+                      }}
+                    >
+                      Accept Proposed Time
+                    </Button>
+                  </div>
+                </>
+              )}
+              
+              {/* Session scheduled state */}
+              {sessionState === 'scheduled' && (
+                <>
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-green-800 text-xs font-medium mb-1">Session Confirmed</p>
+                        <div className="flex items-center mb-1">
+                          <Calendar className="h-3.5 w-3.5 text-green-700 mr-1.5" />
+                          <span className="text-green-800 text-xs">{sessionDate?.toLocaleDateString()} at 3:00 PM</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-3.5 w-3.5 text-green-700 mr-1.5" />
+                          <span className="text-green-800 text-xs font-medium">2 days remaining</span>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Link href="/schedule-course">
+                    <Button
+                      className="w-full py-2 border-indigo-200 text-[#2e1a87] hover:bg-indigo-50 font-medium text-xs"
+                      variant="outline"
+                    >
+                      <Edit className="h-3.5 w-3.5 mr-1.5" />
+                      Reschedule Session
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
             
             {/* Need assistance - Now aligned with Resources section */}
