@@ -287,7 +287,7 @@ export default function Home6() {
           {/* Refined badge-style progress tracker with improved layout */}
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6 mt-2">
             {/* Step badges with increased spacing */}
-            <div className="flex items-center justify-center md:justify-start md:space-x-8 space-x-5 flex-wrap">
+            <div className="flex items-center justify-center md:justify-start md:space-x-12 space-x-8 flex-wrap">
               {steps.map((step) => (
                 <div 
                   key={step.id} 
