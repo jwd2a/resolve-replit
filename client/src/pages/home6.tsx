@@ -400,7 +400,7 @@ export default function Home6() {
             </div>
             
             {/* Checklist items */}
-            <div className="space-y-3">
+            <div className="space-y-3 bg-white p-4 rounded-lg shadow-sm">
               {requirements.map((item) => (
                 <div 
                   key={item.id} 
