@@ -57,7 +57,7 @@ export function NavigationMenu() {
   };
   
   return (
-    <div className="bg-[#2e1a87] border-b shadow-md">
+    <div className="bg-[#2e1a87] shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-6">
           {/* Logo */}
