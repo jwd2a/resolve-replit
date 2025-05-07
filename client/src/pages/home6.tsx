@@ -162,23 +162,7 @@ export default function Home6() {
       actionLink: "/holiday-preferences",
       required: true,
     }] : []),
-    {
-      id: "schedule",
-      icon: <Clock className="h-4 w-4 text-current" />,
-      title: "Schedule Course Session",
-      description: "Pick a date and time to complete the course with your co-parent.",
-      userStatus: sessionState === 'none' ? "No session scheduled" : 
-                 sessionState === 'proposed' ? "Session proposed" : 
-                 "Session scheduled",
-      coParentStatus: sessionState === 'scheduled' ? "Confirmed" : 
-                     sessionState === 'proposed' ? "Pending" : 
-                     "",
-      action: sessionState === 'none' ? "Schedule Now" : 
-             sessionState === 'proposed' ? "View Proposal" :
-             "View Schedule",
-      actionLink: "/schedule-course",
-      required: false,
-    },
+    // Schedule Course Session item removed per request
   ]);
   
   // Toggle function for the click-to-toggle interaction
