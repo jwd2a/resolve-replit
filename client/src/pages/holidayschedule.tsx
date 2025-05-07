@@ -298,211 +298,230 @@ export default function HolidaySchedule() {
     });
   };
 
-  return (
-    <div className="min-h-screen bg-[#f7f7f9]">
-      <NavigationMenu />
-      
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left sidebar - could be added here in the future */}
-          
-          {/* Main content area */}
-          <div className="lg:col-span-12">
-            <Card className="shadow-sm">
-              <CardHeader className="border-b bg-[#2e1a87] text-white rounded-t-lg">
-                <CardTitle className="text-2xl">Holiday Schedule</CardTitle>
-                <CardDescription className="text-gray-100">
-                  Select and configure the holidays that matter to your family.
-                </CardDescription>
-              </CardHeader>
+  // Render a compact holiday item component for the right panel
+  const HolidayItem = ({ holiday }: { holiday: Holiday }) => {
+    return (
+      <div className="border-b border-gray-100 last:border-0">
+        <AccordionItem value={holiday.id} className="border-0">
+          <div className="flex items-center py-3">
+            <Switch 
+              checked={holiday.included} 
+              onCheckedChange={() => toggleHoliday(holiday.id)}
+              className={`mr-3 ${holiday.included ? 'bg-[#2e1a87]' : ''}`}
+            />
+            <AccordionTrigger className="hover:no-underline py-0 flex-1">
+              <span className={`text-sm font-medium ${!holiday.included ? 'text-gray-400' : ''}`}>
+                {holiday.name}
+              </span>
+            </AccordionTrigger>
+          </div>
+          <AccordionContent>
+            <div className="pb-2 pt-1 space-y-3">
+              <div>
+                <Label className="text-xs text-gray-500 mb-1 block">Timesharing Type</Label>
+                <Select
+                  value={holiday.timesharingType}
+                  onValueChange={(value: 'alternate' | 'oneParent' | 'normal') => 
+                    updateHoliday(holiday.id, 'timesharingType', value)
+                  }
+                  disabled={!holiday.included}
+                >
+                  <SelectTrigger className="w-full h-8 text-sm">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="alternate">Alternate Even/Odd Years</SelectItem>
+                    <SelectItem value="oneParent">One Parent Always</SelectItem>
+                    <SelectItem value="normal">Follow Normal Timesharing</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               
-              <CardContent className="pt-6 pb-2">
-                {/* Info tip banner */}
-                <div className="bg-blue-50 p-4 mb-6 rounded-lg flex gap-3 items-start">
-                  <InfoIcon className="text-blue-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-blue-800 font-medium">Tips for a stress-free holiday schedule:</p>
-                    <ul className="mt-1 text-blue-700 text-sm list-disc list-inside">
-                      <li>Plan ahead to reduce stress and anxiety</li>
-                      <li>Alternate holidays between parents whenever possible</li>
-                      <li>Always prioritize what works best for your children</li>
-                      <li>Be specific about pick-up and drop-off times</li>
-                    </ul>
+              {holiday.timesharingType === 'alternate' && (
+                <div>
+                  <Label className="text-xs text-gray-500 mb-1 block">Even Years Parent</Label>
+                  <Select
+                    value={holiday.evenYearParent}
+                    onValueChange={(value: 'mother' | 'father') => 
+                      updateHoliday(holiday.id, 'evenYearParent', value)
+                    }
+                    disabled={!holiday.included}
+                  >
+                    <SelectTrigger className="w-full h-8 text-sm">
+                      <SelectValue placeholder="Select parent" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mother">Mother</SelectItem>
+                      <SelectItem value="father">Father</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              
+              {holiday.timesharingType === 'oneParent' && (
+                <div>
+                  <Label className="text-xs text-gray-500 mb-1 block">Designated Parent</Label>
+                  <Select
+                    value={holiday.designatedParent}
+                    onValueChange={(value: 'mother' | 'father') => 
+                      updateHoliday(holiday.id, 'designatedParent', value)
+                    }
+                    disabled={!holiday.included}
+                  >
+                    <SelectTrigger className="w-full h-8 text-sm">
+                      <SelectValue placeholder="Select parent" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mother">Mother</SelectItem>
+                      <SelectItem value="father">Father</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              
+              <div>
+                <Label className="text-xs text-gray-500 mb-1 block">Time Range</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="time"
+                    value={holiday.startTime}
+                    onChange={(e) => updateHoliday(holiday.id, 'startTime', e.target.value)}
+                    disabled={!holiday.included}
+                    className="h-8 text-sm"
+                  />
+                  <span className="text-gray-400">—</span>
+                  <Input
+                    type="time"
+                    value={holiday.endTime}
+                    onChange={(e) => updateHoliday(holiday.id, 'endTime', e.target.value)}
+                    disabled={!holiday.included}
+                    className="h-8 text-sm"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label className="text-xs text-gray-500 mb-1 block">Notes</Label>
+                <Textarea
+                  placeholder="Add details..."
+                  value={holiday.notes}
+                  onChange={(e) => updateHoliday(holiday.id, 'notes', e.target.value)}
+                  disabled={!holiday.included}
+                  className="resize-none text-sm min-h-[60px]"
+                  rows={2}
+                />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </div>
+    );
+  };
+
+  // For demo purposes - renders the component in both full view and sidebar view
+  // In actual implementation, this would be just one part based on where it appears
+  return (
+    <>
+      {/* DEMO ONLY: Full page version for when accessed directly via URL */}
+      <div className="bg-white min-h-screen">
+        <NavigationMenu />
+        
+        <div className="container mx-auto py-8 px-4 max-w-7xl">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left column - Course modules (as in the screenshot) */}
+            <div className="col-span-12 md:col-span-3 hidden md:block">
+              <div className="bg-white rounded-lg shadow-sm border p-4">
+                <div className="text-sm font-medium text-gray-500 mb-3">Module 3</div>
+                <div className="text-base font-semibold mb-4">Timesharing Schedule</div>
+                <div className="space-y-2">
+                  <div className="flex items-center p-2 bg-gray-100 rounded text-sm">
+                    <div className="w-5 h-5 rounded-full bg-[#2e1a87] flex items-center justify-center text-white mr-3 text-xs">1</div>
+                    <span>Introduction to Time Sharing & Travel</span>
+                  </div>
+                  <div className="flex items-center p-2 bg-gray-100 rounded text-sm">
+                    <div className="w-5 h-5 rounded-full bg-[#2e1a87] flex items-center justify-center text-white mr-3 text-xs">2</div>
+                    <span>Scheduling and Our Calendar</span>
+                  </div>
+                  <div className="flex items-center p-2 bg-gray-100 rounded text-sm">
+                    <div className="w-5 h-5 rounded-full bg-[#2e1a87] flex items-center justify-center text-white mr-3 text-xs">3</div>
+                    <span>Weekday and Weekend Schedule</span>
+                  </div>
+                  <div className="flex items-center p-2 bg-[#2e1a87] rounded text-sm text-white">
+                    <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-[#2e1a87] mr-3 text-xs font-bold">4</div>
+                    <span>Holiday Schedule</span>
                   </div>
                 </div>
+              </div>
+            </div>
+            
+            {/* Middle column - Content (video as in screenshot) */}
+            <div className="col-span-12 md:col-span-5">
+              <div className="bg-[#2e1a87] rounded-lg overflow-hidden">
+                <div className="aspect-video relative flex items-center justify-center">
+                  <div className="text-white text-center p-8">
+                    <h2 className="text-xl font-light mb-4 tracking-wider">TIMESHARING</h2>
+                    <h1 className="text-3xl font-semibold">YOUR HOLIDAY SCHEDULE</h1>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-medium mb-1 text-blue-800">Things to keep in mind</h3>
+                <ul className="space-y-2 text-sm text-blue-700">
+                  <li className="flex">
+                    <span className="mr-2">•</span>
+                    <span>Plan ahead to ensure stress-free holiday transitions.</span>
+                  </li>
+                  <li className="flex">
+                    <span className="mr-2">•</span>
+                    <span>Be open to creating new traditions.</span>
+                  </li>
+                  <li className="flex">
+                    <span className="mr-2">•</span>
+                    <span>Consider alternating years or splitting holiday time.</span>
+                  </li>
+                  <li className="flex">
+                    <span className="mr-2">•</span>
+                    <span>Prioritize your child's joy over personal preferences.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            {/* Right column - Holiday schedule component */}
+            <div className="col-span-12 md:col-span-4">
+              <div className="bg-white rounded-lg shadow-sm border">
+                <div className="p-4 border-b">
+                  <h2 className="text-lg font-semibold">Holiday Schedule</h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Configure each holiday by selecting which parent will have the children and the times for the visitation. Click on a holiday to expand its details.
+                  </p>
+                </div>
                 
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {/* Holiday list */}
-                    <Accordion type="multiple" className="space-y-4">
-                      {holidays.map((holiday, index) => (
-                        <Card key={holiday.id} className={`overflow-hidden ${holiday.included ? 'border-[#2e1a87]/20' : 'opacity-70 border-dashed'}`}>
-                          <div className="flex items-center p-4 justify-between bg-gray-50 border-b">
-                            <div className="flex items-center gap-3">
-                              <Switch 
-                                checked={holiday.included} 
-                                onCheckedChange={() => toggleHoliday(holiday.id)}
-                                className={holiday.included ? 'bg-[#2e1a87]' : ''}
-                              />
-                              <h3 className="font-medium">{holiday.name}</h3>
-                            </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className="text-[#2e1a87]"
-                              onClick={() => toggleExpand(holiday.id)}
-                            >
-                              {holiday.isExpanded ? 'Collapse' : 'Expand'}
-                            </Button>
-                          </div>
-                          
-                          {holiday.isExpanded && (
-                            <CardContent className="pt-4">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                  <FormLabel className="text-sm font-medium mb-1.5 block">
-                                    Timesharing Type
-                                  </FormLabel>
-                                  <Select
-                                    value={holiday.timesharingType}
-                                    onValueChange={(value: 'alternate' | 'oneParent' | 'normal') => 
-                                      updateHoliday(holiday.id, 'timesharingType', value)
-                                    }
-                                    disabled={!holiday.included}
-                                  >
-                                    <SelectTrigger className="w-full">
-                                      <SelectValue placeholder="Select type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="alternate">Alternate Even/Odd Years</SelectItem>
-                                      <SelectItem value="oneParent">One Parent Always</SelectItem>
-                                      <SelectItem value="normal">Follow Normal Timesharing</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                  
-                                  {holiday.timesharingType === 'alternate' && (
-                                    <div className="mt-4">
-                                      <FormLabel className="text-sm font-medium mb-1.5 block">
-                                        Even Years Parent
-                                      </FormLabel>
-                                      <Select
-                                        value={holiday.evenYearParent}
-                                        onValueChange={(value: 'mother' | 'father') => 
-                                          updateHoliday(holiday.id, 'evenYearParent', value)
-                                        }
-                                        disabled={!holiday.included}
-                                      >
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select parent" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="mother">Mother</SelectItem>
-                                          <SelectItem value="father">Father</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                      <FormDescription className="text-xs mt-1">
-                                        Odd years will automatically go to the other parent.
-                                      </FormDescription>
-                                    </div>
-                                  )}
-                                  
-                                  {holiday.timesharingType === 'oneParent' && (
-                                    <div className="mt-4">
-                                      <FormLabel className="text-sm font-medium mb-1.5 block">
-                                        Designated Parent
-                                      </FormLabel>
-                                      <Select
-                                        value={holiday.designatedParent}
-                                        onValueChange={(value: 'mother' | 'father') => 
-                                          updateHoliday(holiday.id, 'designatedParent', value)
-                                        }
-                                        disabled={!holiday.included}
-                                      >
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select parent" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="mother">Mother</SelectItem>
-                                          <SelectItem value="father">Father</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                      <FormDescription className="text-xs mt-1">
-                                        This parent will always have this holiday.
-                                      </FormDescription>
-                                    </div>
-                                  )}
-                                </div>
-                                
-                                <div>
-                                  <div className="mb-4">
-                                    <FormLabel className="text-sm font-medium mb-1.5 block flex items-center">
-                                      <Clock size={16} className="mr-1.5" />
-                                      Time Range
-                                    </FormLabel>
-                                    <div className="flex items-center gap-2">
-                                      <div className="flex-1">
-                                        <FormLabel className="text-xs text-gray-500">Start Time</FormLabel>
-                                        <Input
-                                          type="time"
-                                          value={holiday.startTime}
-                                          onChange={(e) => updateHoliday(holiday.id, 'startTime', e.target.value)}
-                                          disabled={!holiday.included}
-                                          className="mt-1"
-                                        />
-                                      </div>
-                                      <div className="pt-5">—</div>
-                                      <div className="flex-1">
-                                        <FormLabel className="text-xs text-gray-500">End Time</FormLabel>
-                                        <Input
-                                          type="time"
-                                          value={holiday.endTime}
-                                          onChange={(e) => updateHoliday(holiday.id, 'endTime', e.target.value)}
-                                          disabled={!holiday.included}
-                                          className="mt-1"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <div>
-                                    <FormLabel className="text-sm font-medium mb-1.5 block">
-                                      Notes (Optional)
-                                    </FormLabel>
-                                    <Textarea
-                                      placeholder="Add any specific details about this holiday..."
-                                      value={holiday.notes}
-                                      onChange={(e) => updateHoliday(holiday.id, 'notes', e.target.value)}
-                                      disabled={!holiday.included}
-                                      className="resize-none"
-                                      rows={2}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          )}
-                        </Card>
-                      ))}
-                    </Accordion>
-                    
-                    {/* Add new holiday section */}
-                    {showAddHoliday ? (
-                      <Card className="mt-4 border-dashed">
-                        <CardContent className="pt-4">
-                          <FormLabel className="text-sm font-medium mb-1.5 block">
-                            Holiday Name
-                          </FormLabel>
+                <div className="p-0">
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                      <Accordion type="multiple" className="w-full">
+                        {holidays.map(holiday => (
+                          <HolidayItem key={holiday.id} holiday={holiday} />
+                        ))}
+                      </Accordion>
+                      
+                      {/* Add new holiday section */}
+                      {showAddHoliday ? (
+                        <div className="p-4 border-t">
+                          <Label className="text-xs text-gray-500 mb-1 block">Holiday Name</Label>
                           <div className="flex gap-2">
                             <Input
                               value={newHolidayName}
                               onChange={(e) => setNewHolidayName(e.target.value)}
                               placeholder="Enter holiday name..."
-                              className="flex-1"
+                              className="flex-1 h-8 text-sm"
                             />
                             <Button 
                               type="button" 
                               onClick={addNewHoliday}
-                              className="bg-[#2e1a87] hover:bg-[#25156d]"
+                              className="bg-[#2e1a87] hover:bg-[#25156d] h-8 px-3 text-xs"
                             >
                               Add
                             </Button>
@@ -513,41 +532,123 @@ export default function HolidaySchedule() {
                                 setShowAddHoliday(false);
                                 setNewHolidayName("");
                               }}
+                              className="h-8 px-3 text-xs"
                             >
                               Cancel
                             </Button>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setShowAddHoliday(true)}
-                        className="mt-4 w-full border-dashed text-[#2e1a87]"
-                      >
-                        + Add Custom Holiday
-                      </Button>
-                    )}
-                    
-                    {/* Sticky save button */}
-                    <div className="sticky bottom-4 flex justify-end mt-6 pb-4">
-                      <Button 
-                        type="submit" 
-                        className="bg-[#2e1a87] hover:bg-[#25156d] shadow-md"
-                        size="lg"
-                      >
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Changes
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+                        </div>
+                      ) : (
+                        <div className="p-4 border-t">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setShowAddHoliday(true)}
+                            className="w-full text-sm border-dashed text-[#2e1a87] h-8"
+                          >
+                            + Add Custom Holiday
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {/* Save button */}
+                      <div className="p-4 border-t">
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
+                        >
+                          <Save className="mr-2 h-4 w-4" />
+                          Save Changes
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      
+      {/* This is the component that would be used when embedded in the actual course page */}
+      <div className="hidden">
+        {/* Right sidebar component only */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-4 border-b">
+            <h2 className="text-lg font-semibold">Holiday Schedule</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Configure each holiday by selecting which parent will have the children and the times for the visitation. Click on a holiday to expand its details.
+            </p>
+          </div>
+          
+          <div className="p-0">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <Accordion type="multiple" className="w-full">
+                  {holidays.map(holiday => (
+                    <HolidayItem key={holiday.id} holiday={holiday} />
+                  ))}
+                </Accordion>
+                
+                {/* Add new holiday section */}
+                {showAddHoliday ? (
+                  <div className="p-4 border-t">
+                    <Label className="text-xs text-gray-500 mb-1 block">Holiday Name</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value={newHolidayName}
+                        onChange={(e) => setNewHolidayName(e.target.value)}
+                        placeholder="Enter holiday name..."
+                        className="flex-1 h-8 text-sm"
+                      />
+                      <Button 
+                        type="button" 
+                        onClick={addNewHoliday}
+                        className="bg-[#2e1a87] hover:bg-[#25156d] h-8 px-3 text-xs"
+                      >
+                        Add
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => {
+                          setShowAddHoliday(false);
+                          setNewHolidayName("");
+                        }}
+                        className="h-8 px-3 text-xs"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 border-t">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowAddHoliday(true)}
+                      className="w-full text-sm border-dashed text-[#2e1a87] h-8"
+                    >
+                      + Add Custom Holiday
+                    </Button>
+                  </div>
+                )}
+                
+                {/* Save button */}
+                <div className="p-4 border-t">
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
+                  >
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Changes
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
