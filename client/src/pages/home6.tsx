@@ -342,7 +342,7 @@ export default function Home6() {
               ))}
             </div>
             
-            {/* Set a Schedule Component */}
+            {/* Course Session Status Block */}
             <CourseSessionStatusBlock 
               state={sessionState}
               sessionDate={sessionDate}
