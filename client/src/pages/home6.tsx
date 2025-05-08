@@ -384,9 +384,9 @@ export default function Home6() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main content area - spans 2 columns on large screens */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Pre-course checklist section */}
-            <div>
-              <div className="flex items-start gap-3 mb-2">
+            {/* Pre-course checklist section with lightbox containing header and items */}
+            <div className="bg-white p-4 rounded-lg shadow-sm">
+              <div className="flex items-start gap-3 mb-4">
                 <div className="bg-indigo-50 p-2 rounded-md">
                   <FileText className="h-5 w-5 text-indigo-600" />
                 </div>
@@ -397,10 +397,9 @@ export default function Home6() {
                   </p>
                 </div>
               </div>
-            </div>
-            
-            {/* Checklist items */}
-            <div className="space-y-3 bg-white p-4 rounded-lg shadow-sm">
+              
+              {/* Checklist items */}
+              <div className="space-y-3">
               {requirements.map((item) => (
                 <div 
                   key={item.id} 
@@ -514,6 +513,7 @@ export default function Home6() {
                   </div>
                 </div>
               ))}
+            </div>
             </div>
 
             {/* Resources Section - Moved here from sidebar and made full-width */}
