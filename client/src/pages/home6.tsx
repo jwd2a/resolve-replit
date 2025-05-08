@@ -342,23 +342,16 @@ export default function Home6() {
               ))}
             </div>
             
-            {/* Course Session Status Block - hidden for now */}
-            {/* 
-            <div 
-              className="flex-shrink-0 rounded-md cursor-pointer transition-all duration-200 h-auto"
-              onClick={toggleSessionState}
-            >
-              <CourseSessionStatusBlock 
-                state={sessionState}
-                sessionDate={sessionDate}
-                sessionTime="3:00 PM"
-                daysRemaining={sessionState === 'scheduled' ? 2 : undefined}
-                onPropose={toggleSessionState}
-                onProposeNew={toggleSessionState}
-                onAccept={toggleSessionState}
-              />
-            </div>
-            */}
+            {/* Set a Schedule Component */}
+            <CourseSessionStatusBlock 
+              state={sessionState}
+              sessionDate={sessionDate}
+              sessionTime="3:00 PM"
+              daysRemaining={sessionState === 'scheduled' ? 2 : undefined}
+              onPropose={toggleSessionState}
+              onProposeNew={toggleSessionState}
+              onAccept={toggleSessionState}
+            />
             
             {/* Start Course button aligned with badges */}
             <div className="flex-shrink-0 flex flex-col items-center mt-2 lg:mt-0">
