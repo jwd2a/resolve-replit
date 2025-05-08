@@ -38,6 +38,7 @@ import { Separator } from "@/components/ui/separator";
 import { FaCheck, FaChild, FaHome, FaUserFriends, FaGavel } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import logoSrc from "@assets/@Resolve Primary Logo - Main Color 02.png";
+import brandMarkSrc from "../assets/resolve-brand-mark-blue.png";
 
 // US states for jurisdiction picker
 const US_STATES = [

@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { FaGoogle, FaApple, FaFacebook } from "react-icons/fa";
 import logoSrc from "@assets/@Resolve Primary Logo - Main Color 02.png";
+import brandMarkSrc from "../assets/resolve-brand-mark-blue.png";
 
 // Form validation schemas
 const loginSchema = z.object({
@@ -79,9 +80,14 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-gradient-to-b from-[#2e1a87] to-[#4730b8] items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen w-full bg-gradient-to-b from-[#2e1a87] to-[#4730b8] items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Brand mark watermark */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+        <img src={brandMarkSrc} alt="" className="w-[400px] h-[400px]" />
+      </div>
+      
       {/* Centered Authentication form */}
-      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-xl">
+      <div className="w-full max-w-md bg-white p-6 rounded-xl shadow-xl z-10">
         <div className="flex flex-col items-center mb-4">
           <h2 className="text-xl font-bold tracking-tight text-gray-900">
             Welcome to Resolve
