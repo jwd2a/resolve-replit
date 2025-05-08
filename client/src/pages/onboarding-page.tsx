@@ -228,8 +228,13 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8]">
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-[#2e1a87] to-[#4730b8] relative overflow-hidden">
+      {/* Brand mark watermark */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+        <img src={brandMarkSrc} alt="" className="w-[400px] h-[400px]" />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen relative z-10">
         <Card className="w-full max-w-3xl mx-auto shadow-xl">
           <CardHeader className="text-center pb-3">
             <CardTitle className="text-lg font-bold">Complete Your Profile</CardTitle>
