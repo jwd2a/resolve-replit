@@ -17,7 +17,7 @@ import { useLocation } from 'wouter';
 import Player from '@vimeo/player';
 import SignatureCanvas from 'react-signature-canvas';
 
-export default function WaiversAndAgreements() {
+export default function WaiversAndAcknowledgment() {
   const [location, navigate] = useLocation();
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [signature, setSignature] = useState<string | null>(null);
