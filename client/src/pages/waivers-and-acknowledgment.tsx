@@ -195,9 +195,9 @@ export default function WaiversAndAcknowledgment() {
         canvas.height = 60;
         
         if (ctx) {
-          ctx.font = `28px ${signatureFont}`;
+          ctx.font = `36px ${signatureFont}`;
           ctx.fillStyle = '#000';
-          ctx.fillText(autoInitials, 10, 35);
+          ctx.fillText(autoInitials, 10, 40);
           setInitials(canvas.toDataURL());
           validInitials = true;
         }
@@ -427,7 +427,7 @@ export default function WaiversAndAcknowledgment() {
                       {signedParagraphs.includes(index) ? (
                         <div className="flex items-center justify-center">
                           {initials && (
-                            <img src={initials} alt="Your initials" className="h-6" />
+                            <img src={initials} alt="Your initials" className="h-8 w-auto mx-auto" />
                           )}
                         </div>
                       ) : (
@@ -438,7 +438,7 @@ export default function WaiversAndAcknowledgment() {
                     // Read-only version (document completed)
                     <div className="bg-amber-100 px-2 py-1 rounded-md shadow-sm z-10">
                       <div className="flex items-center justify-center">
-                        {initials && <img src={initials} alt="Your initials" className="h-6" />}
+                        {initials && <img src={initials} alt="Your initials" className="h-8 w-auto mx-auto" />}
                       </div>
                     </div>
                   )}
@@ -754,7 +754,7 @@ export default function WaiversAndAcknowledgment() {
                     <div className="border border-gray-200 rounded-md p-3 flex items-center justify-center h-16 w-16">
                       <span 
                         style={{ fontFamily: signatureFont }} 
-                        className="text-xl text-gray-800"
+                        className="text-3xl text-gray-800"
                       >
                         {typedInitials}
                       </span>
