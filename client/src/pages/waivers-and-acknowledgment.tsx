@@ -197,7 +197,10 @@ export default function WaiversAndAcknowledgment() {
         if (ctx) {
           ctx.font = `36px ${signatureFont}`;
           ctx.fillStyle = '#000';
-          ctx.fillText(autoInitials, 10, 40);
+          // Measure text width to center it
+          const textWidth = ctx.measureText(autoInitials).width;
+          const xPos = (canvas.width - textWidth) / 2;
+          ctx.fillText(autoInitials, xPos, 40);
           setInitials(canvas.toDataURL());
           validInitials = true;
         }
@@ -425,9 +428,9 @@ export default function WaiversAndAcknowledgment() {
                       onClick={() => !signedParagraphs.includes(index) && handleInitialOrSignatureTag(index)}
                     >
                       {signedParagraphs.includes(index) ? (
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center w-full h-full">
                           {initials && (
-                            <img src={initials} alt="Your initials" className="h-8 w-auto mx-auto" />
+                            <img src={initials} alt="Your initials" className="h-8 w-auto" />
                           )}
                         </div>
                       ) : (
@@ -437,8 +440,8 @@ export default function WaiversAndAcknowledgment() {
                   ) : (
                     // Read-only version (document completed)
                     <div className="bg-amber-100 px-2 py-1 rounded-md shadow-sm z-10">
-                      <div className="flex items-center justify-center">
-                        {initials && <img src={initials} alt="Your initials" className="h-8 w-auto mx-auto" />}
+                      <div className="flex items-center justify-center w-full h-full">
+                        {initials && <img src={initials} alt="Your initials" className="h-8 w-auto" />}
                       </div>
                     </div>
                   )}
