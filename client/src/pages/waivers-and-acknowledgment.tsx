@@ -11,17 +11,15 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { 
   ArrowLeft, 
-  ArrowDown, 
   Check, 
   Download, 
   Edit, 
   PenTool, 
   Keyboard, 
-  FilePenLine, 
   Play, 
   LockIcon,
   CheckCircle
@@ -41,16 +39,16 @@ export default function WaiversAndAcknowledgment() {
   const [typedInitials, setTypedInitials] = useState('');
   const [signatureFont, setSignatureFont] = useState('Dancing Script');
   const [iframeLoaded, setIframeLoaded] = useState(false);
-  const [signatureModalOpen, setSignatureModalOpen] = useState(false);
-  const [initialModalOpen, setInitialModalOpen] = useState(false);
-  const [selectedParagraph, setSelectedParagraph] = useState<number | null>(null);
+  const [signSetupModalOpen, setSignSetupModalOpen] = useState(false);
+  const [activeInitialPoint, setActiveInitialPoint] = useState<number | null>(null);
   const [signedParagraphs, setSignedParagraphs] = useState<number[]>([]);
   const [isDocumentComplete, setIsDocumentComplete] = useState(false);
+  const [isSignatureSetup, setIsSignatureSetup] = useState(false);
   
   // Safety screening questions
-  const [safetyQuestion1, setSafetyQuestion1] = useState<boolean | null>(null);
-  const [safetyQuestion2, setSafetyQuestion2] = useState<boolean | null>(null);
-  const [safetyQuestion3, setSafetyQuestion3] = useState<boolean | null>(null);
+  const [safetyQuestion1, setSafetyQuestion1] = useState<string | null>(null);
+  const [safetyQuestion2, setSafetyQuestion2] = useState<string | null>(null);
+  const [safetyQuestion3, setSafetyQuestion3] = useState<string | null>(null);
   const [showQuestionsWarning, setShowQuestionsWarning] = useState(false);
   
   // Generate initials from full name
@@ -73,6 +71,7 @@ export default function WaiversAndAcknowledgment() {
   const vimeoPlayerRef = useRef<any>(null);
   const signatureCanvasRef = useRef<SignatureCanvas>(null);
   const initialsCanvasRef = useRef<SignatureCanvas>(null);
+  const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Waiver paragraphs
   const paragraphs = [
@@ -123,12 +122,15 @@ export default function WaiversAndAcknowledgment() {
     }
   };
 
-  const saveSignature = () => {
-    // Save signature
+  const saveSignatureAndInitials = () => {
+    let validSignature = false;
+    let validInitials = false;
+    
+    // First save signature
     if (signatureMethod === 'draw' && signatureCanvasRef.current) {
       if (!signatureCanvasRef.current.isEmpty()) {
         setSignature(signatureCanvasRef.current.toDataURL());
-        setSignatureModalOpen(false);
+        validSignature = true;
       }
     } else if (signatureMethod === 'type' && typedSignature.trim() !== '') {
       // Create a canvas to convert the typed signature to an image
@@ -142,20 +144,15 @@ export default function WaiversAndAcknowledgment() {
         ctx.fillStyle = '#000';
         ctx.fillText(typedSignature, 10, 50);
         setSignature(canvas.toDataURL());
-        setSignatureModalOpen(false);
+        validSignature = true;
       }
     }
-  };
-  
-  const saveInitials = () => {
-    // Save initials and apply to the selected paragraph
+    
+    // Then save initials
     if (initialsMethod === 'draw' && initialsCanvasRef.current) {
       if (!initialsCanvasRef.current.isEmpty()) {
         setInitials(initialsCanvasRef.current.toDataURL());
-        if (selectedParagraph !== null) {
-          setSignedParagraphs(prev => [...prev, selectedParagraph]);
-        }
-        setInitialModalOpen(false);
+        validInitials = true;
       }
     } else if (initialsMethod === 'type' && typedInitials.trim() !== '') {
       // Create a canvas to convert the typed initials to an image
@@ -169,23 +166,39 @@ export default function WaiversAndAcknowledgment() {
         ctx.fillStyle = '#000';
         ctx.fillText(typedInitials, 10, 35);
         setInitials(canvas.toDataURL());
-        if (selectedParagraph !== null) {
-          setSignedParagraphs(prev => [...prev, selectedParagraph]);
-        }
-        setInitialModalOpen(false);
+        validInitials = true;
+      }
+    }
+    
+    // After saving both, mark as setup and add all paragraphs as signed
+    if (validSignature && validInitials) {
+      setIsSignatureSetup(true);
+      // Mark all paragraphs as signed
+      const allParagraphIndices = paragraphs.map((_, index) => index);
+      setSignedParagraphs(allParagraphIndices);
+      
+      // Close the modal
+      setSignSetupModalOpen(false);
+      
+      // If there's an active initial point, scroll to it
+      if (activeInitialPoint !== null && paragraphRefs.current[activeInitialPoint]) {
+        paragraphRefs.current[activeInitialPoint]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setActiveInitialPoint(null);
       }
     }
   };
 
-  const handleInitialTag = (paragraphIndex: number) => {
-    setSelectedParagraph(paragraphIndex);
-    setInitialModalOpen(true);
+  const handleInitialOrSignatureTag = (paragraphIndex: number) => {
+    // If signature/initials are not setup yet, open the setup modal
+    if (!isSignatureSetup) {
+      setActiveInitialPoint(paragraphIndex);
+      setSignSetupModalOpen(true);
+    } else {
+      // If already setup, just scroll to the paragraph
+      paragraphRefs.current[paragraphIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
-  const handleSignButtonClick = () => {
-    setSignatureModalOpen(true);
-  };
-  
   const handleSafetyQuestionToggle = () => {
     // Check if all questions have been answered
     if (safetyQuestion1 === null || safetyQuestion2 === null || safetyQuestion3 === null) {
@@ -198,10 +211,12 @@ export default function WaiversAndAcknowledgment() {
   const isReadyToSign = () => {
     // Check if all paragraphs have been initialed and safety questions answered
     return (
+      isSignatureSetup &&
       signedParagraphs.length === paragraphs.length && 
       safetyQuestion1 !== null && 
       safetyQuestion2 !== null && 
-      safetyQuestion3 !== null
+      safetyQuestion3 !== null &&
+      signature !== null
     );
   };
 
@@ -306,9 +321,13 @@ export default function WaiversAndAcknowledgment() {
           </div>
           
           {/* Document with yellow "Initial Here" tags */}
-          <div className={`border border-gray-200 rounded-md p-6 mb-6 font-serif ${isDocumentComplete ? 'bg-gray-50' : 'bg-white'}`}>
+          <div className={`relative border border-gray-200 rounded-md p-6 mb-6 font-serif ${isDocumentComplete ? 'bg-gray-50' : 'bg-white'}`}>
             {paragraphs.map((paragraph, index) => (
-              <div key={index} className="mb-8 relative">
+              <div 
+                key={index} 
+                className="mb-8 relative pr-14" 
+                ref={el => paragraphRefs.current[index] = el}
+              >
                 <p className="text-gray-800 leading-relaxed">
                   {paragraph}
                 </p>
@@ -316,19 +335,17 @@ export default function WaiversAndAcknowledgment() {
                 {/* Yellow "Initial Here" tag */}
                 {!isDocumentComplete ? (
                   <div 
-                    className={`absolute -right-2 top-1/2 transform -translate-y-1/2 
+                    className={`absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-5
                     ${signedParagraphs.includes(index) 
                       ? 'bg-amber-100 cursor-default' 
                       : 'bg-amber-300 hover:bg-amber-400 cursor-pointer'} 
-                    px-2 py-1 rounded-md shadow-sm transition-colors`}
-                    onClick={() => !signedParagraphs.includes(index) && handleInitialTag(index)}
+                    px-2 py-1 rounded-md shadow-sm transition-colors z-10`}
+                    onClick={() => !signedParagraphs.includes(index) && handleInitialOrSignatureTag(index)}
                   >
                     {signedParagraphs.includes(index) ? (
                       <div className="flex items-center justify-center">
-                        {initials ? (
+                        {initials && (
                           <img src={initials} alt="Your initials" className="h-6" />
-                        ) : (
-                          <span className="text-xs font-medium text-amber-800">Initialed</span>
                         )}
                       </div>
                     ) : (
@@ -337,9 +354,9 @@ export default function WaiversAndAcknowledgment() {
                   </div>
                 ) : (
                   // Read-only version (document completed)
-                  <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 bg-amber-100 px-2 py-1 rounded-md shadow-sm">
+                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-5 bg-amber-100 px-2 py-1 rounded-md shadow-sm z-10">
                     <div className="flex items-center justify-center">
-                      <img src={initials} alt="Your initials" className="h-6" />
+                      {initials && <img src={initials} alt="Your initials" className="h-6" />}
                     </div>
                   </div>
                 )}
@@ -360,76 +377,70 @@ export default function WaiversAndAcknowledgment() {
             )}
             
             <div className="space-y-6">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="safety-q1" className="text-sm text-gray-700 flex-grow pr-4">
-                    Are you concerned that your child(ren) will not be safe while with the other parent?
-                  </Label>
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="safety-q1-yes" className={`text-xs ${safetyQuestion1 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
-                    <Switch 
-                      id="safety-q1" 
-                      checked={safetyQuestion1 === true}
-                      onCheckedChange={() => setSafetyQuestion1(true)}
-                      disabled={isDocumentComplete}
-                    />
-                    <Label htmlFor="safety-q1-no" className={`text-xs ${safetyQuestion1 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
-                    <Switch 
-                      id="safety-q1-no" 
-                      checked={safetyQuestion1 === false}
-                      onCheckedChange={() => setSafetyQuestion1(false)}
-                      disabled={isDocumentComplete}
-                    />
+              {/* Question 1 */}
+              <div className="rounded-lg border border-gray-200 p-4">
+                <Label className="text-sm font-medium text-gray-700 block mb-3">
+                  Are you concerned that your child(ren) will not be safe while with the other parent?
+                </Label>
+                <RadioGroup 
+                  value={safetyQuestion1 || ""}
+                  onValueChange={(value) => setSafetyQuestion1(value)}
+                  disabled={isDocumentComplete}
+                  className="flex gap-4"
+                >
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion1 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="yes" id="q1-yes" />
+                    <Label htmlFor="q1-yes" className={safetyQuestion1 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
                   </div>
-                </div>
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion1 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="no" id="q1-no" />
+                    <Label htmlFor="q1-no" className={safetyQuestion1 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                  </div>
+                </RadioGroup>
               </div>
               
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="safety-q2" className="text-sm text-gray-700 flex-grow pr-4">
-                    Do you believe the other parent has an untreated substance/alcohol abuse problem?
-                  </Label>
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="safety-q2-yes" className={`text-xs ${safetyQuestion2 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
-                    <Switch 
-                      id="safety-q2" 
-                      checked={safetyQuestion2 === true}
-                      onCheckedChange={() => setSafetyQuestion2(true)}
-                      disabled={isDocumentComplete}
-                    />
-                    <Label htmlFor="safety-q2-no" className={`text-xs ${safetyQuestion2 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
-                    <Switch 
-                      id="safety-q2-no" 
-                      checked={safetyQuestion2 === false}
-                      onCheckedChange={() => setSafetyQuestion2(false)}
-                      disabled={isDocumentComplete}
-                    />
+              {/* Question 2 */}
+              <div className="rounded-lg border border-gray-200 p-4">
+                <Label className="text-sm font-medium text-gray-700 block mb-3">
+                  Do you believe the other parent has an untreated substance/alcohol abuse problem?
+                </Label>
+                <RadioGroup 
+                  value={safetyQuestion2 || ""}
+                  onValueChange={(value) => setSafetyQuestion2(value)}
+                  disabled={isDocumentComplete}
+                  className="flex gap-4"
+                >
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion2 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="yes" id="q2-yes" />
+                    <Label htmlFor="q2-yes" className={safetyQuestion2 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
                   </div>
-                </div>
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion2 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="no" id="q2-no" />
+                    <Label htmlFor="q2-no" className={safetyQuestion2 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                  </div>
+                </RadioGroup>
               </div>
               
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="safety-q3" className="text-sm text-gray-700 flex-grow pr-4">
-                    Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
-                  </Label>
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="safety-q3-yes" className={`text-xs ${safetyQuestion3 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
-                    <Switch 
-                      id="safety-q3" 
-                      checked={safetyQuestion3 === true}
-                      onCheckedChange={() => setSafetyQuestion3(true)}
-                      disabled={isDocumentComplete}
-                    />
-                    <Label htmlFor="safety-q3-no" className={`text-xs ${safetyQuestion3 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
-                    <Switch 
-                      id="safety-q3-no" 
-                      checked={safetyQuestion3 === false}
-                      onCheckedChange={() => setSafetyQuestion3(false)}
-                      disabled={isDocumentComplete}
-                    />
+              {/* Question 3 */}
+              <div className="rounded-lg border border-gray-200 p-4">
+                <Label className="text-sm font-medium text-gray-700 block mb-3">
+                  Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
+                </Label>
+                <RadioGroup 
+                  value={safetyQuestion3 || ""}
+                  onValueChange={(value) => setSafetyQuestion3(value)}
+                  disabled={isDocumentComplete}
+                  className="flex gap-4"
+                >
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion3 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="yes" id="q3-yes" />
+                    <Label htmlFor="q3-yes" className={safetyQuestion3 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
                   </div>
-                </div>
+                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion3 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                    <RadioGroupItem value="no" id="q3-no" />
+                    <Label htmlFor="q3-no" className={safetyQuestion3 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                  </div>
+                </RadioGroup>
               </div>
             </div>
           </div>
@@ -451,7 +462,7 @@ export default function WaiversAndAcknowledgment() {
                     <div className="h-20 flex flex-col items-center justify-center">
                       <div 
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-amber-300 hover:bg-amber-400 px-3 py-1.5 rounded-md shadow-sm cursor-pointer transition-colors"
-                        onClick={handleSignButtonClick}
+                        onClick={() => setSignSetupModalOpen(true)}
                       >
                         <span className="text-sm font-medium text-amber-800">Sign Here</span>
                       </div>
@@ -463,7 +474,7 @@ export default function WaiversAndAcknowledgment() {
               
               <div className="flex justify-end">
                 <Button
-                  disabled={!isReadyToSign() || !signature}
+                  disabled={!isReadyToSign()}
                   className="bg-[#2e1a87] hover:bg-[#25156d]"
                   onClick={handleSubmit}
                   onMouseOver={handleSafetyQuestionToggle}
@@ -505,28 +516,28 @@ export default function WaiversAndAcknowledgment() {
           )}
         </div>
 
-        {/* Signature Modal */}
+        {/* Signature & Initials Setup Modal */}
         <Dialog
-          open={signatureModalOpen}
-          onOpenChange={(isOpen) => !isOpen && setSignatureModalOpen(false)}
+          open={signSetupModalOpen}
+          onOpenChange={(isOpen) => !isOpen && setSignSetupModalOpen(false)}
         >
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Add Your Signature</DialogTitle>
+              <DialogTitle>Set Up Your Signature & Initials</DialogTitle>
               <DialogDescription>
-                Sign the document to acknowledge you have read and agree to the terms.
+                Create your signature and initials once to use throughout the document.
               </DialogDescription>
             </DialogHeader>
             
             <Tabs defaultValue="draw" className="w-full py-4">
               <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="draw" onClick={() => setSignatureMethod('draw')}>
+                <TabsTrigger value="draw" onClick={() => {setSignatureMethod('draw'); setInitialsMethod('draw');}}>
                   <div className="flex items-center">
                     <PenTool className="mr-1.5 h-4 w-4" />
                     Draw
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="type" onClick={() => setSignatureMethod('type')}>
+                <TabsTrigger value="type" onClick={() => {setSignatureMethod('type'); setInitialsMethod('type');}}>
                   <div className="flex items-center">
                     <Keyboard className="mr-1.5 h-4 w-4" />
                     Type
@@ -552,6 +563,27 @@ export default function WaiversAndAcknowledgment() {
                       size="sm" 
                       className="mt-2"
                       onClick={clearSignature}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Initials</h3>
+                    <div className="border border-gray-300 rounded-md p-2 bg-white">
+                      <SignatureCanvas
+                        ref={initialsCanvasRef}
+                        penColor="black"
+                        canvasProps={{
+                          className: 'w-full h-24 border rounded-md cursor-crosshair',
+                        }}
+                      />
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-2"
+                      onClick={clearInitials}
                     >
                       Clear
                     </Button>
@@ -600,83 +632,7 @@ export default function WaiversAndAcknowledgment() {
                       </div>
                     )}
                   </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-            
-            <DialogFooter>
-              <Button 
-                variant="ghost" 
-                onClick={() => setSignatureModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={saveSignature}
-              >
-                Apply Signature
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-        
-        {/* Initials Modal */}
-        <Dialog
-          open={initialModalOpen}
-          onOpenChange={(isOpen) => !isOpen && setInitialModalOpen(false)}
-        >
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Add Your Initials</DialogTitle>
-              <DialogDescription>
-                Initial this section to confirm you have read and understood it.
-              </DialogDescription>
-            </DialogHeader>
-            
-            <Tabs defaultValue="draw" className="w-full py-4">
-              <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="draw" onClick={() => setInitialsMethod('draw')}>
-                  <div className="flex items-center">
-                    <PenTool className="mr-1.5 h-4 w-4" />
-                    Draw
-                  </div>
-                </TabsTrigger>
-                <TabsTrigger value="type" onClick={() => setInitialsMethod('type')}>
-                  <div className="flex items-center">
-                    <Keyboard className="mr-1.5 h-4 w-4" />
-                    Type
-                  </div>
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="draw" className="space-y-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Initials</h3>
-                    <div className="border border-gray-300 rounded-md p-2 bg-white">
-                      <SignatureCanvas
-                        ref={initialsCanvasRef}
-                        penColor="black"
-                        canvasProps={{
-                          className: 'w-full h-24 border rounded-md cursor-crosshair',
-                        }}
-                      />
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="mt-2"
-                      onClick={clearInitials}
-                    >
-                      Clear
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="type" className="space-y-6">
-                <div className="space-y-4">
+                  
                   <div>
                     <h3 className="text-sm font-medium mb-2">Your Initials</h3>
                     <div className="flex items-center">
@@ -714,15 +670,15 @@ export default function WaiversAndAcknowledgment() {
             <DialogFooter>
               <Button 
                 variant="ghost" 
-                onClick={() => setInitialModalOpen(false)}
+                onClick={() => setSignSetupModalOpen(false)}
               >
                 Cancel
               </Button>
               <Button
                 className="bg-[#2e1a87] hover:bg-[#25156d]"
-                onClick={saveInitials}
+                onClick={saveSignatureAndInitials}
               >
-                Apply Initials
+                Apply to All Fields
               </Button>
             </DialogFooter>
           </DialogContent>
