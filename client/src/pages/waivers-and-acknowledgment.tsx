@@ -166,8 +166,13 @@ export default function WaiversAndAcknowledgment() {
         validInitials = true;
       }
     } else if (initialsMethod === 'type') {
-      // Validate typed initials
-      if (typedInitials.trim() !== '') {
+      // For type method, we generate initials automatically from full name
+      // So if there's a full name, there should be valid initials
+      if (typedSignature.trim() !== '') {
+        // Use the auto-generated initials (from first letter of first and last name)
+        const autoInitials = generateInitialsFromName(typedSignature);
+        setTypedInitials(autoInitials);
+        
         // Create a canvas to convert the typed initials to an image
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -177,7 +182,7 @@ export default function WaiversAndAcknowledgment() {
         if (ctx) {
           ctx.font = `28px ${signatureFont}`;
           ctx.fillStyle = '#000';
-          ctx.fillText(typedInitials, 10, 35);
+          ctx.fillText(autoInitials, 10, 35);
           setInitials(canvas.toDataURL());
           validInitials = true;
         }
@@ -679,20 +684,13 @@ export default function WaiversAndAcknowledgment() {
                   <div>
                     <h3 className="text-sm font-medium mb-2">Your Initials</h3>
                     <div className="flex items-center">
-                      <input
-                        type="text"
-                        value={typedInitials}
-                        onChange={(e) => setTypedInitials(e.target.value)}
-                        placeholder="JD"
-                        className="w-20 border border-gray-300 rounded-md p-3 text-center"
-                        maxLength={3}
-                      />
+                      <div className="w-20 border border-gray-300 rounded-md p-3 text-center bg-gray-50">
+                        {typedInitials}
+                      </div>
                       
-                      {typedSignature && (
-                        <span className="ml-3 text-sm text-gray-500">
-                          Generated from your full name
-                        </span>
-                      )}
+                      <span className="ml-3 text-sm text-gray-500">
+                        Generated from your full name
+                      </span>
                     </div>
                     
                     {typedInitials && (
