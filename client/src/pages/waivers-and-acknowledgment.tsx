@@ -704,26 +704,20 @@ export default function WaiversAndAcknowledgment() {
                   
                   <div>
                     <h3 className="text-sm font-medium mb-2">Your Initials</h3>
-                    <div className="flex items-center">
-                      <div className="w-20 border border-gray-300 rounded-md p-3 text-center bg-gray-50">
+                    <div className="border border-gray-200 rounded-md p-3 flex items-center justify-center h-16 w-16">
+                      <span 
+                        style={{ fontFamily: signatureFont }} 
+                        className="text-xl text-gray-800"
+                      >
                         {typedInitials}
-                      </div>
-                      
-                      <span className="ml-3 text-sm text-gray-500">
-                        Generated from your full name
                       </span>
                     </div>
                     
-                    {typedInitials && (
-                      <div className="mt-3 border border-gray-200 rounded-md p-3 flex items-center justify-center h-16 w-16">
-                        <span 
-                          style={{ fontFamily: signatureFont }} 
-                          className="text-xl text-gray-800"
-                        >
-                          {typedInitials}
-                        </span>
-                      </div>
-                    )}
+                    <div className="mt-2">
+                      <span className="text-sm text-gray-500">
+                        Generated from your full name
+                      </span>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
