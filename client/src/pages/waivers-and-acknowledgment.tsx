@@ -225,6 +225,14 @@ export default function WaiversAndAcknowledgment() {
     // If signature/initials are not setup yet, open the setup modal
     if (!isSignatureSetup) {
       setActiveInitialPoint(paragraphIndex);
+      // Ensure we're starting with the type tab selected
+      setSignatureMethod('type');
+      setInitialsMethod('type');
+      // If there's any existing typed signature text, regenerate the initials
+      if (typedSignature) {
+        setTypedInitials(generateInitialsFromName(typedSignature));
+      }
+      // Open the modal
       setSignSetupModalOpen(true);
     } else {
       // If already setup, apply the saved signature/initials to this field
@@ -579,7 +587,14 @@ export default function WaiversAndAcknowledgment() {
             
             <Tabs defaultValue="type" className="w-full py-4">
               <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="type" onClick={() => {setSignatureMethod('type'); setInitialsMethod('type');}}>
+                <TabsTrigger value="type" onClick={() => {
+                  setSignatureMethod('type'); 
+                  setInitialsMethod('type');
+                  // If there's already a typed signature, regenerate the initials
+                  if (typedSignature) {
+                    setTypedInitials(generateInitialsFromName(typedSignature));
+                  }
+                }}>
                   <div className="flex items-center">
                     <Keyboard className="mr-1.5 h-4 w-4" />
                     Type
@@ -646,7 +661,13 @@ export default function WaiversAndAcknowledgment() {
                     <input
                       type="text"
                       value={typedSignature}
-                      onChange={(e) => setTypedSignature(e.target.value)}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        setTypedSignature(newValue);
+                        // Immediately generate and update initials
+                        const generatedInitials = generateInitialsFromName(newValue);
+                        setTypedInitials(generatedInitials);
+                      }}
                       placeholder="John Doe"
                       className="w-full border border-gray-300 rounded-md p-3"
                     />
