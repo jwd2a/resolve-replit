@@ -147,7 +147,7 @@ export default function Home6() {
       userStatus: isWaiverCompleted ? "Completed" : "Pending",
       coParentStatus: "Pending",
       action: isWaiverCompleted ? "View" : "Review & Sign",
-      actionLink: "/waivers-and-agreements",
+      actionLink: "/waivers-and-acknowledgment",
       required: true,
     },
     // Temporarily hidden holiday preferences - toggle showHolidaySelector to true to re-enable
@@ -457,7 +457,7 @@ export default function Home6() {
                             : item.id === "co-parent" 
                               ? "/co-parent-invitation" 
                               : item.id === "waivers" 
-                                ? "/waivers-and-agreements" 
+                                ? "/waivers-and-acknowledgment" 
                                 : item.id === "holidays" 
                                   ? "/holiday-preferences" 
                                   : "/schedule-course"

@@ -17,6 +17,11 @@ import { useLocation } from 'wouter';
 import Player from '@vimeo/player';
 import SignatureCanvas from 'react-signature-canvas';
 
+/**
+ * @deprecated Use WaiversAndAcknowledgment component instead
+ * This component has been replaced with WaiversAndAcknowledgment to better reflect
+ * the content's true purpose as an acknowledgment rather than a binding agreement.
+ */
 export default function WaiversAndAgreements() {
   const [location, navigate] = useLocation();
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
