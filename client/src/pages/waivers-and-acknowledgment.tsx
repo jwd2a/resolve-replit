@@ -137,10 +137,14 @@ export default function WaiversAndAcknowledgment() {
     // First validate and save signature
     if (signatureMethod === 'draw') {
       if (signatureCanvasRef.current && !signatureCanvasRef.current.isEmpty()) {
-        // Only update the main signature if we're in signature mode or first time setup
+        // If this is the signature setup mode or signature field, set the signature
         if (activeInitialPoint === -1 || activeInitialPoint === null) {
           setSignature(signatureCanvasRef.current.toDataURL());
         }
+        
+        // Always mark the signature as valid regardless - for signature field (-1) 
+        // we need to capture and validate it, but for initial fields we just need to 
+        // know there's a valid signature somewhere
         validSignature = true;
       }
     } else if (signatureMethod === 'type') {
@@ -157,10 +161,14 @@ export default function WaiversAndAcknowledgment() {
           ctx.fillStyle = '#000';
           ctx.fillText(typedSignature, 10, 50);
           
-          // Only update the main signature if we're in signature mode or first time setup
+          // If this is the signature setup mode or signature field, set the signature
           if (activeInitialPoint === -1 || activeInitialPoint === null) {
             setSignature(canvas.toDataURL());
           }
+          
+          // Always mark the signature as valid regardless - for signature field (-1) 
+          // we need to capture and validate it, but for initial fields we just need to 
+          // know there's a valid signature somewhere
           validSignature = true;
         }
       }
@@ -546,6 +554,16 @@ export default function WaiversAndAcknowledgment() {
                         onClick={() => {
                           // Set activeInitialPoint to -1 to indicate we're in signature mode (not initials)
                           setActiveInitialPoint(-1);
+                          
+                          // Ensure we're starting with the type tab selected
+                          setSignatureMethod('type');
+                          setInitialsMethod('type');
+                          
+                          // If there's any existing typed signature text, regenerate the initials
+                          if (typedSignature) {
+                            setTypedInitials(generateInitialsFromName(typedSignature));
+                          }
+                          
                           setSignSetupModalOpen(true);
                         }}
                       >
