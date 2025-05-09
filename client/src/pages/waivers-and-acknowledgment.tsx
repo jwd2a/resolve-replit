@@ -51,19 +51,25 @@ export default function WaiversAndAcknowledgment() {
   const [safetyQuestion3, setSafetyQuestion3] = useState<string>("no");
   const [showQuestionsWarning, setShowQuestionsWarning] = useState(false);
   
-  // Generate initials from full name
+  // Generate initials from full name - more immediate response
+  const generateInitialsFromName = (name: string) => {
+    const nameParts = name.trim().split(' ').filter(part => part.length > 0);
+    if (nameParts.length >= 2) {
+      // Get first letter of first name and first letter of last name
+      const firstInitial = nameParts[0][0] || '';
+      const lastInitial = nameParts[nameParts.length - 1][0] || '';
+      return firstInitial + lastInitial;
+    } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+      // If only one word, use first letter
+      return nameParts[0][0] || '';
+    }
+    return '';
+  };
+  
+  // Auto-update initials when name is typed
   useEffect(() => {
     if (signatureMethod === 'type' && typedSignature) {
-      const nameParts = typedSignature.trim().split(' ').filter(part => part.length > 0);
-      if (nameParts.length >= 2) {
-        // Get first letter of first name and first letter of last name
-        const firstInitial = nameParts[0][0] || '';
-        const lastInitial = nameParts[nameParts.length - 1][0] || '';
-        setTypedInitials(firstInitial + lastInitial);
-      } else if (nameParts.length === 1 && nameParts[0].length > 0) {
-        // If only one word, use first letter
-        setTypedInitials(nameParts[0][0] || '');
-      }
+      setTypedInitials(generateInitialsFromName(typedSignature));
     }
   }, [signatureMethod, typedSignature]);
   
@@ -128,55 +134,61 @@ export default function WaiversAndAcknowledgment() {
     let validSignature = false;
     let validInitials = false;
     
-    // First save signature
-    if (signatureMethod === 'draw' && signatureCanvasRef.current) {
-      if (!signatureCanvasRef.current.isEmpty()) {
+    // First validate and save signature
+    if (signatureMethod === 'draw') {
+      if (signatureCanvasRef.current && !signatureCanvasRef.current.isEmpty()) {
         setSignature(signatureCanvasRef.current.toDataURL());
         validSignature = true;
       }
-    } else if (signatureMethod === 'type' && typedSignature.trim() !== '') {
-      // Create a canvas to convert the typed signature to an image
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = 300;
-      canvas.height = 100;
-      
-      if (ctx) {
-        ctx.font = `30px ${signatureFont}`;
-        ctx.fillStyle = '#000';
-        ctx.fillText(typedSignature, 10, 50);
-        setSignature(canvas.toDataURL());
-        validSignature = true;
+    } else if (signatureMethod === 'type') {
+      // Validate typed signature
+      if (typedSignature.trim() !== '') {
+        // Create a canvas to convert the typed signature to an image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 300;
+        canvas.height = 100;
+        
+        if (ctx) {
+          ctx.font = `30px ${signatureFont}`;
+          ctx.fillStyle = '#000';
+          ctx.fillText(typedSignature, 10, 50);
+          setSignature(canvas.toDataURL());
+          validSignature = true;
+        }
       }
     }
     
-    // Then save initials
-    if (initialsMethod === 'draw' && initialsCanvasRef.current) {
-      if (!initialsCanvasRef.current.isEmpty()) {
+    // Then validate and save initials
+    if (initialsMethod === 'draw') {
+      if (initialsCanvasRef.current && !initialsCanvasRef.current.isEmpty()) {
         setInitials(initialsCanvasRef.current.toDataURL());
         validInitials = true;
       }
-    } else if (initialsMethod === 'type' && typedInitials.trim() !== '') {
-      // Create a canvas to convert the typed initials to an image
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = 100;
-      canvas.height = 60;
-      
-      if (ctx) {
-        ctx.font = `28px ${signatureFont}`;
-        ctx.fillStyle = '#000';
-        ctx.fillText(typedInitials, 10, 35);
-        setInitials(canvas.toDataURL());
-        validInitials = true;
+    } else if (initialsMethod === 'type') {
+      // Validate typed initials
+      if (typedInitials.trim() !== '') {
+        // Create a canvas to convert the typed initials to an image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 100;
+        canvas.height = 60;
+        
+        if (ctx) {
+          ctx.font = `28px ${signatureFont}`;
+          ctx.fillStyle = '#000';
+          ctx.fillText(typedInitials, 10, 35);
+          setInitials(canvas.toDataURL());
+          validInitials = true;
+        }
       }
     }
     
-    // We only want to mark the setup as complete if we have both signature and initials
+    // Check if both signature and initials are valid before proceeding
     if (validSignature && validInitials) {
       setIsSignatureSetup(true);
       
-      // Only apply to the clicked paragraph, not all of them
+      // Apply only to the clicked paragraph
       if (activeInitialPoint !== null) {
         setSignedParagraphs(prev => {
           if (!prev.includes(activeInitialPoint)) {
@@ -185,13 +197,22 @@ export default function WaiversAndAcknowledgment() {
           return prev;
         });
         
-        // Scroll to the paragraph
+        // Scroll to the paragraph that was just signed
         paragraphRefs.current[activeInitialPoint]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       
       // Close the modal
       setSignSetupModalOpen(false);
       setActiveInitialPoint(null);
+    } else {
+      // Show validation error
+      if (!validSignature && !validInitials) {
+        alert('Please provide both a signature and initials before saving.');
+      } else if (!validSignature) {
+        alert('Please provide a signature before saving.');
+      } else if (!validInitials) {
+        alert('Please provide initials before saving.');
+      }
     }
   };
 
@@ -201,7 +222,14 @@ export default function WaiversAndAcknowledgment() {
       setActiveInitialPoint(paragraphIndex);
       setSignSetupModalOpen(true);
     } else {
-      // If already setup, just scroll to the paragraph
+      // If already setup, apply the saved signature/initials to this field
+      setSignedParagraphs(prev => {
+        if (!prev.includes(paragraphIndex)) {
+          return [...prev, paragraphIndex];
+        }
+        return prev;
+      });
+      // Scroll to show result
       paragraphRefs.current[paragraphIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
