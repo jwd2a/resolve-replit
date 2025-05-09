@@ -261,65 +261,26 @@ export default function WaiversAndAgreements() {
               onScroll={handleScroll}
               className="prose prose-slate h-96 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif max-w-none"
             >
-              <h3>TERMS AND CONDITIONS AGREEMENT</h3>
+              <h3>Resolve Waiver and Acknowledgment</h3>
               
               <p>
-                This Agreement (the "Agreement") is entered into between you, the user ("User"), and Resolve Co-Parenting Solutions, Inc. ("Resolve"), regarding your access to and use of the Resolve co-parenting platform (the "Platform").
+                Resolve is an educational course designed to support cooperative co-parenting and assist in reaching agreements between co-parents. However, participation in the course does not guarantee any specific outcome, including reaching full agreement on all parenting matters.
               </p>
               
-              <h4>1. ACCEPTANCE OF TERMS</h4>
               <p>
-                By accessing or using the Platform, you agree to be bound by this Agreement and all applicable laws and regulations. If you do not agree with any part of this Agreement, you must not use the Platform.
+                I understand that my co-parent and I may not reach a complete agreement through this course, and that additional support from legal, therapeutic, or other professionals may be necessary.
               </p>
               
-              <h4>2. PLATFORM DESCRIPTION</h4>
               <p>
-                The Platform is designed to facilitate co-parenting arrangements and communication. Resolve does not provide legal advice, and the use of the Platform does not create an attorney-client relationship.
+                I acknowledge that any agreement my co-parent and I reach through Resolve does not guarantee the current or future health, safety, or well-being of our child(ren). As parents, we remain solely responsible for the care and upbringing of our child(ren), regardless of the contents of any co-parenting agreement we develop.
               </p>
               
-              <h4>3. USER RESPONSIBILITIES</h4>
               <p>
-                You agree to provide accurate information when using the Platform. You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
+                I understand that Resolve does not provide legal advice, and that no communication or material provided through Resolve—whether by its platform, representatives, or employees—should be construed as legal advice. I acknowledge that if I require legal counsel, I am solely responsible for consulting a licensed attorney in my jurisdiction.
               </p>
               
-              <h4>4. PRIVACY POLICY</h4>
               <p>
-                Your use of the Platform is also governed by our Privacy Policy, which is incorporated by reference into this Agreement. The Privacy Policy can be found on our website.
-              </p>
-              
-              <h4>5. INTELLECTUAL PROPERTY</h4>
-              <p>
-                All content on the Platform, including but not limited to text, graphics, logos, and software, is the property of Resolve and is protected by intellectual property laws.
-              </p>
-              
-              <h4>6. LIMITATION OF LIABILITY</h4>
-              <p>
-                To the maximum extent permitted by law, Resolve shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, arising out of or relating to your use of the Platform.
-              </p>
-              
-              <h4>7. DISPUTE RESOLUTION</h4>
-              <p>
-                Any dispute arising from this Agreement shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.
-              </p>
-              
-              <h4>8. TERMINATION</h4>
-              <p>
-                Resolve reserves the right, at its sole discretion, to terminate your access to the Platform, without notice, for any reason or no reason.
-              </p>
-              
-              <h4>9. GOVERNING LAW</h4>
-              <p>
-                This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to its conflict of law principles.
-              </p>
-              
-              <h4>10. AMENDMENTS</h4>
-              <p>
-                Resolve may amend this Agreement at any time by posting the amended terms on the Platform. Your continued use of the Platform following any amendments indicates your acceptance of the amended terms.
-              </p>
-              
-              <h4>11. ENTIRE AGREEMENT</h4>
-              <p>
-                This Agreement constitutes the entire agreement between you and Resolve regarding your use of the Platform, superseding any prior agreements between you and Resolve.
+                I understand that any agreement my co-parent and I reach may require modifications to comply with applicable state and local laws. I acknowledge that it is my responsibility to ensure the agreement conforms to the laws in my jurisdiction and that legal consultation may be necessary to confirm its enforceability.
               </p>
             </div>
 
