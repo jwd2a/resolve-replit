@@ -137,7 +137,10 @@ export default function WaiversAndAcknowledgment() {
     // First validate and save signature
     if (signatureMethod === 'draw') {
       if (signatureCanvasRef.current && !signatureCanvasRef.current.isEmpty()) {
-        setSignature(signatureCanvasRef.current.toDataURL());
+        // Only update the main signature if we're in signature mode or first time setup
+        if (activeInitialPoint === -1 || activeInitialPoint === null) {
+          setSignature(signatureCanvasRef.current.toDataURL());
+        }
         validSignature = true;
       }
     } else if (signatureMethod === 'type') {
@@ -153,7 +156,11 @@ export default function WaiversAndAcknowledgment() {
           ctx.font = `30px ${signatureFont}`;
           ctx.fillStyle = '#000';
           ctx.fillText(typedSignature, 10, 50);
-          setSignature(canvas.toDataURL());
+          
+          // Only update the main signature if we're in signature mode or first time setup
+          if (activeInitialPoint === -1 || activeInitialPoint === null) {
+            setSignature(canvas.toDataURL());
+          }
           validSignature = true;
         }
       }
@@ -193,8 +200,8 @@ export default function WaiversAndAcknowledgment() {
     if (validSignature && validInitials) {
       setIsSignatureSetup(true);
       
-      // Apply only to the clicked paragraph
-      if (activeInitialPoint !== null) {
+      // Apply only to the clicked paragraph if it's a paragraph initial
+      if (activeInitialPoint !== null && activeInitialPoint >= 0) {
         setSignedParagraphs(prev => {
           if (!prev.includes(activeInitialPoint)) {
             return [...prev, activeInitialPoint];
@@ -518,7 +525,11 @@ export default function WaiversAndAcknowledgment() {
                     <div className="h-20 flex flex-col items-center justify-center">
                       <div 
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-amber-300 hover:bg-amber-400 px-3 py-1.5 rounded-md shadow-sm cursor-pointer transition-colors"
-                        onClick={() => setSignSetupModalOpen(true)}
+                        onClick={() => {
+                          // Set activeInitialPoint to -1 to indicate we're in signature mode (not initials)
+                          setActiveInitialPoint(-1);
+                          setSignSetupModalOpen(true);
+                        }}
                       >
                         <span className="text-sm font-medium text-amber-800">Sign Here</span>
                       </div>
