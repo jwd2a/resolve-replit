@@ -1,0 +1,63 @@
+Please update the current implementation of the Waiver Acknowledgment page to resolve layout issues, fix signature behavior, and improve the design and interaction patterns. Follow these detailed corrections:
+
+📌 1. Remove Initials Tag from Paragraph 1
+The first paragraph of the waiver is an introduction and should not have an initials field.
+
+Only the remaining 5 paragraphs should include a yellow “Initial Here” tag.
+
+📌 2. Fix Initial Tag Overlap with Paragraph Text
+Do not let text flow behind or under the yellow initials tag.
+
+Instead, implement a two-column layout inside each paragraph block:
+
+Left Column: 85% width for the waiver text
+
+Right Column: 15% width reserved for the initials box (aligned vertically to the center of its clause)
+
+This avoids overlapping and preserves line wrapping.
+
+📌 3. Align Yes/No Options to the Right of Each Question
+Display each safety screening question on a single horizontal row:
+
+Left: Full question text
+
+Right: “Yes” and “No” pill-style toggle buttons
+
+This layout should mirror the appearance of mobile forms or legal checklists with in-line responses.
+
+📌 4. Default Safety Questions to “No” Selected
+When the page loads, all three Yes/No questions should have “No” preselected.
+
+The user can still change to “Yes,” but “No” is assumed unless changed.
+
+📌 5. Fix Signature/Initials Modal Behavior
+When the user clicks any yellow field (signature or initials):
+
+Open a single modal for both signature and initials
+
+After the user inputs both:
+
+Do not auto-apply to every field
+
+Only apply to the field that was clicked
+
+The remaining fields (initials or signature) must still be manually clicked to confirm and apply the saved version
+
+Once saved, do not open the modal again unless the user clicks “Edit Signature” or “Edit Initials”
+
+Update the modal’s CTA button to: Save and Continue
+
+📌 6. Default to Type View in Signature Modal
+When the signature modal opens, default to the “Type” tab rather than the Draw tab.
+
+Still allow users to toggle to Draw if preferred.
+
+📌 7. Fix Initials Preview Logic
+When user types their name in the “Type Signature” box, the initials should:
+
+Auto-generate from the first letters of the typed name
+
+Example: “Eric Rabinovitz” → “ER”
+
+Display this stylized in the initials preview box next to the signature.
+

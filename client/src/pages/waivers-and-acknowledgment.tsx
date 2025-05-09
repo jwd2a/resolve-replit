@@ -45,10 +45,10 @@ export default function WaiversAndAcknowledgment() {
   const [isDocumentComplete, setIsDocumentComplete] = useState(false);
   const [isSignatureSetup, setIsSignatureSetup] = useState(false);
   
-  // Safety screening questions
-  const [safetyQuestion1, setSafetyQuestion1] = useState<string | null>(null);
-  const [safetyQuestion2, setSafetyQuestion2] = useState<string | null>(null);
-  const [safetyQuestion3, setSafetyQuestion3] = useState<string | null>(null);
+  // Safety screening questions - default to "no"
+  const [safetyQuestion1, setSafetyQuestion1] = useState<string>("no");
+  const [safetyQuestion2, setSafetyQuestion2] = useState<string>("no");
+  const [safetyQuestion3, setSafetyQuestion3] = useState<string>("no");
   const [showQuestionsWarning, setShowQuestionsWarning] = useState(false);
   
   // Generate initials from full name
@@ -73,9 +73,11 @@ export default function WaiversAndAcknowledgment() {
   const initialsCanvasRef = useRef<SignatureCanvas>(null);
   const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Waiver paragraphs
+  // Waiver introduction and paragraphs
+  const introduction = "Resolve is an educational course designed to support cooperative co-parenting and assist in reaching agreements between co-parents. However, participation in the course does not guarantee any specific outcome, including reaching full agreement on all parenting matters.";
+  
+  // Paragraphs that require initials
   const paragraphs = [
-    "Resolve is an educational course designed to support cooperative co-parenting and assist in reaching agreements between co-parents. However, participation in the course does not guarantee any specific outcome, including reaching full agreement on all parenting matters.",
     "I understand that my co-parent and I may not reach a complete agreement through this course, and that additional support from legal, therapeutic, or other professionals may be necessary.",
     "I acknowledge that any agreement my co-parent and I reach through Resolve does not guarantee the current or future health, safety, or well-being of our child(ren). As parents, we remain solely responsible for the care and upbringing of our child(ren), regardless of the contents of any co-parenting agreement we develop.",
     "I understand that Resolve does not provide legal advice, and that no communication or material provided through Resolve—whether by its platform, representatives, or employees—should be construed as legal advice. I acknowledge that if I require legal counsel, I am solely responsible for consulting a licensed attorney in my jurisdiction.",
@@ -170,21 +172,26 @@ export default function WaiversAndAcknowledgment() {
       }
     }
     
-    // After saving both, mark as setup and add all paragraphs as signed
+    // We only want to mark the setup as complete if we have both signature and initials
     if (validSignature && validInitials) {
       setIsSignatureSetup(true);
-      // Mark all paragraphs as signed
-      const allParagraphIndices = paragraphs.map((_, index) => index);
-      setSignedParagraphs(allParagraphIndices);
+      
+      // Only apply to the clicked paragraph, not all of them
+      if (activeInitialPoint !== null) {
+        setSignedParagraphs(prev => {
+          if (!prev.includes(activeInitialPoint)) {
+            return [...prev, activeInitialPoint];
+          }
+          return prev;
+        });
+        
+        // Scroll to the paragraph
+        paragraphRefs.current[activeInitialPoint]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       
       // Close the modal
       setSignSetupModalOpen(false);
-      
-      // If there's an active initial point, scroll to it
-      if (activeInitialPoint !== null && paragraphRefs.current[activeInitialPoint]) {
-        paragraphRefs.current[activeInitialPoint]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setActiveInitialPoint(null);
-      }
+      setActiveInitialPoint(null);
     }
   };
 
@@ -200,22 +207,14 @@ export default function WaiversAndAcknowledgment() {
   };
 
   const handleSafetyQuestionToggle = () => {
-    // Check if all questions have been answered
-    if (safetyQuestion1 === null || safetyQuestion2 === null || safetyQuestion3 === null) {
-      setShowQuestionsWarning(true);
-      return;
-    }
+    // Questions are already pre-answered to "no" so this is just for warning visibility
     setShowQuestionsWarning(false);
   };
 
   const isReadyToSign = () => {
-    // Check if all paragraphs have been initialed and safety questions answered
+    // Check if all paragraphs have been initialed and signature is added
     return (
-      isSignatureSetup &&
       signedParagraphs.length === paragraphs.length && 
-      safetyQuestion1 !== null && 
-      safetyQuestion2 !== null && 
-      safetyQuestion3 !== null &&
       signature !== null
     );
   };
@@ -322,44 +321,54 @@ export default function WaiversAndAcknowledgment() {
           
           {/* Document with yellow "Initial Here" tags */}
           <div className={`relative border border-gray-200 rounded-md p-6 mb-6 font-serif ${isDocumentComplete ? 'bg-gray-50' : 'bg-white'}`}>
+            {/* Introduction paragraph - no initials required */}
+            <div className="mb-8">
+              <p className="text-gray-800 leading-relaxed">
+                {introduction}
+              </p>
+            </div>
+            
+            {/* Paragraphs that require initials */}
             {paragraphs.map((paragraph, index) => (
               <div 
                 key={index} 
-                className="mb-8 relative pr-14" 
+                className="mb-8 grid grid-cols-[85%_15%] items-center" 
                 ref={el => paragraphRefs.current[index] = el}
               >
-                <p className="text-gray-800 leading-relaxed">
+                <div className="text-gray-800 leading-relaxed pr-4">
                   {paragraph}
-                </p>
+                </div>
                 
-                {/* Yellow "Initial Here" tag */}
-                {!isDocumentComplete ? (
-                  <div 
-                    className={`absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-5
-                    ${signedParagraphs.includes(index) 
-                      ? 'bg-amber-100 cursor-default' 
-                      : 'bg-amber-300 hover:bg-amber-400 cursor-pointer'} 
-                    px-2 py-1 rounded-md shadow-sm transition-colors z-10`}
-                    onClick={() => !signedParagraphs.includes(index) && handleInitialOrSignatureTag(index)}
-                  >
-                    {signedParagraphs.includes(index) ? (
-                      <div className="flex items-center justify-center">
-                        {initials && (
-                          <img src={initials} alt="Your initials" className="h-6" />
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-xs font-medium text-amber-800 whitespace-nowrap">Initial Here</span>
-                    )}
-                  </div>
-                ) : (
-                  // Read-only version (document completed)
-                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-5 bg-amber-100 px-2 py-1 rounded-md shadow-sm z-10">
-                    <div className="flex items-center justify-center">
-                      {initials && <img src={initials} alt="Your initials" className="h-6" />}
+                <div className="flex justify-end">
+                  {/* Yellow "Initial Here" tag */}
+                  {!isDocumentComplete ? (
+                    <div 
+                      className={`
+                      ${signedParagraphs.includes(index) 
+                        ? 'bg-amber-100 cursor-default' 
+                        : 'bg-amber-300 hover:bg-amber-400 cursor-pointer'} 
+                      px-2 py-1 rounded-md shadow-sm transition-colors z-10`}
+                      onClick={() => !signedParagraphs.includes(index) && handleInitialOrSignatureTag(index)}
+                    >
+                      {signedParagraphs.includes(index) ? (
+                        <div className="flex items-center justify-center">
+                          {initials && (
+                            <img src={initials} alt="Your initials" className="h-6" />
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs font-medium text-amber-800 whitespace-nowrap">Initial Here</span>
+                      )}
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    // Read-only version (document completed)
+                    <div className="bg-amber-100 px-2 py-1 rounded-md shadow-sm z-10">
+                      <div className="flex items-center justify-center">
+                        {initials && <img src={initials} alt="Your initials" className="h-6" />}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -377,70 +386,76 @@ export default function WaiversAndAcknowledgment() {
             )}
             
             <div className="space-y-6">
-              {/* Question 1 */}
+              {/* Question 1 - Horizontal layout */}
               <div className="rounded-lg border border-gray-200 p-4">
-                <Label className="text-sm font-medium text-gray-700 block mb-3">
-                  Are you concerned that your child(ren) will not be safe while with the other parent?
-                </Label>
-                <RadioGroup 
-                  value={safetyQuestion1 || ""}
-                  onValueChange={(value) => setSafetyQuestion1(value)}
-                  disabled={isDocumentComplete}
-                  className="flex gap-4"
-                >
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion1 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="yes" id="q1-yes" />
-                    <Label htmlFor="q1-yes" className={safetyQuestion1 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
-                  </div>
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion1 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="no" id="q1-no" />
-                    <Label htmlFor="q1-no" className={safetyQuestion1 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
-                  </div>
-                </RadioGroup>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <Label className="text-sm font-medium text-gray-700 md:w-3/4">
+                    Are you concerned that your child(ren) will not be safe while with the other parent?
+                  </Label>
+                  <RadioGroup 
+                    value={safetyQuestion1}
+                    onValueChange={(value) => setSafetyQuestion1(value)}
+                    disabled={isDocumentComplete}
+                    className="flex gap-2 mt-2 md:mt-0"
+                  >
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion1 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="yes" id="q1-yes" />
+                      <Label htmlFor="q1-yes" className={safetyQuestion1 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
+                    </div>
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion1 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="no" id="q1-no" />
+                      <Label htmlFor="q1-no" className={safetyQuestion1 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
               </div>
               
-              {/* Question 2 */}
+              {/* Question 2 - Horizontal layout */}
               <div className="rounded-lg border border-gray-200 p-4">
-                <Label className="text-sm font-medium text-gray-700 block mb-3">
-                  Do you believe the other parent has an untreated substance/alcohol abuse problem?
-                </Label>
-                <RadioGroup 
-                  value={safetyQuestion2 || ""}
-                  onValueChange={(value) => setSafetyQuestion2(value)}
-                  disabled={isDocumentComplete}
-                  className="flex gap-4"
-                >
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion2 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="yes" id="q2-yes" />
-                    <Label htmlFor="q2-yes" className={safetyQuestion2 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
-                  </div>
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion2 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="no" id="q2-no" />
-                    <Label htmlFor="q2-no" className={safetyQuestion2 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
-                  </div>
-                </RadioGroup>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <Label className="text-sm font-medium text-gray-700 md:w-3/4">
+                    Do you believe the other parent has an untreated substance/alcohol abuse problem?
+                  </Label>
+                  <RadioGroup 
+                    value={safetyQuestion2}
+                    onValueChange={(value) => setSafetyQuestion2(value)}
+                    disabled={isDocumentComplete}
+                    className="flex gap-2 mt-2 md:mt-0"
+                  >
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion2 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="yes" id="q2-yes" />
+                      <Label htmlFor="q2-yes" className={safetyQuestion2 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
+                    </div>
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion2 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="no" id="q2-no" />
+                      <Label htmlFor="q2-no" className={safetyQuestion2 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
               </div>
               
-              {/* Question 3 */}
+              {/* Question 3 - Horizontal layout */}
               <div className="rounded-lg border border-gray-200 p-4">
-                <Label className="text-sm font-medium text-gray-700 block mb-3">
-                  Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
-                </Label>
-                <RadioGroup 
-                  value={safetyQuestion3 || ""}
-                  onValueChange={(value) => setSafetyQuestion3(value)}
-                  disabled={isDocumentComplete}
-                  className="flex gap-4"
-                >
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion3 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="yes" id="q3-yes" />
-                    <Label htmlFor="q3-yes" className={safetyQuestion3 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
-                  </div>
-                  <div className={`flex items-center space-x-2 border rounded-md px-4 py-2 ${safetyQuestion3 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
-                    <RadioGroupItem value="no" id="q3-no" />
-                    <Label htmlFor="q3-no" className={safetyQuestion3 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
-                  </div>
-                </RadioGroup>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <Label className="text-sm font-medium text-gray-700 md:w-3/4">
+                    Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
+                  </Label>
+                  <RadioGroup 
+                    value={safetyQuestion3}
+                    onValueChange={(value) => setSafetyQuestion3(value)}
+                    disabled={isDocumentComplete}
+                    className="flex gap-2 mt-2 md:mt-0"
+                  >
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion3 === 'yes' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="yes" id="q3-yes" />
+                      <Label htmlFor="q3-yes" className={safetyQuestion3 === 'yes' ? 'font-medium text-blue-600' : ''}>Yes</Label>
+                    </div>
+                    <div className={`flex items-center space-x-2 border rounded-md px-3 py-1.5 ${safetyQuestion3 === 'no' ? 'bg-blue-50 border-blue-300' : 'border-gray-200'}`}>
+                      <RadioGroupItem value="no" id="q3-no" />
+                      <Label htmlFor="q3-no" className={safetyQuestion3 === 'no' ? 'font-medium text-blue-600' : ''}>No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
               </div>
             </div>
           </div>
@@ -529,18 +544,18 @@ export default function WaiversAndAcknowledgment() {
               </DialogDescription>
             </DialogHeader>
             
-            <Tabs defaultValue="draw" className="w-full py-4">
+            <Tabs defaultValue="type" className="w-full py-4">
               <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="draw" onClick={() => {setSignatureMethod('draw'); setInitialsMethod('draw');}}>
-                  <div className="flex items-center">
-                    <PenTool className="mr-1.5 h-4 w-4" />
-                    Draw
-                  </div>
-                </TabsTrigger>
                 <TabsTrigger value="type" onClick={() => {setSignatureMethod('type'); setInitialsMethod('type');}}>
                   <div className="flex items-center">
                     <Keyboard className="mr-1.5 h-4 w-4" />
                     Type
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="draw" onClick={() => {setSignatureMethod('draw'); setInitialsMethod('draw');}}>
+                  <div className="flex items-center">
+                    <PenTool className="mr-1.5 h-4 w-4" />
+                    Draw
                   </div>
                 </TabsTrigger>
               </TabsList>
@@ -678,7 +693,7 @@ export default function WaiversAndAcknowledgment() {
                 className="bg-[#2e1a87] hover:bg-[#25156d]"
                 onClick={saveSignatureAndInitials}
               >
-                Apply to All Fields
+                Save and Continue
               </Button>
             </DialogFooter>
           </DialogContent>
