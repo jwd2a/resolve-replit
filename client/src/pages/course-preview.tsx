@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Lock,
+  ArrowRight,
   ExternalLink
 } from "lucide-react";
 import { usePaymentStatus } from "@/hooks/use-payment-status";
@@ -24,7 +25,8 @@ export default function CoursePreview() {
     localStorage.getItem('waiverCompleted') === 'true' : false;
   
   // Mock state for family info completion (replace with actual state in production)
-  const isFamilyInfoCompleted = true;
+  const isFamilyInfoCompleted = typeof window !== 'undefined' ? 
+    localStorage.getItem('familyInfoCompleted') === 'true' : false;
   
   // Get incomplete items for the reminder banner
   const incompleteItems = [];
@@ -109,61 +111,62 @@ export default function CoursePreview() {
       {/* Navigation Menu */}
       <NavigationMenu />
       
-      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Hero Header Section with Warning Banner */}
-        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-6 px-6 mb-6 text-white">
-          <div className="flex justify-between items-center">
-            <div className="flex-shrink-1 mr-3">
-              <h1 className="text-2xl font-semibold mb-1">Your Co-Parenting Course</h1>
-              <p className="text-white/80 text-sm">
-                Built to help families move forward together.
-              </p>
-            </div>
-            
-            {/* Access Warning Banner - single line with proper sizing */}
-            {incompleteItems.length > 0 && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-3 flex-shrink-0 w-auto min-w-[370px]">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2 flex-1">
-                    <AlertTriangle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
-                    <span className="font-medium text-amber-800 text-[11px] whitespace-nowrap mr-2">
-                      Complete required items to unlock the course.
-                    </span>
-                  </div>
-                  <Button 
-                    className="bg-[#2e1a87] hover:bg-[#25156d] py-0 px-2 h-6 text-[10px] whitespace-nowrap flex-shrink-0"
-                    onClick={() => navigate("/")}
-                  >
-                    Back to Checklist
-                  </Button>
-                </div>
-              </div>
-            )}
+      <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* Hero Header Section */}
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-8 px-8 mb-8 text-white">
+          <div className="max-w-3xl">
+            <h1 className="text-3xl font-bold mb-2">Your Co-Parenting Course</h1>
+            <p className="text-white/90 text-lg">
+              Guided by experts. Built to help families move forward together.
+            </p>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main content area - spans 2 columns on large screens */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Course Outline Section - moved up */}
+        {/* Access Reminder Banner */}
+        {incompleteItems.length > 0 && (
+          <div className="bg-amber-50 border-l-4 border-amber-400 rounded-md p-4 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h3 className="font-medium text-amber-800 text-lg flex items-center">
+                  <AlertTriangle className="h-5 w-5 mr-2 text-amber-500" />
+                  Complete required items to unlock your course.
+                </h3>
+                <p className="text-amber-700 mt-1 text-sm">
+                  You still need to finish: {incompleteItems.join(', ')}
+                </p>
+              </div>
+              <Button 
+                className="bg-[#2e1a87] hover:bg-[#25156d] py-2 px-4 h-10 text-sm"
+                onClick={() => navigate("/")}
+              >
+                Go to Checklist <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
+        )}
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main content area - spans 3 columns on large screens */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Course Outline Section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Course Outline</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Course Outline</h2>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {courseModules.map((module) => (
-                  <div key={module.number} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                    <h3 className="text-base font-medium text-[#2e1a87] mb-3">
+                  <div key={module.number} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                    <h3 className="text-lg font-semibold text-[#2e1a87] mb-4">
                       Module {module.number}: {module.title}
                     </h3>
                     
-                    <ul className="space-y-2">
+                    <ul className="space-y-3 ml-2">
                       {module.lessons.map((lesson, index) => (
                         <li 
                           key={index} 
-                          className="flex items-start gap-2 text-gray-500 text-sm pl-1"
+                          className="flex items-start gap-2 text-gray-600 text-sm pl-1"
                         >
                           <Lock className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                          <span className="opacity-75">{lesson}</span>
+                          <span>{lesson}</span>
                         </li>
                       ))}
                     </ul>
@@ -177,24 +180,23 @@ export default function CoursePreview() {
           <div className="space-y-6">
             {/* Value Reminder Section */}
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
-              <h3 className="text-base font-medium text-gray-900 mb-3">What's Included</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">What's Included</h3>
               
               <ul className="space-y-3">
                 {valueReminders.map((value, index) => (
                   <li key={index} className="flex items-center gap-2 text-gray-700">
-                    <CheckCircle className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-emerald-500 flex-shrink-0" />
                     <span className="text-sm">{value}</span>
                   </li>
                 ))}
               </ul>
               
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-xs text-gray-500 mb-3">
+              <div className="mt-6 pt-4 border-t border-gray-100">
+                <p className="text-sm text-gray-600 mb-4">
                   Complete all required items in your pre-course checklist to unlock full course access.
                 </p>
                 <Button 
-                  variant="outline" 
-                  className="w-full text-[#2e1a87] border-[#2e1a87] hover:bg-[#f5f0ff]"
+                  className="w-full bg-[#2e1a87] hover:bg-[#25156d]"
                   onClick={() => navigate("/")}
                 >
                   Return to Dashboard
@@ -204,10 +206,10 @@ export default function CoursePreview() {
             
             {/* Additional resources card */}
             <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
-              <h3 className="text-base font-medium text-gray-900 mb-3">Need Assistance?</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-3">Need Assistance?</h3>
               
               <p className="text-sm text-gray-600 mb-4">
-                Our team is here to help you with any questions about the course.
+                Our team is here to help you navigate the course and complete your pre-course requirements.
               </p>
               
               <Button 

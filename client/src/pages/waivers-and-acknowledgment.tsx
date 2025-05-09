@@ -11,7 +11,21 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowDown, Check, Edit, PenTool, Keyboard, FilePenLine, Play } from 'lucide-react';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { 
+  ArrowLeft, 
+  ArrowDown, 
+  Check, 
+  Download, 
+  Edit, 
+  PenTool, 
+  Keyboard, 
+  FilePenLine, 
+  Play, 
+  LockIcon,
+  CheckCircle
+} from 'lucide-react';
 import michaelLundyVideo from '@/assets/michael_lundy_video.jpg';
 import { useLocation } from 'wouter';
 import Player from '@vimeo/player';
@@ -19,7 +33,6 @@ import SignatureCanvas from 'react-signature-canvas';
 
 export default function WaiversAndAcknowledgment() {
   const [location, navigate] = useLocation();
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [signature, setSignature] = useState<string | null>(null);
   const [initials, setInitials] = useState<string | null>(null);
   const [signatureMethod, setSignatureMethod] = useState<'draw' | 'type'>('draw');
@@ -29,6 +42,16 @@ export default function WaiversAndAcknowledgment() {
   const [signatureFont, setSignatureFont] = useState('Dancing Script');
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [signatureModalOpen, setSignatureModalOpen] = useState(false);
+  const [initialModalOpen, setInitialModalOpen] = useState(false);
+  const [selectedParagraph, setSelectedParagraph] = useState<number | null>(null);
+  const [signedParagraphs, setSignedParagraphs] = useState<number[]>([]);
+  const [isDocumentComplete, setIsDocumentComplete] = useState(false);
+  
+  // Safety screening questions
+  const [safetyQuestion1, setSafetyQuestion1] = useState<boolean | null>(null);
+  const [safetyQuestion2, setSafetyQuestion2] = useState<boolean | null>(null);
+  const [safetyQuestion3, setSafetyQuestion3] = useState<boolean | null>(null);
+  const [showQuestionsWarning, setShowQuestionsWarning] = useState(false);
   
   // Generate initials from full name
   useEffect(() => {
@@ -46,11 +69,19 @@ export default function WaiversAndAcknowledgment() {
     }
   }, [signatureMethod, typedSignature]);
   
-  const agreementRef = useRef<HTMLDivElement>(null);
-  const signatureCanvasRef = useRef<SignatureCanvas>(null);
-  const initialsCanvasRef = useRef<SignatureCanvas>(null);
   const vimeoContainerRef = useRef<HTMLDivElement>(null);
   const vimeoPlayerRef = useRef<any>(null);
+  const signatureCanvasRef = useRef<SignatureCanvas>(null);
+  const initialsCanvasRef = useRef<SignatureCanvas>(null);
+
+  // Waiver paragraphs
+  const paragraphs = [
+    "Resolve is an educational course designed to support cooperative co-parenting and assist in reaching agreements between co-parents. However, participation in the course does not guarantee any specific outcome, including reaching full agreement on all parenting matters.",
+    "I understand that my co-parent and I may not reach a complete agreement through this course, and that additional support from legal, therapeutic, or other professionals may be necessary.",
+    "I acknowledge that any agreement my co-parent and I reach through Resolve does not guarantee the current or future health, safety, or well-being of our child(ren). As parents, we remain solely responsible for the care and upbringing of our child(ren), regardless of the contents of any co-parenting agreement we develop.",
+    "I understand that Resolve does not provide legal advice, and that no communication or material provided through Resolve—whether by its platform, representatives, or employees—should be construed as legal advice. I acknowledge that if I require legal counsel, I am solely responsible for consulting a licensed attorney in my jurisdiction.",
+    "I understand that any agreement my co-parent and I reach may require modifications to comply with applicable state and local laws. I acknowledge that it is my responsibility to ensure the agreement conforms to the laws in my jurisdiction and that legal consultation may be necessary to confirm its enforceability."
+  ];
 
   // Initialize Vimeo player
   useEffect(() => {
@@ -77,18 +108,6 @@ export default function WaiversAndAcknowledgment() {
     };
   }, []);
 
-  // Check if user has scrolled to the bottom of the agreement
-  const handleScroll = () => {
-    if (agreementRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = agreementRef.current;
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 20;
-      
-      if (isAtBottom && !hasScrolledToBottom) {
-        setHasScrolledToBottom(true);
-      }
-    }
-  };
-
   // Clear and save signature functions
   const clearSignature = () => {
     if (signatureCanvasRef.current) {
@@ -104,11 +123,12 @@ export default function WaiversAndAcknowledgment() {
     }
   };
 
-  const saveSignatureAndInitials = () => {
+  const saveSignature = () => {
     // Save signature
     if (signatureMethod === 'draw' && signatureCanvasRef.current) {
       if (!signatureCanvasRef.current.isEmpty()) {
         setSignature(signatureCanvasRef.current.toDataURL());
+        setSignatureModalOpen(false);
       }
     } else if (signatureMethod === 'type' && typedSignature.trim() !== '') {
       // Create a canvas to convert the typed signature to an image
@@ -122,13 +142,20 @@ export default function WaiversAndAcknowledgment() {
         ctx.fillStyle = '#000';
         ctx.fillText(typedSignature, 10, 50);
         setSignature(canvas.toDataURL());
+        setSignatureModalOpen(false);
       }
     }
-    
-    // Save initials
+  };
+  
+  const saveInitials = () => {
+    // Save initials and apply to the selected paragraph
     if (initialsMethod === 'draw' && initialsCanvasRef.current) {
       if (!initialsCanvasRef.current.isEmpty()) {
         setInitials(initialsCanvasRef.current.toDataURL());
+        if (selectedParagraph !== null) {
+          setSignedParagraphs(prev => [...prev, selectedParagraph]);
+        }
+        setInitialModalOpen(false);
       }
     } else if (initialsMethod === 'type' && typedInitials.trim() !== '') {
       // Create a canvas to convert the typed initials to an image
@@ -142,39 +169,51 @@ export default function WaiversAndAcknowledgment() {
         ctx.fillStyle = '#000';
         ctx.fillText(typedInitials, 10, 35);
         setInitials(canvas.toDataURL());
+        if (selectedParagraph !== null) {
+          setSignedParagraphs(prev => [...prev, selectedParagraph]);
+        }
+        setInitialModalOpen(false);
       }
     }
-    
-    // Close the modal
-    if ((signatureMethod === 'draw' && signatureCanvasRef.current && !signatureCanvasRef.current.isEmpty() && 
-         initialsCanvasRef.current && !initialsCanvasRef.current.isEmpty()) ||
-        (signatureMethod === 'type' && typedSignature.trim() !== '' && typedInitials.trim() !== '')) {
-      setSignatureModalOpen(false);
+  };
+
+  const handleInitialTag = (paragraphIndex: number) => {
+    setSelectedParagraph(paragraphIndex);
+    setInitialModalOpen(true);
+  };
+
+  const handleSignButtonClick = () => {
+    setSignatureModalOpen(true);
+  };
+  
+  const handleSafetyQuestionToggle = () => {
+    // Check if all questions have been answered
+    if (safetyQuestion1 === null || safetyQuestion2 === null || safetyQuestion3 === null) {
+      setShowQuestionsWarning(true);
+      return;
     }
+    setShowQuestionsWarning(false);
+  };
+
+  const isReadyToSign = () => {
+    // Check if all paragraphs have been initialed and safety questions answered
+    return (
+      signedParagraphs.length === paragraphs.length && 
+      safetyQuestion1 !== null && 
+      safetyQuestion2 !== null && 
+      safetyQuestion3 !== null
+    );
   };
 
   const handleSubmit = () => {
     // Save the waiver status to localStorage
     localStorage.setItem('waiverCompleted', 'true');
-    
-    // Here you would typically send the signature and initials to your backend
-    // For now, we'll just navigate back to the home page
-    navigate('/home6');
+    setIsDocumentComplete(true);
   };
   
-  const handleSignButtonClick = () => {
-    if (hasScrolledToBottom) {
-      if (!signature || !initials) {
-        setSignatureModalOpen(true);
-      } else {
-        handleSubmit();
-      }
-    }
-  };
-  
-  // No longer needed as saveSignatureAndInitials does this
-  const completeSignatureSetup = () => {
-    saveSignatureAndInitials();
+  const handleDownloadPDF = () => {
+    // Mock function for downloading PDF - would be implemented with actual PDF generation
+    alert('PDF Download functionality would be implemented here');
   };
 
   const fonts = [
@@ -223,7 +262,7 @@ export default function WaiversAndAcknowledgment() {
           </p>
         </div>
 
-        {/* Video section */}
+        {/* Video section - DO NOT MODIFY THIS SECTION */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Watch: Resolve Acknowledgment Overview
@@ -254,330 +293,436 @@ export default function WaiversAndAcknowledgment() {
           </p>
         </div>
 
-        {/* Agreement section */}
+        {/* DocuSign-style Agreement section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="relative">
-            <div
-              ref={agreementRef}
-              onScroll={handleScroll}
-              className="prose prose-slate h-96 overflow-y-auto border border-gray-200 rounded-md p-6 mb-4 font-serif max-w-none"
-            >
-              <h3>Resolve Waiver and Acknowledgment</h3>
-              
-              <p>
-                Resolve is an educational course designed to support cooperative co-parenting and assist in reaching agreements between co-parents. However, participation in the course does not guarantee any specific outcome, including reaching full agreement on all parenting matters.
-              </p>
-              
-              <p>
-                I understand that my co-parent and I may not reach a complete agreement through this course, and that additional support from legal, therapeutic, or other professionals may be necessary.
-              </p>
-              
-              <p>
-                I acknowledge that any agreement my co-parent and I reach through Resolve does not guarantee the current or future health, safety, or well-being of our child(ren). As parents, we remain solely responsible for the care and upbringing of our child(ren), regardless of the contents of any co-parenting agreement we develop.
-              </p>
-              
-              <p>
-                I understand that Resolve does not provide legal advice, and that no communication or material provided through Resolve—whether by its platform, representatives, or employees—should be construed as legal advice. I acknowledge that if I require legal counsel, I am solely responsible for consulting a licensed attorney in my jurisdiction.
-              </p>
-              
-              <p>
-                I understand that any agreement my co-parent and I reach may require modifications to comply with applicable state and local laws. I acknowledge that it is my responsibility to ensure the agreement conforms to the laws in my jurisdiction and that legal consultation may be necessary to confirm its enforceability.
-              </p>
-            </div>
-
-            {/* Sticky scroll indicator */}
-            {!hasScrolledToBottom && (
-              <div className="sticky bottom-0 w-full text-center py-2 bg-gradient-to-t from-white via-white to-transparent">
-                <p className="text-sm text-[#2e1a87] font-medium flex items-center justify-center">
-                  Scroll to bottom to sign <ArrowDown className="ml-1 h-4 w-4 animate-bounce" />
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-800">Resolve Waiver and Acknowledgment</h2>
+            {isDocumentComplete && (
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 flex items-center gap-1">
+                <LockIcon className="h-3.5 w-3.5" />
+                <span>Signed & Completed</span>
+              </Badge>
+            )}
+          </div>
+          
+          {/* Document with yellow "Initial Here" tags */}
+          <div className={`border border-gray-200 rounded-md p-6 mb-6 font-serif ${isDocumentComplete ? 'bg-gray-50' : 'bg-white'}`}>
+            {paragraphs.map((paragraph, index) => (
+              <div key={index} className="mb-8 relative">
+                <p className="text-gray-800 leading-relaxed">
+                  {paragraph}
+                </p>
+                
+                {/* Yellow "Initial Here" tag */}
+                {!isDocumentComplete ? (
+                  <div 
+                    className={`absolute -right-2 top-1/2 transform -translate-y-1/2 
+                    ${signedParagraphs.includes(index) 
+                      ? 'bg-amber-100 cursor-default' 
+                      : 'bg-amber-300 hover:bg-amber-400 cursor-pointer'} 
+                    px-2 py-1 rounded-md shadow-sm transition-colors`}
+                    onClick={() => !signedParagraphs.includes(index) && handleInitialTag(index)}
+                  >
+                    {signedParagraphs.includes(index) ? (
+                      <div className="flex items-center justify-center">
+                        {initials ? (
+                          <img src={initials} alt="Your initials" className="h-6" />
+                        ) : (
+                          <span className="text-xs font-medium text-amber-800">Initialed</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs font-medium text-amber-800 whitespace-nowrap">Initial Here</span>
+                    )}
+                  </div>
+                ) : (
+                  // Read-only version (document completed)
+                  <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 bg-amber-100 px-2 py-1 rounded-md shadow-sm">
+                    <div className="flex items-center justify-center">
+                      <img src={initials} alt="Your initials" className="h-6" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          {/* Safety Screening Questions Section */}
+          <div className={`border border-gray-200 rounded-md p-6 mb-6 ${isDocumentComplete ? 'bg-gray-50' : 'bg-white'}`}>
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Safety Screening Questions</h3>
+            
+            {showQuestionsWarning && (
+              <div className="mb-4 bg-amber-50 border border-amber-200 rounded-md p-3">
+                <p className="text-amber-600 text-sm flex items-center">
+                  Please answer all questions before proceeding.
                 </p>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Signature & Submit section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Sign Acknowledgment</h2>
-          
-          {!hasScrolledToBottom && (
-            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-md p-4">
-              <p className="text-amber-600 text-sm flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                Please read the entire acknowledgment before signing
-              </p>
-            </div>
-          )}
-          
-          <div className="mb-6 border border-gray-200 rounded-md p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-700">Document Acceptance</h3>
-              {signature && initials && (
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  Signed
-                </Badge>
-              )}
-            </div>
             
-            <p className="text-sm text-gray-600 mb-6">
-              By clicking "Sign" you acknowledge that you have read and agree to the terms outlined in the Resolve Waiver and Acknowledgment.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-              {/* Signature Field */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-sm font-medium text-gray-700">Signature</h4>
-                  <span className="text-xs text-red-500">Required</span>
+            <div className="space-y-6">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="safety-q1" className="text-sm text-gray-700 flex-grow pr-4">
+                    Are you concerned that your child(ren) will not be safe while with the other parent?
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="safety-q1-yes" className={`text-xs ${safetyQuestion1 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
+                    <Switch 
+                      id="safety-q1" 
+                      checked={safetyQuestion1 === true}
+                      onCheckedChange={() => setSafetyQuestion1(true)}
+                      disabled={isDocumentComplete}
+                    />
+                    <Label htmlFor="safety-q1-no" className={`text-xs ${safetyQuestion1 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
+                    <Switch 
+                      id="safety-q1-no" 
+                      checked={safetyQuestion1 === false}
+                      onCheckedChange={() => setSafetyQuestion1(false)}
+                      disabled={isDocumentComplete}
+                    />
+                  </div>
                 </div>
-                
+              </div>
+              
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="safety-q2" className="text-sm text-gray-700 flex-grow pr-4">
+                    Do you believe the other parent has an untreated substance/alcohol abuse problem?
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="safety-q2-yes" className={`text-xs ${safetyQuestion2 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
+                    <Switch 
+                      id="safety-q2" 
+                      checked={safetyQuestion2 === true}
+                      onCheckedChange={() => setSafetyQuestion2(true)}
+                      disabled={isDocumentComplete}
+                    />
+                    <Label htmlFor="safety-q2-no" className={`text-xs ${safetyQuestion2 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
+                    <Switch 
+                      id="safety-q2-no" 
+                      checked={safetyQuestion2 === false}
+                      onCheckedChange={() => setSafetyQuestion2(false)}
+                      disabled={isDocumentComplete}
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="safety-q3" className="text-sm text-gray-700 flex-grow pr-4">
+                    Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="safety-q3-yes" className={`text-xs ${safetyQuestion3 === true ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>Yes</Label>
+                    <Switch 
+                      id="safety-q3" 
+                      checked={safetyQuestion3 === true}
+                      onCheckedChange={() => setSafetyQuestion3(true)}
+                      disabled={isDocumentComplete}
+                    />
+                    <Label htmlFor="safety-q3-no" className={`text-xs ${safetyQuestion3 === false ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>No</Label>
+                    <Switch 
+                      id="safety-q3-no" 
+                      checked={safetyQuestion3 === false}
+                      onCheckedChange={() => setSafetyQuestion3(false)}
+                      disabled={isDocumentComplete}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Final Signature Section */}
+          {!isDocumentComplete ? (
+            <div className="border border-gray-200 rounded-md p-6">
+              <h3 className="text-lg font-medium text-gray-800 mb-4">Sign to Complete</h3>
+              
+              <div className="relative mb-6">
                 {signature ? (
-                  <div 
-                    className="border border-gray-200 rounded-md p-3 bg-white min-h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => setSignatureModalOpen(true)}
-                  >
-                    <img src={signature} alt="Your signature" className="max-h-16" />
+                  <div className="border border-gray-200 rounded-md p-4 bg-white">
+                    <div className="flex items-center justify-center py-3">
+                      <img src={signature} alt="Your signature" className="max-h-20" />
+                    </div>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => hasScrolledToBottom && setSignatureModalOpen(true)}
-                    disabled={!hasScrolledToBottom}
-                    className={`w-full border ${hasScrolledToBottom ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : 'border-gray-200 bg-gray-100'} 
-                      rounded-md min-h-20 flex flex-col items-center justify-center cursor-pointer transition-colors`}
-                  >
-                    <FilePenLine className={`h-6 w-6 mb-1 ${hasScrolledToBottom ? 'text-blue-500' : 'text-gray-400'}`} />
-                    <span className={`text-sm ${hasScrolledToBottom ? 'text-blue-600' : 'text-gray-400'}`}>Click to sign</span>
-                  </button>
+                  <div className="border border-gray-200 rounded-md p-4 bg-white relative">
+                    <div className="h-20 flex flex-col items-center justify-center">
+                      <div 
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-amber-300 hover:bg-amber-400 px-3 py-1.5 rounded-md shadow-sm cursor-pointer transition-colors"
+                        onClick={handleSignButtonClick}
+                      >
+                        <span className="text-sm font-medium text-amber-800">Sign Here</span>
+                      </div>
+                      <div className="text-gray-400 text-sm">Click "Sign Here" to add your signature</div>
+                    </div>
+                  </div>
                 )}
               </div>
               
-              {/* Initials Field */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-sm font-medium text-gray-700">Initials</h4>
-                  <span className="text-xs text-red-500">Required</span>
-                </div>
-                
-                {initials ? (
-                  <div 
-                    className="border border-gray-200 rounded-md p-3 bg-white min-h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => setSignatureModalOpen(true)}
-                  >
-                    <img src={initials} alt="Your initials" className="max-h-12" />
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => hasScrolledToBottom && setSignatureModalOpen(true)}
-                    disabled={!hasScrolledToBottom}
-                    className={`w-full border ${hasScrolledToBottom ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : 'border-gray-200 bg-gray-100'} 
-                      rounded-md min-h-20 flex flex-col items-center justify-center cursor-pointer transition-colors`}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 mb-1 ${hasScrolledToBottom ? 'text-blue-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    <span className={`text-sm ${hasScrolledToBottom ? 'text-blue-600' : 'text-gray-400'}`}>Add initials</span>
-                  </button>
-                )}
+              <div className="flex justify-end">
+                <Button
+                  disabled={!isReadyToSign() || !signature}
+                  className="bg-[#2e1a87] hover:bg-[#25156d]"
+                  onClick={handleSubmit}
+                  onMouseOver={handleSafetyQuestionToggle}
+                >
+                  {signature ? 'Complete & Continue' : 'Sign & Complete'}
+                </Button>
               </div>
             </div>
-            
-            {/* Submit Button */}
-            <Button
-              onClick={handleSubmit}
-              className="w-full h-12 mt-4 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium text-base shadow-md"
-              disabled={!signature || !initials}
-            >
-              {signature && initials ? "Complete Signing" : "Signature Required"}
-            </Button>
-          </div>
-          
-          {/* Completion Status Info */}
-          <div className="text-xs text-gray-500 flex items-center justify-between px-1">
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>This document is legally binding when completed</span>
-            </div>
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span>Secured with 256-bit encryption</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* Signature Modal */}
-        <Dialog open={signatureModalOpen} onOpenChange={setSignatureModalOpen}>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>Set Up Your Signature & Initials</DialogTitle>
-              <p className="text-sm text-gray-500 mt-2">
-                Your signature and initials will be used to sign this acknowledgment and future documents.
+          ) : (
+            // Document is completed - show download and continue buttons
+            <div className="border border-green-100 rounded-md p-6 bg-green-50">
+              <div className="flex items-center mb-4">
+                <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                <h3 className="text-lg font-medium text-green-800">Document Successfully Signed</h3>
+              </div>
+              
+              <p className="text-sm text-green-700 mb-6">
+                Thank you for completing the Resolve Waiver and Acknowledgment. You can now download a copy or continue with the co-parenting process.
               </p>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-end">
+                <Button
+                  variant="outline"
+                  className="flex items-center"
+                  onClick={handleDownloadPDF}
+                >
+                  <Download className="h-4 w-4 mr-1.5" />
+                  Download PDF
+                </Button>
+                
+                <Button
+                  className="bg-[#2e1a87] hover:bg-[#25156d]"
+                  onClick={() => navigate('/home6')}
+                >
+                  Continue
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Signature Modal */}
+        <Dialog
+          open={signatureModalOpen}
+          onOpenChange={(isOpen) => !isOpen && setSignatureModalOpen(false)}
+        >
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add Your Signature</DialogTitle>
+              <DialogDescription>
+                Sign the document to acknowledge you have read and agree to the terms.
+              </DialogDescription>
             </DialogHeader>
             
-            <div className="mt-4">
-              <Tabs defaultValue="draw" onValueChange={(value) => {
-                setSignatureMethod(value as 'draw' | 'type');
-                setInitialsMethod(value as 'draw' | 'type');
-              }}>
-                <div className="flex items-center justify-between mb-6">
-                  <TabsList className="grid grid-cols-2 w-48">
-                    <TabsTrigger value="draw" className="flex items-center justify-center">
-                      <PenTool className="mr-2 h-4 w-4" />
-                      Draw
-                    </TabsTrigger>
-                    <TabsTrigger value="type" className="flex items-center justify-center">
-                      <Keyboard className="mr-2 h-4 w-4" />
-                      Type
-                    </TabsTrigger>
-                  </TabsList>
-                  
-                  {signatureMethod === 'type' && (
-                    <div className="flex items-center space-x-3">
-                      <label className="text-sm text-gray-600 whitespace-nowrap">Font Style:</label>
-                      <select
-                        value={signatureFont}
-                        onChange={(e) => setSignatureFont(e.target.value)}
-                        className="p-1 border border-gray-300 rounded-md text-sm"
-                      >
-                        {fonts.map((font) => (
-                          <option key={font.name} value={font.name}>
-                            {font.label}
-                          </option>
-                        ))}
-                      </select>
+            <Tabs defaultValue="draw" className="w-full py-4">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="draw" onClick={() => setSignatureMethod('draw')}>
+                  <div className="flex items-center">
+                    <PenTool className="mr-1.5 h-4 w-4" />
+                    Draw
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="type" onClick={() => setSignatureMethod('type')}>
+                  <div className="flex items-center">
+                    <Keyboard className="mr-1.5 h-4 w-4" />
+                    Type
+                  </div>
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="draw" className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Signature</h3>
+                    <div className="border border-gray-300 rounded-md p-2 bg-white">
+                      <SignatureCanvas
+                        ref={signatureCanvasRef}
+                        penColor="black"
+                        canvasProps={{
+                          className: 'w-full h-32 border rounded-md cursor-crosshair',
+                        }}
+                      />
                     </div>
-                  )}
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-2"
+                      onClick={clearSignature}
+                    >
+                      Clear
+                    </Button>
+                  </div>
                 </div>
-                
-                <TabsContent value="draw" className="mt-0">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Signature Drawing Panel */}
-                    <div className="md:col-span-2">
-                      <h3 className="font-medium text-gray-700 mb-2">Your Signature</h3>
-                      <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
-                        <SignatureCanvas
-                          ref={signatureCanvasRef}
-                          canvasProps={{
-                            width: 300,
-                            height: 150,
-                            className: 'signature-canvas w-full',
-                          }}
-                          backgroundColor="rgba(247, 248, 249, 1)"
-                        />
-                      </div>
-                      <div>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={clearSignature}
-                        >
-                          Clear
-                        </Button>
+              </TabsContent>
+              
+              <TabsContent value="type" className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Type Your Full Name</h3>
+                    <input
+                      type="text"
+                      value={typedSignature}
+                      onChange={(e) => setTypedSignature(e.target.value)}
+                      placeholder="John Doe"
+                      className="w-full border border-gray-300 rounded-md p-3"
+                    />
+                    
+                    <div className="mt-3">
+                      <h4 className="text-xs font-medium mb-1">Select Style</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {fonts.map((font) => (
+                          <button
+                            key={font.name}
+                            type="button"
+                            onClick={() => setSignatureFont(font.name)}
+                            className={`border ${signatureFont === font.name ? 'border-blue-500 bg-blue-50' : 'border-gray-200'} rounded-md p-2 text-sm`}
+                          >
+                            <span style={{ fontFamily: font.name }}>
+                              {font.label}
+                            </span>
+                          </button>
+                        ))}
                       </div>
                     </div>
                     
-                    {/* Initials Drawing Panel */}
-                    <div>
-                      <h3 className="font-medium text-gray-700 mb-2">Your Initials</h3>
-                      <div className="border border-gray-200 rounded-md bg-gray-50 mb-3">
-                        <SignatureCanvas
-                          ref={initialsCanvasRef}
-                          canvasProps={{
-                            width: 150,
-                            height: 80,
-                            className: 'signature-canvas w-full',
-                          }}
-                          backgroundColor="rgba(247, 248, 249, 1)"
-                        />
-                      </div>
-                      <div>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={clearInitials}
+                    {typedSignature && (
+                      <div className="mt-4 border border-gray-200 rounded-md p-3 flex items-center justify-center min-h-16">
+                        <span 
+                          style={{ fontFamily: signatureFont }} 
+                          className="text-2xl text-gray-800"
                         >
-                          Clear
-                        </Button>
+                          {typedSignature}
+                        </span>
                       </div>
-                    </div>
+                    )}
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="type" className="mt-0">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Signature Typing Panel */}
-                    <div className="md:col-span-2">
-                      <h3 className="font-medium text-gray-700 mb-2">Your Signature</h3>
-                      <div className="mb-3">
-                        <input
-                          type="text"
-                          value={typedSignature}
-                          onChange={(e) => setTypedSignature(e.target.value)}
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                          placeholder="Type your full name"
-                        />
-                      </div>
-                      
-                      <div className="border border-gray-200 rounded-md p-4 bg-gray-50 mb-3 h-24 flex items-center justify-center">
-                        <p 
-                          style={{ 
-                            fontFamily: signatureFont, 
-                            fontSize: '28px',
-                            lineHeight: 1.2 
-                          }}
-                        >
-                          {typedSignature || 'Your signature will appear here'}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Initials Typing Panel */}
-                    <div>
-                      <h3 className="font-medium text-gray-700 mb-2">Your Initials</h3>
-                      <div className="mb-3">
-                        <p className="text-sm text-gray-600 mb-1">Initials (auto-generated from name)</p>
-                        <div className="w-full p-2 border border-gray-200 rounded-md bg-gray-100 text-gray-700">
-                          {typedInitials || 'Enter your full name above'}
-                        </div>
-                      </div>
-                      
-                      <div className="border border-gray-200 rounded-md p-4 bg-gray-50 mb-3 h-24 flex items-center justify-center">
-                        <p 
-                          style={{ 
-                            fontFamily: signatureFont, 
-                            fontSize: '32px',
-                            lineHeight: 1.2 
-                          }}
-                        >
-                          {typedInitials || 'JD'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
+                </div>
+              </TabsContent>
+            </Tabs>
             
             <DialogFooter>
               <Button 
-                variant="outline" 
+                variant="ghost" 
                 onClick={() => setSignatureModalOpen(false)}
               >
                 Cancel
               </Button>
-              <Button 
-                onClick={saveSignatureAndInitials}
+              <Button
                 className="bg-[#2e1a87] hover:bg-[#25156d]"
+                onClick={saveSignature}
               >
-                Save and Continue
+                Apply Signature
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Initials Modal */}
+        <Dialog
+          open={initialModalOpen}
+          onOpenChange={(isOpen) => !isOpen && setInitialModalOpen(false)}
+        >
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add Your Initials</DialogTitle>
+              <DialogDescription>
+                Initial this section to confirm you have read and understood it.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <Tabs defaultValue="draw" className="w-full py-4">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="draw" onClick={() => setInitialsMethod('draw')}>
+                  <div className="flex items-center">
+                    <PenTool className="mr-1.5 h-4 w-4" />
+                    Draw
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="type" onClick={() => setInitialsMethod('type')}>
+                  <div className="flex items-center">
+                    <Keyboard className="mr-1.5 h-4 w-4" />
+                    Type
+                  </div>
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="draw" className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Initials</h3>
+                    <div className="border border-gray-300 rounded-md p-2 bg-white">
+                      <SignatureCanvas
+                        ref={initialsCanvasRef}
+                        penColor="black"
+                        canvasProps={{
+                          className: 'w-full h-24 border rounded-md cursor-crosshair',
+                        }}
+                      />
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-2"
+                      onClick={clearInitials}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="type" className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Your Initials</h3>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        value={typedInitials}
+                        onChange={(e) => setTypedInitials(e.target.value)}
+                        placeholder="JD"
+                        className="w-20 border border-gray-300 rounded-md p-3 text-center"
+                        maxLength={3}
+                      />
+                      
+                      {typedSignature && (
+                        <span className="ml-3 text-sm text-gray-500">
+                          Generated from your full name
+                        </span>
+                      )}
+                    </div>
+                    
+                    {typedInitials && (
+                      <div className="mt-3 border border-gray-200 rounded-md p-3 flex items-center justify-center h-16 w-16">
+                        <span 
+                          style={{ fontFamily: signatureFont }} 
+                          className="text-xl text-gray-800"
+                        >
+                          {typedInitials}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+            
+            <DialogFooter>
+              <Button 
+                variant="ghost" 
+                onClick={() => setInitialModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-[#2e1a87] hover:bg-[#25156d]"
+                onClick={saveInitials}
+              >
+                Apply Initials
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -1,0 +1,52 @@
+Overview
+We're updating the Waivers & Acknowledgment page to follow a DocuSign-style signature and initialing flow. **Do not change the video section at the top of the page.** All changes apply to the area **below the video** only.
+
+---
+
+## 📅 Below the Video: Waiver Document + Signature Flow
+
+### ✉️ 1. Waiver Document Layout
+- Show the **Resolve Waiver and Acknowledgment** content as a document-style block
+- Each of the 5 paragraphs must have a yellow **"Initial Here"** tag aligned to the right
+- User clicks any tag to trigger a modal (draw or type initials)
+- Once saved, initials populate all tags
+
+**Paragraphs to include (from full waiver text):**
+1. Resolve is an educational course designed...
+2. I understand that my co-parent and I may not reach...
+3. I acknowledge that any agreement my co-parent and I reach...
+4. I understand that Resolve does not provide legal advice...
+5. I understand that any agreement my co-parent and I reach may require modifications...
+
+---
+
+### 🧳️ 2. Safety Screening Section (below document)
+- Include the following questions as required fields using "Yes / No" toggle selectors:
+  1. Are you concerned that your child(ren) will not be safe while with the other parent?
+  2. Do you believe the other parent has an untreated substance/alcohol abuse problem?
+  3. Has the other parent been diagnosed with a mental health disorder for which he/she is not being properly treated?
+- Highlight unanswered items when user tries to proceed
+
+---
+
+### ✅ 3. Final Signature
+- At the bottom of the document, add a yellow **"Sign Here"** tag with a full signature field
+- User must adopt signature (draw or type)
+- Display stylized name in signature preview font
+- Show lock icon or badge confirming signature is complete
+
+---
+
+### 📄 4. After Signing
+- Lock the full document in read-only mode
+- Display buttons:
+  - `Download PDF`
+  - `Continue`
+
+---
+
+## 🔧 Requirements
+- DO NOT modify video section above the waiver
+- Disable "Sign & Complete" until all initials + questions are done
+- Match design and flow of DocuSign (yellow tags, progressive steps)
+- Support mobile layout
