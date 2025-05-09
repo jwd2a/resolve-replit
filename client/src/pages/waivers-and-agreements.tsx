@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogFooter
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowDown, Check, Edit, PenTool, Keyboard, FilePenLine, Play } from 'lucide-react';
 import michaelLundyVideo from '@/assets/michael_lundy_video.jpg';
 import { useLocation } from 'wouter';
@@ -297,65 +298,118 @@ export default function WaiversAndAgreements() {
 
         {/* Signature & Submit section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          {signature && initials ? (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Your Signature</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">Signature</h3>
-                  <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
-                    <img src={signature} alt="Your signature" className="max-h-16" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">Initials</h3>
-                  <div className="border border-gray-200 rounded-md p-3 bg-white min-h-16 flex items-center">
-                    <img src={initials} alt="Your initials" className="max-h-12" />
-                  </div>
-                </div>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="mb-6 flex items-center text-blue-600"
-                onClick={() => setSignatureModalOpen(true)}
-              >
-                <Edit className="h-4 w-4 mr-1" />
-                Edit Signature
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                className="w-full h-14 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium text-lg shadow-md"
-              >
-                Sign & Continue
-              </Button>
-            </div>
-          ) : (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Sign Agreement</h2>
-              <p className="text-gray-600 mb-6">
-                {hasScrolledToBottom 
-                  ? "Click the button below to sign this agreement with your electronic signature."
-                  : "Please read the entire agreement before signing."}
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Sign Agreement</h2>
+          
+          {!hasScrolledToBottom && (
+            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-md p-4">
+              <p className="text-amber-600 text-sm flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Please read the entire agreement before signing
               </p>
-              <Button
-                onClick={handleSignButtonClick}
-                className="w-full h-14 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium text-lg shadow-md flex items-center justify-center"
-                disabled={!hasScrolledToBottom}
-              >
-                <FilePenLine className="mr-2 h-5 w-5" />
-                Sign Agreement
-              </Button>
-              
-              {!hasScrolledToBottom && (
-                <div className="mt-3 text-center">
-                  <p className="text-amber-600 text-sm">
-                    Please read the entire agreement before signing
-                  </p>
-                </div>
-              )}
             </div>
           )}
+          
+          <div className="mb-6 border border-gray-200 rounded-md p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-medium text-gray-700">Document Acceptance</h3>
+              {signature && initials && (
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Signed
+                </Badge>
+              )}
+            </div>
+            
+            <p className="text-sm text-gray-600 mb-6">
+              By clicking "Sign" you acknowledge that you have read and agree to the terms outlined in the Resolve Waiver and Acknowledgment.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+              {/* Signature Field */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-medium text-gray-700">Signature</h4>
+                  <span className="text-xs text-red-500">Required</span>
+                </div>
+                
+                {signature ? (
+                  <div 
+                    className="border border-gray-200 rounded-md p-3 bg-white min-h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => setSignatureModalOpen(true)}
+                  >
+                    <img src={signature} alt="Your signature" className="max-h-16" />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => hasScrolledToBottom && setSignatureModalOpen(true)}
+                    disabled={!hasScrolledToBottom}
+                    className={`w-full border ${hasScrolledToBottom ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : 'border-gray-200 bg-gray-100'} 
+                      rounded-md min-h-20 flex flex-col items-center justify-center cursor-pointer transition-colors`}
+                  >
+                    <FilePenLine className={`h-6 w-6 mb-1 ${hasScrolledToBottom ? 'text-blue-500' : 'text-gray-400'}`} />
+                    <span className={`text-sm ${hasScrolledToBottom ? 'text-blue-600' : 'text-gray-400'}`}>Click to sign</span>
+                  </button>
+                )}
+              </div>
+              
+              {/* Initials Field */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-medium text-gray-700">Initials</h4>
+                  <span className="text-xs text-red-500">Required</span>
+                </div>
+                
+                {initials ? (
+                  <div 
+                    className="border border-gray-200 rounded-md p-3 bg-white min-h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => setSignatureModalOpen(true)}
+                  >
+                    <img src={initials} alt="Your initials" className="max-h-12" />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => hasScrolledToBottom && setSignatureModalOpen(true)}
+                    disabled={!hasScrolledToBottom}
+                    className={`w-full border ${hasScrolledToBottom ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : 'border-gray-200 bg-gray-100'} 
+                      rounded-md min-h-20 flex flex-col items-center justify-center cursor-pointer transition-colors`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 mb-1 ${hasScrolledToBottom ? 'text-blue-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    <span className={`text-sm ${hasScrolledToBottom ? 'text-blue-600' : 'text-gray-400'}`}>Add initials</span>
+                  </button>
+                )}
+              </div>
+            </div>
+            
+            {/* Submit Button */}
+            <Button
+              onClick={handleSubmit}
+              className="w-full h-12 mt-4 bg-gradient-to-r from-[#2e1a87] to-[#4936c2] hover:from-[#25156d] hover:to-[#3e2ea5] text-white font-medium text-base shadow-md"
+              disabled={!signature || !initials}
+            >
+              {signature && initials ? "Complete Signing" : "Signature Required"}
+            </Button>
+          </div>
+          
+          {/* Completion Status Info */}
+          <div className="text-xs text-gray-500 flex items-center justify-between px-1">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>This document is legally binding when completed</span>
+            </div>
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span>Secured with 256-bit encryption</span>
+            </div>
+          </div>
         </div>
         
         {/* Signature Modal */}
