@@ -196,8 +196,19 @@ export default function WaiversAndAcknowledgment() {
       }
     }
     
-    // Check if both signature and initials are valid before proceeding
-    if (validSignature && validInitials) {
+    // Determine what we need based on what the user is trying to do
+    let isValid = false;
+    
+    // For first-time setup or final signature, require both signature and initials
+    if (activeInitialPoint === null || activeInitialPoint === -1) {
+      isValid = validSignature && validInitials;
+    } 
+    // For initializing a paragraph, we only need initials to be valid
+    else if (activeInitialPoint >= 0) {
+      isValid = validInitials;
+    }
+    
+    if (isValid) {
       setIsSignatureSetup(true);
       
       // Apply only to the clicked paragraph if it's a paragraph initial
@@ -217,13 +228,20 @@ export default function WaiversAndAcknowledgment() {
       setSignSetupModalOpen(false);
       setActiveInitialPoint(null);
     } else {
-      // Show validation error
-      if (!validSignature && !validInitials) {
-        alert('Please provide both a signature and initials before saving.');
-      } else if (!validSignature) {
-        alert('Please provide a signature before saving.');
-      } else if (!validInitials) {
-        alert('Please provide initials before saving.');
+      // Show appropriate validation error
+      if (activeInitialPoint === null || activeInitialPoint === -1) {
+        if (!validSignature && !validInitials) {
+          alert('Please provide both a signature and initials before saving.');
+        } else if (!validSignature) {
+          alert('Please provide a signature before saving.');
+        } else if (!validInitials) {
+          alert('Please provide initials before saving.');
+        }
+      } else {
+        // For paragraph initials, we only need to check initials
+        if (!validInitials) {
+          alert('Please provide initials before saving.');
+        }
       }
     }
   };
