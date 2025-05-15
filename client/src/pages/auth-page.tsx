@@ -207,34 +207,7 @@ export default function AuthPage() {
                     </FormItem>
                   )}
                 />
-                <div className="grid grid-cols-2 gap-2">
-                  <FormField
-                    control={registerForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormLabel className="text-xs">Username</FormLabel>
-                        <FormControl>
-                          <Input placeholder="username" {...field} className="h-8" />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="displayName"
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormLabel className="text-xs">Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John Doe" {...field} className="h-8" />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <FormField
                     control={registerForm.control}
