@@ -23,8 +23,6 @@ const loginSchema = z.object({
 
 const registerSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-  displayName: z.string().min(2, { message: "Please enter your full name" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -53,8 +51,6 @@ export default function AuthPage() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
-      username: "",
-      displayName: "",
       password: "",
       confirmPassword: "",
     },
@@ -66,7 +62,10 @@ export default function AuthPage() {
   };
 
   const onRegisterSubmit = async (values: RegisterFormValues) => {
-    await registerWithEmail(values.email, values.username, values.password, values.displayName);
+    // Generate a username from the email
+    const username = values.email.split('@')[0];
+    // Use username as displayName as well
+    await registerWithEmail(values.email, username, values.password, username);
   };
 
   // If user is already logged in, redirect based on their onboarding status
