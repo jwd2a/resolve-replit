@@ -50,6 +50,7 @@ export function NavigationMenu() {
   const courseEntryCodeRoute = { name: "Course Entry Code", path: "/co-parent-verification" };
   const scheduleRoute = { name: "Co-Parenting Schedule", path: "/co-parenting-schedule" };
   const holidayScheduleRoute = { name: "Holiday Schedule", path: "/holidayschedule" };
+  const childSupportRoute = { name: "Child Support Estimator", path: "/childsupport" };
   const aiTestRoute = { name: "AI Test", path: "/ai-test" };
   
   // Check if current route is active
@@ -189,6 +190,16 @@ export function NavigationMenu() {
                   <Calendar size={16} className="mr-2 text-[#6c54da]" />
                   <span>Holiday Schedule</span>
                   {isActive(holidayScheduleRoute.path) && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
+              <Link href={childSupportRoute.path}>
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <Calendar size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Child Support Estimator</span>
+                  {isActive(childSupportRoute.path) && (
                     <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
                   )}
                 </DropdownMenuItem>

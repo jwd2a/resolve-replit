@@ -36,6 +36,7 @@ import ResourcesPage from "@/pages/resources-page";
 import LandingPage from "@/pages/landing";
 import AdminUsersFamilies from "@/pages/admin/users-families";
 import AdminFamiliesList from "@/pages/admin/families-list";
+import ChildSupport from "@/pages/child-support";
 import { AuthProvider } from "@/hooks/use-auth";
 import { PaymentStatusProvider } from "@/hooks/use-payment-status";
 import { ProtectedRoute } from "@/components/protected-route";
@@ -89,6 +90,7 @@ function Router() {
       <Route path="/resources" component={ResourcesPage} />
       <Route path="/resources/:id" component={ResourcesPage} />
       <Route path="/ai-test" component={AITestPage} />
+      <Route path="/childsupport" component={ChildSupport} />
       
       {/* Admin routes */}
       <Route path="/admin/families" component={AdminFamiliesList} />

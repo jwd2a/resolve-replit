@@ -1,0 +1,79 @@
+# Resolve App – Other Stuff Section
+**Path**: `/childsupport`  
+**Title**: *Child Support Range Estimator*
+
+---
+
+## Overview
+
+This section provides a prototype prompt for building a **Child Support Range Estimator Tool** within Resolve. It's designed to be a starting point for product and engineering teams to implement a simple, educational tool that helps co-parents get a *realistic monthly range* of expected child support without involving litigation.
+
+---
+
+## Prompt for Replit Canvas or Product Implementation
+
+### Goal
+Create a simple, user-friendly web app where co-parents can enter financial and custody-related data and receive an estimated *range* of monthly child support obligations based on standard state guidelines.
+
+---
+
+## Pages / Views
+
+### 1. Welcome / Intro Page
+**Purpose**: Briefly explain what the tool does and reassure users of privacy.  
+**Components**:
+- Headline: “Estimate Your Child Support Range”
+- Text: “Answer a few quick questions and see your estimated monthly range in minutes. This is not legal advice but a helpful starting point.”
+- Start button
+
+---
+
+### 2. Data Collection Page (Multi-Step Form)
+**Purpose**: Collect key inputs to calculate the support estimate.  
+**Step-by-step fields**:
+- Parent A Monthly Income
+- Parent B Monthly Income
+- Number of Children
+- Who has primary custody? (Shared / Parent A / Parent B)
+- # of Overnights with each parent
+- Monthly child-related expenses (optional)
+- State (Dropdown—used to tailor future versions)
+
+---
+
+### 3. Results Page
+**Purpose**: Display the estimated support range clearly.  
+**Components**:
+- Estimated Support Range: e.g., `$1,800 – $2,400 per month`
+- Median Value: e.g., `$2,100`
+- Factors that influenced the range (bullets: income gap, custody time)
+- Adjust Inputs button
+- Optional Download Summary (PDF or shareable summary)
+
+---
+
+### 4. Disclaimer / About Page
+- Notes this is an *educational tool only*.  
+- Encourages users to consult legal or mediation professionals if needed.
+
+---
+
+## Estimation Logic (Initial Placeholder)
+
+Use this simplified logic for now until state-specific calculations are implemented:
+
+```python
+base_amount = (Parent A Income + Parent B Income) * 0.20
+```
+
+Adjust based on custody split (overnights) and other modifiers.  
+Return a range of ±10–15% to reflect common outcomes and negotiation variability.
+
+---
+
+## Technology Considerations
+- Can be built using HTML/CSS/JS in Replit Canvas
+- Optional: Save input data using LocalStorage
+- Stretch Goals:
+  - PDF Export
+  - Connect to API for state-specific guidelines
