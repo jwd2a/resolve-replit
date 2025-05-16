@@ -77,33 +77,48 @@ export default function ChildSupport() {
     const overnightsParentB = Number(data.overnightsParentB);
     const expenses = data.expenses ? Number(data.expenses) : 0;
     
-    // Calculate base amount (20% of combined income)
-    const baseAmount = (parentAIncome + parentBIncome) * 0.20;
+    // Calculate base amount (a percentage of combined income based on number of children)
+    // Using more realistic percentages for monthly child support
+    let basePercentage = 0.10; // Starting base for 1 child
+    if (numberOfChildren === 2) basePercentage = 0.15;
+    if (numberOfChildren === 3) basePercentage = 0.18;
+    if (numberOfChildren >= 4) basePercentage = 0.20;
     
-    // Adjust for number of children
-    let multiplier = 1;
-    if (numberOfChildren === 2) multiplier = 1.25;
-    if (numberOfChildren === 3) multiplier = 1.45;
-    if (numberOfChildren >= 4) multiplier = 1.65;
+    const baseAmount = (parentAIncome + parentBIncome) * basePercentage;
     
-    const adjustedBase = baseAmount * multiplier;
+    // We already adjusted for number of children in the base percentage,
+    // so we'll remove this additional multiplier to avoid double-counting
+    const adjustedBase = baseAmount;
     
     // Adjust for custody
     const overnightRatio = overnightsParentA / (overnightsParentA + overnightsParentB);
     const incomeRatio = parentAIncome / (parentAIncome + parentBIncome);
     
     // Calculate adjustment based on custody and income difference
+    // Make the adjustment smaller to avoid inflating monthly estimates
     let custodyAdjustment = 0;
     if (data.primaryCustody === "shared") {
-      custodyAdjustment = Math.abs(0.5 - overnightRatio) * 0.5;
+      custodyAdjustment = Math.abs(0.5 - overnightRatio) * 0.3;
     } else if (data.primaryCustody === "parentA") {
-      custodyAdjustment = 0.15;
+      custodyAdjustment = 0.1;
     } else {
-      custodyAdjustment = -0.15;
+      custodyAdjustment = -0.1;
     }
     
-    // Calculate final value and create a range
-    let finalAmount = adjustedBase * (1 + custodyAdjustment);
+    // Calculate final value
+    // For more realistic monthly child support, we'll use a weighted proportion
+    // If there's income disparity, higher-earning parent pays more
+    let incomeShare = 0;
+    if (parentAIncome > parentBIncome) {
+      // Parent A pays a share based on their income proportion
+      incomeShare = parentAIncome / (parentAIncome + parentBIncome);
+    } else {
+      // Parent B pays a share based on their income proportion
+      incomeShare = parentBIncome / (parentAIncome + parentBIncome);
+    }
+    
+    // Apply the custody adjustment to the income share
+    let finalAmount = adjustedBase * incomeShare * (1 + custodyAdjustment);
     
     // Determine who pays based on custody and income
     let payingParent = "";
