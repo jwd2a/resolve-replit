@@ -69,20 +69,28 @@ export default function ChildSupport() {
   });
   
   const onSubmit = (data: FormValues) => {
+    // Convert string values to numbers
+    const parentAIncome = Number(data.parentAIncome);
+    const parentBIncome = Number(data.parentBIncome);
+    const numberOfChildren = Number(data.numberOfChildren);
+    const overnightsParentA = Number(data.overnightsParentA);
+    const overnightsParentB = Number(data.overnightsParentB);
+    const expenses = data.expenses ? Number(data.expenses) : 0;
+    
     // Calculate base amount (20% of combined income)
-    const baseAmount = (data.parentAIncome + data.parentBIncome) * 0.20;
+    const baseAmount = (parentAIncome + parentBIncome) * 0.20;
     
     // Adjust for number of children
     let multiplier = 1;
-    if (data.numberOfChildren === 2) multiplier = 1.25;
-    if (data.numberOfChildren === 3) multiplier = 1.45;
-    if (data.numberOfChildren >= 4) multiplier = 1.65;
+    if (numberOfChildren === 2) multiplier = 1.25;
+    if (numberOfChildren === 3) multiplier = 1.45;
+    if (numberOfChildren >= 4) multiplier = 1.65;
     
     const adjustedBase = baseAmount * multiplier;
     
     // Adjust for custody
-    const overnightRatio = data.overnightsParentA / (data.overnightsParentA + data.overnightsParentB);
-    const incomeRatio = data.parentAIncome / (data.parentAIncome + data.parentBIncome);
+    const overnightRatio = overnightsParentA / (overnightsParentA + overnightsParentB);
+    const incomeRatio = parentAIncome / (parentAIncome + parentBIncome);
     
     // Calculate adjustment based on custody and income difference
     let custodyAdjustment = 0;
@@ -105,7 +113,7 @@ export default function ChildSupport() {
       payingParent = "Parent A";
     } else {
       // In shared custody, the higher income parent typically pays
-      payingParent = data.parentAIncome > data.parentBIncome ? "Parent A" : "Parent B";
+      payingParent = parentAIncome > parentBIncome ? "Parent A" : "Parent B";
     }
     
     // Calculate range (+/- 15%)
@@ -117,7 +125,7 @@ export default function ChildSupport() {
     const factors = [];
     
     // Income difference
-    const incomeDifference = Math.abs(data.parentAIncome - data.parentBIncome);
+    const incomeDifference = Math.abs(parentAIncome - parentBIncome);
     const incomeRatioDifference = Math.abs(0.5 - incomeRatio);
     
     if (incomeRatioDifference > 0.2) {
@@ -126,7 +134,7 @@ export default function ChildSupport() {
     
     // Custody arrangement
     if (data.primaryCustody === "shared") {
-      const overnightDifference = Math.abs(data.overnightsParentA - data.overnightsParentB);
+      const overnightDifference = Math.abs(overnightsParentA - overnightsParentB);
       if (overnightDifference < 30) {
         factors.push(`Nearly equal time with both parents`);
       } else {
@@ -137,13 +145,13 @@ export default function ChildSupport() {
     }
     
     // Number of children
-    if (data.numberOfChildren > 1) {
-      factors.push(`Multiple children (${data.numberOfChildren})`);
+    if (numberOfChildren > 1) {
+      factors.push(`Multiple children (${numberOfChildren})`);
     }
     
     // Expenses
-    if (data.expenses > 0) {
-      factors.push(`Additional monthly expenses of $${data.expenses}`);
+    if (expenses > 0) {
+      factors.push(`Additional monthly expenses of $${expenses}`);
     }
     
     setResult({
