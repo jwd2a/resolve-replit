@@ -68,106 +68,114 @@ export default function ChildSupport() {
     }
   });
   
+  // Implement the updated child support calculation algorithm
+  function estimateChildSupport({
+    incomeA,
+    incomeB,
+    numChildren,
+    overnightsA,
+    extraExpenses
+  }) {
+    const totalOvernights = 365;
+    const overnightsB = totalOvernights - overnightsA;
+    const combinedIncome = incomeA + incomeB;
+
+    if (combinedIncome === 0) return { error: "Combined income must be greater than 0." };
+
+    // Multiplier by number of children
+    const multipliers = { 1: 0.16, 2: 0.22, 3: 0.26 };
+    const multiplier = multipliers[numChildren] || 0.30;
+
+    const baseSupport = combinedIncome * multiplier;
+
+    // Income share
+    const aShare = incomeA / combinedIncome;
+    const bShare = incomeB / combinedIncome;
+
+    // Custody percentage
+    const aCustodyPct = overnightsA / totalOvernights;
+    const bCustodyPct = overnightsB / totalOvernights;
+
+    const aToB = baseSupport * (aShare - aCustodyPct);
+    const bToA = baseSupport * (bShare - bCustodyPct);
+
+    let netSupport = Math.max(aToB, bToA, 0); // Only one pays
+    netSupport += extraExpenses;
+
+    const median = Math.round(netSupport);
+    const min = Math.round(median * 0.9);
+    const max = Math.round(median * 1.1);
+
+    // Determine who pays
+    const payingParent = aToB > bToA ? "Parent A" : "Parent B";
+
+    // Determine factors that influenced the calculation
+    const factors = [];
+    
+    // Income difference
+    if (Math.abs(aShare - bShare) > 0.2) {
+      factors.push(`Significant income difference between parents`);
+    }
+    
+    // Custody arrangement
+    if (Math.abs(aCustodyPct - 0.5) < 0.1) {
+      factors.push(`Nearly equal time with both parents`);
+    } else if (Math.abs(aCustodyPct - 0.5) < 0.3) {
+      factors.push(`Uneven but shared custody arrangement`);
+    } else {
+      factors.push(`${aCustodyPct > 0.6 ? "Parent A" : "Parent B"} has primary custody`);
+    }
+    
+    // Number of children
+    if (numChildren > 1) {
+      factors.push(`Multiple children (${numChildren})`);
+    }
+    
+    // Expenses
+    if (extraExpenses > 0) {
+      factors.push(`Additional monthly expenses of $${extraExpenses}`);
+    }
+
+    return {
+      supportRange: { min, max },
+      median: median,
+      payingParent,
+      factors,
+      details: {
+        baseSupport: Math.round(baseSupport),
+        incomeSplit: { aShare: aShare.toFixed(2), bShare: bShare.toFixed(2) },
+        custodySplit: { aCustodyPct: aCustodyPct.toFixed(2), bCustodyPct: bCustodyPct.toFixed(2) },
+      }
+    };
+  }
+
   const onSubmit = (data: FormValues) => {
     // Convert string values to numbers
     const parentAIncome = Number(data.parentAIncome);
     const parentBIncome = Number(data.parentBIncome);
     const numberOfChildren = Number(data.numberOfChildren);
     const overnightsParentA = Number(data.overnightsParentA);
-    const overnightsParentB = Number(data.overnightsParentB);
     const expenses = data.expenses ? Number(data.expenses) : 0;
     
-    // Calculate base amount (a percentage of combined income based on number of children)
-    // Using more realistic percentages for monthly child support
-    let basePercentage = 0.10; // Starting base for 1 child
-    if (numberOfChildren === 2) basePercentage = 0.15;
-    if (numberOfChildren === 3) basePercentage = 0.18;
-    if (numberOfChildren >= 4) basePercentage = 0.20;
+    // Calculate child support using the new algorithm
+    const result = estimateChildSupport({
+      incomeA: parentAIncome,
+      incomeB: parentBIncome,
+      numChildren: numberOfChildren,
+      overnightsA: overnightsParentA,
+      extraExpenses: expenses
+    });
     
-    const baseAmount = (parentAIncome + parentBIncome) * basePercentage;
-    
-    // We already adjusted for number of children in the base percentage,
-    // so we'll remove this additional multiplier to avoid double-counting
-    const adjustedBase = baseAmount;
-    
-    // Adjust for custody
-    const overnightRatio = overnightsParentA / (overnightsParentA + overnightsParentB);
-    const incomeRatio = parentAIncome / (parentAIncome + parentBIncome);
-    
-    // Calculate adjustment based on custody and income difference
-    // Make the adjustment smaller to avoid inflating monthly estimates
-    let custodyAdjustment = 0;
-    if (data.primaryCustody === "shared") {
-      custodyAdjustment = Math.abs(0.5 - overnightRatio) * 0.3;
-    } else if (data.primaryCustody === "parentA") {
-      custodyAdjustment = 0.1;
-    } else {
-      custodyAdjustment = -0.1;
+    if ('error' in result) {
+      // Handle error case
+      console.error(result.error);
+      return;
     }
     
-    // Calculate final value
-    // For more realistic monthly child support, we'll use a weighted proportion
-    // If there's income disparity, higher-earning parent pays more
-    let incomeShare = 0;
-    if (parentAIncome > parentBIncome) {
-      // Parent A pays a share based on their income proportion
-      incomeShare = parentAIncome / (parentAIncome + parentBIncome);
-    } else {
-      // Parent B pays a share based on their income proportion
-      incomeShare = parentBIncome / (parentAIncome + parentBIncome);
-    }
-    
-    // Apply the custody adjustment to the income share
-    let finalAmount = adjustedBase * incomeShare * (1 + custodyAdjustment);
-    
-    // Determine who pays based on custody and income
-    let payingParent = "";
-    if (data.primaryCustody === "parentA") {
-      payingParent = "Parent B";
-    } else if (data.primaryCustody === "parentB") {
-      payingParent = "Parent A";
-    } else {
-      // In shared custody, the higher income parent typically pays
-      payingParent = parentAIncome > parentBIncome ? "Parent A" : "Parent B";
-    }
-    
-    // Calculate range (+/- 15%)
-    const min = Math.round(finalAmount * 0.85);
-    const max = Math.round(finalAmount * 1.15);
-    const median = Math.round(finalAmount);
-    
-    // Determine factors that influenced the calculation
-    const factors = [];
-    
-    // Income difference
-    const incomeDifference = Math.abs(parentAIncome - parentBIncome);
-    const incomeRatioDifference = Math.abs(0.5 - incomeRatio);
-    
-    if (incomeRatioDifference > 0.2) {
-      factors.push(`Significant income difference between parents`);
-    }
-    
-    // Custody arrangement
-    if (data.primaryCustody === "shared") {
-      const overnightDifference = Math.abs(overnightsParentA - overnightsParentB);
-      if (overnightDifference < 30) {
-        factors.push(`Nearly equal time with both parents`);
-      } else {
-        factors.push(`Uneven but shared custody arrangement`);
-      }
-    } else {
-      factors.push(`${data.primaryCustody === "parentA" ? "Parent A" : "Parent B"} has primary custody`);
-    }
-    
-    // Number of children
-    if (numberOfChildren > 1) {
-      factors.push(`Multiple children (${numberOfChildren})`);
-    }
-    
-    // Expenses
-    if (expenses > 0) {
-      factors.push(`Additional monthly expenses of $${expenses}`);
-    }
+    const min = result.supportRange.min;
+    const max = result.supportRange.max;
+    const median = result.median;
+    const factors = result.factors;
     
     setResult({
       min,
