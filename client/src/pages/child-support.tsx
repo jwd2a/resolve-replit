@@ -188,7 +188,8 @@ export default function ChildSupport() {
   };
   
   const handleStartOver = () => {
-    form.reset();
+    // Don't reset the form, just go back to the form step
+    // This will preserve user's previous inputs
     setStep("form");
   };
   
