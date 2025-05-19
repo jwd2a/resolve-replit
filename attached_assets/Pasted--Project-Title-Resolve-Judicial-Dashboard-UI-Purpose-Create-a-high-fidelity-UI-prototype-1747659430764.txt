@@ -1,0 +1,91 @@
+**Project Title:**
+Resolve – Judicial Dashboard UI
+
+**Purpose:**
+Create a high-fidelity UI prototype for the Judicial Dashboard that matches the overall look and feel of the Resolve platform. The focus is on clean, professional, human-centered design with no backend or functionality—purely for visual walkthroughs and stakeholder alignment.
+
+**Design Direction:**
+- Match Resolve’s modern, calm, and trustworthy aesthetic.
+- Prioritize clarity, ease of use, and minimal cognitive load.
+- Use consistent fonts, button styles, iconography, and spacing as seen in other Resolve screens.
+- All elements are static—no interactivity or data fetching required.
+
+**Layout Structure:**
+
+**1. Header (Top Bar)**
+- Platform name: “Resolve Judicial”
+- Case search bar (placeholder only)
+- Judge’s profile icon (top right)
+
+**2. Left Navigation (Sidebar)**
+- Case Overview
+- Parenting Plan
+- Compliance Tracker
+- Financial Summary
+- Documents
+- Notes & Flags
+- Timeline
+
+Styled to mirror Resolve’s left-side menu on logged-in screens, with subtle hover effects and clear active state.
+
+**3. Main Panel (Content Area)**
+
+**When “Case Overview” is active:**
+- Case Title: “Smith vs. Jones – Case #2025-0412”
+- Children Summary: Names + ages (e.g., “Ella, 7 • Noah, 10”)
+- Plan Status: “Ready for Review” badge
+- Quick Stats:
+  - Course Completion: 2/2 parents
+  - Plan Agreement Score: 93%
+  - Outstanding Items: 1 flag
+- Timeline Snapshot (static):
+  - 02/01 – Case Opened
+  - 02/15 – Course Completed
+  - 02/17 – Plan Submitted
+  - 02/20 – Flag Raised
+
+**When “Parenting Plan” is active:**
+- Embedded preview of plan (placeholder doc viewer box)
+- Highlighted items: dropdown of flagged sections (e.g., “Holiday Schedule – disagreement noted”)
+- Button: “Open Full Plan” (non-functional)
+
+**When “Compliance Tracker” is active:**
+- Checklist view (with checkmarks):
+  - Parenting Course Completed
+  - Plan Submitted
+  - Judge Review
+  - Final Signatures
+  - Court Filing
+
+**When “Financial Summary” is active:**
+- Placeholder boxes for:
+  - Proposed Child Support: “$800/month”
+  - Income Disclosures Uploaded: Yes
+  - Additional Notes: (blank box)
+
+**When “Documents” is active:**
+- Grid or list of file names
+  - File: Parenting Plan.pdf
+  - File: Financial Affidavit.pdf
+  - File: Joint Statement.docx
+  (Use generic icons for PDF/Word)
+
+**When “Notes & Flags” is active:**
+- Static note boxes:
+  - “Concern over communication clause.”
+  - “Review holiday schedule discrepancies.”
+- Option to add flag (greyed out, non-functional)
+
+**When “Timeline” is active:**
+- Horizontal or vertical visual line
+  - Milestones represented as circles
+  - Dates + labels beneath
+  (e.g., “Submitted Plan” – 02/17/25)
+
+**Footer (Optional):**
+None unless consistent with Resolve’s logged-in user interface.
+
+**Typography & Color:**
+- Use Resolve’s font stack
+- Maintain soft, reassuring tones (blues, grays, white backgrounds)
+- Highlight actions with Resolve’s primary accent color
