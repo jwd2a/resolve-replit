@@ -317,7 +317,7 @@ export default function ParentingPlan() {
             
               <div className="prose max-w-none overflow-y-auto flex-1">
                 {/* Action Buttons - Moved to top right */}
-                <div className="flex justify-end mb-4">
+                <div className="flex justify-end mb-6">
                   <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                     {/* Print View Button */}
                     <button
@@ -362,12 +362,12 @@ export default function ParentingPlan() {
                 {/* Document header with prominent title */}
                 <div className="border-b border-gray-100 pb-3 mb-4">
                   {/* Large, prominent title */}
-                  <h1 className="text-4xl font-bold text-[#2e1a87] pb-1" style={{ letterSpacing: "-0.025em" }}>
+                  <h1 className="text-4xl font-bold text-[#2e1a87]" style={{ letterSpacing: "-0.025em" }}>
                     Parenting Partnership Agreement
                   </h1>
                   
                   {/* Date in smaller row */}
-                  <div className="flex justify-start items-center">
+                  <div className="flex justify-start items-center mt-1">
                     <p className="text-gray-500 text-sm">Last updated: April 24, 2025</p>
                   </div>
                 </div>
