@@ -316,57 +316,59 @@ export default function ParentingPlan() {
               </div>
             
               <div className="prose max-w-none overflow-y-auto flex-1">
-                {/* Document header with prominent title - now part of scrollable content */}
+                {/* Action Buttons - Moved to top right */}
+                <div className="flex justify-end mb-4">
+                  <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                    {/* Print View Button */}
+                    <button
+                      onClick={() => setViewMode('print')}
+                      className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
+                        viewMode === 'print'
+                          ? 'bg-[#2e1a87] text-white'
+                          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      <span className="font-medium">Print View</span>
+                    </button>
+
+                    {/* Edit Button */}
+                    <button
+                      onClick={() => setViewMode('edit')}
+                      className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
+                        viewMode === 'edit'
+                          ? 'bg-[#2e1a87] text-white'
+                          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Edit2 className="h-4 w-4 mr-2" />
+                      <span className="font-medium">Edit</span>
+                    </button>
+
+                    {/* Download Button */}
+                    <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200 border-r border-gray-200">
+                      <Download className="h-4 w-4 mr-2" />
+                      <span className="font-medium">Download</span>
+                    </button>
+
+                    {/* Print Button */}
+                    <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200">
+                      <Printer className="h-4 w-4 mr-2" />
+                      <span className="font-medium">Print</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Document header with prominent title */}
                 <div className="border-b border-gray-100 pb-3 mb-4">
                   {/* Large, prominent title */}
                   <h1 className="text-4xl font-bold text-[#2e1a87] py-4" style={{ letterSpacing: "-0.025em" }}>
                     Parenting Partnership Agreement
                   </h1>
                   
-                  {/* Action buttons and date in smaller row */}
-                  <div className="flex justify-between items-center">
+                  {/* Date in smaller row */}
+                  <div className="flex justify-start items-center">
                     <p className="text-gray-500 text-sm">Last updated: April 24, 2025</p>
-                    
-                    {/* All Action Buttons - Always Visible */}
-                    <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                      {/* Print View Button */}
-                      <button
-                        onClick={() => setViewMode('print')}
-                        className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
-                          viewMode === 'print'
-                            ? 'bg-[#2e1a87] text-white'
-                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                        }`}
-                      >
-                        <FileText className="h-4 w-4 mr-2" />
-                        <span className="font-medium">Print View</span>
-                      </button>
-
-                      {/* Edit Button */}
-                      <button
-                        onClick={() => setViewMode('edit')}
-                        className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
-                          viewMode === 'edit'
-                            ? 'bg-[#2e1a87] text-white'
-                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                        }`}
-                      >
-                        <Edit2 className="h-4 w-4 mr-2" />
-                        <span className="font-medium">Edit</span>
-                      </button>
-
-                      {/* Download Button */}
-                      <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200 border-r border-gray-200">
-                        <Download className="h-4 w-4 mr-2" />
-                        <span className="font-medium">Download</span>
-                      </button>
-
-                      {/* Print Button */}
-                      <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200">
-                        <Printer className="h-4 w-4 mr-2" />
-                        <span className="font-medium">Print</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
                 
