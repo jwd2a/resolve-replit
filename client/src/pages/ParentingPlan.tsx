@@ -12,7 +12,7 @@ export default function ParentingPlan() {
   const [userMessage, setUserMessage] = useState<string>("");
   const [aiSuggestion, setAiSuggestion] = useState<string>("");
   const [showProposalOption, setShowProposalOption] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<'edit' | 'print'>('edit');
+  const [viewMode, setViewMode] = useState<'edit' | 'print'>('print');
   // Enhanced version history with timestamps
   const [sectionVersions, setSectionVersions] = useState<Record<string, Array<{
     content: string;
@@ -327,47 +327,45 @@ export default function ParentingPlan() {
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 text-sm">Last updated: April 24, 2025</p>
                     
-                    {/* Edit/Print Toggle and Action buttons */}
-                    <div className="flex items-center space-x-3">
-                      {/* Edit/Print Toggle - Improved Design */}
-                      <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg p-0.5 shadow-sm">
-                        <button
-                          onClick={() => setViewMode('edit')}
-                          className={`flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200 ${
-                            viewMode === 'edit'
-                              ? 'bg-[#2e1a87] text-white shadow-sm'
-                              : 'text-gray-700 hover:text-gray-900 hover:bg-white'
-                          }`}
-                        >
-                          <Edit2 className="h-4 w-4 mr-2" />
-                          <span className="font-medium">Edit</span>
-                        </button>
-                        <button
-                          onClick={() => setViewMode('print')}
-                          className={`flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200 ${
-                            viewMode === 'print'
-                              ? 'bg-[#2e1a87] text-white shadow-sm'
-                              : 'text-gray-700 hover:text-gray-900 hover:bg-white'
-                          }`}
-                        >
-                          <FileText className="h-4 w-4 mr-2" />
-                          <span className="font-medium">Print View</span>
-                        </button>
-                      </div>
+                    {/* All Action Buttons - Always Visible */}
+                    <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                      {/* Print View Button */}
+                      <button
+                        onClick={() => setViewMode('print')}
+                        className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
+                          viewMode === 'print'
+                            ? 'bg-[#2e1a87] text-white'
+                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                        }`}
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        <span className="font-medium">Print View</span>
+                      </button>
 
-                      {/* Action buttons - only show in print mode with improved spacing */}
-                      {viewMode === 'print' && (
-                        <div className="flex items-center space-x-2 pl-2 border-l border-gray-200">
-                          <button className="flex items-center px-4 py-2 text-[#2e1a87] bg-white border border-[#2e1a87] text-sm rounded-lg hover:bg-[#f5f3ff] hover:shadow-sm transition-all duration-200">
-                            <Download className="h-4 w-4 mr-2" />
-                            <span className="font-medium">Download</span>
-                          </button>
-                          <button className="flex items-center px-4 py-2 bg-[#2e1a87] text-white text-sm rounded-lg hover:shadow-md hover:bg-[#3d2ba0] transition-all duration-200">
-                            <Printer className="h-4 w-4 mr-2" />
-                            <span className="font-medium">Print</span>
-                          </button>
-                        </div>
-                      )}
+                      {/* Edit Button */}
+                      <button
+                        onClick={() => setViewMode('edit')}
+                        className={`flex items-center px-4 py-2.5 text-sm transition-all duration-200 border-r border-gray-200 ${
+                          viewMode === 'edit'
+                            ? 'bg-[#2e1a87] text-white'
+                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                        }`}
+                      >
+                        <Edit2 className="h-4 w-4 mr-2" />
+                        <span className="font-medium">Edit</span>
+                      </button>
+
+                      {/* Download Button */}
+                      <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200 border-r border-gray-200">
+                        <Download className="h-4 w-4 mr-2" />
+                        <span className="font-medium">Download</span>
+                      </button>
+
+                      {/* Print Button */}
+                      <button className="flex items-center px-4 py-2.5 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm transition-all duration-200">
+                        <Printer className="h-4 w-4 mr-2" />
+                        <span className="font-medium">Print</span>
+                      </button>
                     </div>
                   </div>
                 </div>
