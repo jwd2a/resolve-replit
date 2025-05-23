@@ -328,42 +328,42 @@ export default function ParentingPlan() {
                     <p className="text-gray-500 text-sm">Last updated: April 24, 2025</p>
                     
                     {/* Edit/Print Toggle and Action buttons */}
-                    <div className="flex items-center space-x-4">
-                      {/* Edit/Print Toggle */}
-                      <div className="flex items-center bg-gray-100 rounded-full p-1">
+                    <div className="flex items-center space-x-3">
+                      {/* Edit/Print Toggle - Improved Design */}
+                      <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg p-0.5 shadow-sm">
                         <button
                           onClick={() => setViewMode('edit')}
-                          className={`flex items-center px-3 py-1 text-xs rounded-full transition-all duration-200 ${
+                          className={`flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200 ${
                             viewMode === 'edit'
                               ? 'bg-[#2e1a87] text-white shadow-sm'
-                              : 'text-gray-600 hover:text-gray-800'
+                              : 'text-gray-700 hover:text-gray-900 hover:bg-white'
                           }`}
                         >
-                          <Edit2 className="h-3 w-3 mr-1" />
+                          <Edit2 className="h-4 w-4 mr-2" />
                           <span className="font-medium">Edit</span>
                         </button>
                         <button
                           onClick={() => setViewMode('print')}
-                          className={`flex items-center px-3 py-1 text-xs rounded-full transition-all duration-200 ${
+                          className={`flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200 ${
                             viewMode === 'print'
                               ? 'bg-[#2e1a87] text-white shadow-sm'
-                              : 'text-gray-600 hover:text-gray-800'
+                              : 'text-gray-700 hover:text-gray-900 hover:bg-white'
                           }`}
                         >
-                          <FileText className="h-3 w-3 mr-1" />
+                          <FileText className="h-4 w-4 mr-2" />
                           <span className="font-medium">Print View</span>
                         </button>
                       </div>
 
-                      {/* Action buttons - only show in print mode */}
+                      {/* Action buttons - only show in print mode with improved spacing */}
                       {viewMode === 'print' && (
-                        <div className="flex space-x-2">
-                          <button className="flex items-center px-3 py-1 text-[#2e1a87] bg-white border border-[#2e1a87] text-xs rounded-full hover:bg-[#f5f3ff] hover:shadow transition-all duration-200">
-                            <Download className="h-3 w-3 mr-1" />
+                        <div className="flex items-center space-x-2 pl-2 border-l border-gray-200">
+                          <button className="flex items-center px-4 py-2 text-[#2e1a87] bg-white border border-[#2e1a87] text-sm rounded-lg hover:bg-[#f5f3ff] hover:shadow-sm transition-all duration-200">
+                            <Download className="h-4 w-4 mr-2" />
                             <span className="font-medium">Download</span>
                           </button>
-                          <button className="flex items-center px-3 py-1 bg-[#2e1a87] text-white text-xs rounded-full hover:shadow-md hover:bg-[#3d2ba0] transition-all duration-200">
-                            <Printer className="h-3 w-3 mr-1" />
+                          <button className="flex items-center px-4 py-2 bg-[#2e1a87] text-white text-sm rounded-lg hover:shadow-md hover:bg-[#3d2ba0] transition-all duration-200">
+                            <Printer className="h-4 w-4 mr-2" />
                             <span className="font-medium">Print</span>
                           </button>
                         </div>
