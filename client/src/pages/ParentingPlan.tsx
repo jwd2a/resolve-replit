@@ -378,35 +378,37 @@ export default function ParentingPlan() {
                 
                 {/* Section 1 - Parents */}
                 <div 
-                  className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-1' ? 'active' : ''}`}
-                  onClick={() => handleSectionClick('section-1', 'Parents')}
+                  className={`${viewMode === 'edit' ? 'parenting-plan-section border border-gray-200 rounded-md p-6 my-6' : 'my-6'} ${activeSection === 'section-1' ? 'active' : ''}`}
+                  onClick={viewMode === 'edit' ? () => handleSectionClick('section-1', 'Parents') : undefined}
                 >
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatus('section-1').icon}
-                      <span className="ml-2">SECTION 1 - PARENTS</span>
+                  <div className={viewMode === 'edit' ? "flex justify-between items-center" : ""}>
+                    <h2 className={`${viewMode === 'edit' ? 'text-xl font-semibold text-gray-800 flex items-center' : 'text-lg font-bold text-black mb-4'}`}>
+                      {viewMode === 'edit' && getSectionStatus('section-1').icon}
+                      <span className={viewMode === 'edit' ? "ml-2" : ""}>SECTION 1 - PARENTS</span>
                     </h2>
-                    <div className="flex items-center space-x-3">
-                      <div className={`section-status-badge ${getSectionStatus('section-1').badge}`}>
-                        {getSectionStatus('section-1').label}
-                      </div>
-                      {sectionVersions['section-1'] && sectionVersions['section-1']?.length > 1 && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveSection('section-1');
-                            setActiveSectionTitle('Parents');
-                            viewVersionHistory();
-                          }}
-                          className="history-button"
-                        >
-                          <History className="h-4 w-4" />
+                    {viewMode === 'edit' && (
+                      <div className="flex items-center space-x-3">
+                        <div className={`section-status-badge ${getSectionStatus('section-1').badge}`}>
+                          {getSectionStatus('section-1').label}
+                        </div>
+                        {sectionVersions['section-1'] && sectionVersions['section-1']?.length > 1 && (
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveSection('section-1');
+                              setActiveSectionTitle('Parents');
+                              viewVersionHistory();
+                            }}
+                            className="history-button"
+                          >
+                            <History className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button className="modern-icon-button">
+                          <Edit2 className="h-4 w-4" />
                         </button>
-                      )}
-                      <button className="modern-icon-button">
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                    </div>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -441,35 +443,37 @@ export default function ParentingPlan() {
                 
                 {/* Section 2 - Children */}
                 <div 
-                  className={`parenting-plan-section border border-gray-200 rounded-md p-6 my-6 ${activeSection === 'section-2' ? 'active' : ''}`}
-                  onClick={() => handleSectionClick('section-2', 'Children')}
+                  className={`${viewMode === 'edit' ? 'parenting-plan-section border border-gray-200 rounded-md p-6 my-6' : 'my-6'} ${activeSection === 'section-2' ? 'active' : ''}`}
+                  onClick={viewMode === 'edit' ? () => handleSectionClick('section-2', 'Children') : undefined}
                 >
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-                      {getSectionStatus('section-2').icon}
-                      <span className="ml-2">SECTION 2 - CHILDREN</span>
+                  <div className={viewMode === 'edit' ? "flex justify-between items-center" : ""}>
+                    <h2 className={`${viewMode === 'edit' ? 'text-xl font-semibold text-gray-800 flex items-center' : 'text-lg font-bold text-black mb-4'}`}>
+                      {viewMode === 'edit' && getSectionStatus('section-2').icon}
+                      <span className={viewMode === 'edit' ? "ml-2" : ""}>SECTION 2 - CHILDREN</span>
                     </h2>
-                    <div className="flex items-center space-x-3">
-                      <div className={`section-status-badge ${getSectionStatus('section-2').badge}`}>
-                        {getSectionStatus('section-2').label}
-                      </div>
-                      {sectionVersions['section-2'] && sectionVersions['section-2']?.length > 1 && (
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveSection('section-2');
-                            setActiveSectionTitle('Children');
-                            viewVersionHistory();
-                          }}
-                          className="history-button"
-                        >
-                          <History className="h-4 w-4" />
+                    {viewMode === 'edit' && (
+                      <div className="flex items-center space-x-3">
+                        <div className={`section-status-badge ${getSectionStatus('section-2').badge}`}>
+                          {getSectionStatus('section-2').label}
+                        </div>
+                        {sectionVersions['section-2'] && sectionVersions['section-2']?.length > 1 && (
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveSection('section-2');
+                              setActiveSectionTitle('Children');
+                              viewVersionHistory();
+                            }}
+                            className="history-button"
+                          >
+                            <History className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button className="modern-icon-button">
+                          <Edit2 className="h-4 w-4" />
                         </button>
-                      )}
-                      <button className="modern-icon-button">
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                    </div>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="mt-4 overflow-x-auto">
