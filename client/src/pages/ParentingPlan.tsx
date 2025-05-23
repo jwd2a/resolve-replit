@@ -362,7 +362,7 @@ export default function ParentingPlan() {
                 {/* Document header with prominent title */}
                 <div className="border-b border-gray-100 pb-3 mb-4">
                   {/* Large, prominent title */}
-                  <h1 className="text-4xl font-bold text-[#2e1a87] py-4" style={{ letterSpacing: "-0.025em" }}>
+                  <h1 className="text-4xl font-bold text-[#2e1a87] pb-1" style={{ letterSpacing: "-0.025em" }}>
                     Parenting Partnership Agreement
                   </h1>
                   
