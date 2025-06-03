@@ -11,7 +11,6 @@ interface EmotionalIntroData {
   feeling: string[];
   situation: string;
   priority: string[];
-  inviteCoParent: string;
 }
 
 interface UserData {
@@ -36,6 +35,7 @@ interface CoParentData {
   };
   phoneNumber: string;
   email: string;
+  inviteNow: boolean;
 }
 
 interface Child {
@@ -59,7 +59,7 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
   onDataUpdate: (data: EmotionalIntroData) => void;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 3;
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -93,16 +93,11 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
     onDataUpdate({ ...data, situation: value });
   };
 
-  const updateInviteCoParent = (value: string) => {
-    onDataUpdate({ ...data, inviteCoParent: value });
-  };
-
   const isStepComplete = () => {
     switch (currentStep) {
       case 1: return data.feeling.length > 0;
       case 2: return data.situation !== '';
       case 3: return data.priority.length > 0;
-      case 4: return data.inviteCoParent !== '';
       default: return false;
     }
   };
@@ -230,47 +225,7 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
               </div>
             )}
 
-            {currentStep === 4 && (
-              <div className="text-center space-y-8">
-                <div className="mb-8">
-                  <Mail className="h-16 w-16 text-[#2e1a87] mx-auto mb-6" />
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                    Would you like to invite your co-parent now or later?
-                  </h2>
-                  <p className="text-gray-600 text-lg">
-                    You can always invite them later if you're not ready yet.
-                  </p>
-                </div>
-                
-                <div className="space-y-6">
-                  {[
-                    { emoji: "📨", text: "Invite now", value: "invite-now", description: "We'll help you send them an invitation" },
-                    { emoji: "🕓", text: "I'll do it later", value: "invite-later", description: "Focus on your plan first, invite when ready" }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => updateInviteCoParent(option.value)}
-                      className={`w-full p-6 rounded-xl border-2 transition-all duration-200 ${
-                        data.inviteCoParent === option.value
-                          ? 'border-[#2e1a87] bg-purple-100 shadow-lg'
-                          : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
-                      }`}
-                    >
-                      <div className="flex items-center justify-center">
-                        <div className="text-3xl mr-4">{option.emoji}</div>
-                        <div className="text-left">
-                          <div className="font-semibold text-lg mb-1">{option.text}</div>
-                          <div className="text-sm text-gray-600">{option.description}</div>
-                        </div>
-                        {data.inviteCoParent === option.value && (
-                          <CheckCircle className="h-5 w-5 text-[#2e1a87] ml-4" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Navigation */}
             <div className="flex justify-between items-center mt-10 pt-6 border-t">
@@ -347,7 +302,7 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
     }
   };
 
-  const updateCoParentData = (field: keyof CoParentData | string, value: string) => {
+  const updateCoParentData = (field: keyof CoParentData | string, value: string | boolean) => {
     if (field === 'address.street' || field === 'address.city' || field === 'address.state' || field === 'address.zip') {
       const addressField = field.split('.')[1] as keyof CoParentData['address'];
       onDataUpdate({
@@ -358,6 +313,14 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
             ...data.coParentData.address,
             [addressField]: value
           }
+        }
+      });
+    } else if (field === 'inviteNow') {
+      onDataUpdate({
+        ...data,
+        coParentData: {
+          ...data.coParentData,
+          inviteNow: value === 'true' || value === true
         }
       });
     } else {
@@ -569,6 +532,57 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
                   <p className="text-sm text-gray-600 mt-1">
                     Required regardless of when you invite them
                   </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <Label className="text-lg">Would you like to invite your co-parent now?</Label>
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={() => updateCoParentData('inviteNow', 'true')}
+                      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 flex items-start ${
+                        data.coParentData.inviteNow
+                          ? 'border-[#2e1a87] bg-purple-50'
+                          : 'border-gray-200 hover:border-purple-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-start">
+                          <div className="text-2xl mr-3">📨</div>
+                          <div className="text-left">
+                            <div className="font-medium">Send invitation now</div>
+                            <div className="text-sm text-gray-600">We'll help you send them an invitation to collaborate</div>
+                          </div>
+                        </div>
+                        {data.coParentData.inviteNow && (
+                          <CheckCircle className="h-5 w-5 text-[#2e1a87] ml-3" />
+                        )}
+                      </div>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => updateCoParentData('inviteNow', 'false')}
+                      className={`w-full p-4 rounded-lg border-2 transition-all duration-200 flex items-start ${
+                        !data.coParentData.inviteNow
+                          ? 'border-[#2e1a87] bg-purple-50'
+                          : 'border-gray-200 hover:border-purple-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex items-start">
+                          <div className="text-2xl mr-3">🕓</div>
+                          <div className="text-left">
+                            <div className="font-medium">I'll invite them later</div>
+                            <div className="text-sm text-gray-600">Focus on building your plan first</div>
+                          </div>
+                        </div>
+                        {!data.coParentData.inviteNow && (
+                          <CheckCircle className="h-5 w-5 text-[#2e1a87] ml-3" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -850,8 +864,7 @@ export default function OnboardingPeech() {
     emotionalIntro: {
       feeling: [],
       situation: '',
-      priority: [],
-      inviteCoParent: ''
+      priority: []
     },
     userData: {
       legalName: '',
@@ -863,7 +876,8 @@ export default function OnboardingPeech() {
       legalName: '',
       address: { street: '', city: '', state: '', zip: '' },
       phoneNumber: '',
-      email: ''
+      email: '',
+      inviteNow: false
     },
     children: [],
     jurisdiction: ''
