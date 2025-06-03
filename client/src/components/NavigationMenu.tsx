@@ -237,6 +237,16 @@ export function NavigationMenu() {
                 </DropdownMenuItem>
               </Link>
               
+              <Link href="/exit-confirmation-demo">
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <HelpCircle size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Exit Confirmation Modal</span>
+                  {isActive("/exit-confirmation-demo") && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
               <DropdownMenuSeparator />
               <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
               <DropdownMenuSeparator />

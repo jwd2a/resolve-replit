@@ -15,6 +15,7 @@ import OnboardingPage3Step from "@/pages/onboarding-page-3step";
 import Onboarding2 from "@/pages/onboarding2";
 import Onboarding6Step from "@/pages/onboarding6step";
 import OnboardingPeech from "@/pages/onboarding-peech";
+import ExitConfirmationDemo from "@/pages/exit-confirmation-demo";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -67,6 +68,9 @@ function Router() {
       
       {/* For the Peech-style onboarding flow */}
       <Route path="/onboarding-peech" component={OnboardingPeech} />
+      
+      {/* Exit confirmation modal demo */}
+      <Route path="/exit-confirmation-demo" component={ExitConfirmationDemo} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
