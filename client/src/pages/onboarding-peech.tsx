@@ -207,7 +207,7 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
                   {[
                     { emoji: "🎯", text: "Avoiding court", value: "avoid-court" },
                     { emoji: "👶", text: "Protecting the kids", value: "protect-kids" },
-                    { emoji: "💰", text: "Saving money", value: "saving-money" },
+                    { emoji: "🕊️", text: "Finishing quickly", value: "finishing-quickly" },
                     { emoji: "🗓️", text: "Staying organized", value: "stay-organized" }
                   ].map((option) => (
                     <button
