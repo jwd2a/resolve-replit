@@ -1,0 +1,74 @@
+// PROMPT FOR REPLIT AI TO GENERATE A HYBRID ONBOARDING FLOW FOR RESOLVE
+
+/*
+OVERVIEW:
+We are building an onboarding flow for Resolve, a platform that helps separating or divorcing parents collaboratively build a co-parenting plan.
+
+The onboarding needs to:
+1. Begin with an emotionally supportive, quiz-like experience inspired by Peech (https://go.getpeech.com) — light, conversational, and human.
+2. Then transition into structured form inputs that collect all required data for the parenting plan builder.
+
+The end result is a seamless, two-part experience:
+- Part 1: Emotionally aware onboarding (4–5 light steps)
+- Part 2: Legal & structured data collection (5 detailed steps)
+*/
+
+// 🟣 USE:
+// - React with functional components and hooks
+// - TailwindCSS for layout and styling
+// - Modular design (two main components: PartOneIntroFlow and PartTwoProfileForm)
+// - Emoji and icon-friendly input options for Part 1
+
+// PART 1 — EMOTIONALLY AWARE INTRO FLOW
+// Softly introduces the platform and collects context
+// Use card-based inputs, multiple choice, and emoji-rich responses
+
+// Questions:
+// 1. How are you feeling about creating a co-parenting plan today?
+//    😟 Nervous and unsure | 😐 Just getting started | 🙂 Hopeful | 😭 Overwhelmed
+//
+// 2. What best describes your current situation with your co-parent?
+//    Still living together | Recently separated | Living apart | Never lived together
+//
+// 3. What’s most important to you right now?
+//    🎯 Avoiding court | 👧 Protecting the kids | 🕊️ Finishing quickly | 📅 Staying organized
+//
+// 4. Would you like to invite your co-parent now or later?
+//    📨 Invite now | 🕓 I’ll do it later
+//
+// At the end: transition into structured onboarding with a supportive message.
+
+
+// PART 2 — STRUCTURED PROFILE FORM
+// Collect all required data, step-by-step, in softened UX language:
+
+// STEP 1: Your Info
+// - Legal Name
+// - Legal Address (Street, City, State, ZIP)
+// - Phone Number
+
+// STEP 2: Co-Parent Info
+// - Co-Parent Legal Name
+// - Co-Parent Address (Street, City, State, ZIP)
+// - Co-Parent Phone Number
+// - Co-Parent Email Address
+
+// STEP 3: Children Info
+// - Child Full Name
+// - Child Date of Birth
+// - Child Gender
+// (Allow adding multiple children)
+
+// STEP 4: Jurisdiction
+// - What U.S. state will you be filing for divorce or separation?
+
+// STEP 5: Confirmation screen or onboarding complete message.
+
+
+// FINAL NOTES:
+// - The whole experience should feel like a guided conversation
+// - Please use a soft visual style with welcoming tones and emoji where appropriate
+// - Onboarding container should manage transitions between steps (step state, data collection)
+
+// Please generate the full flow as modular components suitable for integration into an existing React + Tailwind project.
+// Begin with the main onboarding container, then create each part as separate components.

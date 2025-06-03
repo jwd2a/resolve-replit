@@ -163,6 +163,16 @@ export function NavigationMenu() {
                 </DropdownMenuItem>
               </Link>
               
+              <Link href="/onboarding-peech">
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <Settings size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Onboarding (Peech Style)</span>
+                  {isActive("/onboarding-peech") && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
               <Link href={courseEntryCodeRoute.path}>
                 <DropdownMenuItem className="cursor-pointer py-2">
                   <MessageSquare size={16} className="mr-2 text-[#6c54da]" />

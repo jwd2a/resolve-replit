@@ -14,6 +14,7 @@ import OnboardingPage from "@/pages/onboarding-page";
 import OnboardingPage3Step from "@/pages/onboarding-page-3step";
 import Onboarding2 from "@/pages/onboarding2";
 import Onboarding6Step from "@/pages/onboarding6step";
+import OnboardingPeech from "@/pages/onboarding-peech";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -63,6 +64,9 @@ function Router() {
       
       {/* For the 6-step onboarding flow */}
       <Route path="/onboarding6step" component={Onboarding6Step} />
+      
+      {/* For the Peech-style onboarding flow */}
+      <Route path="/onboarding-peech" component={OnboardingPeech} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
