@@ -1,0 +1,67 @@
+// UPDATED PROMPT FOR REPLIT AI
+
+/*
+GOAL:
+We are updating our Resolve onboarding flow to improve emotional UX, streamline legal data collection, and clean up some visual inconsistencies.
+
+The existing flow has two phases:
+1. Emotional Check-In (4 steps)
+2. Legal Profile Collection (5 steps)
+
+This prompt should generate an updated onboarding experience using React and TailwindCSS that addresses the following changes:
+*/
+
+// 🔁 STRUCTURAL CHANGES
+// 1. Emotional check-in steps (first 4) should NOT show a progress bar
+// 2. Progress bar begins at "Step 1 of 5" on the Legal Profile steps only
+
+
+// 🎯 FUNCTIONAL & UX CHANGES
+// Emotional Check-In:
+// Step 1: "How are you feeling about creating a co-parenting plan today?"
+// - Change to MULTI-SELECT
+// - Options: Nervous and unsure 😟, Just getting started 😐, Hopeful 🙂, Overwhelmed 😭
+//
+// Step 3: "What’s most important to you right now?"
+// - Change to MULTI-SELECT
+// - Change "Finishing quickly" ➜ "Saving money 💰"
+// - Other options remain: Avoiding court 🎯, Protecting the kids 👶, Staying organized 🗓️
+
+
+// Legal Profile Collection:
+// Step 1: Your Info
+// - Legal Name
+// - Legal Address (Street, City, State, ZIP)
+// - Phone Number
+// - ADD: Your Email Address (required)
+//
+// Step 2: Co-Parent Info
+// - Co-Parent Legal Name
+// - Co-Parent Address (Street, City, State, ZIP)
+// - Co-Parent Phone Number
+// - Co-Parent Email Address (required, regardless of whether they’re invited now or later)
+//
+// Step 3: Children Info
+// - SHOW one child input section by default (Name, DOB, Gender)
+// - Button to "Add Another Child"
+//
+// Step 4: Jurisdiction (no change)
+// Step 5: All Set! confirmation (no change)
+
+
+// 🎨 VISUAL + DESIGN IMPROVEMENTS
+// - Make emoji and text options center-aligned in both axes
+// - Use full-width selectable buttons or cards with Tailwind hover + active states
+// - Allow clear visual distinction for multi-select chips
+// - Maintain icon headers for each question (💜 heart, 👨‍👩‍👧‍👦 people, 🎯 target, ✉️ envelope, etc.)
+
+
+// 📦 TECH SPEC
+// - React with functional components and hooks
+// - TailwindCSS for styling
+// - Modular design: Each step should be its own component
+// - Parent component manages navigation state and form data
+
+
+// ✅ DELIVERABLE:
+// A fully updated version of the Resolve onboarding flow that reflects the above changes and is structured to cleanly integrate into our existing app.

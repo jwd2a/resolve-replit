@@ -3,15 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Heart, CheckCircle, Mail, Clock, Target, Shield, Calendar, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, CheckCircle, Mail, Target, Shield, Calendar, Users, DollarSign, FileText } from "lucide-react";
 
 // Types for onboarding data
 interface EmotionalIntroData {
-  feeling: string;
+  feeling: string[];
   situation: string;
-  priority: string;
+  priority: string[];
   inviteCoParent: string;
 }
 
@@ -24,6 +23,7 @@ interface UserData {
     zip: string;
   };
   phoneNumber: string;
+  email: string;
 }
 
 interface CoParentData {
@@ -52,7 +52,7 @@ interface OnboardingData {
   jurisdiction: string;
 }
 
-// Part 1: Emotionally Aware Intro Flow
+// Part 1: Emotionally Aware Intro Flow (NO PROGRESS BAR)
 function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
   onComplete: () => void;
   data: EmotionalIntroData;
@@ -75,15 +75,33 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
     }
   };
 
-  const updateData = (field: keyof EmotionalIntroData, value: string) => {
-    onDataUpdate({ ...data, [field]: value });
+  const updateFeelings = (value: string) => {
+    const newFeelings = data.feeling.includes(value)
+      ? data.feeling.filter(f => f !== value)
+      : [...data.feeling, value];
+    onDataUpdate({ ...data, feeling: newFeelings });
+  };
+
+  const updatePriorities = (value: string) => {
+    const newPriorities = data.priority.includes(value)
+      ? data.priority.filter(p => p !== value)
+      : [...data.priority, value];
+    onDataUpdate({ ...data, priority: newPriorities });
+  };
+
+  const updateSituation = (value: string) => {
+    onDataUpdate({ ...data, situation: value });
+  };
+
+  const updateInviteCoParent = (value: string) => {
+    onDataUpdate({ ...data, inviteCoParent: value });
   };
 
   const isStepComplete = () => {
     switch (currentStep) {
-      case 1: return data.feeling !== '';
+      case 1: return data.feeling.length > 0;
       case 2: return data.situation !== '';
-      case 3: return data.priority !== '';
+      case 3: return data.priority.length > 0;
       case 4: return data.inviteCoParent !== '';
       default: return false;
     }
@@ -92,35 +110,23 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        {/* Progress indicator */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-600">Step {currentStep} of {totalSteps}</span>
-            <span className="text-sm text-[#2e1a87] font-medium">Getting to know you</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-[#2e1a87] h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-            />
-          </div>
-        </div>
-
+        {/* NO PROGRESS BAR for emotional check-in */}
+        
         <Card className="border-0 shadow-xl">
           <CardContent className="p-8">
             {currentStep === 1 && (
-              <div className="text-center space-y-6">
-                <div className="mb-6">
-                  <Heart className="h-12 w-12 text-[#2e1a87] mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="text-center space-y-8">
+                <div className="mb-8">
+                  <Heart className="h-16 w-16 text-[#2e1a87] mx-auto mb-6" />
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
                     How are you feeling about creating a co-parenting plan today?
                   </h2>
-                  <p className="text-gray-600">
-                    We want to meet you where you are and provide the right support.
+                  <p className="text-gray-600 text-lg">
+                    Select all that apply - we want to meet you where you are.
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
                     { emoji: "😟", text: "Nervous and unsure", value: "nervous" },
                     { emoji: "😐", text: "Just getting started", value: "starting" },
@@ -129,15 +135,18 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => updateData('feeling', option.value)}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        data.feeling === option.value
-                          ? 'border-[#2e1a87] bg-purple-50'
-                          : 'border-gray-200 hover:border-purple-300'
+                      onClick={() => updateFeelings(option.value)}
+                      className={`w-full p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center justify-center min-h-[120px] ${
+                        data.feeling.includes(option.value)
+                          ? 'border-[#2e1a87] bg-purple-100 shadow-lg transform scale-105'
+                          : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
                       }`}
                     >
-                      <div className="text-2xl mb-2">{option.emoji}</div>
-                      <div className="font-medium">{option.text}</div>
+                      <div className="text-4xl mb-3">{option.emoji}</div>
+                      <div className="font-semibold text-lg text-center">{option.text}</div>
+                      {data.feeling.includes(option.value) && (
+                        <CheckCircle className="h-5 w-5 text-[#2e1a87] mt-2" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -145,18 +154,18 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
             )}
 
             {currentStep === 2 && (
-              <div className="text-center space-y-6">
-                <div className="mb-6">
-                  <Users className="h-12 w-12 text-[#2e1a87] mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="text-center space-y-8">
+                <div className="mb-8">
+                  <Users className="h-16 w-16 text-[#2e1a87] mx-auto mb-6" />
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
                     What best describes your current situation with your co-parent?
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 text-lg">
                     This helps us understand your starting point.
                   </p>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {[
                     { text: "Still living together", value: "together" },
                     { text: "Recently separated", value: "recent" },
@@ -165,14 +174,17 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => updateData('situation', option.value)}
-                      className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                      onClick={() => updateSituation(option.value)}
+                      className={`w-full p-6 rounded-xl border-2 transition-all duration-200 flex items-center justify-center min-h-[80px] ${
                         data.situation === option.value
-                          ? 'border-[#2e1a87] bg-purple-50'
-                          : 'border-gray-200 hover:border-purple-300'
+                          ? 'border-[#2e1a87] bg-purple-100 shadow-lg'
+                          : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
                       }`}
                     >
-                      <div className="font-medium">{option.text}</div>
+                      <div className="font-semibold text-lg text-center">{option.text}</div>
+                      {data.situation === option.value && (
+                        <CheckCircle className="h-5 w-5 text-[#2e1a87] ml-3" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -180,35 +192,38 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
             )}
 
             {currentStep === 3 && (
-              <div className="text-center space-y-6">
-                <div className="mb-6">
-                  <Target className="h-12 w-12 text-[#2e1a87] mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="text-center space-y-8">
+                <div className="mb-8">
+                  <Target className="h-16 w-16 text-[#2e1a87] mx-auto mb-6" />
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
                     What's most important to you right now?
                   </h2>
-                  <p className="text-gray-600">
-                    We'll prioritize the features that matter most to your situation.
+                  <p className="text-gray-600 text-lg">
+                    Select all that apply - we'll prioritize features that matter most.
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
                     { emoji: "🎯", text: "Avoiding court", value: "avoid-court" },
-                    { emoji: "👧", text: "Protecting the kids", value: "protect-kids" },
-                    { emoji: "🕊️", text: "Finishing quickly", value: "finish-quickly" },
-                    { emoji: "📅", text: "Staying organized", value: "stay-organized" }
+                    { emoji: "👶", text: "Protecting the kids", value: "protect-kids" },
+                    { emoji: "💰", text: "Saving money", value: "saving-money" },
+                    { emoji: "🗓️", text: "Staying organized", value: "stay-organized" }
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => updateData('priority', option.value)}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        data.priority === option.value
-                          ? 'border-[#2e1a87] bg-purple-50'
-                          : 'border-gray-200 hover:border-purple-300'
+                      onClick={() => updatePriorities(option.value)}
+                      className={`w-full p-6 rounded-xl border-2 transition-all duration-200 flex flex-col items-center justify-center min-h-[120px] ${
+                        data.priority.includes(option.value)
+                          ? 'border-[#2e1a87] bg-purple-100 shadow-lg transform scale-105'
+                          : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
                       }`}
                     >
-                      <div className="text-2xl mb-2">{option.emoji}</div>
-                      <div className="font-medium">{option.text}</div>
+                      <div className="text-4xl mb-3">{option.emoji}</div>
+                      <div className="font-semibold text-lg text-center">{option.text}</div>
+                      {data.priority.includes(option.value) && (
+                        <CheckCircle className="h-5 w-5 text-[#2e1a87] mt-2" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -216,37 +231,40 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
             )}
 
             {currentStep === 4 && (
-              <div className="text-center space-y-6">
-                <div className="mb-6">
-                  <Mail className="h-12 w-12 text-[#2e1a87] mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="text-center space-y-8">
+                <div className="mb-8">
+                  <Mail className="h-16 w-16 text-[#2e1a87] mx-auto mb-6" />
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
                     Would you like to invite your co-parent now or later?
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 text-lg">
                     You can always invite them later if you're not ready yet.
                   </p>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {[
                     { emoji: "📨", text: "Invite now", value: "invite-now", description: "We'll help you send them an invitation" },
                     { emoji: "🕓", text: "I'll do it later", value: "invite-later", description: "Focus on your plan first, invite when ready" }
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => updateData('inviteCoParent', option.value)}
-                      className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                      onClick={() => updateInviteCoParent(option.value)}
+                      className={`w-full p-6 rounded-xl border-2 transition-all duration-200 ${
                         data.inviteCoParent === option.value
-                          ? 'border-[#2e1a87] bg-purple-50'
-                          : 'border-gray-200 hover:border-purple-300'
+                          ? 'border-[#2e1a87] bg-purple-100 shadow-lg'
+                          : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50'
                       }`}
                     >
-                      <div className="flex items-start">
-                        <div className="text-2xl mr-3">{option.emoji}</div>
-                        <div>
-                          <div className="font-medium mb-1">{option.text}</div>
+                      <div className="flex items-center justify-center">
+                        <div className="text-3xl mr-4">{option.emoji}</div>
+                        <div className="text-left">
+                          <div className="font-semibold text-lg mb-1">{option.text}</div>
                           <div className="text-sm text-gray-600">{option.description}</div>
                         </div>
+                        {data.inviteCoParent === option.value && (
+                          <CheckCircle className="h-5 w-5 text-[#2e1a87] ml-4" />
+                        )}
                       </div>
                     </button>
                   ))}
@@ -255,24 +273,24 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between items-center mt-8 pt-6 border-t">
+            <div className="flex justify-between items-center mt-10 pt-6 border-t">
               <Button
                 variant="ghost"
                 onClick={handleBack}
                 disabled={currentStep === 1}
-                className="flex items-center"
+                className="flex items-center text-lg px-6 py-3"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="h-5 w-5 mr-2" />
                 Back
               </Button>
               
               <Button
                 onClick={handleNext}
                 disabled={!isStepComplete()}
-                className="bg-[#2e1a87] hover:bg-[#3d2a9b] flex items-center"
+                className="bg-[#2e1a87] hover:bg-[#3d2a9b] flex items-center text-lg px-6 py-3"
               >
                 {currentStep === totalSteps ? 'Continue to Details' : 'Next'}
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
             </div>
           </CardContent>
@@ -282,7 +300,7 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
   );
 }
 
-// Part 2: Structured Profile Form
+// Part 2: Structured Profile Form (WITH PROGRESS BAR starting at Step 1 of 5)
 function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
   onComplete: () => void;
   data: Omit<OnboardingData, 'emotionalIntro'>;
@@ -376,7 +394,8 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
       case 1:
         return data.userData.legalName && data.userData.address.street && 
                data.userData.address.city && data.userData.address.state && 
-               data.userData.address.zip && data.userData.phoneNumber;
+               data.userData.address.zip && data.userData.phoneNumber && 
+               data.userData.email;
       case 2:
         return data.coParentData.legalName && data.coParentData.address.street && 
                data.coParentData.address.city && data.coParentData.address.state && 
@@ -398,7 +417,7 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        {/* Progress indicator */}
+        {/* Progress indicator - ONLY for Legal Profile steps */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-600">Step {currentStep} of {totalSteps}</span>
@@ -472,6 +491,18 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
                     className="mt-2"
                   />
                 </div>
+                
+                <div>
+                  <Label htmlFor="email">Your Email Address *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={data.userData.email}
+                    onChange={(e) => updateUserData('email', e.target.value)}
+                    placeholder="your-email@example.com"
+                    className="mt-2"
+                  />
+                </div>
               </div>
             )}
 
@@ -532,9 +563,12 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
                     type="email"
                     value={data.coParentData.email}
                     onChange={(e) => updateCoParentData('email', e.target.value)}
-                    placeholder="email@example.com"
+                    placeholder="coparent-email@example.com"
                     className="mt-2"
                   />
+                  <p className="text-sm text-gray-600 mt-1">
+                    Required regardless of when you invite them
+                  </p>
                 </div>
               </div>
             )}
@@ -549,14 +583,74 @@ function PartTwoProfileForm({ onComplete, data, onDataUpdate }: {
                     onClick={addChild}
                     className="text-[#2e1a87]"
                   >
-                    Add Child
+                    Add Another Child
                   </Button>
                 </div>
                 
+                {/* Show one child by default */}
                 {data.children.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Click "Add Child" to add information about your children.</p>
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <h4 className="font-medium">Child 1</h4>
+                    
+                    <Input
+                      value=""
+                      onChange={(e) => {
+                        if (data.children.length === 0) {
+                          onDataUpdate({
+                            ...data,
+                            children: [{ fullName: e.target.value, dateOfBirth: '', gender: '' }]
+                          });
+                        } else {
+                          updateChild(0, 'fullName', e.target.value);
+                        }
+                      }}
+                      placeholder="Child's Full Name"
+                    />
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Date of Birth</Label>
+                        <Input
+                          type="date"
+                          value=""
+                          onChange={(e) => {
+                            if (data.children.length === 0) {
+                              onDataUpdate({
+                                ...data,
+                                children: [{ fullName: '', dateOfBirth: e.target.value, gender: '' }]
+                              });
+                            } else {
+                              updateChild(0, 'dateOfBirth', e.target.value);
+                            }
+                          }}
+                          className="mt-1"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label>Gender</Label>
+                        <Select value="" onValueChange={(value) => {
+                          if (data.children.length === 0) {
+                            onDataUpdate({
+                              ...data,
+                              children: [{ fullName: '', dateOfBirth: '', gender: value }]
+                            });
+                          } else {
+                            updateChild(0, 'gender', value);
+                          }
+                        }}>
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                   </div>
                 )}
                 
@@ -754,15 +848,16 @@ export default function OnboardingPeech() {
   const [currentPart, setCurrentPart] = useState<1 | 2>(1);
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
     emotionalIntro: {
-      feeling: '',
+      feeling: [],
       situation: '',
-      priority: '',
+      priority: [],
       inviteCoParent: ''
     },
     userData: {
       legalName: '',
       address: { street: '', city: '', state: '', zip: '' },
-      phoneNumber: ''
+      phoneNumber: '',
+      email: ''
     },
     coParentData: {
       legalName: '',
