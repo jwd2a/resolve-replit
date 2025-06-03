@@ -206,7 +206,7 @@ function PartOneIntroFlow({ onComplete, data, onDataUpdate }: {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
                     { emoji: "🎯", text: "Avoiding court", value: "avoid-court" },
-                    { emoji: "👶", text: "Protecting the kids", value: "protect-kids" },
+                    { emoji: "👶", text: "Protecting my child(ren)", value: "protect-kids" },
                     { emoji: "🕊️", text: "Finishing quickly", value: "finishing-quickly" },
                     { emoji: "💰", text: "Saving money", value: "saving-money" }
                   ].map((option) => (
