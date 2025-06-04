@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lock, X, ArrowRight, CheckCircle } from "lucide-react";
+import { BlockedSignaturePanel } from "@/components/BlockedSignaturePanel";
 
 interface IncompleteStep {
   id: string;
@@ -91,6 +92,7 @@ function BlockedSignatureStep({ incompleteSteps, onNavigateToStep }: BlockedSign
 // Demo page to showcase the component
 export default function IncompleteCourse() {
   const [demoMode, setDemoMode] = useState<'incomplete' | 'complete'>('incomplete');
+  const [viewMode, setViewMode] = useState<'fullscreen' | 'panel'>('panel');
 
   // Sample incomplete steps data
   const incompleteSteps: IncompleteStep[] = [
@@ -131,29 +133,57 @@ export default function IncompleteCourse() {
                 Course flow component that prevents signing when sections are incomplete
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Demo Mode:</span>
-              <div className="flex bg-gray-100 rounded-lg p-1">
-                <button
-                  onClick={() => setDemoMode('incomplete')}
-                  className={`px-3 py-1 text-sm rounded transition-colors ${
-                    demoMode === 'incomplete'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  Incomplete Steps
-                </button>
-                <button
-                  onClick={() => setDemoMode('complete')}
-                  className={`px-3 py-1 text-sm rounded transition-colors ${
-                    demoMode === 'complete'
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  All Complete
-                </button>
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">View:</span>
+                <div className="flex bg-gray-100 rounded-lg p-1">
+                  <button
+                    onClick={() => setViewMode('panel')}
+                    className={`px-3 py-1 text-sm rounded transition-colors ${
+                      viewMode === 'panel'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Sidebar Panel
+                  </button>
+                  <button
+                    onClick={() => setViewMode('fullscreen')}
+                    className={`px-3 py-1 text-sm rounded transition-colors ${
+                      viewMode === 'fullscreen'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Full Screen
+                  </button>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">State:</span>
+                <div className="flex bg-gray-100 rounded-lg p-1">
+                  <button
+                    onClick={() => setDemoMode('incomplete')}
+                    className={`px-3 py-1 text-sm rounded transition-colors ${
+                      demoMode === 'incomplete'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Incomplete Steps
+                  </button>
+                  <button
+                    onClick={() => setDemoMode('complete')}
+                    className={`px-3 py-1 text-sm rounded transition-colors ${
+                      demoMode === 'complete'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    All Complete
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -161,29 +191,92 @@ export default function IncompleteCourse() {
       </div>
 
       {/* Component Demo */}
-      {demoMode === 'incomplete' ? (
-        <BlockedSignatureStep
-          incompleteSteps={incompleteSteps}
-          onNavigateToStep={handleNavigateToStep}
-        />
+      {viewMode === 'fullscreen' ? (
+        demoMode === 'incomplete' ? (
+          <BlockedSignatureStep
+            incompleteSteps={incompleteSteps}
+            onNavigateToStep={handleNavigateToStep}
+          />
+        ) : (
+          <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
+            <Card className="border-0 shadow-xl max-w-md text-center">
+              <CardContent className="p-8">
+                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  All Steps Complete!
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  This component only renders when there are incomplete steps. Since all steps are complete, you would now see the signature interface.
+                </p>
+                <Button className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">
+                  Proceed to Signature
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )
       ) : (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-          <Card className="border-0 shadow-xl max-w-md text-center">
-            <CardContent className="p-8">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle className="h-8 w-8 text-green-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                All Steps Complete!
-              </h2>
-              <p className="text-gray-600 mb-6">
-                This component only renders when there are incomplete steps. Since all steps are complete, you would now see the signature interface.
-              </p>
-              <Button className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">
-                Proceed to Signature
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="w-full max-w-6xl">
+            <Card className="border-0 shadow-xl">
+              <CardContent className="p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                  Sidebar Panel Demo - Course Layout Simulation
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left side - simulated course content */}
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="bg-[#2e1a87] text-white p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4">Final Considerations</h3>
+                      <h2 className="text-3xl font-bold mb-4">FINALIZING AND SIGNING THE AGREEMENT</h2>
+                      <div className="bg-black/20 rounded p-4 mb-4">
+                        <div className="text-center text-sm opacity-75">Video Player Placeholder</div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-blue-50 p-6 rounded-lg">
+                      <h4 className="font-semibold text-gray-900 mb-4">Things to keep in mind</h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li>• Signing is a commitment to cooperation.</li>
+                        <li>• Recognize the work you've put in together.</li>
+                        <li>• Stay focused on co-parenting positively.</li>
+                        <li>• This document represents a shared promise to your child.</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  {/* Right side - blocked signature panel */}
+                  <div className="lg:col-span-1">
+                    {demoMode === 'incomplete' ? (
+                      <BlockedSignaturePanel
+                        incompleteSteps={incompleteSteps}
+                        onNavigateToStep={handleNavigateToStep}
+                      />
+                    ) : (
+                      <Card className="border border-green-200 bg-green-50">
+                        <CardContent className="p-6 text-center">
+                          <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                            <CheckCircle className="h-6 w-6 text-green-600" />
+                          </div>
+                          <h3 className="font-semibold text-green-900 mb-2">
+                            Ready to Sign!
+                          </h3>
+                          <p className="text-sm text-green-700 mb-4">
+                            All required sections complete. The signature interface would appear here.
+                          </p>
+                          <Button className="bg-green-600 hover:bg-green-700 text-white">
+                            Sign Agreement
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
 
