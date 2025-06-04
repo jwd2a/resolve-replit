@@ -21,33 +21,33 @@ export function BlockedSignaturePanel({ incompleteSteps, onNavigateToStep }: Blo
 
   return (
     <Card className="w-full max-w-sm border border-red-200 bg-red-50">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2 pt-3 px-3">
         <div className="flex items-center space-x-2">
-          <Lock className="h-5 w-5 text-red-600" />
-          <CardTitle className="text-lg text-red-900">
+          <Lock className="h-4 w-4 text-red-600" />
+          <CardTitle className="text-sm font-semibold text-red-900">
             Complete Required Steps
           </CardTitle>
         </div>
-        <p className="text-sm text-red-700">
+        <p className="text-xs text-red-700 leading-tight">
           Please complete the missing sections before signing.
         </p>
       </CardHeader>
       
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2 px-3 pb-3">
         {incompleteSteps.map((step) => (
           <div
             key={step.id}
-            className="p-3 bg-white border border-red-200 rounded-lg"
+            className="p-2 bg-white border border-red-200 rounded"
           >
-            <div className="flex items-start justify-between mb-2">
-              <X className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+            <div className="flex items-start justify-between mb-1">
+              <X className="h-3 w-3 text-red-500 mt-0.5 flex-shrink-0" />
             </div>
-            <div className="space-y-1 mb-3">
-              <h4 className="font-medium text-sm text-gray-900 leading-tight">
+            <div className="space-y-1 mb-2">
+              <h4 className="font-medium text-xs text-gray-900 leading-tight">
                 {step.moduleTitle}
               </h4>
               {step.stepTitle && (
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-gray-600 leading-tight">
                   {step.stepNumber && `${step.stepNumber}: `}{step.stepTitle}
                 </p>
               )}
@@ -55,7 +55,7 @@ export function BlockedSignaturePanel({ incompleteSteps, onNavigateToStep }: Blo
             <Button
               onClick={() => onNavigateToStep(step.id)}
               size="sm"
-              className="w-full bg-[#2e1a87] hover:bg-[#3d2a9b] text-white text-xs"
+              className="w-full h-7 bg-[#2e1a87] hover:bg-[#3d2a9b] text-white text-xs px-2"
             >
               Complete Section
               <ArrowRight className="h-3 w-3 ml-1" />
@@ -63,8 +63,8 @@ export function BlockedSignaturePanel({ incompleteSteps, onNavigateToStep }: Blo
           </div>
         ))}
         
-        <div className="mt-4 p-2 bg-blue-50 rounded border border-blue-200">
-          <p className="text-xs text-blue-800">
+        <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
+          <p className="text-xs text-blue-800 leading-tight">
             Once complete, you'll return here to sign together.
           </p>
         </div>
