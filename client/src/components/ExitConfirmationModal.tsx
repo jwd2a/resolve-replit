@@ -21,9 +21,12 @@ export function ExitConfirmationModal({ isOpen, onConfirm, onCancel }: ExitConfi
           </DialogTitle>
         </DialogHeader>
         
-        <div className="py-4">
+        <div className="py-4 space-y-3">
           <p className="text-gray-600 text-center leading-relaxed">
             If you exit now, you'll need to complete the co-parent registration process again to rejoin.
+          </p>
+          <p className="text-gray-600 text-center leading-relaxed">
+            Don't worry, all of your progress is automatically saved and you can pick up right where you left off.
           </p>
         </div>
         
