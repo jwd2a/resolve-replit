@@ -14,141 +14,238 @@ export default function HomeBeta2() {
   const nextAction = coParent.waiverSigned ? "Begin Ava's Plan" : "Wait for Alex to Sign";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 md:px-6 pb-32 pt-6 md:pt-12 space-y-6 md:space-y-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 pb-32 pt-8 md:pt-16 space-y-8 md:space-y-12">
 
         {/* Greeting */}
-        <div className="text-center space-y-3 md:space-y-4">
-          <h1 className="text-2xl md:text-4xl font-bold text-gray-900">Hi {userName} 👋</h1>
-          <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-lg mx-auto">
-            Let's finish setting up {child.name}'s (age {child.age}) parenting plan together.
+        <div className="text-center space-y-4 md:space-y-6">
+          <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-[#2e1a87] via-purple-600 to-blue-600 bg-clip-text text-transparent">
+            Building {child.name}'s Future
+          </h1>
+          <p className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+            Hi {userName}, let's complete your parenting plan setup together. {child.name} (age {child.age}) deserves the best.
           </p>
         </div>
 
-        {/* You're Ready Box */}
-        <Card className="border-0 shadow-lg bg-green-50 border-green-200">
-          <CardContent className="space-y-4 py-6 md:py-8 px-6 md:px-8">
-            <div className="flex items-center space-x-3">
-              <CheckCircle className="h-6 w-6 md:h-7 md:w-7 text-green-600" />
-              <p className="text-green-800 font-semibold text-base md:text-lg">Family Profile Complete</p>
+        {/* Progress Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          
+          {/* You're Ready Card */}
+          <Card className="border-0 shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="h-32 bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute top-4 right-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4">
+                <div className="w-8 h-8 bg-white/30 rounded-lg"></div>
+              </div>
             </div>
-            <p className="text-green-700 text-sm md:text-base leading-relaxed">
-              You've set up your family and unlocked the course. Great job!
-            </p>
-            <Button variant="link" size="sm" className="text-green-700 hover:text-green-800 p-0 h-auto text-sm md:text-base">
-              Review Family Info →
-            </Button>
-          </CardContent>
-        </Card>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 mb-2">You're All Set</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Family profile complete and course unlocked. Ready to start!
+              </p>
+              <Button variant="link" className="text-green-600 hover:text-green-700 p-0 h-auto text-sm font-medium">
+                Review Profile →
+              </Button>
+            </CardContent>
+          </Card>
 
-        {/* Co-Parent Status */}
-        <Card className="border-0 shadow-lg">
-          <CardContent className="space-y-6 py-6 md:py-8 px-6 md:px-8">
-            <div>
-              <p className="font-semibold text-gray-900 text-base md:text-lg mb-2">Co-Parent</p>
-              <p className="text-gray-600 text-sm md:text-base">{coParent.name}</p>
-              <p className="text-gray-500 text-xs md:text-sm">{coParent.email}</p>
+          {/* Co-Parent Status Card */}
+          <Card className="border-0 shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="h-32 bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute top-4 right-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  {coParent.waiverSigned ? (
+                    <CheckCircle className="h-6 w-6 text-white" />
+                  ) : (
+                    <Clock className="h-6 w-6 text-white" />
+                  )}
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 flex space-x-2">
+                <div className="w-6 h-6 bg-white/30 rounded-full"></div>
+                <div className="w-6 h-6 bg-white/20 rounded-full"></div>
+              </div>
             </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-700 text-sm md:text-base font-medium">Invite Status</span>
-                {coParent.inviteSent ? (
-                  <span className="text-green-700 flex items-center gap-2 text-sm md:text-base font-medium">
-                    <CheckCircle size={18}/> Sent
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Co-Parent: {coParent.name}</h3>
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Invite</span>
+                  <span className="text-sm font-medium text-green-600">Sent</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Waiver</span>
+                  <span className={`text-sm font-medium ${coParent.waiverSigned ? 'text-green-600' : 'text-amber-600'}`}>
+                    {coParent.waiverSigned ? 'Signed' : 'Pending'}
                   </span>
-                ) : (
-                  <Button size="sm" variant="outline" className="text-xs md:text-sm">
-                    <UserPlus size={14} className="mr-1" /> Send Invite
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Payment Status Card */}
+          <Card className="border-0 shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="h-32 bg-gradient-to-br from-violet-400 via-purple-500 to-pink-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute top-4 right-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4">
+                <div className="w-8 h-2 bg-white/30 rounded-full"></div>
+              </div>
+            </div>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Payment Complete</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Full access granted. Ready to begin your journey.
+              </p>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <span className="text-sm font-medium text-green-600">Processed</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Waiver Details Section */}
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Waiver Progress</h2>
+            <p className="text-gray-600">Both parents need to complete waivers before starting</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Your Waiver */}
+            <Card className="border-0 shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+              <div className="h-24 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+                <div className="absolute bottom-3 left-3">
+                  <div className="text-white font-semibold text-lg">You</div>
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Waiver Complete</h3>
+                    <p className="text-green-600 text-sm font-medium">Signed & Acknowledged</p>
+                  </div>
+                  <Button variant="link" className="text-green-600 text-sm">
+                    View →
                   </Button>
-                )}
-              </div>
+                </div>
+              </CardContent>
+            </Card>
 
-              <div className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-700 text-sm md:text-base font-medium">Waiver Status</span>
-                {coParent.waiverSigned ? (
-                  <span className="text-green-700 flex items-center gap-2 text-sm md:text-base font-medium">
-                    <CheckCircle size={18}/> Signed
-                  </span>
-                ) : (
-                  <span className="text-amber-600 flex items-center gap-2 text-sm md:text-base font-medium">
-                    <Clock size={18}/> Pending
-                  </span>
-                )}
+            {/* Co-Parent Waiver */}
+            <Card className="border-0 shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+              <div className={`h-24 bg-gradient-to-br ${coParent.waiverSigned ? 'from-green-400 via-emerald-500 to-teal-600' : 'from-amber-400 via-orange-500 to-red-500'} relative overflow-hidden`}>
+                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="absolute top-3 right-3">
+                  {coParent.waiverSigned ? (
+                    <CheckCircle className="h-6 w-6 text-white" />
+                  ) : (
+                    <Clock className="h-6 w-6 text-white" />
+                  )}
+                </div>
+                <div className="absolute bottom-3 left-3">
+                  <div className="text-white font-semibold text-lg">{coParent.name}</div>
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">
+                      {coParent.waiverSigned ? 'Waiver Complete' : 'Waiver Pending'}
+                    </h3>
+                    <p className={`text-sm font-medium ${coParent.waiverSigned ? 'text-green-600' : 'text-amber-600'}`}>
+                      {coParent.waiverSigned ? 'Signed & Acknowledged' : 'Waiting for signature'}
+                    </p>
+                  </div>
+                  {coParent.waiverSigned && (
+                    <Button variant="link" className="text-green-600 text-sm">
+                      View →
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Next Steps Section */}
+        {!coParent.waiverSigned ? (
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <div className="h-32 bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute top-4 right-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 flex space-x-2">
+                <div className="w-8 h-8 bg-white/30 rounded-full animate-pulse"></div>
+                <div className="w-8 h-8 bg-white/20 rounded-full animate-pulse delay-75"></div>
+                <div className="w-8 h-8 bg-white/10 rounded-full animate-pulse delay-150"></div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Waiver Summary */}
-        <Card className="border-0 shadow-lg">
-          <CardContent className="space-y-6 py-6 md:py-8 px-6 md:px-8">
-            <p className="font-semibold text-gray-900 text-base md:text-lg">Waivers & Acknowledgments</p>
-            
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-700 text-sm md:text-base font-medium">You</span>
-                {userWaiverSigned ? (
-                  <span className="text-green-700 text-sm md:text-base font-medium">Signed</span>
-                ) : (
-                  <Button size="sm" className="text-xs md:text-sm">Sign Waiver</Button>
-                )}
+            <CardContent className="p-8 text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Waiting for {coParent.name}
+              </h3>
+              <p className="text-gray-600 leading-relaxed max-w-md mx-auto mb-6">
+                Once {coParent.name} signs their waiver, you can both start building {child.name}'s parenting plan together.
+              </p>
+              <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                <span>Waiting for response</span>
               </div>
-              
-              <div className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-700 text-sm md:text-base font-medium">{coParent.name}</span>
-                {coParent.waiverSigned ? (
-                  <span className="text-green-700 text-sm md:text-base font-medium">Signed</span>
-                ) : (
-                  <span className="text-amber-600 text-sm md:text-base font-medium">Pending</span>
-                )}
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="border-0 shadow-xl overflow-hidden">
+            <div className="h-32 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/10"></div>
+              <div className="absolute top-4 right-4">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4">
+                <div className="text-white font-bold text-2xl">🎉</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Payment */}
-        <Card className="border-0 shadow-lg">
-          <CardContent className="space-y-4 py-6 md:py-8 px-6 md:px-8">
-            <p className="font-semibold text-gray-900 text-base md:text-lg">Payment</p>
-            {paymentComplete ? (
-              <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
-                <CheckCircle className="h-6 w-6 md:h-7 md:w-7 text-green-600" />
-                <p className="text-green-700 text-sm md:text-base">Payment processed. Full access granted.</p>
-              </div>
-            ) : (
-              <Button className="w-full py-3 text-base">Make Payment</Button>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Progress Waiting State */}
-        {!coParent.waiverSigned && (
-          <Card className="border-0 shadow-lg bg-blue-50 border-blue-200">
-            <CardContent className="text-center py-8 md:py-10 px-6 md:px-8 space-y-4">
-              <Clock className="h-10 w-10 md:h-12 md:w-12 text-blue-600 mx-auto" />
-              <div>
-                <p className="font-semibold text-blue-900 text-lg md:text-xl mb-3">
-                  Waiting for {coParent.name}
-                </p>
-                <p className="text-blue-700 text-sm md:text-base leading-relaxed max-w-md mx-auto">
-                  Once {coParent.name} signs their waiver, you can both start building {child.name}'s parenting plan together.
-                </p>
-              </div>
+            <CardContent className="p-8 text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Ready to Begin!
+              </h3>
+              <p className="text-gray-600 leading-relaxed max-w-md mx-auto mb-6">
+                Both parents have completed all requirements. Time to start building {child.name}'s parenting plan together.
+              </p>
             </CardContent>
           </Card>
         )}
       </div>
 
       {/* Bottom CTA - Responsive */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:relative md:border-0 md:bg-transparent">
-        <div className="max-w-2xl mx-auto px-4 md:px-6 py-4 md:py-8">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-gray-200 md:relative md:border-0 md:bg-transparent md:backdrop-blur-none">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-8">
           <Button 
-            className={`w-full text-base md:text-lg py-4 md:py-5 ${
+            className={`w-full text-base md:text-lg py-4 md:py-6 font-semibold rounded-xl shadow-lg transition-all duration-300 ${
               coParent.waiverSigned 
-                ? 'bg-[#2e1a87] hover:bg-[#3d2a9b] text-white shadow-lg' 
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-[#2e1a87] via-purple-600 to-blue-600 hover:from-[#3d2a9b] hover:via-purple-700 hover:to-blue-700 text-white shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-[1.02]' 
+                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
             }`}
             size="lg" 
             disabled={!coParent.waiverSigned}
