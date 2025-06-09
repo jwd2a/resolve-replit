@@ -1,0 +1,105 @@
+// Replit Prompt: Create a polished mobile-first, but web ready, onboarding page at route `/homebeta2`
+// This is the final design for testing with users, inspired by Gamma-style modern UX but 100% brand-aligned with Resolve.
+// It should be clean, action-driven, and emotionally supportive.
+
+// Requirements:
+// - Uses Resolve color palette (purples, greens, muted neutrals)
+// - No aggressive gradients or mismatched styling
+// - Tap-friendly cards, stacked vertically
+// - Personalized copy: user name, child name + age
+// - One primary CTA (sticky button)
+// - Optional sticky bottom nav
+
+// Sample data (replace with real user data via props/context):
+const userName = "Eric";
+const child = { name: "Ava", age: 8 };
+const coParent = { name: "Alex Jordan", email: "alex@email.com", inviteSent: true, waiverSigned: false };
+const userWaiverSigned = true;
+const paymentComplete = true;
+
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle, Clock } from "lucide-react";
+
+export default function HomeBeta2() {
+  const allReady = coParent.waiverSigned && userWaiverSigned && paymentComplete;
+  const nextActionText = allReady ? "Begin Ava’s Parenting Plan" : coParent.waiverSigned ? "Start Course" : "Waiting on Alex to Sign";
+
+  return (
+    <div className="max-w-sm mx-auto px-4 pb-24 pt-6 space-y-5 text-sm text-gray-800">
+
+      {/* Header Greeting */}
+      <div className="text-center">
+        <h1 className="text-xl font-bold text-purple-800">Hi {userName},</h1>
+        <p className="text-muted-foreground mt-1">
+          Let’s finish setting up {child.name}’s parenting plan (age {child.age}).
+        </p>
+      </div>
+
+      {/* Profile Status */}
+      <Card>
+        <CardContent className="py-4 space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Your Profile</span>
+            <span className="text-green-600 flex items-center gap-1"><CheckCircle size={16}/> Complete</span>
+          </div>
+          <p className="text-muted-foreground">Family info entered and course unlocked.</p>
+          <Button variant="link" size="sm">Review Info</Button>
+        </CardContent>
+      </Card>
+
+      {/* Co-Parent Status */}
+      <Card>
+        <CardContent className="py-4 space-y-2">
+          <p className="font-medium">Co-Parent: {coParent.name}</p>
+          <p className="text-muted-foreground text-xs">{coParent.email}</p>
+
+          <div className="flex justify-between">
+            <span>Invite</span>
+            {coParent.inviteSent ? <span className="text-green-700">Sent</span> : <Button size="sm">Send</Button>}
+          </div>
+          <div className="flex justify-between">
+            <span>Waiver</span>
+            {coParent.waiverSigned ? (
+              <span className="text-green-700 flex items-center gap-1"><CheckCircle size={16}/> Signed</span>
+            ) : (
+              <span className="text-yellow-600 flex items-center gap-1"><Clock size={16}/> Pending</span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Waiver Summary */}
+      <Card>
+        <CardContent className="py-4 space-y-2">
+          <p className="font-medium">Waivers</p>
+          <div className="flex justify-between">
+            <span>You</span>
+            {userWaiverSigned ? <span className="text-green-700">Signed</span> : <Button size="sm">Sign Now</Button>}
+          </div>
+          <div className="flex justify-between">
+            <span>{coParent.name}</span>
+            {coParent.waiverSigned ? <span className="text-green-700">Signed</span> : <span className="text-yellow-600">Pending</span>}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Payment Section */}
+      <Card>
+        <CardContent className="py-4">
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Payment</span>
+            {paymentComplete ? <span className="text-green-700">Processed</span> : <Button size="sm">Pay Now</Button>}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Sticky CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t shadow-md">
+        <Button className="w-full" size="lg" disabled={!allReady}>{nextActionText}</Button>
+      </div>
+
+    </div>
+  );
+}
