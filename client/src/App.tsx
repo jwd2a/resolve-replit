@@ -17,6 +17,7 @@ import Onboarding6Step from "@/pages/onboarding6step";
 import OnboardingPeech from "@/pages/onboarding-peech";
 import ExitConfirmationDemo from "@/pages/exit-confirmation-demo";
 import IncompleteCourse from "@/pages/incomplete-course";
+import HomeBeta from "@/pages/home-beta";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -75,6 +76,9 @@ function Router() {
       
       {/* Blocked signature step demo */}
       <Route path="/incomplete-course" component={IncompleteCourse} />
+      
+      {/* Beta home screen */}
+      <Route path="/homebeta" component={HomeBeta} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />

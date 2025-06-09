@@ -1,0 +1,104 @@
+// Replit Prompt: Create a new page in our React app at route `/homebeta`
+// This is a beta version of the onboarding/home screen experience for the parenting plan platform.
+// Do NOT overwrite the current home screen. This is a completely new layout for testing.
+
+// Goal: Replace the checklist UI with a more collaborative, clear progress-tracking layout.
+// Focus on breaking down the user’s progress and their co-parent’s progress clearly, using a warm, human-centered tone.
+
+// Sections to include:
+
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, XCircle, Send } from "lucide-react";
+
+export default function HomeBeta() {
+  const coParentName = "Alex Jordan";
+  const coParentEmail = "alex@email.com";
+  const coParentInviteSent = true;
+  const coParentWaiverSigned = false;
+  const userWaiverSigned = true;
+  const familyInfoComplete = true;
+  const paymentComplete = true;
+
+  return (
+    <div className="p-6 space-y-6">
+
+      {/* Section 1: Your Part Is Ready */}
+      <Card>
+        <CardContent className="space-y-2">
+          <h2 className="text-xl font-semibold">You're Ready to Begin</h2>
+          <p className="text-muted-foreground">
+            You’ve set up your family profile and unlocked the course. Great work!
+          </p>
+          <div>
+            <Button variant="link" size="sm">Review Family Info</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Section 2: Co-Parent Status */}
+      <Card>
+        <CardContent className="space-y-2">
+          <h2 className="text-xl font-semibold">Co-Parent: {coParentName}</h2>
+          <p className="text-muted-foreground">{coParentEmail}</p>
+
+          <div className="flex items-center gap-2">
+            <span className="font-medium">Invite Status:</span>
+            {coParentInviteSent ? (
+              <span className="flex items-center text-green-600"><CheckCircle size={18} className="mr-1" /> Invite Sent</span>
+            ) : (
+              <Button size="sm" variant="outline"><Send size={16} className="mr-1" /> Send Invite</Button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-medium">Waiver:</span>
+            {coParentWaiverSigned ? (
+              <span className="flex items-center text-green-600"><CheckCircle size={18} className="mr-1" /> Signed</span>
+            ) : (
+              <span className="flex items-center text-yellow-600"><XCircle size={18} className="mr-1" /> Not Signed Yet</span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Section 3: Waiver Summary */}
+      <Card>
+        <CardContent className="space-y-2">
+          <h2 className="text-xl font-semibold">Waivers</h2>
+          <div className="space-y-1">
+            <div className="flex justify-between">
+              <span>You</span>
+              {userWaiverSigned ? (
+                <Button variant="link" size="sm">View</Button>
+              ) : (
+                <Button size="sm">Sign Waiver</Button>
+              )}
+            </div>
+            <div className="flex justify-between">
+              <span>{coParentName}</span>
+              {coParentWaiverSigned ? (
+                <span className="text-green-600">Signed</span>
+              ) : (
+                <span className="text-yellow-600">Pending</span>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Section 4: Payment */}
+      <Card>
+        <CardContent className="space-y-2">
+          <h2 className="text-xl font-semibold">Payment</h2>
+          {paymentComplete ? (
+            <p className="text-green-600">Payment processed successfully.</p>
+          ) : (
+            <Button>Make Payment</Button>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
