@@ -1,0 +1,108 @@
+// Replit Prompt: Create a new mobile-optimized onboarding screen at route `/homebeta2`
+// This is a modern, emotional, and mobile-first experience focused on co-parenting progress.
+// Do NOT affect the current home or /homebeta screens.
+
+// Key principles:
+// - Personalized greeting using user's name, child(ren)’s name(s) and age(s)
+// - Clear progress with co-parent and waivers
+// - Tap-friendly, vertical card layout with max width and side padding
+// - Sticky CTA for the next action
+// - Tabs or minimal nav for: Home, Course, Plan, Resources
+
+// Sample data (use props/context in production):
+const userName = "Eric";
+const child = { name: "Ava", age: 8 };
+const coParent = { name: "Alex Jordan", email: "alex@email.com", inviteSent: true, waiverSigned: false };
+const userWaiverSigned = true;
+const paymentComplete = true;
+
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle, Clock, UserPlus } from "lucide-react";
+
+export default function HomeBeta2() {
+  const nextAction = coParent.waiverSigned ? "Begin Ava’s Plan" : "Wait for Alex to Sign";
+
+  return (
+    <div className="max-w-sm mx-auto px-4 pb-24 pt-6 space-y-6 text-sm">
+
+      {/* Greeting */}
+      <div>
+        <h1 className="text-lg font-semibold mb-1">Hi {userName},</h1>
+        <p className="text-muted-foreground">Let’s finish setting up Ava’s (age {child.age}) parenting plan.</p>
+      </div>
+
+      {/* You’re Ready Box */}
+      <Card>
+        <CardContent className="space-y-2 py-4">
+          <p className="text-green-700 font-medium">✅ Family Profile Complete</p>
+          <p className="text-muted-foreground">You’ve set up your family and unlocked the course. Great job.</p>
+          <Button variant="link" size="sm">Review Family Info</Button>
+        </CardContent>
+      </Card>
+
+      {/* Co-Parent Status */}
+      <Card>
+        <CardContent className="space-y-3 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">Co-Parent</p>
+              <p className="text-muted-foreground">{coParent.name} — {coParent.email}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span>Invite Status</span>
+            {coParent.inviteSent ? (
+              <span className="text-green-700 flex items-center gap-1"><CheckCircle size={16}/> Sent</span>
+            ) : (
+              <Button size="sm" variant="outline"><UserPlus size={14} className="mr-1" /> Send Invite</Button>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span>Waiver Status</span>
+            {coParent.waiverSigned ? (
+              <span className="text-green-700 flex items-center gap-1"><CheckCircle size={16}/> Signed</span>
+            ) : (
+              <span className="text-yellow-600 flex items-center gap-1"><Clock size={16}/> Pending</span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Waiver Summary */}
+      <Card>
+        <CardContent className="space-y-2 py-4">
+          <p className="font-medium mb-2">Waivers</p>
+          <div className="flex justify-between">
+            <span>You</span>
+            {userWaiverSigned ? <span className="text-green-700">Signed</span> : <Button size="sm">Sign Waiver</Button>}
+          </div>
+          <div className="flex justify-between">
+            <span>{coParent.name}</span>
+            {coParent.waiverSigned ? <span className="text-green-700">Signed</span> : <span className="text-yellow-600">Pending</span>}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Payment */}
+      <Card>
+        <CardContent className="space-y-1 py-4">
+          <p className="font-medium">Payment</p>
+          {paymentComplete ? (
+            <p className="text-green-700">✅ Payment processed. Full access granted.</p>
+          ) : (
+            <Button>Make Payment</Button>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Sticky Bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-md border-t">
+        <Button className="w-full" size="lg" disabled={!coParent.waiverSigned}>{nextAction}</Button>
+      </div>
+    </div>
+  );
+}

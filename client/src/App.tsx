@@ -18,6 +18,7 @@ import OnboardingPeech from "@/pages/onboarding-peech";
 import ExitConfirmationDemo from "@/pages/exit-confirmation-demo";
 import IncompleteCourse from "@/pages/incomplete-course";
 import HomeBeta from "@/pages/home-beta";
+import HomeBeta2 from "@/pages/home-beta2";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -79,6 +80,9 @@ function Router() {
       
       {/* Beta home screen */}
       <Route path="/homebeta" component={HomeBeta} />
+      
+      {/* Mobile-optimized beta home screen */}
+      <Route path="/homebeta2" component={HomeBeta2} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
