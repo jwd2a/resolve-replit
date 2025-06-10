@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Check, RefreshCw, Users, Mail, Clock3, Send } from "lucide-react";
+import { Check, RefreshCw, Users, Mail, Clock3, Send, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import { NavigationMenu } from "@/components/NavigationMenu";
 
-export default function CoParentVerification() {
+interface CoParentVerificationProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function CoParentVerification({ isOpen, onClose }: CoParentVerificationProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -116,61 +126,66 @@ export default function CoParentVerification() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavigationMenu />
-      
-      {/* Main content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex items-center mb-4">
-            <Users className="h-6 w-6 text-[#2e1a87] mr-3" />
-            <h1 className="text-2xl font-bold text-gray-900">Co-Parent Verification Required</h1>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Users className="h-6 w-6 text-[#2e1a87] mr-3" />
+              <DialogTitle className="text-xl font-semibold text-gray-900">
+                Co-Parent Verification Required
+              </DialogTitle>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onClose}
+              className="h-8 w-8 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-          <p className="text-gray-700 text-lg max-w-3xl">
+          <DialogDescription className="text-gray-700 mt-2">
             To begin the course, we need to confirm that both parents are present and participating.
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
-        {/* Why This Step Matters Section */}
-        <Card className="mb-8 border-0 shadow-sm">
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Why This Step Matters</h2>
+        <div className="mt-6 space-y-6">
+          {/* Why This Step Matters Section */}
+          <div className="bg-[#f9f5ff]/80 border border-[#6c54da]/20 rounded-lg p-5">
+            <h3 className="text-lg font-medium text-[#2e1a87] mb-3">Why This Step Matters</h3>
             <p className="text-gray-700 leading-relaxed">
               Each parent must verify their presence to prevent one person from completing the process alone. This 
               ensures both of you are making decisions together and that all agreements are valid.
             </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Email Verification Section */}
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
+          {/* Email Verification Section */}
+          <div className="space-y-4">
             <div className="flex items-center mb-4">
               <Mail className="h-5 w-5 text-[#2e1a87] mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">Verify Co-Parent's Email</h2>
+              <h3 className="text-lg font-medium text-gray-900">Verify Co-Parent's Email</h3>
             </div>
             
-            <div className="mb-6">
-              <p className="text-gray-700 mb-2">
-                We'll send a 6-digit code to your co-parent at <span className="font-medium text-blue-600">{coParentEmail}</span>.
+            <div className="text-gray-700 space-y-2">
+              <p>
+                We'll send a 6-digit code to your co-parent at <span className="font-medium text-[#6c54da]">{coParentEmail}</span>.
               </p>
-              <p className="text-gray-700">
+              <p>
                 They must be present to enter the code and proceed with you.
               </p>
             </div>
           
             <div className="space-y-6">
               {!codeSent ? (
-                <div className="text-center">
+                <div className="text-center pt-4">
                   <Button
                     onClick={sendVerificationCode}
                     disabled={isResending}
                     className={`px-8 py-3 text-sm font-medium ${
                       isResending 
-                        ? 'bg-[#2e1a87]/60'
-                        : 'bg-[#2e1a87] hover:bg-[#3d2a9b] text-white'
+                        ? 'bg-[#6c54da]/60'
+                        : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] text-white'
                     }`}
                     size="lg"
                   >
@@ -182,7 +197,7 @@ export default function CoParentVerification() {
                     ) : (
                       <>
                         <Send className="h-4 w-4 mr-2" />
-                        [Send Verification Code]
+                        Send Verification Code
                       </>
                     )}
                   </Button>
@@ -200,7 +215,7 @@ export default function CoParentVerification() {
                   
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-medium text-gray-900">Enter Verification Code</h3>
+                      <h4 className="text-sm font-medium text-gray-900">Enter Verification Code</h4>
                       {timeRemaining > 0 && (
                         <div className="flex items-center text-amber-600 text-sm">
                           <Clock3 className="h-4 w-4 mr-1" />
@@ -219,7 +234,7 @@ export default function CoParentVerification() {
                           maxLength={1}
                           value={digit}
                           onChange={(e) => handleCodeChange(index, e.target.value)}
-                          className="w-12 h-12 text-center text-lg font-medium border-gray-300 focus:border-[#2e1a87] focus:ring-[#2e1a87]/20 rounded-md"
+                          className="w-12 h-12 text-center text-lg font-medium border-[#6c54da]/30 focus:border-[#6c54da] focus:ring-[#6c54da]/20 rounded-md"
                           disabled={isSuccess || verifying}
                         />
                       ))}
@@ -232,7 +247,7 @@ export default function CoParentVerification() {
                         className={`text-sm ${
                           isResending || timeRemaining > 270 || isSuccess || verifying
                             ? 'text-gray-400 cursor-not-allowed'
-                            : 'text-[#2e1a87] hover:underline'
+                            : 'text-[#6c54da] hover:underline'
                         }`}
                       >
                         {isResending ? "Sending..." : "Resend Code"}
@@ -248,10 +263,10 @@ export default function CoParentVerification() {
                       disabled={verificationCode.some(digit => digit === "") || isSuccess || verifying}
                       className={`w-full py-3 text-sm font-medium ${
                         verifying 
-                          ? 'bg-[#2e1a87]/60' 
+                          ? 'bg-[#6c54da]/60' 
                           : isSuccess 
                             ? 'bg-green-600 hover:bg-green-700'
-                            : 'bg-[#2e1a87] hover:bg-[#3d2a9b] text-white'
+                            : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4] text-white'
                       }`}
                     >
                       {verifying ? (
@@ -272,9 +287,9 @@ export default function CoParentVerification() {
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-      </main>
-    </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

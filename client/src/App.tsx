@@ -27,7 +27,7 @@ import Home3 from "@/pages/home3";
 import Home4 from "@/pages/home4";
 import Home5 from "@/pages/home5";
 import Home6 from "@/pages/home6";
-import CoParentVerification from "@/pages/co-parent-verification";
+import CoParentVerificationDemo from "@/pages/co-parent-verification-demo";
 import CoParentingSchedule from "@/pages/co-parenting-schedule";
 import FamilyInformation from "@/pages/family-information";
 import CoParentInvitation from "@/pages/co-parent-invitation";
@@ -98,7 +98,7 @@ function Router() {
       <Route path="/home4" component={Home4} />
       <Route path="/home5" component={Home5} />
       <Route path="/home6" component={Home6} />
-      <Route path="/co-parent-verification" component={CoParentVerification} />
+      <Route path="/co-parent-verification" component={CoParentVerificationDemo} />
       <Route path="/co-parenting-schedule" component={CoParentingSchedule} />
       <Route path="/family-information" component={FamilyInformation} />
       <Route path="/co-parent-invitation" component={CoParentInvitation} />
