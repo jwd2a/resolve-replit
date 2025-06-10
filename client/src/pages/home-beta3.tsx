@@ -1,10 +1,9 @@
 import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Clock, ChevronDown, User, Users, FileText, CreditCard } from "lucide-react";
+import { CheckCircle, Clock } from "lucide-react";
 
 export default function HomeBeta3() {
-  // Sample state data (in production, these come from user context or props)
   const userName = "Eric";
   const child = { name: "Ava", age: 8 };
   const coParent = { name: "Alex Jordan", email: "alex@email.com", inviteSent: true, waiverSigned: false };
@@ -23,7 +22,7 @@ export default function HomeBeta3() {
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => ref.current?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <div className="max-w-sm mx-auto px-4 pb-24 pt-6 text-sm text-gray-800 space-y-5">
+    <div className="max-w-3xl mx-auto px-4 pb-24 pt-6 text-sm text-gray-800 space-y-6">
 
       {/* Header Greeting */}
       <div className="text-center">
@@ -33,94 +32,77 @@ export default function HomeBeta3() {
         </p>
       </div>
 
-      {/* Progress Module */}
+      {/* Progress Summary - Responsive */}
       <Card className="border-0 shadow-sm">
         <CardContent className="py-4">
           <p className="font-semibold mb-3 text-[#2e1a87]">Progress: {stepsComplete}/4 Steps Complete</p>
 
-          <ul className="space-y-3">
-            <li 
-              className="flex justify-between items-center cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded transition-colors" 
-              onClick={() => scrollTo(familyRef)}
-            >
-              <div className="flex items-center gap-2">
-                <User size={16} className="text-gray-500" />
-                <span>Family Info</span>
+          {/* Mobile vertical list, Desktop horizontal icon strip */}
+          <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-center">
+            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(familyRef)}>
+              <div className="mb-2">
+                {familyInfoComplete ? 
+                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
+                  <Clock size={20} className="mx-auto text-amber-600"/>
+                }
               </div>
-              {familyInfoComplete ? 
-                <CheckCircle className="text-green-600" size={16}/> : 
-                <Clock className="text-amber-600" size={16}/>
-              }
+              <div className="font-medium">Family Info</div>
             </li>
-            <li 
-              className="flex justify-between items-center cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded transition-colors" 
-              onClick={() => scrollTo(coParentRef)}
-            >
-              <div className="flex items-center gap-2">
-                <Users size={16} className="text-gray-500" />
-                <span>Co-Parent</span>
+            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(coParentRef)}>
+              <div className="mb-2">
+                {coParent.inviteSent ? 
+                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
+                  <Clock size={20} className="mx-auto text-amber-600"/>
+                }
               </div>
-              {coParent.inviteSent ? 
-                <CheckCircle className="text-green-600" size={16}/> : 
-                <Clock className="text-amber-600" size={16}/>
-              }
+              <div className="font-medium">Co-Parent</div>
             </li>
-            <li 
-              className="flex justify-between items-center cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded transition-colors" 
-              onClick={() => scrollTo(waiverRef)}
-            >
-              <div className="flex items-center gap-2">
-                <FileText size={16} className="text-gray-500" />
-                <span>Waivers</span>
+            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(waiverRef)}>
+              <div className="mb-2">
+                {(userWaiverSigned && coParent.waiverSigned) ? 
+                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
+                  <Clock size={20} className="mx-auto text-amber-600"/>
+                }
               </div>
-              {(userWaiverSigned && coParent.waiverSigned) ? 
-                <CheckCircle className="text-green-600" size={16}/> : 
-                <Clock className="text-amber-600" size={16}/>
-              }
+              <div className="font-medium">Waivers</div>
             </li>
-            <li 
-              className="flex justify-between items-center cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded transition-colors" 
-              onClick={() => scrollTo(paymentRef)}
-            >
-              <div className="flex items-center gap-2">
-                <CreditCard size={16} className="text-gray-500" />
-                <span>Payment</span>
+            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(paymentRef)}>
+              <div className="mb-2">
+                {paymentComplete ? 
+                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
+                  <Clock size={20} className="mx-auto text-amber-600"/>
+                }
               </div>
-              {paymentComplete ? 
-                <CheckCircle className="text-green-600" size={16}/> : 
-                <Clock className="text-amber-600" size={16}/>
-              }
+              <div className="font-medium">Payment</div>
             </li>
           </ul>
         </CardContent>
       </Card>
 
-      {/* Next Step Message */}
-      <Card className="border-0 shadow-sm">
-        <CardContent className="py-4">
-          {allReady ? (
-            <>
-              <p className="text-green-700 font-medium mb-3">You're all set!</p>
-              <p className="text-gray-600 text-xs mb-3">All requirements completed. Ready to begin {child.name}'s parenting plan.</p>
-              <Button className="w-full bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">Start Course</Button>
-            </>
-          ) : (
-            <>
-              <p className="text-[#2e1a87] font-medium mb-2">
-                Next Step: {coParent.waiverSigned ? "Review your info and begin" : `Waiting for ${coParent.name} to sign their waiver`}
-              </p>
-              <p className="text-gray-600 text-xs mb-3">
-                {!coParent.waiverSigned && `We've sent ${coParent.name} an invitation to complete their waiver.`}
-              </p>
-              {!coParent.waiverSigned && (
-                <Button variant="outline" size="sm" className="w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87] hover:text-white">
-                  Resend Invite
-                </Button>
-              )}
-            </>
-          )}
-        </CardContent>
-      </Card>
+      {/* Next Step - Mobile only */}
+      <div className="md:hidden">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="py-4">
+            {allReady ? (
+              <>
+                <p className="text-green-700 font-medium mb-2">You're all set!</p>
+                <Button className="mt-2 w-full bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">Start Course</Button>
+              </>
+            ) : (
+              <>
+                <p className="text-[#2e1a87] font-medium mb-2">
+                  Next Step: {coParent.waiverSigned ? "Review your info and begin" : `Waiting for ${coParent.name} to sign their waiver`}
+                </p>
+                {!coParent.waiverSigned && (
+                  <Button variant="outline" size="sm" className="mt-2 w-full border-[#2e1a87] text-[#2e1a87] hover:bg-[#2e1a87] hover:text-white">
+                    Resend Invite
+                  </Button>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Family Info Section */}
       <div ref={familyRef}>
@@ -216,9 +198,9 @@ export default function HomeBeta3() {
         </Card>
       </div>
 
-      {/* Sticky Footer CTA */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
-        <div className="max-w-sm mx-auto">
+      {/* Sticky Footer CTA - Mobile only */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 md:hidden">
+        <div className="max-w-3xl mx-auto">
           <Button 
             className={`w-full text-sm py-3 font-medium ${
               allReady 
@@ -228,10 +210,19 @@ export default function HomeBeta3() {
             size="lg" 
             disabled={!allReady}
           >
-            {allReady ? "Start Course" : `Waiting for ${coParent.name}`}
+            Start Course
           </Button>
         </div>
       </div>
+
+      {/* Inline CTA for desktop */}
+      {allReady && (
+        <div className="hidden md:flex justify-center mt-6">
+          <Button size="lg" className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">
+            Start Course
+          </Button>
+        </div>
+      )}
 
     </div>
   );
