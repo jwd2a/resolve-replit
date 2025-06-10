@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Clock } from "lucide-react";
+import { CheckCircle, Clock, Home, Users, FileText, CreditCard, Check, Menu, X } from "lucide-react";
 
 export default function HomeBeta3() {
   const userName = "Eric";
@@ -10,6 +10,8 @@ export default function HomeBeta3() {
   const userWaiverSigned = true;
   const paymentComplete = true;
   const familyInfoComplete = true;
+  
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const stepsComplete = [familyInfoComplete, coParent.inviteSent, userWaiverSigned && coParent.waiverSigned, paymentComplete].filter(Boolean).length;
   const allReady = stepsComplete === 4;
@@ -21,65 +23,173 @@ export default function HomeBeta3() {
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => ref.current?.scrollIntoView({ behavior: 'smooth' });
 
+  // Step data matching the reference design
+  const steps = [
+    {
+      id: "family-info",
+      label: "Family Info",
+      icon: <Home className="h-6 w-6" />,
+      completed: familyInfoComplete,
+      ref: familyRef
+    },
+    {
+      id: "co-parent",
+      label: "Co-Parent",
+      icon: <Users className="h-6 w-6" />,
+      completed: coParent.inviteSent,
+      ref: coParentRef
+    },
+    {
+      id: "waivers",
+      label: "Waivers",
+      icon: <FileText className="h-6 w-6" />,
+      completed: userWaiverSigned && coParent.waiverSigned,
+      ref: waiverRef
+    },
+    {
+      id: "payment",
+      label: "Payment",
+      icon: <CreditCard className="h-6 w-6" />,
+      completed: paymentComplete,
+      ref: paymentRef
+    }
+  ];
+
   return (
-    <div className="max-w-3xl mx-auto px-4 pb-24 pt-6 text-sm text-gray-800 space-y-6">
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Navigation Bar */}
+      <nav className="bg-[#2e1a87] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <span className="text-xl font-bold">Resolve</span>
+            </div>
 
-      {/* Header Greeting */}
-      <div className="text-center">
-        <h1 className="text-xl font-bold text-[#2e1a87] mb-1">Hi {userName},</h1>
-        <p className="text-gray-600 text-sm leading-relaxed">
-          Let's finish setting up {child.name}'s parenting plan (age {child.age}).
-        </p>
-      </div>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#" className="text-white/80 hover:text-white text-sm font-medium">HOME</a>
+              <a href="#" className="text-white/80 hover:text-white text-sm font-medium">COURSE</a>
+              <a href="#" className="text-white/80 hover:text-white text-sm font-medium">PARENTING PLAN</a>
+              <a href="#" className="text-white/80 hover:text-white text-sm font-medium">RESOURCES</a>
+              <div className="flex items-center space-x-4 ml-8">
+                <a href="#" className="text-white/80 hover:text-white text-sm font-medium">OTHER STUFF</a>
+                <Button variant="ghost" size="sm" className="text-white border-white/20 hover:bg-white/10">
+                  Login
+                </Button>
+              </div>
+            </div>
 
-      {/* Progress Summary - Responsive */}
-      <Card className="border-0 shadow-sm">
-        <CardContent className="py-4">
-          <p className="font-semibold mb-3 text-[#2e1a87]">Progress: {stepsComplete}/4 Steps Complete</p>
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-white hover:bg-white/10"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
+          </div>
+        </div>
 
-          {/* Mobile vertical list, Desktop horizontal icon strip */}
-          <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-center">
-            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(familyRef)}>
-              <div className="mb-2">
-                {familyInfoComplete ? 
-                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
-                  <Clock size={20} className="mx-auto text-amber-600"/>
-                }
-              </div>
-              <div className="font-medium">Family Info</div>
-            </li>
-            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(coParentRef)}>
-              <div className="mb-2">
-                {coParent.inviteSent ? 
-                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
-                  <Clock size={20} className="mx-auto text-amber-600"/>
-                }
-              </div>
-              <div className="font-medium">Co-Parent</div>
-            </li>
-            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(waiverRef)}>
-              <div className="mb-2">
-                {(userWaiverSigned && coParent.waiverSigned) ? 
-                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
-                  <Clock size={20} className="mx-auto text-amber-600"/>
-                }
-              </div>
-              <div className="font-medium">Waivers</div>
-            </li>
-            <li className="cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onClick={() => scrollTo(paymentRef)}>
-              <div className="mb-2">
-                {paymentComplete ? 
-                  <CheckCircle size={20} className="mx-auto text-green-600"/> : 
-                  <Clock size={20} className="mx-auto text-amber-600"/>
-                }
-              </div>
-              <div className="font-medium">Payment</div>
-            </li>
-          </ul>
-        </CardContent>
-      </Card>
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#2e1a87] border-t border-white/20">
+            <div className="px-4 py-4 space-y-3">
+              <a href="#" className="block text-white/80 hover:text-white text-sm font-medium">HOME</a>
+              <a href="#" className="block text-white/80 hover:text-white text-sm font-medium">COURSE</a>
+              <a href="#" className="block text-white/80 hover:text-white text-sm font-medium">PARENTING PLAN</a>
+              <a href="#" className="block text-white/80 hover:text-white text-sm font-medium">RESOURCES</a>
+              <a href="#" className="block text-white/80 hover:text-white text-sm font-medium">OTHER STUFF</a>
+              <Button variant="ghost" size="sm" className="text-white border-white/20 hover:bg-white/10 w-full justify-start">
+                Login
+              </Button>
+            </div>
+          </div>
+        )}
+      </nav>
 
-      {/* Next Step - Mobile only */}
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {/* Welcome banner matching reference design */}
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-6 px-6 mb-6 text-white relative overflow-hidden">
+          {/* Background decorative element */}
+          <div className="absolute right-0 bottom-0 w-48 h-48 bg-indigo-500/10 rounded-full -mr-16 -mb-16"></div>
+          
+          <div className="relative z-10">
+            {/* Title section */}
+            <div className="mb-6">
+              <h1 className="text-xl font-semibold mb-2">Welcome to Your Family's Parenting Plan</h1>
+              <p className="text-white/80 text-sm">
+                To begin your course, please complete the steps below.
+              </p>
+            </div>
+            
+            {/* Progress indicators and Start Course button */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              {/* Step badges */}
+              <div className="flex items-center space-x-6 lg:space-x-12 flex-wrap">
+                {steps.map((step) => (
+                  <div 
+                    key={step.id} 
+                    className="flex flex-col items-center cursor-pointer py-2" 
+                    onClick={() => scrollTo(step.ref)}
+                  >
+                    <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 mb-2
+                      ${step.completed 
+                        ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
+                        : "bg-white/30 text-white border-[1.5px] border-white/60 shadow-sm"
+                      }`}
+                    >
+                      {step.completed && (
+                        <div className="absolute -top-1 -left-1 w-[14px] h-[14px] bg-green-500 rounded-full flex items-center justify-center z-20">
+                          <Check className="h-2.5 w-2.5 text-white" />
+                        </div>
+                      )}
+                      <div className={`w-6 h-6 ${!step.completed ? "opacity-80" : ""}`}>
+                        {step.icon}
+                      </div>
+                    </div>
+                    <span className="text-xs text-white text-center whitespace-nowrap font-medium">
+                      {step.label}
+                    </span>
+                    <span className={`text-[10px] mt-0.5 text-center whitespace-nowrap
+                      ${step.completed 
+                        ? "text-white/90 font-medium" 
+                        : "text-white/75"
+                      }`}
+                    >
+                      {step.completed ? "Completed" : "Pending"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Start Course button */}
+              <div className="flex-shrink-0 w-full lg:w-auto">
+                <Button 
+                  className={`w-full lg:w-auto px-6 py-2 text-sm font-medium transition-all duration-200 ${
+                    allReady 
+                      ? 'bg-white text-[#2e1a87] hover:bg-gray-100 shadow-lg' 
+                      : 'bg-white/20 text-white/60 cursor-not-allowed border border-white/30'
+                  }`}
+                  disabled={!allReady}
+                >
+                  Start Course →
+                </Button>
+                {!allReady && (
+                  <span className="text-xs text-white/70 mt-1 block lg:hidden">
+                    All steps must be completed
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Next Step - Mobile only */}
       <div className="md:hidden">
         <Card className="border-0 shadow-sm">
           <CardContent className="py-4">
@@ -224,6 +334,7 @@ export default function HomeBeta3() {
         </div>
       )}
 
+      </main>
     </div>
   );
 }
