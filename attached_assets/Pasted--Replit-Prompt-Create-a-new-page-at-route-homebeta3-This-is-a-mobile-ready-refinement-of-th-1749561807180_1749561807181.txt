@@ -1,0 +1,102 @@
+// Replit Prompt: Create a new page at route `/homebeta3`
+// This is a mobile-ready refinement of the existing `/home` screen.
+// DO NOT redesign from scratch. This version keeps the current layout, components, and logic but improves the mobile experience.
+// Focus on progress visibility, actionability, and screen hierarchy — not visuals or structure overhaul.
+
+// GOALS:
+// 1. Collapse the top visual icons (Family Info, Co-Parent, Waivers, Payment) into a mobile-friendly progress summary module.
+// 2. Make each step tappable and scroll or focus to the corresponding section below.
+// 3. Add a clear "Next Step" message below the progress module with a helpful CTA.
+// 4. Maintain the current components for Family Info, Co-Parent, Waivers, and Payment — just reorganized slightly for mobile clarity.
+// 5. Optionally, add a sticky footer to show progress summary or "Start Course" button.
+
+// Sample state data (in production, these come from user context or props):
+const userName = "Eric";
+const child = { name: "Ava", age: 8 };
+const coParent = { name: "Alex Jordan", email: "alex@email.com", inviteSent: true, waiverSigned: false };
+const userWaiverSigned = true;
+const paymentComplete = true;
+const familyInfoComplete = true;
+
+import React, { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle, Clock, ChevronDown } from "lucide-react";
+
+export default function HomeBeta3() {
+  const stepsComplete = [familyInfoComplete, coParent.inviteSent, userWaiverSigned && coParent.waiverSigned, paymentComplete].filter(Boolean).length;
+  const allReady = stepsComplete === 4;
+
+  const familyRef = useRef();
+  const coParentRef = useRef();
+  const waiverRef = useRef();
+  const paymentRef = useRef();
+
+  const scrollTo = (ref) => ref.current?.scrollIntoView({ behavior: 'smooth' });
+
+  return (
+    <div className="max-w-sm mx-auto px-4 pb-24 pt-6 text-sm text-gray-800 space-y-5">
+
+      {/* Progress Module */}
+      <Card>
+        <CardContent className="py-4">
+          <p className="font-semibold mb-1 text-purple-800">Progress: {stepsComplete}/4 Steps Complete</p>
+
+          <ul className="space-y-2">
+            <li className="flex justify-between items-center" onClick={() => scrollTo(familyRef)}>
+              <span>Family Info</span>
+              {familyInfoComplete ? <CheckCircle className="text-green-600" size={16}/> : <Clock className="text-yellow-600" size={16}/>}
+            </li>
+            <li className="flex justify-between items-center" onClick={() => scrollTo(coParentRef)}>
+              <span>Co-Parent</span>
+              {coParent.inviteSent ? <CheckCircle className="text-green-600" size={16}/> : <Clock className="text-yellow-600" size={16}/>}
+            </li>
+            <li className="flex justify-between items-center" onClick={() => scrollTo(waiverRef)}>
+              <span>Waivers</span>
+              {(userWaiverSigned && coParent.waiverSigned) ? <CheckCircle className="text-green-600" size={16}/> : <Clock className="text-yellow-600" size={16}/>}
+            </li>
+            <li className="flex justify-between items-center" onClick={() => scrollTo(paymentRef)}>
+              <span>Payment</span>
+              {paymentComplete ? <CheckCircle className="text-green-600" size={16}/> : <Clock className="text-yellow-600" size={16}/>}
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Next Step Message */}
+      <div className="bg-white border rounded-lg p-4 shadow-sm">
+        {allReady ? (
+          <>
+            <p className="text-green-700 font-medium">You're all set!</p>
+            <Button className="mt-2 w-full">Start Course</Button>
+          </>
+        ) : (
+          <>
+            <p className="text-purple-800 font-medium">Next Step: {coParent.waiverSigned ? "Review your info and begin" : `Waiting for ${coParent.name} to sign their waiver`}</p>
+            {!coParent.waiverSigned && <Button variant="outline" size="sm" className="mt-2 w-full">Resend Invite</Button>}
+          </>
+        )}
+      </div>
+
+      {/* Existing Content Sections */}
+      <div ref={familyRef}>
+        {/* Preserve existing Family Info section */}
+      </div>
+      <div ref={coParentRef}>
+        {/* Preserve existing Co-Parent section */}
+      </div>
+      <div ref={waiverRef}>
+        {/* Preserve existing Waivers section */}
+      </div>
+      <div ref={paymentRef}>
+        {/* Preserve existing Payment section */}
+      </div>
+
+      {/* Optional: Sticky Footer CTA */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md p-4">
+        <Button className="w-full" size="lg" disabled={!allReady}>Start Course</Button>
+      </div>
+
+    </div>
+  );
+}

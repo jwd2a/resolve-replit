@@ -19,6 +19,7 @@ import ExitConfirmationDemo from "@/pages/exit-confirmation-demo";
 import IncompleteCourse from "@/pages/incomplete-course";
 import HomeBeta from "@/pages/home-beta";
 import HomeBeta2 from "@/pages/home-beta2";
+import HomeBeta3 from "@/pages/home-beta3";
 import DashboardPage from "@/pages/dashboard-page";
 import DashboardSimplified from "@/pages/dashboard-simplified";
 import Home2 from "@/pages/home2";
@@ -83,6 +84,9 @@ function Router() {
       
       {/* Mobile-optimized beta home screen */}
       <Route path="/homebeta2" component={HomeBeta2} />
+      
+      {/* Mobile-ready refinement with progress tracking */}
+      <Route path="/homebeta3" component={HomeBeta3} />
       
       {/* For now, we're keeping these routes public for demonstration purposes */}
       <Route path="/dashboard" component={DashboardPage} />
