@@ -113,77 +113,153 @@ export default function HomeBeta3() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-        {/* Welcome banner matching reference design */}
-        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] py-6 px-6 mb-6 text-white relative overflow-hidden">
+        {/* Welcome banner - Mobile vs Desktop */}
+        <div className="rounded-lg bg-gradient-to-br from-[#2e1a87] to-[#4936c2] text-white relative overflow-hidden mb-6">
           {/* Background decorative element */}
           <div className="absolute right-0 bottom-0 w-48 h-48 bg-indigo-500/10 rounded-full -mr-16 -mb-16"></div>
           
-          <div className="relative z-10">
-            {/* Title section */}
-            <div className="mb-6">
-              <h1 className="text-xl font-semibold mb-2">Welcome to Your Family's Parenting Plan</h1>
-              <p className="text-white/80 text-sm">
-                To begin your course, please complete the steps below.
-              </p>
+          {/* Desktop Layout */}
+          <div className="hidden md:block py-6 px-6">
+            <div className="relative z-10">
+              {/* Title section */}
+              <div className="mb-6">
+                <h1 className="text-xl font-semibold mb-2">Welcome to Your Family's Parenting Plan</h1>
+                <p className="text-white/80 text-sm">
+                  To begin your course, please complete the steps below.
+                </p>
+              </div>
+              
+              {/* Progress indicators and Start Course button */}
+              <div className="flex items-center justify-between gap-6">
+                {/* Step badges */}
+                <div className="flex items-center space-x-12">
+                  {steps.map((step) => (
+                    <div 
+                      key={step.id} 
+                      className="flex flex-col items-center cursor-pointer py-2" 
+                      onClick={() => scrollTo(step.ref)}
+                    >
+                      <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 mb-2
+                        ${step.completed 
+                          ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
+                          : "bg-white/30 text-white border-[1.5px] border-white/60 shadow-sm"
+                        }`}
+                      >
+                        {step.completed && (
+                          <div className="absolute -top-1 -left-1 w-[14px] h-[14px] bg-green-500 rounded-full flex items-center justify-center z-20">
+                            <Check className="h-2.5 w-2.5 text-white" />
+                          </div>
+                        )}
+                        <div className={`w-6 h-6 ${!step.completed ? "opacity-80" : ""}`}>
+                          {step.icon}
+                        </div>
+                      </div>
+                      <span className="text-xs text-white text-center whitespace-nowrap font-medium">
+                        {step.label}
+                      </span>
+                      <span className={`text-[10px] mt-0.5 text-center whitespace-nowrap
+                        ${step.completed 
+                          ? "text-white/90 font-medium" 
+                          : "text-white/75"
+                        }`}
+                      >
+                        {step.completed ? "Completed" : "Pending"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Start Course button */}
+                <div className="flex-shrink-0">
+                  <Button 
+                    className={`px-6 py-2 text-sm font-medium transition-all duration-200 ${
+                      allReady 
+                        ? 'bg-white text-[#2e1a87] hover:bg-gray-100 shadow-lg' 
+                        : 'bg-white/20 text-white/60 cursor-not-allowed border border-white/30'
+                    }`}
+                    disabled={!allReady}
+                  >
+                    Start Course →
+                  </Button>
+                </div>
+              </div>
             </div>
-            
-            {/* Progress indicators and Start Course button */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-              {/* Step badges */}
-              <div className="flex items-center space-x-6 lg:space-x-12 flex-wrap">
+          </div>
+
+          {/* Mobile Layout - Optimized for mobile viewing */}
+          <div className="md:hidden py-4 px-4">
+            <div className="relative z-10">
+              {/* Mobile Title */}
+              <div className="text-center mb-4">
+                <h1 className="text-lg font-semibold mb-1">Setup Your Parenting Plan</h1>
+                <p className="text-white/80 text-sm">
+                  {stepsComplete}/4 steps completed
+                </p>
+              </div>
+              
+              {/* Mobile Progress Bar */}
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-white/80">Progress</span>
+                  <span className="text-xs text-white font-medium">{Math.round((stepsComplete/4) * 100)}%</span>
+                </div>
+                <div className="w-full bg-white/20 rounded-full h-2">
+                  <div 
+                    className="bg-green-400 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${(stepsComplete/4) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Mobile Step List */}
+              <div className="space-y-3 mb-4">
                 {steps.map((step) => (
                   <div 
                     key={step.id} 
-                    className="flex flex-col items-center cursor-pointer py-2" 
+                    className="flex items-center justify-between bg-white/10 rounded-lg p-3 cursor-pointer hover:bg-white/15 transition-colors" 
                     onClick={() => scrollTo(step.ref)}
                   >
-                    <div className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 mb-2
-                      ${step.completed 
-                        ? "bg-[#2e1a87] text-white border border-white/20 shadow-md" 
-                        : "bg-white/30 text-white border-[1.5px] border-white/60 shadow-sm"
-                      }`}
-                    >
-                      {step.completed && (
-                        <div className="absolute -top-1 -left-1 w-[14px] h-[14px] bg-green-500 rounded-full flex items-center justify-center z-20">
-                          <Check className="h-2.5 w-2.5 text-white" />
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center
+                        ${step.completed 
+                          ? "bg-green-500 text-white" 
+                          : "bg-white/30 text-white/80"
+                        }`}
+                      >
+                        {step.completed ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Clock className="h-4 w-4" />
+                        )}
+                      </div>
+                      <div>
+                        <span className="text-white font-medium text-sm">{step.label}</span>
+                        <div className="text-xs text-white/70">
+                          {step.completed ? "Completed" : "Tap to complete"}
                         </div>
-                      )}
-                      <div className={`w-6 h-6 ${!step.completed ? "opacity-80" : ""}`}>
-                        {step.icon}
                       </div>
                     </div>
-                    <span className="text-xs text-white text-center whitespace-nowrap font-medium">
-                      {step.label}
-                    </span>
-                    <span className={`text-[10px] mt-0.5 text-center whitespace-nowrap
-                      ${step.completed 
-                        ? "text-white/90 font-medium" 
-                        : "text-white/75"
-                      }`}
-                    >
-                      {step.completed ? "Completed" : "Pending"}
-                    </span>
+                    <div className="text-white/60">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
                 ))}
               </div>
-              
-              {/* Start Course button */}
-              <div className="flex-shrink-0 w-full lg:w-auto">
+
+              {/* Mobile CTA */}
+              <div className="text-center">
                 <Button 
-                  className={`w-full lg:w-auto px-6 py-2 text-sm font-medium transition-all duration-200 ${
+                  className={`w-full py-3 text-sm font-medium transition-all duration-200 ${
                     allReady 
                       ? 'bg-white text-[#2e1a87] hover:bg-gray-100 shadow-lg' 
                       : 'bg-white/20 text-white/60 cursor-not-allowed border border-white/30'
                   }`}
                   disabled={!allReady}
                 >
-                  Start Course →
+                  {allReady ? 'Start Course' : `${4 - stepsComplete} steps remaining`}
                 </Button>
-                {!allReady && (
-                  <span className="text-xs text-white/70 mt-1 block lg:hidden">
-                    All steps must be completed
-                  </span>
-                )}
               </div>
             </div>
           </div>
