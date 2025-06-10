@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Check, RefreshCw, Info, User, Mail, Clock3, Send } from "lucide-react";
+import { Check, RefreshCw, Users, Mail, Clock3, Send } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { NavigationMenu } from "@/components/NavigationMenu";
@@ -28,7 +21,6 @@ export default function CoParentVerification() {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [verifying, setVerifying] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [showInfoDialog, setShowInfoDialog] = useState(false);
   
   // Mock co-parent data - in a real app, this would come from the user's profile
   const coParentEmail = "co-parent@example.com"; // In production, get this from the user's profile
@@ -124,226 +116,165 @@ export default function CoParentVerification() {
   };
   
   return (
-    <div className="min-h-screen bg-[#f9f7fe]">
+    <div className="min-h-screen bg-gray-50">
       <NavigationMenu />
       
       {/* Main content */}
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-        <div className="bg-white rounded-xl p-8 border border-[#6c54da]/20 shadow-sm mb-6">
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-medium text-[#2e1a87] mb-2">
-              Co-Parent Verification Required
-            </h2>
-            <p className="text-gray-600 text-sm max-w-md mx-auto">
-              To ensure both parents are present for the course, we need to verify your co-parent's identity.
-            </p>
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center mb-4">
+            <Users className="h-6 w-6 text-[#2e1a87] mr-3" />
+            <h1 className="text-2xl font-bold text-gray-900">Co-Parent Verification Required</h1>
           </div>
-          
-          <div className="bg-[#f9f5ff]/80 rounded-lg p-5 mb-6">
-            <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-[#6c54da] mt-0.5 flex-shrink-0" />
-              <div>
-                <h3 className="font-medium text-[#2e1a87] text-sm mb-1">Why this step matters</h3>
-                <p className="text-gray-600 text-sm">
-                  Making important decisions together as a team creates the foundation for effective 
-                  co-parenting and helps children feel more secure in their family relationships.
-                </p>
-                <button 
-                  onClick={() => setShowInfoDialog(true)} 
-                  className="text-xs text-[#6c54da] font-medium mt-1 hover:underline"
-                >
-                  Learn more about our approach
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-6">
-            {!codeSent ? (
-              <div className="flex flex-col items-center">
-                <div className="text-center mb-6">
-                  <Mail className="h-10 w-10 mx-auto text-[#6c54da] mb-4" />
-                  <h3 className="text-[#2e1a87] font-medium mb-2">Verify Co-Parent's Email</h3>
-                  <p className="text-gray-600 text-sm max-w-md mx-auto">
-                    Your co-parent's email ({coParentEmail}) will receive a 6-digit verification code.
-                    Both of you need to be present to proceed with the course.
-                  </p>
-                </div>
-                
-                <Button
-                  onClick={sendVerificationCode}
-                  disabled={isResending}
-                  className={`py-6 px-8 ${
-                    isResending 
-                      ? 'bg-[#6c54da]/60'
-                      : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4]'
-                  }`}
-                  size="lg"
-                >
-                  {isResending ? (
-                    <>
-                      <RefreshCw className="h-5 w-5 animate-spin mr-2" />
-                      Sending Code...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-5 w-5 mr-2" />
-                      Send Verification Code
-                    </>
-                  )}
-                </Button>
-              </div>
-            ) : (
-              <div className={cn("transition-all duration-500", isSuccess ? "opacity-50" : "opacity-100")}>
-                <div className="text-center bg-blue-50 p-4 rounded-lg w-full mb-6">
-                  <Mail className="h-5 w-5 mx-auto text-blue-500 mb-2" />
-                  <p className="text-sm text-blue-700">
-                    A verification code has been sent to your co-parent's email.
-                  </p>
-                </div>
-                
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-medium text-[#2e1a87]">Enter Verification Code</h3>
-                    {timeRemaining > 0 && (
-                      <div className="flex items-center text-amber-600 text-sm">
-                        <Clock3 className="h-3.5 w-3.5 mr-1.5" />
-                        <span>{formatTime(timeRemaining)}</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex justify-center gap-3 mb-4">
-                    {verificationCode.map((digit, index) => (
-                      <Input
-                        key={index}
-                        id={`code-${index}`}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleCodeChange(index, e.target.value)}
-                        className="w-12 h-14 text-center text-xl font-medium border-[#6c54da]/30 focus:border-[#6c54da] focus:ring-[#6c54da]/20 rounded-md"
-                        disabled={isSuccess || verifying}
-                      />
-                    ))}
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <button
-                      onClick={sendVerificationCode}
-                      disabled={isResending || timeRemaining > 270 || isSuccess || verifying} // Don't allow resend within 30 seconds
-                      className={`text-xs ${
-                        isResending || timeRemaining > 270 || isSuccess || verifying
-                          ? 'text-gray-400 cursor-not-allowed'
-                          : 'text-[#6c54da] hover:underline'
-                      }`}
-                    >
-                      {isResending ? "Sending..." : "Resend Code"}
-                    </button>
-                    
-                    <p className="text-xs text-gray-500">
-                      Code sent to {coParentEmail}
-                    </p>
-                  </div>
-                </div>
-                
-                <Button
-                  onClick={verifyCode}
-                  disabled={verificationCode.some(digit => digit === "") || isSuccess || verifying}
-                  className={`w-full py-6 ${
-                    verifying 
-                      ? 'bg-[#6c54da]/60' 
-                      : isSuccess 
-                        ? 'bg-green-600 hover:bg-green-700'
-                        : 'bg-gradient-to-r from-[#2e1a87] to-[#6c54da] hover:from-[#25156d] hover:to-[#5744c4]'
-                  }`}
-                >
-                  {verifying ? (
-                    <>
-                      <RefreshCw className="h-5 w-5 animate-spin mr-2" />
-                      Verifying...
-                    </>
-                  ) : isSuccess ? (
-                    <>
-                      <Check className="h-5 w-5 mr-2" />
-                      Verified! Redirecting to Course...
-                    </>
-                  ) : (
-                    "Verify & Continue to Course"
-                  )}
-                </Button>
-              </div>
-            )}
-          </div>
+          <p className="text-gray-700 text-lg max-w-3xl">
+            To begin the course, we need to confirm that both parents are present and participating.
+          </p>
         </div>
-      </main>
-      
-      {/* Information dialog */}
-      <Dialog open={showInfoDialog} onOpenChange={setShowInfoDialog}>
-        <DialogContent className="bg-white rounded-lg max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-[#2e1a87]">Why Both Parents Matter</DialogTitle>
-            <DialogDescription>
-              Working as a team creates better outcomes for your children.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="py-4 space-y-4">
-            <p className="text-sm text-gray-700">
-              When both parents participate together in making important decisions:
+
+        {/* Why This Step Matters Section */}
+        <Card className="mb-8 border-0 shadow-sm">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Why This Step Matters</h2>
+            <p className="text-gray-700 leading-relaxed">
+              Each parent must verify their presence to prevent one person from completing the process alone. This 
+              ensures both of you are making decisions together and that all agreements are valid.
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Email Verification Section */}
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center mb-4">
+              <Mail className="h-5 w-5 text-[#2e1a87] mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">Verify Co-Parent's Email</h2>
+            </div>
             
-            <ul className="space-y-3">
-              <li className="flex gap-3">
-                <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <Check className="h-4 w-4 text-green-600" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900">United Front</h4>
-                  <p className="text-xs text-gray-600">Children feel more secure when parents present a united approach to important family decisions.</p>
-                </div>
-              </li>
-              
-              <li className="flex gap-3">
-                <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <Check className="h-4 w-4 text-green-600" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900">Consistent Understanding</h4>
-                  <p className="text-xs text-gray-600">Both parents share the same understanding of your agreement, reducing misinterpretations later.</p>
-                </div>
-              </li>
-              
-              <li className="flex gap-3">
-                <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <Check className="h-4 w-4 text-green-600" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900">Stronger Commitment</h4>
-                  <p className="text-xs text-gray-600">When you create a plan together, you're both more invested in making it work for your family.</p>
-                </div>
-              </li>
-            </ul>
-            
-            <div className="bg-blue-50 p-4 rounded-md text-sm text-blue-700 mt-4">
-              <p>
-                Our verification process ensures that both parents can participate together in creating your family's parenting plan.
+            <div className="mb-6">
+              <p className="text-gray-700 mb-2">
+                We'll send a 6-digit code to your co-parent at <span className="font-medium text-blue-600">{coParentEmail}</span>.
+              </p>
+              <p className="text-gray-700">
+                They must be present to enter the code and proceed with you.
               </p>
             </div>
-          </div>
           
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setShowInfoDialog(false)}
-              className="border-[#6c54da]/20 text-[#2e1a87]"
-            >
-              Got it
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <div className="space-y-6">
+              {!codeSent ? (
+                <div className="text-center">
+                  <Button
+                    onClick={sendVerificationCode}
+                    disabled={isResending}
+                    className={`px-8 py-3 text-sm font-medium ${
+                      isResending 
+                        ? 'bg-[#2e1a87]/60'
+                        : 'bg-[#2e1a87] hover:bg-[#3d2a9b] text-white'
+                    }`}
+                    size="lg"
+                  >
+                    {isResending ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                        Sending Code...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        [Send Verification Code]
+                      </>
+                    )}
+                  </Button>
+                </div>
+              ) : (
+                <div className={cn("space-y-6", isSuccess ? "opacity-50" : "opacity-100")}>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <Mail className="h-5 w-5 text-blue-600 mr-2" />
+                      <p className="text-sm text-blue-800">
+                        A verification code has been sent to your co-parent's email.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-gray-900">Enter Verification Code</h3>
+                      {timeRemaining > 0 && (
+                        <div className="flex items-center text-amber-600 text-sm">
+                          <Clock3 className="h-4 w-4 mr-1" />
+                          <span>{formatTime(timeRemaining)}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex justify-center gap-3 mb-6">
+                      {verificationCode.map((digit, index) => (
+                        <Input
+                          key={index}
+                          id={`code-${index}`}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleCodeChange(index, e.target.value)}
+                          className="w-12 h-12 text-center text-lg font-medium border-gray-300 focus:border-[#2e1a87] focus:ring-[#2e1a87]/20 rounded-md"
+                          disabled={isSuccess || verifying}
+                        />
+                      ))}
+                    </div>
+                    
+                    <div className="flex justify-between items-center mb-6">
+                      <button
+                        onClick={sendVerificationCode}
+                        disabled={isResending || timeRemaining > 270 || isSuccess || verifying}
+                        className={`text-sm ${
+                          isResending || timeRemaining > 270 || isSuccess || verifying
+                            ? 'text-gray-400 cursor-not-allowed'
+                            : 'text-[#2e1a87] hover:underline'
+                        }`}
+                      >
+                        {isResending ? "Sending..." : "Resend Code"}
+                      </button>
+                      
+                      <p className="text-sm text-gray-600">
+                        Code sent to {coParentEmail}
+                      </p>
+                    </div>
+                    
+                    <Button
+                      onClick={verifyCode}
+                      disabled={verificationCode.some(digit => digit === "") || isSuccess || verifying}
+                      className={`w-full py-3 text-sm font-medium ${
+                        verifying 
+                          ? 'bg-[#2e1a87]/60' 
+                          : isSuccess 
+                            ? 'bg-green-600 hover:bg-green-700'
+                            : 'bg-[#2e1a87] hover:bg-[#3d2a9b] text-white'
+                      }`}
+                    >
+                      {verifying ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                          Verifying...
+                        </>
+                      ) : isSuccess ? (
+                        <>
+                          <Check className="h-4 w-4 mr-2" />
+                          Verified! Redirecting to Course...
+                        </>
+                      ) : (
+                        "Verify & Continue to Course"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 }
