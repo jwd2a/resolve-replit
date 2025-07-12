@@ -519,70 +519,7 @@ export default function ParentingPlan2() {
                   </CardContent>
                 </Card>
 
-                {/* Enhanced Quick Actions */}
-                <Card className="bg-white/80 backdrop-blur-sm border-purple-200">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center">
-                      <Zap className="h-5 w-5 mr-2" />
-                      Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 gap-3">
-                      <Button 
-                        variant="outline" 
-                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <BookOpen className="h-4 w-4 mt-0.5 text-purple-600" />
-                          <div>
-                            <p className="font-medium text-sm">Explain This Section</p>
-                            <p className="text-xs text-gray-500">Get detailed explanations of legal terms</p>
-                          </div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <CheckCircle className="h-4 w-4 mt-0.5 text-green-600" />
-                          <div>
-                            <p className="font-medium text-sm">Check Compliance</p>
-                            <p className="text-xs text-gray-500">Verify legal requirements are met</p>
-                          </div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <FileText className="h-4 w-4 mt-0.5 text-blue-600" />
-                          <div>
-                            <p className="font-medium text-sm">Suggest Improvements</p>
-                            <p className="text-xs text-gray-500">Get recommendations for clarity</p>
-                          </div>
-                        </div>
-                      </Button>
 
-                      <Button 
-                        variant="outline" 
-                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <div className="flex items-start space-x-3">
-                          <Users className="h-4 w-4 mt-0.5 text-orange-600" />
-                          <div>
-                            <p className="font-medium text-sm">Compare Templates</p>
-                            <p className="text-xs text-gray-500">See how this compares to standards</p>
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
 
                 {viewMode === "edit" && (
                   <Card className="bg-white/80 backdrop-blur-sm border-purple-200">
