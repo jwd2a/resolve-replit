@@ -25,7 +25,8 @@ import {
   ChevronDown,
   ChevronRight,
   Send,
-  Bot
+  Bot,
+  Zap
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -350,101 +351,207 @@ export default function ParentingPlan2() {
           <div className="col-span-12 lg:col-span-3">
             <div className="sticky top-24">
               <div className="space-y-6">
-                {/* AI Assistant Widget */}
+                {/* Enhanced AI Assistant Widget */}
                 <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-lg flex items-center text-[#2e1a87]">
-                      <Bot className="h-5 w-5 mr-2" />
+                    <CardTitle className="text-xl flex items-center text-[#2e1a87]">
+                      <Bot className="h-6 w-6 mr-3" />
                       AI Parenting Plan Assistant
                     </CardTitle>
-                    <p className="text-sm text-gray-600">How can I help you with this section?</p>
+                    <p className="text-sm text-gray-600">Expert guidance for creating fair, child-focused agreements</p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Quick Action Buttons */}
-                    <div className="grid grid-cols-1 gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <BookOpen className="h-3 w-3 mr-2" />
-                        Summarize This Section
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <HelpCircle className="h-3 w-3 mr-2" />
-                        Explain Legal Terms
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <FileText className="h-3 w-3 mr-2" />
-                        Compare to Template
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
-                      >
-                        <CheckCircle className="h-3 w-3 mr-2" />
-                        Review for Compliance
-                      </Button>
+                  <CardContent className="space-y-6">
+                    {/* Current Section Context */}
+                    <div className="bg-white/80 rounded-lg p-4 border border-purple-100">
+                      <h4 className="font-semibold text-sm text-gray-800 mb-2">Currently Viewing</h4>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-5 h-5 rounded-full bg-[#2e1a87] text-white flex items-center justify-center text-xs font-bold">
+                          {activeSection}
+                        </div>
+                        <span className="text-sm text-gray-700">
+                          {sections.find(s => s.id === activeSection)?.title || "Document Overview"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Smart Suggestions */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-sm text-gray-800">Smart Suggestions</h4>
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300 h-auto py-2"
+                        >
+                          <div className="flex items-start space-x-2">
+                            <BookOpen className="h-3 w-3 mt-0.5 text-purple-600" />
+                            <div className="text-left">
+                              <p className="font-medium">Explain This Section</p>
+                              <p className="text-gray-500 text-xs">Get plain English explanations</p>
+                            </div>
+                          </div>
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300 h-auto py-2"
+                        >
+                          <div className="flex items-start space-x-2">
+                            <CheckCircle className="h-3 w-3 mt-0.5 text-green-600" />
+                            <div className="text-left">
+                              <p className="font-medium">Check Requirements</p>
+                              <p className="text-gray-500 text-xs">Verify legal compliance</p>
+                            </div>
+                          </div>
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="justify-start text-xs bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300 h-auto py-2"
+                        >
+                          <div className="flex items-start space-x-2">
+                            <Zap className="h-3 w-3 mt-0.5 text-yellow-600" />
+                            <div className="text-left">
+                              <p className="font-medium">Improve Language</p>
+                              <p className="text-gray-500 text-xs">Make it clearer and fairer</p>
+                            </div>
+                          </div>
+                        </Button>
+                      </div>
                     </div>
                     
-                    {/* Chat Input */}
-                    <div className="pt-2 border-t border-purple-200">
-                      <div className="flex space-x-2">
+                    {/* Enhanced Chat Input */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-sm text-gray-800">Ask Questions</h4>
+                      <div className="space-y-2">
                         <Input
                           value={aiQuestion}
                           onChange={(e) => setAiQuestion(e.target.value)}
-                          placeholder="Ask me anything about parenting plans..."
-                          className="flex-1 bg-white/70 border-purple-200 focus:border-purple-400 focus:ring-purple-100 text-sm rounded-full"
+                          placeholder="e.g., How should we handle school pickup times?"
+                          className="bg-white/70 border-purple-200 focus:border-purple-400 focus:ring-purple-100 text-sm"
                           onKeyPress={(e) => e.key === 'Enter' && handleAiSubmit()}
                         />
-                        <Button 
-                          size="sm" 
-                          onClick={handleAiSubmit}
-                          className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white rounded-full px-3"
-                        >
-                          <Send className="h-3 w-3" />
-                        </Button>
+                        <div className="flex space-x-2">
+                          <Button 
+                            onClick={handleAiSubmit}
+                            className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white text-sm px-4 flex-1"
+                            disabled={!aiQuestion.trim()}
+                          >
+                            <Send className="h-3 w-3 mr-2" />
+                            Ask Assistant
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            className="bg-white/70 border-purple-200 hover:border-purple-300"
+                          >
+                            <MessageSquare className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Tips */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-start space-x-2">
+                        <HelpCircle className="h-4 w-4 text-blue-600 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium text-blue-800">Tip</p>
+                          <p className="text-xs text-blue-700">Try asking: "What should I consider for holiday schedules?" or "How do we handle child support?"</p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Document History */}
+                {/* AI Chat History */}
                 <Card className="bg-white/80 backdrop-blur-sm border-purple-200">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center">
-                      <History className="h-5 w-5 mr-2" />
-                      Recent Activity
+                      <MessageSquare className="h-5 w-5 mr-2" />
+                      Chat History
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-2 h-2 rounded-full bg-[#2e1a87] mt-2"></div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">Document Created</p>
-                          <p className="text-xs text-gray-500">January 10, 2024 at 2:30 PM</p>
-                          <p className="text-xs text-gray-600 mt-1">Initial parenting plan template created</p>
+                    <div className="space-y-4 max-h-80 overflow-y-auto">
+                      <div className="space-y-3">
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-sm text-gray-600 mb-1">You asked:</p>
+                          <p className="text-sm text-gray-800">"Can you help me understand custody schedules?"</p>
+                        </div>
+                        <div className="bg-purple-50 rounded-lg p-3">
+                          <p className="text-sm text-purple-600 mb-1">AI Assistant:</p>
+                          <p className="text-sm text-gray-800">Custody schedules should prioritize the child's routine and both parents' availability. Common arrangements include alternating weeks, 2-2-3 schedules, or traditional every-other-weekend patterns.</p>
                         </div>
                       </div>
+                    </div>
+                    <div className="text-center py-4 text-sm text-gray-500">
+                      <p>Ask questions to get personalized guidance</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Enhanced Quick Actions */}
+                <Card className="bg-white/80 backdrop-blur-sm border-purple-200">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center">
+                      <Zap className="h-5 w-5 mr-2" />
+                      Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 gap-3">
+                      <Button 
+                        variant="outline" 
+                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <BookOpen className="h-4 w-4 mt-0.5 text-purple-600" />
+                          <div>
+                            <p className="font-medium text-sm">Explain This Section</p>
+                            <p className="text-xs text-gray-500">Get detailed explanations of legal terms</p>
+                          </div>
+                        </div>
+                      </Button>
                       
-                      <div className="flex items-start space-x-3">
-                        <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">Last Modified</p>
-                          <p className="text-xs text-gray-500">January 15, 2024 at 4:15 PM</p>
-                          <p className="text-xs text-gray-600 mt-1">Updated parenting time schedule section</p>
+                      <Button 
+                        variant="outline" 
+                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <CheckCircle className="h-4 w-4 mt-0.5 text-green-600" />
+                          <div>
+                            <p className="font-medium text-sm">Check Compliance</p>
+                            <p className="text-xs text-gray-500">Verify legal requirements are met</p>
+                          </div>
                         </div>
-                      </div>
+                      </Button>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <FileText className="h-4 w-4 mt-0.5 text-blue-600" />
+                          <div>
+                            <p className="font-medium text-sm">Suggest Improvements</p>
+                            <p className="text-xs text-gray-500">Get AI recommendations for clarity</p>
+                          </div>
+                        </div>
+                      </Button>
+
+                      <Button 
+                        variant="outline" 
+                        className="justify-start text-left h-auto p-3 bg-white/70 hover:bg-white border-purple-200 hover:border-purple-300"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <Users className="h-4 w-4 mt-0.5 text-orange-600" />
+                          <div>
+                            <p className="font-medium text-sm">Compare Templates</p>
+                            <p className="text-xs text-gray-500">See how this compares to standards</p>
+                          </div>
+                        </div>
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
