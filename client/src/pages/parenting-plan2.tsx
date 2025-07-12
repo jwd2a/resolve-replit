@@ -55,38 +55,50 @@ export default function ParentingPlan2() {
   const [sections, setSections] = useState<Section[]>([
     {
       id: "1",
-      title: "Parenting Time Schedule",
-      content: "Regular parenting time shall be as follows: Parent A shall have the children every Monday and Tuesday from 6:00 PM to 8:00 AM the following day. Parent B shall have the children every Wednesday and Thursday from 6:00 PM to 8:00 AM the following day. Weekends shall alternate between parents, beginning with Parent A having the first weekend of each month. Exchange of the children shall occur at the primary residence unless otherwise agreed upon in writing.",
+      title: "Family Information and Jurisdiction",
+      content: "The parents named below, which will be referred to throughout this Agreement as we, us, or by individual names, are entering into this Agreement to address their legal rights and obligations relating to their minor children. It is our intention to submit this Agreement to the Court in any legal proceeding to determine our parenting rights and obligations. We both want the Court to adopt this Agreement in its entirety because we agree that it is in our children's best interests.\n\n1. PARENTS\n\nOur names and contact information are:\n\nEric Rabinovitz\n(813) 789-0202\nebrcapital@gmail.com\n\nMichelle Rabinovitz\n(813) 495-2219\nmmrabinovitz@gmail.com\n\nWe will keep each other informed of any changes to any of our contact information listed above, in each instance immediately upon any change, or as soon as we possibly can after any change.\n\n2. CHILDREN\n\nOur children are:\n\nInitials: A. J.\nDate of birth: Mar 12, 2013\nGender: Female",
       isEditable: true
     },
     {
       id: "2", 
-      title: "Holiday and Vacation Schedule",
-      content: "Holidays shall be alternated between parents on a yearly basis according to the attached holiday schedule. Summer vacation shall be divided equally between parents with each parent having a minimum of two consecutive weeks. Each parent must provide 30 days written notice of their intended vacation time. During extended vacation periods, the non-vacationing parent shall have reasonable contact with the children via phone or video call.",
+      title: "Parental Responsibility and Decision Making",
+      content: "We are going to make decisions about our children as co-parents, together, and always with our child(ren)'s best interests as the most important factor. These decisions include all important decisions affecting the welfare of our child(ren), including all decisions about the child(ren)'s Education (choice of schools, tutoring, special educational needs), Healthcare (non-emergency medical treatments, choice of doctors), Significant extracurricular activities.\n\nNeither of us will have a superior right or authority when it comes to co-parenting our children unless it expressly says so below. We will treat each other as equals, and we will do our best to ensure that our child(ren) see us as equals when it comes to all important decisions. We will never involve our children in any disputes that we may have about them because we understand how damaging this could be for our children.",
       isEditable: true
     },
     {
       id: "3",
-      title: "Decision Making Authority",
-      content: "Parents shall share joint legal custody and make major decisions regarding the children's education, health care, and religious upbringing together. Major decisions include but are not limited to: choice of schools, medical treatment beyond routine care, religious instruction, and extracurricular activities. Parents agree to consult with each other before making any major decisions and attempt to reach consensus.",
+      title: "Resolving Disagreements",
+      content: "If we have a disagreement and we are unable to resolve it, then we will:\n\n• Remember and acknowledge that disagreements are normal and will happen from time to time\n• Treat each other with respect and focus on what is best for our child(ren), instead of our own needs and wants\n• Take a break if our discussion ever gets unpleasant, too argumentative, or too heated\n• Agree on a timeline for resuming the discussion so that deadlines can be met\n• Take time to research options independently before resuming discussions\n• Consult with relevant professionals for their perspectives, which are likely to be more neutral than our own\n• Document in writing any agreement we ultimately reach\n• Refrain from involving our child(ren) unless we are doing it together, and solely for the purpose of understanding their preference",
       isEditable: true
     },
     {
       id: "4",
-      title: "Communication Guidelines",
-      content: "Parents shall communicate regarding the children through the agreed-upon co-parenting app or email. Emergency communications may be made via phone call or text message. All communications should be respectful, child-focused, and businesslike. Parents agree to respond to non-emergency communications within 24 hours.",
+      title: "Day-to-Day Decision-Making",
+      content: "Nothing in this agreement is intended to interfere with our respective rights to make decisions regarding the day-to-day care and control of our child(ren) while the child(ren) are with us. Similarly, we both are allowed to make immediate, emergency decisions affecting the health or safety of the child(ren) if such a decision is ever necessary. If there is ever such an emergency, then we both commit to notify each other of the situation as soon as reasonably possible.",
       isEditable: true
     },
     {
       id: "5",
-      title: "Transportation and Exchange",
-      content: "The parent beginning their parenting time shall be responsible for picking up the children. Exchanges shall occur at 6:00 PM unless otherwise specified. If a parent will be more than 30 minutes late for an exchange, they must notify the other parent. Both parents agree to have the children ready for exchange at the designated time.",
+      title: "Extra-curricular Activities",
+      content: "We agree that extracurricular activities are very important for the development of our child(ren) in many respects. We will discuss all proposed extracurricular activities with each other, and these are the things we agree are important to consider:\n• The child(ren)'s interests and desires\n• The location of activities relative to both our homes\n• How the activities will fit within our time sharing schedule\n• What equipment or supplies will be needed and how they'll be purchased, stored, and transported from one home to the other\n• How activities may impact schoolwork and academic progress\n• How competition or performance travel will impact our timesharing schedule\n\nActivity decisions will be reviewed annually",
       isEditable: true
     },
     {
       id: "6",
-      title: "Financial Responsibilities",
-      content: "Child support shall be paid according to the state guidelines and court order. Both parents shall maintain health insurance for the children when available through their employer at reasonable cost. Uncovered medical expenses exceeding $250 per child per year shall be shared equally between parents. Each parent is responsible for the children's expenses during their parenting time.",
+      title: "Sharing Information/Records",
+      content: "We both will have equal access to all important information about our child(ren) at all times. We will each take care to ensure that anytime we have the opportunity to list the other parent's name on any document or list, we will do so because it is our intention to both be listed as authorized parties, contacts, or recipients for all medical, school, and other records pertaining to our child(ren). We also will try our best to always share any information that we obtain anytime we may independently consult with any professionals or other important people that are involved with our child(ren).\n\nBoth of us have equal rights to inspect and receive governmental agency and law enforcement records concerning the child(ren). Both of us will have equal and independent authority to confer with the child(ren)'s school, day care, health care providers, and other programs with regard to the child(ren)'s educational, emotional, and social progress.\n\nBoth of us will always be listed as 'emergency contacts' for the child(ren).",
+      isEditable: true
+    },
+    {
+      id: "7",
+      title: "Communication",
+      content: "We agree and understand that communication is critical to good coparenting. We also agree and understand that communications regarding our child(ren) should be between the two of us, as parents. Neither of us will ever use a child as a messenger to convey information, ask questions, or set up schedule changes. We agree to communicate freely with each other in a respectful manner using one or more of the following methods of communication: email, text, phone\n\nWe further agree and understand that our child(ren) deserve(s) to have communication with both of us whenever reasonable, which is not more than once or twice on most days. We each will ensure that our child(ren) has/have regular contact with the other parent in a manner that does not interfere with time sharing and routines.",
+      isEditable: true
+    },
+    {
+      id: "8",
+      title: "Child Care",
+      content: "We agree that the selection of individuals to care for our child(ren) is very important and that we each should be given consideration in this selection. We will try our best to use the same child care providers so that our child(ren) has/have consistency and safety, but we are free to choose our own child care providers as well.\n\nWe will give each other a right of first refusal to take care of the child(ren) whenever either of us is going to be unavailable for a period of at least One Overnight. This means that anytime one of us knows that we will be unavailable for One Overnight, the other parent will be given the opportunity to take care of the children during that time.",
       isEditable: true
     }
   ]);
@@ -238,23 +250,23 @@ export default function ParentingPlan2() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-12 gap-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-12 gap-4">
           {/* Left Sidebar - Table of Contents */}
           <div className={cn(
-            "col-span-12 lg:col-span-3 transition-all duration-200",
+            "col-span-12 lg:col-span-2 transition-all duration-200",
             isSideNavOpen ? "block" : "hidden lg:block"
           )}>
             <div className="sticky top-24">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Table of Contents</h3>
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4">
+                <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
                 <nav className="space-y-1">
                   {sections.map((section) => (
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
                       className={cn(
-                        "w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
+                        "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
                         "hover:bg-purple-50",
                         activeSection === section.id
                           ? "bg-[#2e1a87] text-white shadow-sm"
@@ -263,14 +275,14 @@ export default function ParentingPlan2() {
                     >
                       <div className="flex items-center">
                         <div className={cn(
-                          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0",
+                          "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
                           activeSection === section.id 
                             ? "bg-white text-[#2e1a87]" 
                             : "bg-purple-100 text-purple-600"
                         )}>
                           {section.id}
                         </div>
-                        <span className="truncate">{section.title}</span>
+                        <span className="truncate text-xs leading-tight">{section.title}</span>
                       </div>
                     </button>
                   ))}
@@ -279,11 +291,38 @@ export default function ParentingPlan2() {
             </div>
           </div>
 
-          {/* Main Content Area - Document View */}
-          <div className="col-span-12 lg:col-span-6">
-            {/* Document Content */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-8">
-              <div className="space-y-8">
+          {/* Main Content Area - Legal Document View */}
+          <div className="col-span-12 lg:col-span-7">
+            {/* Legal Document Content */}
+            <div className="bg-white shadow-lg border border-gray-200 min-h-[11in]">
+              {/* Document Header */}
+              <div className="text-center border-b border-gray-300 p-8 bg-gray-50">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
+                <p className="text-gray-600 font-medium">Legal Document for Co-Parenting Arrangement</p>
+                <div className="flex justify-center items-center space-x-6 mt-4 text-sm text-gray-500">
+                  <div>Version 2.1</div>
+                  <div>|</div>
+                  <div>Date: {new Date().toLocaleDateString()}</div>
+                  <div>|</div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
+                      className="text-xs"
+                    >
+                      {viewMode === "edit" ? (
+                        <><Eye className="h-3 w-3 mr-1" />View</>
+                      ) : (
+                        <><Edit3 className="h-3 w-3 mr-1" />Edit</>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Document Body */}
+              <div className="p-12 space-y-8 font-serif">
                 {sections.map((section, index) => (
                   <section
                     key={section.id}
@@ -291,12 +330,9 @@ export default function ParentingPlan2() {
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className="scroll-mt-24"
                   >
-                    <div className="border-b border-gray-200 pb-6 mb-6 last:border-b-0">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-[#2e1a87] text-white flex items-center justify-center text-sm font-bold mr-3">
-                          {section.id}
-                        </div>
-                        {section.title}
+                    <div className="border-b border-gray-200 pb-8 mb-8 last:border-b-0">
+                      <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-wide">
+                        SECTION {section.id} - {section.title.toUpperCase()}
                       </h2>
                       
                       {viewMode === "edit" && section.isEditable ? (
@@ -304,42 +340,92 @@ export default function ParentingPlan2() {
                           <Textarea
                             value={section.content}
                             onChange={(e) => updateSectionContent(section.id, e.target.value)}
-                            className="min-h-[140px] border-purple-200 focus:border-[#2e1a87] focus:ring-purple-100 rounded-lg text-gray-700 leading-relaxed"
+                            className="min-h-[200px] border-gray-300 focus:border-gray-500 focus:ring-gray-100 text-gray-800 leading-7 font-serif text-base"
                             placeholder="Enter section content..."
                           />
-                          <div className="flex items-center space-x-2 text-sm text-green-600 bg-green-50 p-3 rounded-lg">
+                          <div className="flex items-center space-x-2 text-sm text-green-600 bg-green-50 p-3 rounded border border-green-200">
                             <CheckCircle className="h-4 w-4" />
-                            <span>Changes will be tracked and sent for approval</span>
+                            <span>Changes will be tracked and require approval from both parties</span>
                           </div>
                         </div>
                       ) : (
-                        <div className="prose prose-lg max-w-none">
-                          <p className="text-gray-700 leading-relaxed text-base">{section.content}</p>
+                        <div className="prose prose-lg max-w-none font-serif">
+                          <div className="text-gray-800 leading-7 text-base whitespace-pre-line">
+                            {section.content}
+                          </div>
                         </div>
                       )}
                     </div>
                   </section>
                 ))}
                 
-                {/* Signature Section */}
-                <div className="mt-12 pt-8 border-t-2 border-gray-200">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">Agreement Signatures</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-800">Parent A</h4>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <p className="text-gray-500">Signature pending</p>
-                        <p className="text-sm text-gray-400 mt-1">Sarah Johnson</p>
+                {/* Legal Signature Section */}
+                <div className="mt-16 pt-8 border-t-2 border-gray-400">
+                  <h3 className="text-xl font-bold text-gray-900 mb-8 uppercase tracking-wide">AGREEMENT SIGNATURES</h3>
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                      <div className="space-y-6">
+                        <div>
+                          <h4 className="font-bold text-gray-800 mb-4">Eric Rabinovitz</h4>
+                          <div className="border-b-2 border-gray-400 pb-2 mb-4 h-16 flex items-end">
+                            <span className="text-gray-400 text-sm">Digital signature pending</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-600">Date: </span>
+                              <span className="border-b border-gray-400 inline-block w-20"></span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Print Name: </span>
+                              <span className="border-b border-gray-400 inline-block w-24"></span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500">Date: ________________</p>
+                      <div className="space-y-6">
+                        <div>
+                          <h4 className="font-bold text-gray-800 mb-4">Michelle Rabinovitz</h4>
+                          <div className="border-b-2 border-gray-400 pb-2 mb-4 h-16 flex items-end">
+                            <span className="text-gray-400 text-sm">Digital signature pending</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-600">Date: </span>
+                              <span className="border-b border-gray-400 inline-block w-20"></span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Print Name: </span>
+                              <span className="border-b border-gray-400 inline-block w-24"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-800">Parent B</h4>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <p className="text-gray-500">Signature pending</p>
-                        <p className="text-sm text-gray-400 mt-1">Michael Johnson</p>
+                    
+                    {/* Notary Section */}
+                    <div className="mt-12 pt-6 border-t border-gray-300">
+                      <h5 className="font-bold text-gray-800 mb-4">NOTARIZATION</h5>
+                      <div className="bg-gray-50 p-6 border border-gray-300">
+                        <p className="text-sm text-gray-600 mb-4">
+                          State of Florida, County of ______________
+                        </p>
+                        <p className="text-sm text-gray-600 mb-6">
+                          On this _____ day of _________, 2025, before me personally appeared the above-named individuals, 
+                          who proved to me on the basis of satisfactory evidence to be the persons whose names are 
+                          subscribed to the within instrument and acknowledged to me that they executed the same in 
+                          their authorized capacities.
+                        </p>
+                        <div className="grid grid-cols-2 gap-8">
+                          <div>
+                            <div className="border-b border-gray-400 mb-2 h-12"></div>
+                            <p className="text-xs text-center text-gray-600">Notary Public Signature</p>
+                          </div>
+                          <div>
+                            <div className="border-b border-gray-400 mb-2 h-12"></div>
+                            <p className="text-xs text-center text-gray-600">Notary Seal</p>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500">Date: ________________</p>
                     </div>
                   </div>
                 </div>
