@@ -349,16 +349,16 @@ export default function ParentingPlan2() {
         </div>
       </header>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-12 gap-4">
-          {/* Left Sidebar - Table of Contents */}
-          <div className={cn(
-            "col-span-12 lg:col-span-2 transition-all duration-200",
-            isSideNavOpen ? "block" : "hidden lg:block"
-          )}>
-            <div className="sticky top-24">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4">
-                <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
+        {/* Left Sidebar - Table of Contents */}
+        <div className={cn(
+          "w-80 flex-shrink-0 transition-all duration-200 mr-4",
+          isSideNavOpen ? "block" : "hidden lg:block"
+        )}>
+          <div className="h-full flex flex-col">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
+              <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
+              <div className="flex-1 overflow-y-auto">
                 <Accordion type="multiple" className="w-full space-y-2">
                   {mainSections.map((mainSection) => (
                     <AccordionItem 
@@ -404,21 +404,22 @@ export default function ParentingPlan2() {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Main Content Area - Legal Document View */}
-          <div className="col-span-12 lg:col-span-7">
-            {/* Legal Document Content */}
-            <div className="bg-white shadow-lg border border-gray-200">
-              {/* Document Header */}
-              <div className="text-center border-b border-gray-300 p-6 bg-gray-50">
-                <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
-                <p className="text-sm text-gray-600">Legal Document for Co-Parenting Arrangement</p>
-                <p className="text-xs text-gray-500 mt-2">Date: {new Date().toLocaleDateString()}</p>
-              </div>
-              
-              {/* Document Body */}
-              <div className="p-8 space-y-6 font-serif">
-                {sectionsState.map((section, index) => (
+        {/* Main Content Area - Legal Document View */}
+        <div className="flex-1 min-w-0">
+          {/* Legal Document Content */}
+          <div className="bg-white shadow-lg border border-gray-200 h-full flex flex-col">
+            {/* Document Header */}
+            <div className="text-center border-b border-gray-300 p-6 bg-gray-50 flex-shrink-0">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
+              <p className="text-sm text-gray-600">Legal Document for Co-Parenting Arrangement</p>
+              <p className="text-xs text-gray-500 mt-2">Date: {new Date().toLocaleDateString()}</p>
+            </div>
+            
+            {/* Document Body - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-8 space-y-6 font-serif">
+              {sectionsState.map((section, index) => (
                   <section
                     key={section.id}
                     id={section.id}
@@ -508,20 +509,20 @@ export default function ParentingPlan2() {
             </div>
           </div>
 
-          {/* Right Sidebar - AI Parenting Plan Assistant */}
-          <div className="col-span-12 lg:col-span-3">
-            <div className="sticky top-24">
-              <div className="space-y-6">
-                {/* Enhanced AI Assistant Widget */}
-                <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="text-xl flex items-center text-[#2e1a87]">
-                      <Bot className="h-6 w-6 mr-3" />
-                      Parenting Plan Assistant
-                    </CardTitle>
-                    <p className="text-sm text-gray-600">Expert guidance for creating fair, child-focused agreements</p>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
+        {/* Right Sidebar - AI Parenting Plan Assistant */}
+        <div className="w-80 flex-shrink-0 ml-4">
+          <div className="h-full flex flex-col">
+            <div className="space-y-6 h-full flex flex-col">
+              {/* Enhanced AI Assistant Widget */}
+              <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg flex-1 flex flex-col">
+                <CardHeader className="pb-4 flex-shrink-0">
+                  <CardTitle className="text-xl flex items-center text-[#2e1a87]">
+                    <Bot className="h-6 w-6 mr-3" />
+                    Parenting Plan Assistant
+                  </CardTitle>
+                  <p className="text-sm text-gray-600">Expert guidance for creating fair, child-focused agreements</p>
+                </CardHeader>
+                <CardContent className="space-y-6 flex-1 flex flex-col overflow-hidden">
                     {/* Current Section Context */}
                     <div className="bg-white/80 rounded-lg p-4 border border-purple-100">
                       <h4 className="font-semibold text-sm text-gray-800 mb-2">Currently Viewing</h4>
