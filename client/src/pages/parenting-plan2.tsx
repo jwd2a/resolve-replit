@@ -384,7 +384,7 @@ export default function ParentingPlan2() {
                   <CardHeader className="pb-4">
                     <CardTitle className="text-xl flex items-center text-[#2e1a87]">
                       <Bot className="h-6 w-6 mr-3" />
-                      AI Parenting Plan Assistant
+                      Parenting Plan Assistant
                     </CardTitle>
                     <p className="text-sm text-gray-600">Expert guidance for creating fair, child-focused agreements</p>
                   </CardHeader>
@@ -508,7 +508,7 @@ export default function ParentingPlan2() {
                           <p className="text-sm text-gray-800">"Can you help me understand custody schedules?"</p>
                         </div>
                         <div className="bg-purple-50 rounded-lg p-3">
-                          <p className="text-sm text-purple-600 mb-1">AI Assistant:</p>
+                          <p className="text-sm text-purple-600 mb-1">Assistant:</p>
                           <p className="text-sm text-gray-800">Custody schedules should prioritize the child's routine and both parents' availability. Common arrangements include alternating weeks, 2-2-3 schedules, or traditional every-other-weekend patterns.</p>
                         </div>
                       </div>
@@ -563,7 +563,7 @@ export default function ParentingPlan2() {
                           <FileText className="h-4 w-4 mt-0.5 text-blue-600" />
                           <div>
                             <p className="font-medium text-sm">Suggest Improvements</p>
-                            <p className="text-xs text-gray-500">Get AI recommendations for clarity</p>
+                            <p className="text-xs text-gray-500">Get recommendations for clarity</p>
                           </div>
                         </div>
                       </Button>
