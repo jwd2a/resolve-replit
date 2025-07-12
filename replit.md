@@ -125,3 +125,11 @@ Preferred communication style: Simple, everyday language.
 - Database schema deployment
 
 The application follows a modern full-stack TypeScript architecture with clear separation between client and server concerns, emphasizing user experience and emotional support throughout the co-parenting journey.
+
+## Recent Changes (January 2025)
+
+### Parenting Plan Document Layout Improvements
+- **Updated Table of Contents**: Restructured TOC into accordion layout with 4 main sections (Parental Responsibility, Timesharing, Educational Decisions, Final Considerations) with expandable subsections for better navigation
+- **Persistent Sidebar Layout**: Implemented fixed sidebars with scrollable document content only - left sidebar contains TOC accordion, right sidebar contains Parenting Plan Assistant
+- **Improved Document Navigation**: Enhanced section navigation with numbered subsections and active state highlighting for easy document traversal
+- **Mobile-Responsive Design**: Maintained responsive behavior with collapsible sidebars on smaller screens
