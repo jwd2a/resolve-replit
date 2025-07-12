@@ -165,10 +165,10 @@ export default function ParentingPlan2() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50">
       <NavigationMenu />
       
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-purple-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+      {/* Clean Header */}
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
@@ -176,72 +176,53 @@ export default function ParentingPlan2() {
                 onClick={() => setIsSideNavOpen(!isSideNavOpen)}
                 className="lg:hidden"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-4 w-4" />
               </Button>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Parenting Partnership Agreement</h1>
-                <p className="text-sm text-gray-600 mt-1">This agreement helps you create a stable, cooperative plan for your children.</p>
-                <div className="flex items-center space-x-3 mt-2">
-                  <Badge variant="secondary" className="bg-amber-100 text-amber-800 rounded-full">
-                    Draft
+                <h1 className="text-xl font-semibold text-gray-900">Parenting Partnership Agreement</h1>
+                <div className="flex items-center space-x-3 mt-1">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                    Legal Ready
                   </Badge>
-                  <span className="text-sm text-gray-500 flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    Last updated: Jan 15, 2024
-                  </span>
+                  <span className="text-xs text-gray-500">Version 2.1</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center space-x-3">
-              {viewMode === "view" ? (
-                <>
-                  <Button
-                    onClick={handleProposeChanges}
-                    className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white rounded-full px-6"
-                  >
-                    <Edit3 className="h-4 w-4 mr-2" />
-                    Propose Changes
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-full">
-                    <Printer className="h-4 w-4 mr-2" />
-                    Print
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    onClick={handleSaveChanges}
-                    className="bg-green-600 hover:bg-green-700 text-white rounded-full px-6"
-                  >
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Changes
-                  </Button>
-                  <Button variant="outline" onClick={handleCancelEdit} className="rounded-full">
-                    <X className="h-4 w-4 mr-2" />
-                    Cancel
-                  </Button>
-                </>
-              )}
-              
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
+              >
+                {viewMode === "edit" ? (
+                  <><Eye className="h-4 w-4 mr-2" />View</>
+                ) : (
+                  <><Edit3 className="h-4 w-4 mr-2" />Edit</>
+                )}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="rounded-full">
+                  <Button variant="outline" size="sm">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <History className="h-4 w-4 mr-2" />
-                    View History
+                    <Printer className="h-4 w-4 mr-2" />
+                    Print Document
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Share2 className="h-4 w-4 mr-2" />
-                    Share Link
+                    Share with Co-Parent
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <History className="h-4 w-4 mr-2" />
+                    View History
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -294,35 +275,16 @@ export default function ParentingPlan2() {
           {/* Main Content Area - Legal Document View */}
           <div className="col-span-12 lg:col-span-7">
             {/* Legal Document Content */}
-            <div className="bg-white shadow-lg border border-gray-200 min-h-[11in]">
+            <div className="bg-white shadow-lg border border-gray-200">
               {/* Document Header */}
-              <div className="text-center border-b border-gray-300 p-8 bg-gray-50">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
-                <p className="text-gray-600 font-medium">Legal Document for Co-Parenting Arrangement</p>
-                <div className="flex justify-center items-center space-x-6 mt-4 text-sm text-gray-500">
-                  <div>Version 2.1</div>
-                  <div>|</div>
-                  <div>Date: {new Date().toLocaleDateString()}</div>
-                  <div>|</div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
-                      className="text-xs"
-                    >
-                      {viewMode === "edit" ? (
-                        <><Eye className="h-3 w-3 mr-1" />View</>
-                      ) : (
-                        <><Edit3 className="h-3 w-3 mr-1" />Edit</>
-                      )}
-                    </Button>
-                  </div>
-                </div>
+              <div className="text-center border-b border-gray-300 p-6 bg-gray-50">
+                <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
+                <p className="text-sm text-gray-600">Legal Document for Co-Parenting Arrangement</p>
+                <p className="text-xs text-gray-500 mt-2">Date: {new Date().toLocaleDateString()}</p>
               </div>
               
               {/* Document Body */}
-              <div className="p-12 space-y-8 font-serif">
+              <div className="p-8 space-y-6 font-serif">
                 {sections.map((section, index) => (
                   <section
                     key={section.id}
@@ -330,27 +292,27 @@ export default function ParentingPlan2() {
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className="scroll-mt-24"
                   >
-                    <div className="border-b border-gray-200 pb-8 mb-8 last:border-b-0">
-                      <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-wide">
+                    <div className="border-b border-gray-200 pb-6 mb-6 last:border-b-0">
+                      <h2 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wide">
                         SECTION {section.id} - {section.title.toUpperCase()}
                       </h2>
                       
                       {viewMode === "edit" && section.isEditable ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <Textarea
                             value={section.content}
                             onChange={(e) => updateSectionContent(section.id, e.target.value)}
-                            className="min-h-[200px] border-gray-300 focus:border-gray-500 focus:ring-gray-100 text-gray-800 leading-7 font-serif text-base"
+                            className="min-h-[150px] border-gray-300 focus:border-gray-500 focus:ring-gray-100 text-gray-800 leading-6 font-serif text-sm"
                             placeholder="Enter section content..."
                           />
-                          <div className="flex items-center space-x-2 text-sm text-green-600 bg-green-50 p-3 rounded border border-green-200">
-                            <CheckCircle className="h-4 w-4" />
-                            <span>Changes will be tracked and require approval from both parties</span>
+                          <div className="flex items-center space-x-2 text-xs text-green-600 bg-green-50 p-2 rounded border border-green-200">
+                            <CheckCircle className="h-3 w-3" />
+                            <span>Changes tracked and require approval</span>
                           </div>
                         </div>
                       ) : (
-                        <div className="prose prose-lg max-w-none font-serif">
-                          <div className="text-gray-800 leading-7 text-base whitespace-pre-line">
+                        <div className="max-w-none">
+                          <div className="text-gray-800 leading-6 text-sm whitespace-pre-line font-serif">
                             {section.content}
                           </div>
                         </div>
@@ -360,70 +322,50 @@ export default function ParentingPlan2() {
                 ))}
                 
                 {/* Legal Signature Section */}
-                <div className="mt-16 pt-8 border-t-2 border-gray-400">
-                  <h3 className="text-xl font-bold text-gray-900 mb-8 uppercase tracking-wide">AGREEMENT SIGNATURES</h3>
-                  <div className="space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="font-bold text-gray-800 mb-4">Eric Rabinovitz</h4>
-                          <div className="border-b-2 border-gray-400 pb-2 mb-4 h-16 flex items-end">
-                            <span className="text-gray-400 text-sm">Digital signature pending</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="text-gray-600">Date: </span>
-                              <span className="border-b border-gray-400 inline-block w-20"></span>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">Print Name: </span>
-                              <span className="border-b border-gray-400 inline-block w-24"></span>
-                            </div>
-                          </div>
-                        </div>
+                <div className="mt-12 pt-6 border-t-2 border-gray-400">
+                  <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wide">AGREEMENT SIGNATURES</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                      <h4 className="font-bold text-gray-800 mb-3">Eric Rabinovitz</h4>
+                      <div className="border-b-2 border-gray-400 pb-1 mb-3 h-12 flex items-end">
+                        <span className="text-gray-400 text-xs">Digital signature pending</span>
                       </div>
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="font-bold text-gray-800 mb-4">Michelle Rabinovitz</h4>
-                          <div className="border-b-2 border-gray-400 pb-2 mb-4 h-16 flex items-end">
-                            <span className="text-gray-400 text-sm">Digital signature pending</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="text-gray-600">Date: </span>
-                              <span className="border-b border-gray-400 inline-block w-20"></span>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">Print Name: </span>
-                              <span className="border-b border-gray-400 inline-block w-24"></span>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="text-xs text-gray-600">
+                        <span>Date: ________________</span>
                       </div>
                     </div>
-                    
-                    {/* Notary Section */}
-                    <div className="mt-12 pt-6 border-t border-gray-300">
-                      <h5 className="font-bold text-gray-800 mb-4">NOTARIZATION</h5>
-                      <div className="bg-gray-50 p-6 border border-gray-300">
-                        <p className="text-sm text-gray-600 mb-4">
-                          State of Florida, County of ______________
-                        </p>
-                        <p className="text-sm text-gray-600 mb-6">
-                          On this _____ day of _________, 2025, before me personally appeared the above-named individuals, 
-                          who proved to me on the basis of satisfactory evidence to be the persons whose names are 
-                          subscribed to the within instrument and acknowledged to me that they executed the same in 
-                          their authorized capacities.
-                        </p>
-                        <div className="grid grid-cols-2 gap-8">
-                          <div>
-                            <div className="border-b border-gray-400 mb-2 h-12"></div>
-                            <p className="text-xs text-center text-gray-600">Notary Public Signature</p>
-                          </div>
-                          <div>
-                            <div className="border-b border-gray-400 mb-2 h-12"></div>
-                            <p className="text-xs text-center text-gray-600">Notary Seal</p>
-                          </div>
+                    <div>
+                      <h4 className="font-bold text-gray-800 mb-3">Michelle Rabinovitz</h4>
+                      <div className="border-b-2 border-gray-400 pb-1 mb-3 h-12 flex items-end">
+                        <span className="text-gray-400 text-xs">Digital signature pending</span>
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        <span>Date: ________________</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Notary Section */}
+                  <div className="pt-4 border-t border-gray-300">
+                    <h5 className="font-bold text-gray-800 mb-3 text-sm">NOTARIZATION</h5>
+                    <div className="bg-gray-50 p-4 border border-gray-300 text-xs">
+                      <p className="text-gray-600 mb-2">
+                        State of Florida, County of ______________
+                      </p>
+                      <p className="text-gray-600 mb-4 leading-tight">
+                        On this _____ day of _________, 2025, before me personally appeared the above-named individuals, 
+                        who proved to me on the basis of satisfactory evidence to be the persons whose names are 
+                        subscribed to the within instrument and acknowledged to me that they executed the same in 
+                        their authorized capacities.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <div className="border-b border-gray-400 mb-1 h-8"></div>
+                          <p className="text-xs text-center text-gray-600">Notary Public Signature</p>
+                        </div>
+                        <div>
+                          <div className="border-b border-gray-400 mb-1 h-8"></div>
+                          <p className="text-xs text-center text-gray-600">Notary Seal</p>
                         </div>
                       </div>
                     </div>
