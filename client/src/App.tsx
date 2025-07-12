@@ -8,6 +8,7 @@ import Course from "@/pages/Course";
 import CoursePage from "@/pages/course-page";
 import CoursePreview from "@/pages/course-preview";
 import ParentingPlan from "@/pages/ParentingPlan";
+import ParentingPlan2 from "@/pages/parenting-plan2";
 import AuthPage from "@/pages/auth-page";
 import BetaAuth from "@/pages/beta-auth";
 import OnboardingPage from "@/pages/onboarding-page";
@@ -112,6 +113,7 @@ function Router() {
       <Route path="/course-page" component={CoursePage} />
       <Route path="/course-session-demo" component={CourseSessionDemo} />
       <Route path="/parenting-plan" component={ParentingPlan} />
+      <Route path="/parenting-plan2" component={ParentingPlan2} />
       <Route path="/resources" component={ResourcesPage} />
       <Route path="/resources/:id" component={ResourcesPage} />
       <Route path="/ai-test" component={AITestPage} />

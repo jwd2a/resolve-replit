@@ -1,0 +1,72 @@
+I am redesigning the "Parenting Plan" document screen for our co-parenting platform Resolve. The goal is to create a modern, emotionally supportive, and intuitive user experience for viewing, editing, and managing the parenting plan.
+
+Here is the redesign specification. Build a responsive, clean React (or HTML/CSS/JavaScript) prototype implementing the following:
+
+1. **Overall Layout**
+   - Use a sticky top header with:
+     - Large title: "Parenting Partnership Agreement"
+     - Status badge to the right (e.g., "Draft", "Final", "Signed")
+     - "Last Updated" date below or beside the status
+     - Primary action button: "Propose Changes"
+     - Secondary actions: "Download", "Print"
+     - Overflow menu (⋮) with "View History", "Share Link"
+   - Left-side vertical navigation (or tabs across the top) with:
+     - Overview
+     - Sections
+     - Comments
+     - History
+   - Main document area with:
+     - Clear headings for each section (Section 1, Section 2, etc.)
+     - Collapsible/expandable sections
+     - Tables styled as cards with subtle shading and spacing
+     - Section anchors for easy navigation
+   - Right-side panel with contextual assistance:
+     - In View Mode:
+       - A summary box:
+         - Status, last updated, participants
+       - Helpful actions:
+         - Summarize Section
+         - Explain Legal Terms
+         - Compare to Template
+         - Request Professional Review
+     - In Edit Mode:
+       - AI Suggestions
+       - Compliance Validation
+       - Tracked Changes Toggle
+
+2. **Visual Styling**
+   - Softer, friendly colors (light purples, blues, neutrals)
+   - Rounded corners on containers
+   - Modern typography with clear hierarchy
+   - Hover and focus styles for buttons and navigation
+   - Emotional tone that is warm, calm, and supportive
+
+3. **Action Buttons**
+   - "Propose Changes": primary color, prominent
+   - "Download", "Print": secondary styles
+   - "More Actions": icon button
+   - Consistent icon set (e.g., Lucide icons)
+
+4. **Propose Changes Flow**
+   - When the user clicks "Propose Changes":
+     - Enable inline editing
+     - Highlight editable fields
+     - Show a side-by-side or tracked changes view
+     - "Submit Proposed Changes" button with optional comments
+   - Allow canceling the edit mode
+
+5. **Responsiveness**
+   - Ensure the design adapts to tablet and mobile:
+     - Collapsible side navigation
+     - Floating action button for "Propose Changes"
+
+6. **Accessibility**
+   - Use semantic HTML
+   - ARIA labels where necessary
+   - Sufficient color contrast
+
+7. **Demo Data**
+   - Populate the document with example sections and a table of parent details.
+
+Please create a clean, modular structure with clear component boundaries so it can be easily adapted later. Provide example styles and layout, and include placeholder content where appropriate.
+
