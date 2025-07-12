@@ -237,118 +237,118 @@ export default function ParentingPlan2() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-12 gap-6">
           {/* Left Sidebar - Table of Contents */}
           <div className={cn(
-            "w-72 flex-shrink-0 transition-all duration-200",
-            isSideNavOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
-            "lg:relative absolute lg:block z-30",
-            "bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 h-fit"
+            "col-span-12 lg:col-span-3 transition-all duration-200",
+            isSideNavOpen ? "block" : "hidden lg:block"
           )}>
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Table of Contents</h3>
-              <nav className="space-y-1">
-                {sections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => scrollToSection(section.id)}
-                    className={cn(
-                      "w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
-                      "hover:bg-purple-50",
-                      activeSection === section.id
-                        ? "bg-[#2e1a87] text-white shadow-sm"
-                        : "text-gray-700"
-                    )}
-                  >
-                    <div className="flex items-center">
-                      <div className={cn(
-                        "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3",
-                        activeSection === section.id 
-                          ? "bg-white text-[#2e1a87]" 
-                          : "bg-purple-100 text-purple-600"
-                      )}>
-                        {section.id}
+            <div className="sticky top-24">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Table of Contents</h3>
+                <nav className="space-y-1">
+                  {sections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(section.id)}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
+                        "hover:bg-purple-50",
+                        activeSection === section.id
+                          ? "bg-[#2e1a87] text-white shadow-sm"
+                          : "text-gray-700"
+                      )}
+                    >
+                      <div className="flex items-center">
+                        <div className={cn(
+                          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0",
+                          activeSection === section.id 
+                            ? "bg-white text-[#2e1a87]" 
+                            : "bg-purple-100 text-purple-600"
+                        )}>
+                          {section.id}
+                        </div>
+                        <span className="truncate">{section.title}</span>
                       </div>
-                      <span className="line-clamp-2">{section.title}</span>
-                    </div>
-                  </button>
-                ))}
-              </nav>
+                    </button>
+                  ))}
+                </nav>
+              </div>
             </div>
           </div>
 
           {/* Main Content Area - Document View */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              <div className="lg:col-span-3">
-                {/* Document Content */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-8">
-                  <div className="max-w-4xl mx-auto space-y-8">
-                    {sections.map((section, index) => (
-                      <section
-                        key={section.id}
-                        id={section.id}
-                        ref={(el) => (sectionRefs.current[section.id] = el)}
-                        className="scroll-mt-24"
-                      >
-                        <div className="border-b border-gray-200 pb-6 mb-6 last:border-b-0">
-                          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                            <div className="w-8 h-8 rounded-full bg-[#2e1a87] text-white flex items-center justify-center text-sm font-bold mr-3">
-                              {section.id}
-                            </div>
-                            {section.title}
-                          </h2>
-                          
-                          {viewMode === "edit" && section.isEditable ? (
-                            <div className="space-y-4">
-                              <Textarea
-                                value={section.content}
-                                onChange={(e) => updateSectionContent(section.id, e.target.value)}
-                                className="min-h-[140px] border-purple-200 focus:border-[#2e1a87] focus:ring-purple-100 rounded-lg text-gray-700 leading-relaxed"
-                                placeholder="Enter section content..."
-                              />
-                              <div className="flex items-center space-x-2 text-sm text-green-600 bg-green-50 p-3 rounded-lg">
-                                <CheckCircle className="h-4 w-4" />
-                                <span>Changes will be tracked and sent for approval</span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="prose prose-lg max-w-none">
-                              <p className="text-gray-700 leading-relaxed text-base">{section.content}</p>
-                            </div>
-                          )}
+          <div className="col-span-12 lg:col-span-6">
+            {/* Document Content */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-8">
+              <div className="space-y-8">
+                {sections.map((section, index) => (
+                  <section
+                    key={section.id}
+                    id={section.id}
+                    ref={(el) => (sectionRefs.current[section.id] = el)}
+                    className="scroll-mt-24"
+                  >
+                    <div className="border-b border-gray-200 pb-6 mb-6 last:border-b-0">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-[#2e1a87] text-white flex items-center justify-center text-sm font-bold mr-3">
+                          {section.id}
                         </div>
-                      </section>
-                    ))}
-                    
-                    {/* Signature Section */}
-                    <div className="mt-12 pt-8 border-t-2 border-gray-200">
-                      <h3 className="text-xl font-bold text-gray-900 mb-6">Agreement Signatures</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {section.title}
+                      </h2>
+                      
+                      {viewMode === "edit" && section.isEditable ? (
                         <div className="space-y-4">
-                          <h4 className="font-semibold text-gray-800">Parent A</h4>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                            <p className="text-gray-500">Signature pending</p>
-                            <p className="text-sm text-gray-400 mt-1">Sarah Johnson</p>
+                          <Textarea
+                            value={section.content}
+                            onChange={(e) => updateSectionContent(section.id, e.target.value)}
+                            className="min-h-[140px] border-purple-200 focus:border-[#2e1a87] focus:ring-purple-100 rounded-lg text-gray-700 leading-relaxed"
+                            placeholder="Enter section content..."
+                          />
+                          <div className="flex items-center space-x-2 text-sm text-green-600 bg-green-50 p-3 rounded-lg">
+                            <CheckCircle className="h-4 w-4" />
+                            <span>Changes will be tracked and sent for approval</span>
                           </div>
-                          <p className="text-sm text-gray-500">Date: ________________</p>
                         </div>
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-gray-800">Parent B</h4>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                            <p className="text-gray-500">Signature pending</p>
-                            <p className="text-sm text-gray-400 mt-1">Michael Johnson</p>
-                          </div>
-                          <p className="text-sm text-gray-500">Date: ________________</p>
+                      ) : (
+                        <div className="prose prose-lg max-w-none">
+                          <p className="text-gray-700 leading-relaxed text-base">{section.content}</p>
                         </div>
+                      )}
+                    </div>
+                  </section>
+                ))}
+                
+                {/* Signature Section */}
+                <div className="mt-12 pt-8 border-t-2 border-gray-200">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Agreement Signatures</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-800">Parent A</h4>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <p className="text-gray-500">Signature pending</p>
+                        <p className="text-sm text-gray-400 mt-1">Sarah Johnson</p>
                       </div>
+                      <p className="text-sm text-gray-500">Date: ________________</p>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-gray-800">Parent B</h4>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <p className="text-gray-500">Signature pending</p>
+                        <p className="text-sm text-gray-400 mt-1">Michael Johnson</p>
+                      </div>
+                      <p className="text-sm text-gray-500">Date: ________________</p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Right Sidebar - AI Parenting Plan Assistant */}
+          {/* Right Sidebar - AI Parenting Plan Assistant */}
+          <div className="col-span-12 lg:col-span-3">
+            <div className="sticky top-24">
               <div className="space-y-6">
                 {/* AI Assistant Widget */}
                 <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
