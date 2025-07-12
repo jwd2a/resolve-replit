@@ -1,0 +1,55 @@
+Please make the following specific changes to the current Parenting Plan Document View page:
+
+1. **Main View Default**
+   - The default view should be the **full scrollable document**, not collapsed section cards.
+   - Remove the separate "Sections" view.
+   - Instead, display all sections in order on the main page, styled like a legal document.
+   - Each section should have:
+     - A clear section heading.
+     - The full body text.
+     - Subtle dividers between sections.
+
+2. **Left Sidebar Navigation**
+   - Change the left sidebar to a **Table of Contents list**.
+   - Each item in the list should:
+     - Be a link that smoothly scrolls to the corresponding section anchor in the main document.
+     - Highlight the active section when in view.
+
+3. **Remove Document Overview and Comments Tabs**
+   - Completely remove the “Document Overview” tab in the left sidebar.
+   - Remove the “Comments” tab in the left sidebar.
+   - We will only show comments as inline discussions on proposed changes later—no general comments section.
+
+4. **Right Sidebar (AI Assistant)**
+   - Rename "Helpful Actions" to **AI Parenting Plan Assistant**.
+   - Change the style to look more like a chat or Intercom widget:
+     - Show a short prompt: “How can I help you with this section?”
+     - Keep the existing quick action buttons.
+     - Below the buttons, add a text input box so users can type a question.
+     - Style the input like a message field (rounded, subtle placeholder text).
+   - Use a lighter background or subtle border to make this panel visually distinct.
+
+5. **Action Bar**
+   - Keep the top action buttons as is, but ensure labels are clear:
+     - Propose Changes (primary button)
+     - Download
+     - Print
+     - More Actions dropdown
+   - Remove any duplicate or unnecessary icons.
+
+6. **Visual Styling Updates**
+   - Use a warm color palette (light purples and neutrals) rather than stark white.
+   - Add a subtle subheader under the main title: “This agreement helps you create a stable, cooperative plan for your children.”
+   - Use modern typography with clear hierarchy.
+   - Keep all corners slightly rounded for a softer feel.
+
+7. **Interactivity**
+   - Make sure clicking a section in the Table of Contents smoothly scrolls to the correct place in the document.
+   - Highlight the section in view in the sidebar.
+
+8. **Responsiveness**
+   - On smaller screens:
+     - Collapse the sidebar into a hamburger menu.
+     - Allow the AI Assistant panel to slide over the content when opened.
+
+Do not remove any other existing functionality. These updates should build on the current design rather than replacing it completely.
