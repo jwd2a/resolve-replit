@@ -344,54 +344,52 @@ export default function ParentingPlan2() {
         </div>
       </header>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
-        {/* Left Sidebar - Table of Contents */}
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex">
+        {/* Left Sidebar - Table of Contents (Sticky) */}
         <div className={cn(
           "w-80 flex-shrink-0 transition-all duration-200 mr-4",
           isSideNavOpen ? "block" : "hidden lg:block"
         )}>
-          <div className="h-full flex flex-col">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
+          <div className="sticky top-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
               <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
-              <div className="flex-1 overflow-y-auto">
-                <div className="w-full space-y-4">
-                  {mainSections.map((mainSection) => (
-                    <div key={mainSection.id} className="border border-purple-200 rounded-lg">
-                      <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
-                        {mainSection.title}
-                      </div>
-                      <div className="px-3 py-2">
-                        <nav className="space-y-1">
-                          {mainSection.subsections.map((subsection) => (
-                            <button
-                              key={subsection.id}
-                              onClick={() => scrollToSection(subsection.id)}
-                              className={cn(
-                                "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
-                                "hover:bg-purple-50",
-                                activeSection === subsection.id
-                                  ? "bg-[#2e1a87] text-white shadow-sm"
-                                  : "text-gray-700"
-                              )}
-                            >
-                              <div className="flex items-center">
-                                <div className={cn(
-                                  "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
-                                  activeSection === subsection.id 
-                                    ? "bg-white text-[#2e1a87]" 
-                                    : "bg-purple-100 text-purple-600"
-                                )}>
-                                  {subsection.id}
-                                </div>
-                                <span className="truncate text-xs leading-tight">{subsection.title}</span>
-                              </div>
-                            </button>
-                          ))}
-                        </nav>
-                      </div>
+              <div className="w-full space-y-4">
+                {mainSections.map((mainSection) => (
+                  <div key={mainSection.id} className="border border-purple-200 rounded-lg">
+                    <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
+                      {mainSection.title}
                     </div>
-                  ))}
-                </div>
+                    <div className="px-3 py-2">
+                      <nav className="space-y-1">
+                        {mainSection.subsections.map((subsection) => (
+                          <button
+                            key={subsection.id}
+                            onClick={() => scrollToSection(subsection.id)}
+                            className={cn(
+                              "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
+                              "hover:bg-purple-50",
+                              activeSection === subsection.id
+                                ? "bg-[#2e1a87] text-white shadow-sm"
+                                : "text-gray-700"
+                            )}
+                          >
+                            <div className="flex items-center">
+                              <div className={cn(
+                                "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
+                                activeSection === subsection.id 
+                                  ? "bg-white text-[#2e1a87]" 
+                                  : "bg-purple-100 text-purple-600"
+                              )}>
+                                {subsection.id}
+                              </div>
+                              <span className="truncate text-xs leading-tight">{subsection.title}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </nav>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -400,16 +398,16 @@ export default function ParentingPlan2() {
         {/* Main Content Area - Legal Document View */}
         <div className="flex-1 min-w-0">
           {/* Legal Document Content */}
-          <div className="bg-white shadow-lg border border-gray-200 h-full flex flex-col">
+          <div className="bg-white shadow-lg border border-gray-200">
             {/* Document Header */}
-            <div className="text-center border-b border-gray-300 p-6 bg-gray-50 flex-shrink-0">
+            <div className="text-center border-b border-gray-300 p-6 bg-gray-50">
               <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-wide">PARENTING PARTNERSHIP AGREEMENT</h1>
               <p className="text-sm text-gray-600">Legal Document for Co-Parenting Arrangement</p>
               <p className="text-xs text-gray-500 mt-2">Date: {new Date().toLocaleDateString()}</p>
             </div>
             
-            {/* Document Body - Scrollable */}
-            <div className="flex-1 overflow-y-auto p-8 space-y-6 font-serif">
+            {/* Document Body - Natural Page Flow */}
+            <div className="p-8 space-y-6 font-serif">
               {sectionsState.map((section, index) => (
                   <section
                     key={section.id}
@@ -500,12 +498,12 @@ export default function ParentingPlan2() {
             </div>
           </div>
 
-        {/* Right Sidebar - AI Parenting Plan Assistant */}
+        {/* Right Sidebar - AI Parenting Plan Assistant (Sticky) */}
         <div className="w-80 flex-shrink-0 ml-4">
-          <div className="h-full flex flex-col">
-            <div className="space-y-6 h-full flex flex-col">
+          <div className="sticky top-6">
+            <div className="space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto">
               {/* Enhanced AI Assistant Widget */}
-              <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg flex-1 flex flex-col">
+              <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg flex flex-col">
                 <CardHeader className="pb-4 flex-shrink-0">
                   <CardTitle className="text-xl flex items-center text-[#2e1a87]">
                     <Bot className="h-6 w-6 mr-3" />
@@ -513,7 +511,7 @@ export default function ParentingPlan2() {
                   </CardTitle>
                   <p className="text-sm text-gray-600">Expert guidance for creating fair, child-focused agreements</p>
                 </CardHeader>
-                <CardContent className="space-y-6 flex-1 flex flex-col overflow-hidden">
+                <CardContent className="space-y-6 flex flex-col">
                     {/* Current Section Context */}
                     <div className="bg-white/80 rounded-lg p-4 border border-purple-100">
                       <h4 className="font-semibold text-sm text-gray-800 mb-2">Currently Viewing</h4>
