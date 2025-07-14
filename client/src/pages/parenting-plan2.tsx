@@ -351,7 +351,7 @@ export default function ParentingPlan2() {
           isSideNavOpen ? "block" : "hidden lg:block"
         )}>
           <div className="sticky top-6">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4">
               <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
               <div className="w-full space-y-4">
                 {mainSections.map((mainSection) => (
@@ -501,7 +501,7 @@ export default function ParentingPlan2() {
         {/* Right Sidebar - AI Parenting Plan Assistant (Sticky) */}
         <div className="w-80 flex-shrink-0 ml-4">
           <div className="sticky top-6">
-            <div className="space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto">
+            <div className="space-y-6">
               {/* Enhanced AI Assistant Widget */}
               <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg flex flex-col">
                 <CardHeader className="pb-4 flex-shrink-0">
@@ -624,7 +624,7 @@ export default function ParentingPlan2() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4 max-h-80 overflow-y-auto">
+                    <div className="space-y-4">
                       <div className="space-y-3">
                         <div className="bg-gray-50 rounded-lg p-3">
                           <p className="text-sm text-gray-600 mb-1">You asked:</p>
