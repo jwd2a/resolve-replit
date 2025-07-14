@@ -34,12 +34,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { NavigationMenu } from "@/components/NavigationMenu";
 
@@ -303,37 +297,44 @@ export default function ParentingPlan3() {
               <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
                 <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
                 <div className="flex-1 overflow-y-auto">
-                  <Accordion type="multiple" className="w-full space-y-2">
+                  <div className="w-full space-y-4">
                     {mainSections.map((mainSection) => (
-                      <AccordionItem 
-                        key={mainSection.id} 
-                        value={mainSection.id}
-                        className="border border-purple-200 rounded-lg"
-                      >
-                        <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-900 hover:no-underline hover:bg-purple-50 rounded-t-lg">
-                          <span className="text-left">{mainSection.title}</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-3 pb-2">
+                      <div key={mainSection.id} className="border border-purple-200 rounded-lg">
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
+                          {mainSection.title}
+                        </div>
+                        <div className="px-3 py-2">
                           <nav className="space-y-1">
                             {mainSection.subsections.map((subsection) => (
                               <button
                                 key={subsection.id}
                                 onClick={() => scrollToSection(subsection.id)}
                                 className={cn(
-                                  "w-full text-left px-2 py-1.5 rounded text-xs transition-colors",
+                                  "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
+                                  "hover:bg-purple-50",
                                   activeSection === subsection.id
-                                    ? "bg-[#2e1a87] text-white"
-                                    : "text-gray-700 hover:bg-purple-50"
+                                    ? "bg-[#2e1a87] text-white shadow-sm"
+                                    : "text-gray-700"
                                 )}
                               >
-                                {subsection.title}
+                                <div className="flex items-center">
+                                  <div className={cn(
+                                    "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
+                                    activeSection === subsection.id 
+                                      ? "bg-white text-[#2e1a87]" 
+                                      : "bg-purple-100 text-purple-600"
+                                  )}>
+                                    {subsection.id}
+                                  </div>
+                                  <span className="truncate text-xs leading-tight">{subsection.title}</span>
+                                </div>
                               </button>
                             ))}
                           </nav>
-                        </AccordionContent>
-                      </AccordionItem>
+                        </div>
+                      </div>
                     ))}
-                  </Accordion>
+                  </div>
                 </div>
               </div>
             </div>
