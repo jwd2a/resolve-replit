@@ -227,8 +227,8 @@ export default function ParentingPlan3() {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -70% 0px",
-      threshold: 0.1,
+      rootMargin: "-10% 0px -60% 0px",
+      threshold: 0.3,
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -420,7 +420,7 @@ export default function ParentingPlan3() {
                     id={section.id}
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className={cn(
-                      "scroll-mt-8",
+                      "scroll-mt-24",
                       index > 0 && "border-t border-gray-200 pt-6"
                     )}
                   >
