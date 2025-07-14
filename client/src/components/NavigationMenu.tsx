@@ -287,6 +287,16 @@ export function NavigationMenu() {
                 </DropdownMenuItem>
               </Link>
               
+              <Link href="/parenting-plan3">
+                <DropdownMenuItem className="cursor-pointer py-2">
+                  <FileText size={16} className="mr-2 text-[#6c54da]" />
+                  <span>Parenting Plan 3</span>
+                  {isActive("/parenting-plan3") && (
+                    <span className="ml-auto h-2 w-2 rounded-full bg-[#2e1a87]" />
+                  )}
+                </DropdownMenuItem>
+              </Link>
+              
               <DropdownMenuSeparator />
               <DropdownMenuLabel className="text-xs font-semibold text-gray-500">ADMIN</DropdownMenuLabel>
               <DropdownMenuSeparator />

@@ -1,0 +1,82 @@
+Please build a single-page Parenting Plan Document View for our family co-parenting platform, Resolve. This page should be clean, modern, emotionally supportive, and fully responsive.
+
+**Purpose:**
+Allow parents to comfortably read, navigate, and understand their Parenting Partnership Agreement, with supportive AI assistance and clear action options.
+
+**Layout & Structure:**
+
+1. **Sticky Top Header**
+   - Large title: "Parenting Partnership Agreement"
+   - Subheader below the title: "This agreement helps you create a stable, cooperative plan for your children."
+   - Status badge on the right (e.g., "Draft") with a distinct color
+   - Last updated date beside or below the status badge
+   - Action buttons:
+     - Propose Changes (primary button)
+     - Download
+     - Print
+     - More Actions dropdown (for Share Link, View History)
+   - Clear spacing and modern typography
+
+2. **Left Sidebar – Table of Contents**
+   - Vertical list of document sections:
+     - Parenting Time Schedule
+     - Holiday and Vacation Schedule
+     - Decision Making Authority
+     - Communication Guidelines
+   - Clicking a section smoothly scrolls the main content area to that section
+   - The active section highlights in the sidebar as the user scrolls
+   - This sidebar replaces any separate “Sections,” “Overview,” or “Comments” tabs—**just one navigation list**
+
+3. **Main Document Area**
+   - Display the full parenting plan document in a single scrollable view
+   - Each section includes:
+     - A clear section heading
+     - Full body text styled for readability (like a legal document)
+     - Subtle dividers or light shading between sections
+   - Use warm, neutral background colors and rounded corners for a friendly feel
+   - Optional: Provide a toggle to expand/collapse all sections at once
+
+4. **Right Sidebar – AI Parenting Plan Assistant**
+   - Title: "AI Parenting Plan Assistant"
+   - Display an introductory prompt: "How can I help you with this section?"
+   - Include quick action buttons:
+     - Summarize Section
+     - Explain Legal Terms
+     - Compare to Template
+     - Request Professional Review
+   - Below the buttons, include a text input field styled like a chat message input with placeholder text (“Type your question…”)
+   - Design this panel to look like a modern support widget (inspired by Intercom), with a visually distinct background or subtle border
+
+5. **Visual Design & Emotional Tone**
+   - Use warm, supportive colors: light purples, soft grays, and neutral backgrounds
+   - Modern typography with clear hierarchy
+   - Slightly rounded corners on cards, buttons, and input fields
+   - Hover and focus styles for all buttons and navigation links
+   - Overall tone should feel calm, professional, and reassuring
+
+6. **Interactivity & Behavior**
+   - Smooth scrolling when clicking items in the Table of Contents
+   - Highlight the active section in the sidebar
+   - The AI Assistant quick action buttons should show placeholder interactions or popups
+   - Propose Changes button should be prominent and styled as the primary action
+
+7. **Responsiveness**
+   - On tablet and mobile:
+     - Left sidebar collapses into a hamburger menu
+     - Right AI Assistant collapses into a floating button that opens the assistant as a slide-out panel
+     - Top action buttons stack or collapse into a dropdown menu
+
+8. **Accessibility**
+   - Use semantic HTML and ARIA labels for main landmarks, navigation, and buttons
+   - Ensure text and button colors have sufficient contrast
+
+9. **Demo Data**
+   - Populate example content for each document section
+   - Use placeholder participant names and dates
+
+**Important Notes:**
+- This is a single cohesive page. Do not build separate views or tabs.
+- There should be no separate “Sections” view—**the full document is always visible**.
+- No general “Comments” tab—comments will be part of proposed changes later.
+
+Please create modular, clean code that is easy to maintain and extend.
