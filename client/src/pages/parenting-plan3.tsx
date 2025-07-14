@@ -225,8 +225,11 @@ export default function ParentingPlan3() {
 
   // Auto-scroll to active section
   useEffect(() => {
+    // Find the scrollable document container
+    const scrollContainer = document.querySelector('.h-full.overflow-y-auto');
+    
     const observerOptions = {
-      root: null,
+      root: scrollContainer,
       rootMargin: "-10% 0px -60% 0px",
       threshold: 0.3,
     };
@@ -359,52 +362,54 @@ export default function ParentingPlan3() {
           </div>
         </header>
 
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
           {/* Left Sidebar - Table of Contents (Sticky) */}
           <div className={cn(
             "w-80 flex-shrink-0 transition-all duration-200 mr-4",
             isSideNavOpen ? "block" : "hidden lg:block"
           )}>
-            <div className="sticky top-6">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4">
+            <div className="h-full flex flex-col">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
                 <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
-                <div className="w-full space-y-4">
-                  {mainSections.map((mainSection) => (
-                    <div key={mainSection.id} className="border border-purple-200 rounded-lg">
-                      <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
-                        {mainSection.title}
-                      </div>
-                      <div className="px-3 py-2">
-                        <nav className="space-y-1">
-                          {mainSection.subsections.map((subsection) => (
-                            <button
-                              key={subsection.id}
-                              onClick={() => scrollToSection(subsection.id)}
-                              className={cn(
-                                "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
-                                "hover:bg-purple-50",
-                                activeSection === subsection.id
-                                  ? "bg-[#2e1a87] text-white shadow-sm"
-                                  : "text-gray-700"
-                              )}
-                            >
-                              <div className="flex items-center">
-                                <div className={cn(
-                                  "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
-                                  activeSection === subsection.id 
-                                    ? "bg-white text-[#2e1a87]" 
-                                    : "bg-purple-100 text-purple-600"
-                                )}>
-                                  {subsection.id}
+                <div className="flex-1 overflow-y-auto">
+                  <div className="w-full space-y-4">
+                    {mainSections.map((mainSection) => (
+                      <div key={mainSection.id} className="border border-purple-200 rounded-lg">
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
+                          {mainSection.title}
+                        </div>
+                        <div className="px-3 py-2">
+                          <nav className="space-y-1">
+                            {mainSection.subsections.map((subsection) => (
+                              <button
+                                key={subsection.id}
+                                onClick={() => scrollToSection(subsection.id)}
+                                className={cn(
+                                  "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
+                                  "hover:bg-purple-50",
+                                  activeSection === subsection.id
+                                    ? "bg-[#2e1a87] text-white shadow-sm"
+                                    : "text-gray-700"
+                                )}
+                              >
+                                <div className="flex items-center">
+                                  <div className={cn(
+                                    "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
+                                    activeSection === subsection.id 
+                                      ? "bg-white text-[#2e1a87]" 
+                                      : "bg-purple-100 text-purple-600"
+                                  )}>
+                                    {subsection.id}
+                                  </div>
+                                  <span className="truncate text-xs leading-tight">{subsection.title}</span>
                                 </div>
-                                <span className="truncate text-xs leading-tight">{subsection.title}</span>
-                              </div>
-                            </button>
-                          ))}
-                        </nav>
+                              </button>
+                            ))}
+                          </nav>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -412,7 +417,7 @@ export default function ParentingPlan3() {
 
           {/* Main Document Area */}
           <div className="flex-1 mr-4">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
+            <div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
               <div className="max-w-none space-y-6">
                 {sectionsState.map((section, index) => (
                   <section
@@ -485,70 +490,72 @@ export default function ParentingPlan3() {
             "w-80 flex-shrink-0 transition-all duration-200",
             isAiPanelOpen || "hidden lg:block"
           )}>
-            <div className="sticky top-6">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 flex flex-col space-y-4">
+            <div className="h-full flex flex-col">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
                 <div className="flex items-center">
                   <Bot className="h-5 w-5 mr-2 text-[#2e1a87]" />
                   <h3 className="text-base font-semibold text-gray-900">AI Parenting Plan Assistant</h3>
                 </div>
                 
-                <div className="space-y-3">
-                  <p className="text-sm text-gray-600">
-                    I can help you refine your parenting plan with suggestions, legal insights, and personalized recommendations.
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left h-auto py-2"
-                      size="sm"
-                    >
-                      <Sparkles className="h-4 w-4 mr-2 text-purple-600" />
-                      <div className="text-left">
-                        <div className="font-medium">Improve This Section</div>
-                        <div className="text-xs text-gray-500">Get suggestions for clarity and completeness</div>
-                      </div>
-                    </Button>
+                <div className="flex-1 overflow-y-auto">
+                  <div className="space-y-3">
+                    <p className="text-sm text-gray-600">
+                      I can help you refine your parenting plan with suggestions, legal insights, and personalized recommendations.
+                    </p>
                     
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left h-auto py-2"
-                      size="sm"
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                      <div className="text-left">
-                        <div className="font-medium">Legal Review</div>
-                        <div className="text-xs text-gray-500">Check for legal compliance</div>
-                      </div>
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left h-auto py-2"
-                      size="sm"
-                    >
-                      <Users className="h-4 w-4 mr-2 text-blue-600" />
-                      <div className="text-left">
-                        <div className="font-medium">Co-Parent Perspective</div>
-                        <div className="text-xs text-gray-500">Consider other viewpoints</div>
-                      </div>
-                    </Button>
-                    
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left h-auto py-2"
-                      size="sm"
-                    >
-                      <HelpCircle className="h-4 w-4 mr-2 text-orange-600" />
-                      <div className="text-left">
-                        <div className="font-medium">Explain Section</div>
-                        <div className="text-xs text-gray-500">Understand what this means</div>
-                      </div>
-                    </Button>
+                    <div className="space-y-2">
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left h-auto py-2"
+                        size="sm"
+                      >
+                        <Sparkles className="h-4 w-4 mr-2 text-purple-600" />
+                        <div className="text-left">
+                          <div className="font-medium">Improve This Section</div>
+                          <div className="text-xs text-gray-500">Get suggestions for clarity and completeness</div>
+                        </div>
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left h-auto py-2"
+                        size="sm"
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                        <div className="text-left">
+                          <div className="font-medium">Legal Review</div>
+                          <div className="text-xs text-gray-500">Check for legal compliance</div>
+                        </div>
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left h-auto py-2"
+                        size="sm"
+                      >
+                        <Users className="h-4 w-4 mr-2 text-blue-600" />
+                        <div className="text-left">
+                          <div className="font-medium">Co-Parent Perspective</div>
+                          <div className="text-xs text-gray-500">Consider other viewpoints</div>
+                        </div>
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left h-auto py-2"
+                        size="sm"
+                      >
+                        <HelpCircle className="h-4 w-4 mr-2 text-orange-600" />
+                        <div className="text-left">
+                          <div className="font-medium">Explain Section</div>
+                          <div className="text-xs text-gray-500">Understand what this means</div>
+                        </div>
+                      </Button>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="border-t pt-4 mt-auto">
+                <div className="border-t pt-4 flex-shrink-0">
                   <div className="flex items-center space-x-2 mb-3">
                     <Input
                       placeholder="Ask me anything..."
