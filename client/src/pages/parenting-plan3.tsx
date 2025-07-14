@@ -359,7 +359,7 @@ export default function ParentingPlan3() {
           </div>
         </header>
 
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex">
           {/* Left Sidebar - Table of Contents (Sticky) */}
           <div className={cn(
             "w-80 flex-shrink-0 transition-all duration-200 mr-4",
@@ -412,7 +412,7 @@ export default function ParentingPlan3() {
 
           {/* Main Document Area */}
           <div className="flex-1 mr-4">
-            <div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
               <div className="max-w-none space-y-6">
                 {sectionsState.map((section, index) => (
                   <section
@@ -485,14 +485,14 @@ export default function ParentingPlan3() {
             "w-80 flex-shrink-0 transition-all duration-200",
             isAiPanelOpen || "hidden lg:block"
           )}>
-            <div className="h-full flex flex-col">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
-                <div className="flex items-center mb-4">
+            <div className="sticky top-6">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 flex flex-col space-y-4">
+                <div className="flex items-center">
                   <Bot className="h-5 w-5 mr-2 text-[#2e1a87]" />
                   <h3 className="text-base font-semibold text-gray-900">AI Parenting Plan Assistant</h3>
                 </div>
                 
-                <div className="space-y-3 mb-4">
+                <div className="space-y-3">
                   <p className="text-sm text-gray-600">
                     I can help you refine your parenting plan with suggestions, legal insights, and personalized recommendations.
                   </p>
