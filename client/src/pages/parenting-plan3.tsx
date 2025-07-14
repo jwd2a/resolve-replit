@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   FileText, 
   Download, 
@@ -18,7 +19,14 @@ import {
   Clock,
   Users,
   CheckCircle,
-  Sparkles
+  Sparkles,
+  Eye,
+  Save,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Zap,
+  HelpCircle
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -26,141 +34,128 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { NavigationMenu } from "@/components/NavigationMenu";
 
-// Demo data structure for the parenting plan
-interface DocumentSection {
+type ViewMode = "view" | "edit";
+
+interface Section {
   id: string;
   title: string;
   content: string;
+  isEditable?: boolean;
 }
 
-const documentSections: DocumentSection[] = [
+interface MainSection {
+  id: string;
+  title: string;
+  subsections: Section[];
+}
+
+const mainSections: MainSection[] = [
   {
-    id: "parenting-time",
-    title: "Parenting Time Schedule",
-    content: `We agree that both parents will have regular, meaningful time with our children. Our standard schedule is as follows:
-
-**Regular Weekly Schedule:**
-• Parent A: Monday after school until Wednesday morning drop-off
-• Parent B: Wednesday after school until Friday morning drop-off
-• Alternating weekends from Friday after school until Sunday evening at 6:00 PM
-
-**Exchange Times and Locations:**
-• School days: Exchanges occur at school
-• Non-school days: Exchanges occur at 123 Main Street, Anytown, State 12345
-• Weekend exchanges: Friday at 6:00 PM and Sunday at 6:00 PM
-
-**Communication During Parenting Time:**
-Each parent may communicate with the children during the other parent's time through phone calls or video calls between 7:00 PM and 8:00 PM, but not more than once per day unless there is an emergency.
-
-**Flexibility:**
-Both parents agree to be flexible with the schedule when possible, always prioritizing the children's best interests and maintaining advance notice of any proposed changes.`
+    id: "parental-responsibility",
+    title: "Parental Responsibility and Decision Making",
+    subsections: [
+      {
+        id: "1",
+        title: "Family Information and Jurisdiction",
+        content: "The parents named below, which will be referred to throughout this Agreement as we, us, or by individual names, are entering into this Agreement to address their legal rights and obligations relating to their minor children. It is our intention to submit this Agreement to the Court in any legal proceeding to determine our parenting rights and obligations. We both want the Court to adopt this Agreement in its entirety because we agree that it is in our children's best interests.\n\n1. PARENTS\n\nOur names and contact information are:\n\nEric Rabinovitz\n(813) 789-0202\nebrcapital@gmail.com\n\nMichelle Rabinovitz\n(813) 495-2219\nmmrabinovitz@gmail.com\n\nWe will keep each other informed of any changes to any of our contact information listed above, in each instance immediately upon any change, or as soon as we possibly can after any change.\n\n2. CHILDREN\n\nOur children are:\n\nInitials: A. J.\nDate of birth: Mar 12, 2013\nGender: Female",
+        isEditable: true
+      },
+      {
+        id: "2",
+        title: "Shared Decision-Making",
+        content: "We are going to make decisions about our children as co-parents, together, and always with our child(ren)'s best interests as the most important factor. These decisions include all important decisions affecting the welfare of our child(ren), including all decisions about the child(ren)'s Education (choice of schools, tutoring, special educational needs), Healthcare (non-emergency medical treatments, choice of doctors), Significant extracurricular activities.\n\nNeither of us will have a superior right or authority when it comes to co-parenting our children unless it expressly says so below. We will treat each other as equals, and we will do our best to ensure that our child(ren) see us as equals when it comes to all important decisions. We will never involve our children in any disputes that we may have about them because we understand how damaging this could be for our children.",
+        isEditable: true
+      },
+      {
+        id: "3",
+        title: "Resolving Disagreements",
+        content: "If we have a disagreement and we are unable to resolve it, then we will:\n\n• Remember and acknowledge that disagreements are normal and will happen from time to time\n• Treat each other with respect and focus on what is best for our child(ren), instead of our own needs and wants\n• Take a break if our discussion ever gets unpleasant, too argumentative, or too heated\n• Agree on a timeline for resuming the discussion so that deadlines can be met\n• Take time to research options independently before resuming discussions\n• Consult with relevant professionals for their perspectives, which are likely to be more neutral than our own\n• Document in writing any agreement we ultimately reach\n• Refrain from involving our child(ren) unless we are doing it together, and solely for the purpose of understanding their preference",
+        isEditable: true
+      }
+    ]
   },
   {
-    id: "holidays-vacations",
-    title: "Holiday and Vacation Schedule",
-    content: `Holiday time takes precedence over the regular parenting schedule. We will alternate major holidays each year.
-
-**Year A (Odd Years) - Parent A:**
-• New Year's Day
-• Memorial Day Weekend
-• July 4th
-• Labor Day Weekend
-• Thanksgiving Weekend
-• Christmas Day
-
-**Year B (Even Years) - Parent B:**
-• New Year's Day
-• Memorial Day Weekend
-• July 4th
-• Labor Day Weekend
-• Thanksgiving Weekend
-• Christmas Day
-
-**Spring Break:**
-Spring break will alternate each year, with Parent A having odd years and Parent B having even years.
-
-**Summer Vacation:**
-Each parent is entitled to two weeks of uninterrupted vacation time with the children. Parents must provide at least 60 days advance notice of their intended vacation dates.
-
-**Mother's Day and Father's Day:**
-Children will spend Mother's Day with their mother and Father's Day with their father, regardless of the regular schedule.
-
-**Children's Birthdays:**
-Each parent has the right to spend time with the children on their birthdays. If the birthday falls during the other parent's time, the celebrating parent may have the children from after school until 8:00 PM.`
+    id: "timesharing",
+    title: "Timesharing",
+    subsections: [
+      {
+        id: "4",
+        title: "Scheduling and Our Calendar",
+        content: "We will maintain a shared calendar system that clearly shows our timesharing schedule, including regular rotation, holidays, and any special arrangements. This calendar will be accessible to both parents and updated regularly to reflect any agreed-upon changes. The calendar will include pickup and drop-off times, locations, and any special notes relevant to each exchange.",
+        isEditable: true
+      },
+      {
+        id: "5",
+        title: "Regular Parenting Time",
+        content: "We agree that both parents will have regular, meaningful time with our children. Our standard schedule is as follows:\n\n• Parent A: Monday after school until Wednesday morning drop-off\n• Parent B: Wednesday after school until Friday morning drop-off\n• Alternating weekends from Friday after school until Sunday evening at 6:00 PM\n\nExchange times and locations:\n• School days: Exchanges occur at school\n• Non-school days: Exchanges occur at 123 Main Street, Anytown, State 12345\n• Weekend exchanges: Friday at 6:00 PM and Sunday at 6:00 PM",
+        isEditable: true
+      },
+      {
+        id: "6",
+        title: "Holiday and Vacation Schedule",
+        content: "Holiday time takes precedence over the regular parenting schedule. We will alternate major holidays each year.\n\nYear A (Odd Years) - Parent A:\n• New Year's Day\n• Memorial Day Weekend\n• July 4th\n• Labor Day Weekend\n• Thanksgiving Weekend\n• Christmas Day\n\nYear B (Even Years) - Parent B:\n• New Year's Day\n• Memorial Day Weekend\n• July 4th\n• Labor Day Weekend\n• Thanksgiving Weekend\n• Christmas Day",
+        isEditable: true
+      }
+    ]
   },
   {
-    id: "decision-making",
-    title: "Decision Making Authority",
-    content: `Both parents share joint legal custody and will make major decisions together regarding the children's welfare.
-
-**Major Decisions Requiring Both Parents' Agreement:**
-• Educational decisions (school choice, tutoring, special programs)
-• Healthcare decisions (non-emergency medical treatment, therapy, medication)
-• Religious upbringing and activities
-• Extracurricular activities and sports
-• Travel outside the state/country
-
-**Emergency Decisions:**
-Either parent may make immediate emergency decisions affecting the health or safety of the children. The other parent must be notified as soon as reasonably possible.
-
-**Day-to-Day Decisions:**
-The parent with whom the children are staying has the authority to make routine day-to-day decisions about care, activities, and immediate needs.
-
-**Dispute Resolution:**
-If parents cannot agree on a major decision, they will:
-1. Discuss the matter respectfully, focusing on the children's best interests
-2. Consult with relevant professionals (teachers, doctors, etc.)
-3. Seek mediation if necessary
-4. Consider the children's preferences when age-appropriate
-
-**Information Sharing:**
-Both parents have equal access to all school records, medical records, and information about the children's activities and progress. Both parents will be listed as emergency contacts and authorized to make decisions in emergency situations.`
+    id: "educational-decisions",
+    title: "Educational Decisions",
+    subsections: [
+      {
+        id: "7",
+        title: "School Choice and Educational Planning",
+        content: "Both parents will participate in making decisions about our children's education, including school choice, tutoring, special educational needs, and extracurricular activities. We will consult with teachers and educational professionals to make informed decisions that serve our children's best interests.",
+        isEditable: true
+      },
+      {
+        id: "8",
+        title: "Information Sharing and Records Access",
+        content: "We both will have equal access to all important information about our child(ren) at all times. We will each take care to ensure that anytime we have the opportunity to list the other parent's name on any document or list, we will do so because it is our intention to both be listed as authorized parties, contacts, or recipients for all medical, school, and other records pertaining to our child(ren).",
+        isEditable: true
+      }
+    ]
   },
   {
-    id: "communication",
-    title: "Communication Guidelines",
-    content: `Effective communication between parents is essential for successful co-parenting. We agree to follow these guidelines:
-
-**Communication Methods:**
-• Primary communication will be through email and text messaging
-• Phone calls for urgent matters only
-• Face-to-face communication should be brief and child-focused during exchanges
-• We will not use the children as messengers between parents
-
-**Communication Tone and Content:**
-• All communication will be respectful, business-like, and focused on the children
-• We will avoid discussing personal matters or past relationship issues
-• We will respond to communication within 24 hours unless it's an emergency
-• We will keep all communication child-focused and solution-oriented
-
-**Sharing Information:**
-• We will keep each other informed about the children's school events, activities, and important milestones
-• We will share schedules, contact information, and any changes in circumstances
-• We will inform each other of any significant changes in the children's behavior or needs
-• We will coordinate on discipline approaches and house rules when possible
-
-**Conflict Resolution:**
-• We will address disagreements privately, away from the children
-• We will focus on finding solutions rather than assigning blame
-• We will seek professional mediation if we cannot resolve conflicts independently
-• We will always prioritize the children's emotional well-being over our own disagreements
-
-**Digital Communication:**
-• We will maintain appropriate boundaries on social media regarding the children and co-parenting
-• We will not share personal information about each other publicly
-• We will respect each other's privacy while maintaining necessary communication about the children`
+    id: "final-considerations",
+    title: "Final Considerations",
+    subsections: [
+      {
+        id: "9",
+        title: "Communication Guidelines",
+        content: "We agree and understand that communication is critical to good coparenting. We also agree and understand that communications regarding our child(ren) should be between the two of us, as parents. Neither of us will ever use a child as a messenger to convey information, ask questions, or set up schedule changes. We agree to communicate freely with each other in a respectful manner using one or more of the following methods of communication: email, text, phone",
+        isEditable: true
+      },
+      {
+        id: "10",
+        title: "Dispute Resolution",
+        content: "If we cannot resolve a dispute through direct communication, we will seek mediation before pursuing legal action. We agree to participate in good faith mediation and to prioritize our children's well-being throughout any conflict resolution process.",
+        isEditable: true
+      }
+    ]
   }
 ];
 
 export default function ParentingPlan3() {
-  const [activeSection, setActiveSection] = useState<string>("parenting-time");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [viewMode, setViewMode] = useState<ViewMode>("view");
+  const [activeSection, setActiveSection] = useState<string>("1");
+  const [isSideNavOpen, setIsSideNavOpen] = useState(true);
   const [aiQuestion, setAiQuestion] = useState("");
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+
+  // Flatten sections for easier management
+  const sections = mainSections.flatMap(section => section.subsections);
+  const [sectionsState, setSectionsState] = useState<Section[]>(sections);
 
   // Auto-scroll to active section
   useEffect(() => {
@@ -178,7 +173,7 @@ export default function ParentingPlan3() {
       });
     }, observerOptions);
 
-    documentSections.forEach((section) => {
+    sectionsState.forEach((section) => {
       const element = sectionRefs.current[section.id];
       if (element) {
         observer.observe(element);
@@ -186,7 +181,13 @@ export default function ParentingPlan3() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [sectionsState]);
+
+  const updateSectionContent = (sectionId: string, newContent: string) => {
+    setSectionsState(prev => prev.map(section => 
+      section.id === sectionId ? { ...section, content: newContent } : section
+    ));
+  };
 
   const scrollToSection = (sectionId: string) => {
     const element = sectionRefs.current[sectionId];
@@ -203,6 +204,16 @@ export default function ParentingPlan3() {
     }
   };
 
+  const handleSaveChanges = () => {
+    setViewMode("view");
+    // Here you would typically save the changes to your backend
+  };
+
+  const handleCancelEdit = () => {
+    setViewMode("view");
+    // Here you would typically revert any unsaved changes
+  };
+
   const getLastUpdated = () => {
     return new Date().toLocaleDateString('en-US', { 
       year: 'numeric', 
@@ -216,155 +227,185 @@ export default function ParentingPlan3() {
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50">
         <NavigationMenu />
         
-        {/* Sticky Header */}
+        {/* Clean Header */}
         <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-20">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
               <div className="flex items-center space-x-4">
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  onClick={() => setIsSideNavOpen(!isSideNavOpen)}
                   className="lg:hidden"
                 >
                   <Menu className="h-4 w-4" />
                 </Button>
-                
-                <div className="flex flex-col">
-                  <h1 className="text-2xl font-bold text-gray-900">Parenting Partnership Agreement</h1>
-                  <p className="text-sm text-gray-600 mt-1">This agreement helps you create a stable, cooperative plan for your children.</p>
+                <div>
+                  <h1 className="text-xl font-semibold text-gray-900">Parenting Partnership Agreement</h1>
+                  <div className="flex items-center space-x-3 mt-1">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                      Legal Ready
+                    </Badge>
+                    <span className="text-xs text-gray-500">Version 2.1</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
-                  <Badge variant="secondary" className="bg-amber-100 text-amber-800">
-                    Draft
-                  </Badge>
-                  <span className="text-sm text-gray-500">
-                    Last updated: {getLastUpdated()}
-                  </span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Button className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white">
-                    <Edit3 className="h-4 w-4 mr-2" />
-                    Propose Changes
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Printer className="h-4 w-4 mr-2" />
-                    Print
-                  </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Share Link
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <History className="h-4 w-4 mr-2" />
-                        View History
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
+                >
+                  {viewMode === "edit" ? (
+                    <><Eye className="h-4 w-4 mr-2" />View</>
+                  ) : (
+                    <><Edit3 className="h-4 w-4 mr-2" />Edit</>
+                  )}
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Printer className="h-4 w-4 mr-2" />
+                      Print Document
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share with Co-Parent
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <History className="h-4 w-4 mr-2" />
+                      View History
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-128px)] flex">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
           {/* Left Sidebar - Table of Contents */}
           <div className={cn(
-            "w-80 flex-shrink-0 transition-all duration-200 mr-6",
-            isSidebarOpen ? "block" : "hidden lg:block"
+            "w-80 flex-shrink-0 transition-all duration-200 mr-4",
+            isSideNavOpen ? "block" : "hidden lg:block"
           )}>
-            <div className="h-full">
-              <Card className="h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg">Table of Contents</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <nav className="space-y-2">
-                    {documentSections.map((section) => (
-                      <button
-                        key={section.id}
-                        onClick={() => scrollToSection(section.id)}
-                        className={cn(
-                          "w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                          activeSection === section.id
-                            ? "bg-[#2e1a87] text-white"
-                            : "text-gray-700 hover:bg-gray-100"
-                        )}
+            <div className="h-full flex flex-col">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
+                <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
+                <div className="flex-1 overflow-y-auto">
+                  <Accordion type="multiple" className="w-full space-y-2">
+                    {mainSections.map((mainSection) => (
+                      <AccordionItem 
+                        key={mainSection.id} 
+                        value={mainSection.id}
+                        className="border border-purple-200 rounded-lg"
                       >
-                        {section.title}
-                      </button>
+                        <AccordionTrigger className="px-3 py-2 text-xs font-semibold text-gray-900 hover:no-underline hover:bg-purple-50 rounded-t-lg">
+                          <span className="text-left">{mainSection.title}</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-3 pb-2">
+                          <nav className="space-y-1">
+                            {mainSection.subsections.map((subsection) => (
+                              <button
+                                key={subsection.id}
+                                onClick={() => scrollToSection(subsection.id)}
+                                className={cn(
+                                  "w-full text-left px-2 py-1.5 rounded text-xs transition-colors",
+                                  activeSection === subsection.id
+                                    ? "bg-[#2e1a87] text-white"
+                                    : "text-gray-700 hover:bg-purple-50"
+                                )}
+                              >
+                                {subsection.title}
+                              </button>
+                            ))}
+                          </nav>
+                        </AccordionContent>
+                      </AccordionItem>
                     ))}
-                  </nav>
-                </CardContent>
-              </Card>
+                  </Accordion>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Main Document Area */}
-          <div className="flex-1 mr-6">
-            <div className="h-full overflow-y-auto">
-              <Card className="h-full">
-                <CardContent className="p-8">
-                  <div className="max-w-4xl mx-auto space-y-8">
-                    {documentSections.map((section, index) => (
-                      <div
-                        key={section.id}
-                        id={section.id}
-                        ref={(el) => (sectionRefs.current[section.id] = el)}
-                        className={cn(
-                          "scroll-mt-8",
-                          index > 0 && "border-t border-gray-200 pt-8"
-                        )}
-                      >
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                          {section.title}
-                        </h2>
-                        <div className="prose prose-gray max-w-none">
-                          {section.content.split('\n').map((paragraph, i) => {
-                            if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                              return (
-                                <h3 key={i} className="text-lg font-medium text-gray-800 mt-6 mb-3">
-                                  {paragraph.slice(2, -2)}
-                                </h3>
-                              );
-                            }
-                            if (paragraph.startsWith('•')) {
-                              return (
-                                <ul key={i} className="ml-4 mb-3">
-                                  <li className="text-gray-700">{paragraph.slice(1).trim()}</li>
-                                </ul>
-                              );
-                            }
-                            if (paragraph.trim()) {
-                              return (
-                                <p key={i} className="text-gray-700 mb-4 leading-relaxed">
-                                  {paragraph}
-                                </p>
-                              );
-                            }
-                            return null;
-                          })}
+          <div className="flex-1 mr-4">
+            <div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
+              <div className="max-w-none space-y-6">
+                {sectionsState.map((section, index) => (
+                  <section
+                    key={section.id}
+                    id={section.id}
+                    ref={(el) => (sectionRefs.current[section.id] = el)}
+                    className={cn(
+                      "scroll-mt-8",
+                      index > 0 && "border-t border-gray-200 pt-6"
+                    )}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold text-gray-900">
+                        {section.title}
+                      </h2>
+                      {section.isEditable && viewMode === "view" && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setViewMode("edit")}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          <Edit3 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {viewMode === "edit" && section.isEditable ? (
+                      <div className="space-y-4">
+                        <Textarea
+                          value={section.content}
+                          onChange={(e) => updateSectionContent(section.id, e.target.value)}
+                          className="min-h-[200px] resize-none font-mono text-sm"
+                          placeholder="Enter content for this section..."
+                        />
+                        <div className="flex justify-end space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleCancelEdit}
+                          >
+                            <X className="h-4 w-4 mr-2" />
+                            Cancel
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={handleSaveChanges}
+                            className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
+                          >
+                            <Save className="h-4 w-4 mr-2" />
+                            Save Changes
+                          </Button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    ) : (
+                      <div className="prose prose-gray max-w-none">
+                        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          {section.content}
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -373,85 +414,100 @@ export default function ParentingPlan3() {
             "w-80 flex-shrink-0 transition-all duration-200",
             isAiPanelOpen || "hidden lg:block"
           )}>
-            <div className="h-full">
-              <Card className="h-full">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center">
-                    <Bot className="h-5 w-5 mr-2 text-[#2e1a87]" />
-                    AI Parenting Plan Assistant
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+            <div className="h-full flex flex-col">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
+                <div className="flex items-center mb-4">
+                  <Bot className="h-5 w-5 mr-2 text-[#2e1a87]" />
+                  <h3 className="text-base font-semibold text-gray-900">AI Parenting Plan Assistant</h3>
+                </div>
+                
+                <div className="space-y-3 mb-4">
                   <p className="text-sm text-gray-600">
-                    How can I help you with this section?
+                    I can help you refine your parenting plan with suggestions, legal insights, and personalized recommendations.
                   </p>
                   
                   <div className="space-y-2">
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-left"
+                      className="w-full justify-start text-left h-auto py-2"
                       size="sm"
                     >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Summarize Section
+                      <Sparkles className="h-4 w-4 mr-2 text-purple-600" />
+                      <div className="text-left">
+                        <div className="font-medium">Improve This Section</div>
+                        <div className="text-xs text-gray-500">Get suggestions for clarity and completeness</div>
+                      </div>
                     </Button>
+                    
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-left"
+                      className="w-full justify-start text-left h-auto py-2"
                       size="sm"
                     >
-                      <FileText className="h-4 w-4 mr-2" />
-                      Explain Legal Terms
+                      <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                      <div className="text-left">
+                        <div className="font-medium">Legal Review</div>
+                        <div className="text-xs text-gray-500">Check for legal compliance</div>
+                      </div>
                     </Button>
+                    
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-left"
+                      className="w-full justify-start text-left h-auto py-2"
                       size="sm"
                     >
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Compare to Template
+                      <Users className="h-4 w-4 mr-2 text-blue-600" />
+                      <div className="text-left">
+                        <div className="font-medium">Co-Parent Perspective</div>
+                        <div className="text-xs text-gray-500">Consider other viewpoints</div>
+                      </div>
                     </Button>
+                    
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-left"
+                      className="w-full justify-start text-left h-auto py-2"
                       size="sm"
                     >
-                      <Users className="h-4 w-4 mr-2" />
-                      Request Professional Review
+                      <HelpCircle className="h-4 w-4 mr-2 text-orange-600" />
+                      <div className="text-left">
+                        <div className="font-medium">Explain Section</div>
+                        <div className="text-xs text-gray-500">Understand what this means</div>
+                      </div>
                     </Button>
                   </div>
-                  
-                  <div className="space-y-2">
+                </div>
+                
+                <div className="border-t pt-4 mt-auto">
+                  <div className="flex items-center space-x-2 mb-3">
                     <Input
+                      placeholder="Ask me anything..."
                       value={aiQuestion}
                       onChange={(e) => setAiQuestion(e.target.value)}
-                      placeholder="Type your question..."
-                      className="bg-white"
                       onKeyPress={(e) => e.key === 'Enter' && handleAiSubmit()}
+                      className="flex-1 text-sm"
                     />
-                    <Button 
+                    <Button
                       onClick={handleAiSubmit}
-                      className="w-full bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
-                      disabled={!aiQuestion.trim()}
+                      size="sm"
+                      className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
                     >
-                      <Send className="h-4 w-4 mr-2" />
-                      Ask Assistant
+                      <Send className="h-4 w-4" />
                     </Button>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-purple-50 rounded-lg">
+                  <div className="p-3 bg-purple-50 rounded-lg">
                     <div className="flex items-start space-x-2">
-                      <Sparkles className="h-4 w-4 text-purple-600 mt-0.5" />
+                      <Zap className="h-4 w-4 text-purple-600 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-purple-800">Tip</p>
+                        <p className="text-xs font-medium text-purple-800">Quick Tip</p>
                         <p className="text-xs text-purple-700">
-                          Try asking: "What should I consider for holiday schedules?" or "How do we handle communication boundaries?"
+                          Ask: "What's missing from this section?" or "How can we make this more fair?"
                         </p>
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </div>
