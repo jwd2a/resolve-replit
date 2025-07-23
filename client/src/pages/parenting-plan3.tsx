@@ -296,78 +296,13 @@ export default function ParentingPlan3() {
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50">
         <NavigationMenu />
         
-        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-20">
-              <div className="flex items-center space-x-4">
-                <div className="p-2 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg">
-                  <FileText className="h-6 w-6 text-[#2e1a87]" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Parenting Partnership Agreement</h1>
-                  <div className="flex items-center space-x-3 mt-1">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200 text-xs">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      Ready for Review
-                    </Badge>
-                    <span className="text-xs text-gray-500">Last updated: {getLastUpdated()}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant={viewMode === 'edit' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
-                  className={cn(
-                    "transition-all",
-                    viewMode === 'edit' && "bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
-                  )}
-                >
-                  {viewMode === "edit" ? (
-                    <><Save className="h-4 w-4 mr-2" />Save</>
-                  ) : (
-                    <><Edit3 className="h-4 w-4 mr-2" />Edit</>
-                  )}
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Printer className="h-4 w-4 mr-2" />
-                      Print Document
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Share2 className="h-4 w-4 mr-2" />
-                      Share with Co-Parent
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <History className="h-4 w-4 mr-2" />
-                      View History
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 h-screen flex">
           {/* Left Sidebar - Table of Contents (Fixed) */}
           <div className={cn(
             "w-72 flex-shrink-0 transition-all duration-200 mr-8",
             isSideNavOpen ? "block" : "hidden lg:block"
           )}>
-            <div className="h-full flex flex-col py-8">
+            <div className="h-full flex flex-col py-4">
               <div className="flex-1 overflow-y-auto">
                 <nav className="space-y-8">
                   {mainSections.map((mainSection) => (
@@ -401,9 +336,93 @@ export default function ParentingPlan3() {
 
           {/* Main Document Area */}
           <div className="flex-1">
-            <div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
-              <div className="max-w-none space-y-6">
-                {sectionsState.map((section, index) => (
+            <div className="h-full overflow-y-auto">
+              <div className="space-y-4">
+                {/* Document Header - Scrolls with content */}
+                <div className="bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border border-purple-200 rounded-xl p-8 shadow-sm">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-3 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg">
+                        <FileText className="h-8 w-8 text-[#2e1a87]" />
+                      </div>
+                      <div>
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+                          Parenting Partnership Agreement
+                        </h1>
+                        <div className="flex items-center space-x-4 mb-3">
+                          <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Ready for Review
+                          </Badge>
+                          <span className="text-sm text-gray-600">Version 2.1</span>
+                        </div>
+                        <p className="text-gray-600 text-sm max-w-2xl">
+                          A comprehensive co-parenting agreement designed to provide structure, clarity, and stability for your family's future.
+                        </p>
+                        <div className="mt-3 text-xs text-gray-500">
+                          Last updated: {getLastUpdated()}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex items-center space-x-2 mt-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsSideNavOpen(!isSideNavOpen)}
+                        className="lg:hidden"
+                      >
+                        <Menu className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant={viewMode === 'edit' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
+                        className={cn(
+                          "transition-all",
+                          viewMode === 'edit' && "bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
+                        )}
+                      >
+                        {viewMode === "edit" ? (
+                          <><Save className="h-4 w-4 mr-2" />Save</>
+                        ) : (
+                          <><Edit3 className="h-4 w-4 mr-2" />Edit</>
+                        )}
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Printer className="h-4 w-4 mr-2" />
+                            Print Document
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Share2 className="h-4 w-4 mr-2" />
+                            Share with Co-Parent
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <History className="h-4 w-4 mr-2" />
+                            View History
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Document Content Container */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
+                  <div className="max-w-none space-y-6">
+                    {sectionsState.map((section, index) => (
                   <section
                     key={section.id}
                     id={section.id}
@@ -465,6 +484,8 @@ export default function ParentingPlan3() {
                     )}
                   </section>
                 ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
