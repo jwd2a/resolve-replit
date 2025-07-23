@@ -296,38 +296,37 @@ export default function ParentingPlan3() {
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50">
         <NavigationMenu />
         
-        {/* Clean Header */}
-        <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-gray-200">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
+            <div className="flex items-center justify-between h-20">
               <div className="flex items-center space-x-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsSideNavOpen(!isSideNavOpen)}
-                  className="lg:hidden"
-                >
-                  <Menu className="h-4 w-4" />
-                </Button>
+                <div className="p-2 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg">
+                  <FileText className="h-6 w-6 text-[#2e1a87]" />
+                </div>
                 <div>
-                  <h1 className="text-xl font-semibold text-gray-900">Parenting Partnership Agreement</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Parenting Partnership Agreement</h1>
                   <div className="flex items-center space-x-3 mt-1">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
-                      Legal Ready
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200 text-xs">
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Ready for Review
                     </Badge>
-                    <span className="text-xs text-gray-500">Version 2.1</span>
+                    <span className="text-xs text-gray-500">Last updated: {getLastUpdated()}</span>
                   </div>
                 </div>
               </div>
               
               <div className="flex items-center space-x-2">
                 <Button
-                  variant="outline"
+                  variant={viewMode === 'edit' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
+                  className={cn(
+                    "transition-all",
+                    viewMode === 'edit' && "bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
+                  )}
                 >
                   {viewMode === "edit" ? (
-                    <><Eye className="h-4 w-4 mr-2" />View</>
+                    <><Save className="h-4 w-4 mr-2" />Save</>
                   ) : (
                     <><Edit3 className="h-4 w-4 mr-2" />Edit</>
                   )}
@@ -363,60 +362,45 @@ export default function ParentingPlan3() {
         </header>
 
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-112px)] flex">
-          {/* Left Sidebar - Table of Contents (Sticky) */}
+          {/* Left Sidebar - Table of Contents (Fixed) */}
           <div className={cn(
-            "w-80 flex-shrink-0 transition-all duration-200 mr-4",
+            "w-72 flex-shrink-0 transition-all duration-200 mr-8",
             isSideNavOpen ? "block" : "hidden lg:block"
           )}>
-            <div className="h-full flex flex-col">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
-                <h3 className="text-base font-semibold text-gray-900 mb-3">Table of Contents</h3>
-                <div className="flex-1 overflow-y-auto">
-                  <div className="w-full space-y-4">
-                    {mainSections.map((mainSection) => (
-                      <div key={mainSection.id} className="border border-purple-200 rounded-lg">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-900 bg-purple-50 rounded-t-lg border-b border-purple-200">
-                          {mainSection.title}
-                        </div>
-                        <div className="px-3 py-2">
-                          <nav className="space-y-1">
-                            {mainSection.subsections.map((subsection) => (
-                              <button
-                                key={subsection.id}
-                                onClick={() => scrollToSection(subsection.id)}
-                                className={cn(
-                                  "w-full text-left px-2 py-1.5 text-xs font-medium rounded transition-all duration-200",
-                                  "hover:bg-purple-50",
-                                  activeSection === subsection.id
-                                    ? "bg-[#2e1a87] text-white shadow-sm"
-                                    : "text-gray-700"
-                                )}
-                              >
-                                <div className="flex items-center">
-                                  <div className={cn(
-                                    "w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0",
-                                    activeSection === subsection.id 
-                                      ? "bg-white text-[#2e1a87]" 
-                                      : "bg-purple-100 text-purple-600"
-                                  )}>
-                                    {subsection.id}
-                                  </div>
-                                  <span className="truncate text-xs leading-tight">{subsection.title}</span>
-                                </div>
-                              </button>
-                            ))}
-                          </nav>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="h-full flex flex-col py-8">
+              <div className="flex-1 overflow-y-auto">
+                <nav className="space-y-8">
+                  {mainSections.map((mainSection) => (
+                    <div key={mainSection.id}>
+                      <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">
+                        {mainSection.title}
+                      </h4>
+                      <ul className="space-y-1">
+                        {mainSection.subsections.map((subsection) => (
+                          <li key={subsection.id}>
+                            <button
+                              onClick={() => scrollToSection(subsection.id)}
+                              className={cn(
+                                "w-full text-left text-sm transition-colors duration-200 hover:text-[#2e1a87]",
+                                activeSection === subsection.id
+                                  ? "text-[#2e1a87] font-medium"
+                                  : "text-gray-600"
+                              )}
+                            >
+                              {subsection.title}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </nav>
               </div>
             </div>
           </div>
 
           {/* Main Document Area */}
-          <div className="flex-1 mr-4">
+          <div className="flex-1">
             <div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
               <div className="max-w-none space-y-6">
                 {sectionsState.map((section, index) => (
@@ -425,7 +409,7 @@ export default function ParentingPlan3() {
                     id={section.id}
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className={cn(
-                      "scroll-mt-24",
+                      "scroll-mt-6",
                       index > 0 && "border-t border-gray-200 pt-6"
                     )}
                   >
@@ -484,120 +468,6 @@ export default function ParentingPlan3() {
               </div>
             </div>
           </div>
-
-          {/* Right Sidebar - AI Assistant */}
-          <div className={cn(
-            "w-80 flex-shrink-0 transition-all duration-200",
-            isAiPanelOpen || "hidden lg:block"
-          )}>
-            <div className="h-full flex flex-col">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-4 h-full flex flex-col">
-                <div className="flex items-center">
-                  <Bot className="h-5 w-5 mr-2 text-[#2e1a87]" />
-                  <h3 className="text-base font-semibold text-gray-900">AI Parenting Plan Assistant</h3>
-                </div>
-                
-                <div className="flex-1 overflow-y-auto">
-                  <div className="space-y-3">
-                    <p className="text-sm text-gray-600">
-                      I can help you refine your parenting plan with suggestions, legal insights, and personalized recommendations.
-                    </p>
-                    
-                    <div className="space-y-2">
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left h-auto py-2"
-                        size="sm"
-                      >
-                        <Sparkles className="h-4 w-4 mr-2 text-purple-600" />
-                        <div className="text-left">
-                          <div className="font-medium">Improve This Section</div>
-                          <div className="text-xs text-gray-500">Get suggestions for clarity and completeness</div>
-                        </div>
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left h-auto py-2"
-                        size="sm"
-                      >
-                        <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
-                        <div className="text-left">
-                          <div className="font-medium">Legal Review</div>
-                          <div className="text-xs text-gray-500">Check for legal compliance</div>
-                        </div>
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left h-auto py-2"
-                        size="sm"
-                      >
-                        <Users className="h-4 w-4 mr-2 text-blue-600" />
-                        <div className="text-left">
-                          <div className="font-medium">Co-Parent Perspective</div>
-                          <div className="text-xs text-gray-500">Consider other viewpoints</div>
-                        </div>
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left h-auto py-2"
-                        size="sm"
-                      >
-                        <HelpCircle className="h-4 w-4 mr-2 text-orange-600" />
-                        <div className="text-left">
-                          <div className="font-medium">Explain Section</div>
-                          <div className="text-xs text-gray-500">Understand what this means</div>
-                        </div>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border-t pt-4 flex-shrink-0">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <Input
-                      placeholder="Ask me anything..."
-                      value={aiQuestion}
-                      onChange={(e) => setAiQuestion(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleAiSubmit()}
-                      className="flex-1 text-sm"
-                    />
-                    <Button
-                      onClick={handleAiSubmit}
-                      size="sm"
-                      className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
-                    >
-                      <Send className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  
-                  <div className="p-3 bg-purple-50 rounded-lg">
-                    <div className="flex items-start space-x-2">
-                      <Zap className="h-4 w-4 text-purple-600 mt-0.5" />
-                      <div>
-                        <p className="text-xs font-medium text-purple-800">Quick Tip</p>
-                        <p className="text-xs text-purple-700">
-                          Ask: "What's missing from this section?" or "How can we make this more fair?"
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile AI Assistant Float Button */}
-        <div className="lg:hidden fixed bottom-6 right-6 z-50">
-          <Button
-            onClick={() => setIsAiPanelOpen(!isAiPanelOpen)}
-            className="rounded-full w-14 h-14 bg-[#2e1a87] hover:bg-[#3d2a9b] text-white shadow-lg"
-          >
-            <Bot className="h-6 w-6" />
-          </Button>
         </div>
       </div>
     </>
