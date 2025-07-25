@@ -490,6 +490,34 @@ export default function ParentingPlan3() {
             </div>
           </div>
         </div>
+
+          {/* Floating AI Assistant */}
+          <div className="fixed bottom-6 z-50" style={{ left: 'calc(288px + 2rem)', right: '1rem', transform: 'none' }}>
+            <div className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl shadow-black/10 mx-auto max-w-2xl">
+              <div className="flex items-center p-4">
+                <div className="flex items-center space-x-3 flex-1">
+                  <div className="p-2 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg">
+                    <Bot className="h-5 w-5 text-[#2e1a87]" />
+                  </div>
+                  <Input
+                    placeholder="Ask AI about your parenting plan..."
+                    value={aiQuestion}
+                    onChange={(e) => setAiQuestion(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAiSubmit()}
+                    className="flex-1 border-0 bg-transparent text-sm placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </div>
+                <Button
+                  onClick={handleAiSubmit}
+                  size="sm"
+                  className="bg-[#2e1a87] hover:bg-[#3d2a9b] text-white rounded-xl ml-3"
+                  disabled={!aiQuestion.trim()}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
       </div>
     </>
   );
