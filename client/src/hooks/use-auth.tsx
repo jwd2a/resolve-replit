@@ -1,9 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { User } from "@shared/schema";
 
-// Create a simplified mock user type for our auth context
-// This doesn't need to match the exact schema since we're just mocking for design
-type MockUser = Partial<User> & {
+// Simple mock user type for UI prototype
+type MockUser = {
   id: number;
   username: string;
   email: string;
@@ -27,179 +25,96 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<MockUser | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<MockUser | null>({
+    id: 1,
+    username: "demo-user",
+    email: "demo@resolve.app",
+    displayName: "Demo User",
+    role: "user",
+    onboardingComplete: true,
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  // Mock functions for now
   const loginWithEmail = async (email: string, password: string) => {
     setIsLoading(true);
-    setError(null);
-    
-    try {
-      // Mock successful login
-      console.log("Logging in with email:", email);
-      
-      // Mock user data - setting onboardingComplete to true for existing users
-      const mockUser: MockUser = {
+    // Mock login - always succeed for UI prototype
+    setTimeout(() => {
+      setUser({
         id: 1,
-        username: email.split('@')[0],
-        email: email,
-        displayName: email.split('@')[0],
-        role: "parent",
-        onboardingComplete: true, // Existing users (login) should have completed onboarding
-        createdAt: new Date(),
-        password: null,
-        phone: null,
-        address: null,
-        authProvider: null,
-        providerId: null
-      };
-      
-      setUser(mockUser);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
+        username: "demo-user",
+        email,
+        displayName: "Demo User",
+        role: "user",
+        onboardingComplete: true,
+      });
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const registerWithEmail = async (email: string, username: string, password: string, displayName: string) => {
     setIsLoading(true);
-    setError(null);
-    
-    try {
-      // Mock registration
-      console.log("Registering user:", { email, username, displayName });
-      
-      // Mock user data
-      const mockUser: MockUser = {
+    // Mock registration - always succeed for UI prototype
+    setTimeout(() => {
+      setUser({
         id: 1,
         username,
         email,
         displayName,
-        role: "parent",
+        role: "user",
         onboardingComplete: false,
-        createdAt: new Date(),
-        password: null,
-        phone: null,
-        address: null,
-        authProvider: null,
-        providerId: null
-      };
-      
-      setUser(mockUser);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
+      });
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const loginWithGoogle = async () => {
     setIsLoading(true);
-    setError(null);
-    
-    try {
-      console.log("Logging in with Google");
-      
-      // Mock user data
-      const mockUser: MockUser = {
+    setTimeout(() => {
+      setUser({
         id: 1,
-        username: "googleuser",
-        email: "user@gmail.com",
+        username: "google-user",
+        email: "google@resolve.app",
         displayName: "Google User",
-        role: "parent",
-        onboardingComplete: true, // Existing users should have completed onboarding
-        createdAt: new Date(),
-        authProvider: "google",
-        password: null,
-        phone: null,
-        address: null,
-        providerId: null
-      };
-      
-      setUser(mockUser);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
+        role: "user",
+        onboardingComplete: true,
+      });
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const loginWithApple = async () => {
     setIsLoading(true);
-    setError(null);
-    
-    try {
-      console.log("Logging in with Apple");
-      
-      // Mock user data
-      const mockUser: MockUser = {
+    setTimeout(() => {
+      setUser({
         id: 1,
-        username: "appleuser",
-        email: "user@icloud.com",
+        username: "apple-user",
+        email: "apple@resolve.app",
         displayName: "Apple User",
-        role: "parent",
-        onboardingComplete: true, // Existing users should have completed onboarding
-        createdAt: new Date(),
-        authProvider: "apple",
-        password: null,
-        phone: null,
-        address: null,
-        providerId: null
-      };
-      
-      setUser(mockUser);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
+        role: "user",
+        onboardingComplete: true,
+      });
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const loginWithFacebook = async () => {
     setIsLoading(true);
-    setError(null);
-    
-    try {
-      console.log("Logging in with Facebook");
-      
-      // Mock user data
-      const mockUser: MockUser = {
+    setTimeout(() => {
+      setUser({
         id: 1,
-        username: "fbuser",
-        email: "user@facebook.com",
+        username: "facebook-user",
+        email: "facebook@resolve.app",
         displayName: "Facebook User",
-        role: "parent",
-        onboardingComplete: true, // Existing users should have completed onboarding
-        createdAt: new Date(),
-        authProvider: "facebook",
-        password: null,
-        phone: null,
-        address: null,
-        providerId: null
-      };
-      
-      setUser(mockUser);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
+        role: "user",
+        onboardingComplete: true,
+      });
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const logout = async () => {
-    setIsLoading(true);
-    
-    try {
-      console.log("Logging out");
-      setUser(null);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setIsLoading(false);
-    }
+    setUser(null);
   };
 
   return (
@@ -213,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loginWithGoogle,
         loginWithApple,
         loginWithFacebook,
-        logout
+        logout,
       }}
     >
       {children}
