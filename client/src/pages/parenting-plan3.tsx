@@ -28,6 +28,7 @@ import {
   Zap,
   HelpCircle
 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +45,7 @@ interface Section {
   title: string;
   content: string;
   isEditable?: boolean;
+  isIncomplete?: boolean;
 }
 
 interface MainSection {
@@ -127,7 +129,8 @@ const mainSections: MainSection[] = [
         id: "11",
         title: "Holiday Schedule",
         content: "Holidays will be alternated annually between parents unless otherwise agreed. Major holidays include: Christmas Day, Thanksgiving Day, New Year's Day, Easter, Memorial Day, Independence Day, Labor Day, and the child(ren)'s birthday. Christmas Day (12:00 AM - 11:59 PM) will alternate yearly. The child(ren)'s birthday celebrations may be shared or alternated as agreed upon by both parents, with both parents having the right to celebrate with the child(ren).",
-        isEditable: true
+        isEditable: true,
+        isIncomplete: true
       },
       {
         id: "12",
@@ -476,10 +479,21 @@ export default function ParentingPlan3() {
                         </div>
                       </div>
                     ) : (
-                      <div className="prose prose-gray max-w-none">
-                        <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                          {section.content}
-                        </div>
+                      <div className="prose prose-gray max-w-none space-y-3">
+                        {section.isIncomplete ? (
+                          <Alert className="bg-amber-50/60 border-amber-200 text-amber-900">
+                            <Clock className="h-4 w-4" />
+                            <AlertTitle className="text-sm font-medium">This section is unfinished</AlertTitle>
+                            <AlertDescription className="text-sm">
+                              You haven’t finished this section. 
+                              <a href="/course" className="underline text-amber-900 hover:text-amber-800 ml-1">Go back to the course</a> to complete it.
+                            </AlertDescription>
+                          </Alert>
+                        ) : (
+                          <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                            {section.content}
+                          </div>
+                        )}
                       </div>
                     )}
                   </section>

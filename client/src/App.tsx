@@ -5,6 +5,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import ParentingPlan3 from "@/pages/parenting-plan3";
 import DashboardSimplified from "@/pages/dashboard-simplified";
+import CoursePage from "@/pages/course-page";
 
 function Router() {
   return (
@@ -17,6 +18,9 @@ function Router() {
       
       {/* Main parenting plan route */}
       <Route path="/parenting-plan3" component={ParentingPlan3} />
+      
+      {/* Course route */}
+      <Route path="/course" component={CoursePage} />
       
       {/* Fallback for unknown routes */}
       <Route component={NotFound} />
