@@ -9,7 +9,7 @@ import {
   Download, 
   Printer, 
   MoreHorizontal, 
-  Edit3, 
+  
   Share2,
   History,
   Menu,
@@ -26,9 +26,11 @@ import {
   ChevronDown,
   ChevronRight,
   Zap,
-  HelpCircle
+  HelpCircle,
+  AlertCircle
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -325,7 +327,21 @@ export default function ParentingPlan3() {
                                   : "text-gray-600"
                               )}
                             >
-                              {subsection.title}
+                              <span className="inline-flex items-center">
+                                {subsection.title}
+                                {subsection.isIncomplete && (
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <span className="ml-2 inline-flex items-center align-middle cursor-help" aria-label="Unfinished">
+                                        <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+                                      </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right" className="text-xs">
+                                      This section is incomplete
+                                    </TooltipContent>
+                                  </Tooltip>
+                                )}
+                              </span>
                             </button>
                           </li>
                         ))}
@@ -378,21 +394,7 @@ export default function ParentingPlan3() {
                       >
                         <Menu className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant={viewMode === 'edit' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setViewMode(viewMode === "edit" ? "view" : "edit")}
-                        className={cn(
-                          "transition-all",
-                          viewMode === 'edit' && "bg-[#2e1a87] hover:bg-[#3d2a9b] text-white"
-                        )}
-                      >
-                        {viewMode === "edit" ? (
-                          <><Save className="h-4 w-4 mr-2" />Save</>
-                        ) : (
-                          <><Edit3 className="h-4 w-4 mr-2" />Edit</>
-                        )}
-                      </Button>
+                      
                       <Button variant="outline" size="sm">
                         <Download className="h-4 w-4 mr-2" />
                         Download
@@ -439,16 +441,7 @@ export default function ParentingPlan3() {
                       <h2 className="text-lg font-semibold text-gray-900">
                         {section.title}
                       </h2>
-                      {section.isEditable && viewMode === "view" && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setViewMode("edit")}
-                          className="text-gray-500 hover:text-gray-700"
-                        >
-                          <Edit3 className="h-4 w-4" />
-                        </Button>
-                      )}
+                      
                     </div>
                     
                     {viewMode === "edit" && section.isEditable ? (
