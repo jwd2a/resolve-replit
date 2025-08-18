@@ -9,7 +9,6 @@ import {
   Download, 
   Printer, 
   MoreHorizontal, 
-  
   Share2,
   History,
   Menu,
@@ -27,7 +26,12 @@ import {
   ChevronRight,
   Zap,
   HelpCircle,
-  AlertCircle
+  AlertCircle,
+  Edit3,
+  Bell,
+  UserCheck,
+  GitBranch,
+  Mail
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
@@ -39,6 +43,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { NavigationMenu } from "@/components/NavigationMenu";
+import { mockDataService } from "@/services/mockDataService";
+import { 
+  ChangeRequest, 
+  Notification, 
+  SectionVersion, 
+  UserRole, 
+  SectionState 
+} from "@/types/collaborative-editing";
+import { ChangeRequestModal } from "@/components/collaborative/ChangeRequestModal";
+import { NotificationSystem } from "@/components/collaborative/NotificationSystem";
+import { ChangeRequestDashboard } from "@/components/collaborative/ChangeRequestDashboard";
+import { SectionHistoryModal } from "@/components/collaborative/SectionHistoryModal";
+import { EmailPreviewModal } from "@/components/collaborative/EmailPreviewModal";
+import { ErrorBoundary } from "@/components/collaborative/ErrorBoundary";
+import { CollaborativeEditingTests } from "@/utils/collaborativeEditingTests";
 
 type ViewMode = "view" | "edit";
 
@@ -228,6 +247,60 @@ export default function ParentingPlan3() {
   const sections = mainSections.flatMap(section => section.subsections);
   const [sectionsState, setSectionsState] = useState<Section[]>(sections);
 
+  // Collaborative editing state
+  const [currentUser, setCurrentUser] = useState<UserRole>('parentB'); // Default to Michelle's perspective
+  const [changeRequests, setChangeRequests] = useState<ChangeRequest[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [sectionStates, setSectionStates] = useState<{ [sectionId: string]: SectionState }>({});
+  const [isChangeRequestModalOpen, setIsChangeRequestModalOpen] = useState(false);
+  const [selectedSectionForChange, setSelectedSectionForChange] = useState<{ id: string; title: string } | null>(null);
+  const [isChangeRequestDashboardOpen, setIsChangeRequestDashboardOpen] = useState(false);
+  const [isSectionHistoryModalOpen, setIsSectionHistoryModalOpen] = useState(false);
+  const [selectedSectionForHistory, setSelectedSectionForHistory] = useState<{ id: string; title: string } | null>(null);
+  const [isEmailPreviewModalOpen, setIsEmailPreviewModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Initialize collaborative editing data
+  useEffect(() => {
+    initializeCollaborativeData();
+  }, [currentUser]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl/Cmd + Shift + R: Open requests dashboard
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'R') {
+        event.preventDefault();
+        setIsChangeRequestDashboardOpen(true);
+      }
+      
+      // Ctrl/Cmd + Shift + N: Open notifications
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'N') {
+        event.preventDefault();
+        // Focus on notifications button
+        const notificationButton = document.querySelector('[aria-label*="notification"]') as HTMLElement;
+        notificationButton?.click();
+      }
+      
+      // Ctrl/Cmd + Shift + U: Toggle user perspective
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'U') {
+        event.preventDefault();
+        toggleUserPerspective();
+      }
+      
+      // Escape: Close all modals
+      if (event.key === 'Escape') {
+        setIsChangeRequestModalOpen(false);
+        setIsChangeRequestDashboardOpen(false);
+        setIsSectionHistoryModalOpen(false);
+        setIsEmailPreviewModalOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Auto-scroll to active section
   useEffect(() => {
     // Find the scrollable document container
@@ -296,6 +369,214 @@ export default function ParentingPlan3() {
     });
   };
 
+  // Collaborative editing functions
+  const initializeCollaborativeData = () => {
+    const requests = mockDataService.getChangeRequests();
+    const userNotifications = mockDataService.getNotificationsForUser(currentUser);
+    
+    setChangeRequests(requests);
+    setNotifications(userNotifications);
+    
+    // Calculate section states
+    const states: { [sectionId: string]: SectionState } = {};
+    sections.forEach(section => {
+      const sectionRequests = requests.filter(r => r.sectionId === section.id);
+      const pendingRequests = sectionRequests.filter(r => r.status === 'pending');
+      const hasModifications = mockDataService.getSectionHistory(section.id).length > 1;
+      
+      states[section.id] = {
+        hasModifications,
+        hasPendingRequests: pendingRequests.length > 0,
+        pendingRequestCount: pendingRequests.length,
+        lastModified: hasModifications ? new Date() : undefined,
+        currentVersion: Math.max(...mockDataService.getSectionHistory(section.id).map(h => h.version), 1)
+      };
+    });
+    
+    setSectionStates(states);
+  };
+
+  const handleRequestChanges = (sectionId: string, sectionTitle: string) => {
+    // Prevent new requests if there are already pending requests for this section
+    const sectionState = sectionStates[sectionId];
+    if (sectionState?.hasPendingRequests) {
+      console.warn('Cannot create new request - section already has pending requests');
+      return;
+    }
+    
+    setSelectedSectionForChange({ id: sectionId, title: sectionTitle });
+    setIsChangeRequestModalOpen(true);
+  };
+
+  const handleSubmitChangeRequest = async (description: string) => {
+    if (!selectedSectionForChange || description.length < 20) {
+      console.error('Invalid change request submission');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      // Simulate async operation
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const request = mockDataService.createChangeRequest(
+        selectedSectionForChange.id,
+        selectedSectionForChange.title,
+        description,
+        currentUser
+      );
+      
+      // Update local state
+      setChangeRequests(prev => [...prev, request]);
+      
+      // Update section state
+      setSectionStates(prev => ({
+        ...prev,
+        [selectedSectionForChange.id]: {
+          ...prev[selectedSectionForChange.id],
+          hasPendingRequests: true,
+          pendingRequestCount: (prev[selectedSectionForChange.id]?.pendingRequestCount || 0) + 1
+        }
+      }));
+      
+      setIsChangeRequestModalOpen(false);
+      setSelectedSectionForChange(null);
+      
+      // Show success message (could be a toast in real implementation)
+      console.log('Change request submitted successfully');
+    } catch (error) {
+      console.error('Error submitting change request:', error);
+      // In a real app, show error toast
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleApproveRequest = (requestId: string) => {
+    try {
+      const request = changeRequests.find(r => r.id === requestId);
+      if (!request) {
+        console.error('Request not found:', requestId);
+        return;
+      }
+      
+      if (request.status !== 'pending') {
+        console.error('Cannot approve request with status:', request.status);
+        return;
+      }
+      
+      if (request.requestingParent === currentUser) {
+        console.error('Cannot approve own request');
+        return;
+      }
+      
+      mockDataService.updateChangeRequestStatus(requestId, 'approved', currentUser);
+      initializeCollaborativeData(); // Refresh data
+    } catch (error) {
+      console.error('Error approving request:', error);
+      // In a real app, show error toast
+    }
+  };
+
+  const handleRejectRequest = (requestId: string) => {
+    try {
+      const request = changeRequests.find(r => r.id === requestId);
+      if (!request) {
+        console.error('Request not found:', requestId);
+        return;
+      }
+      
+      if (request.status !== 'pending') {
+        console.error('Cannot reject request with status:', request.status);
+        return;
+      }
+      
+      if (request.requestingParent === currentUser) {
+        console.error('Cannot reject own request');
+        return;
+      }
+      
+      mockDataService.updateChangeRequestStatus(requestId, 'rejected', currentUser);
+      initializeCollaborativeData(); // Refresh data
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+      // In a real app, show error toast
+    }
+  };
+
+  const handleApproveLegalLanguage = (requestId: string) => {
+    try {
+      mockDataService.approveLegalLanguage(requestId, currentUser);
+      
+      // Check if the request is now completed
+      const updatedRequests = mockDataService.getChangeRequests();
+      const completedRequest = updatedRequests.find(r => r.id === requestId && r.status === 'completed');
+      
+      if (completedRequest && completedRequest.legalLanguage) {
+        // Update the section content with the new legal language
+        setSectionsState(prev => prev.map(section => 
+          section.id === completedRequest.sectionId 
+            ? { ...section, content: completedRequest.legalLanguage! }
+            : section
+        ));
+      }
+      
+      initializeCollaborativeData(); // Refresh data
+    } catch (error) {
+      console.error('Error approving legal language:', error);
+      // In a real app, show error toast
+    }
+  };
+
+  const handleRejectLegalLanguage = (requestId: string) => {
+    try {
+      mockDataService.rejectLegalLanguage(requestId, currentUser);
+      initializeCollaborativeData(); // Refresh data
+    } catch (error) {
+      console.error('Error rejecting legal language:', error);
+      // In a real app, show error toast
+    }
+  };
+
+  const markNotificationAsRead = (notificationId: string) => {
+    mockDataService.markNotificationAsRead(notificationId);
+    setNotifications(prev => prev.map(n => 
+      n.id === notificationId ? { ...n, isRead: true } : n
+    ));
+  };
+
+  const toggleUserPerspective = () => {
+    const newUser = currentUser === 'parentA' ? 'parentB' : 'parentA';
+    setCurrentUser(newUser);
+    
+    // Clear any open modals when switching users
+    setIsChangeRequestModalOpen(false);
+    setIsChangeRequestDashboardOpen(false);
+    setIsSectionHistoryModalOpen(false);
+    setIsEmailPreviewModalOpen(false);
+    setSelectedSectionForChange(null);
+    setSelectedSectionForHistory(null);
+  };
+
+  const getUnreadNotificationCount = () => {
+    return notifications.filter(n => !n.isRead).length;
+  };
+
+  const getSectionDisplayState = (sectionId: string) => {
+    const state = sectionStates[sectionId];
+    if (!state) return null;
+    
+    if (state.hasPendingRequests) return 'pending';
+    if (state.hasModifications) return 'modified';
+    return 'original';
+  };
+
+  const handleViewSectionHistory = (sectionId: string, sectionTitle: string) => {
+    setSelectedSectionForHistory({ id: sectionId, title: sectionTitle });
+    setIsSectionHistoryModalOpen(true);
+  };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50">
@@ -358,6 +639,33 @@ export default function ParentingPlan3() {
             <div className="h-full overflow-y-auto">
               <div className="space-y-4">
                 {/* Document Header - Scrolls with content */}
+                {/* Demo Mode Banner */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-4 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <Sparkles className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">Demo Mode Active</h3>
+                        <p className="text-sm text-blue-100">
+                          You're viewing as <strong>{currentUser === 'parentA' ? 'Eric' : 'Michelle'}</strong>. 
+                          Switch perspectives to see different notifications and actions.
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={toggleUserPerspective}
+                      className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    >
+                      <UserCheck className="h-4 w-4 mr-2" />
+                      Switch to {currentUser === 'parentA' ? 'Michelle' : 'Eric'}
+                    </Button>
+                  </div>
+                </div>
+
                 <div className="bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border border-purple-200 rounded-xl p-8 shadow-sm">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4">
@@ -394,6 +702,80 @@ export default function ParentingPlan3() {
                       >
                         <Menu className="h-4 w-4" />
                       </Button>
+
+                      {/* Demo Mode Toggle */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={toggleUserPerspective}
+                        className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                      >
+                        <UserCheck className="h-4 w-4 mr-2" />
+                        {currentUser === 'parentA' ? 'Eric' : 'Michelle'}
+                      </Button>
+
+                      <ErrorBoundary>
+                        {/* Change Requests Dashboard */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsChangeRequestDashboardOpen(true)}
+                          className="relative"
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Requests
+                          {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0 && (
+                            <Badge 
+                              variant="destructive" 
+                              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                            >
+                              {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length}
+                            </Badge>
+                          )}
+                        </Button>
+
+                        {/* Email Preview */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsEmailPreviewModalOpen(true)}
+                        >
+                          <Mail className="h-4 w-4 mr-2" />
+                          Emails ({mockDataService.getEmailQueue().length})
+                        </Button>
+
+                        {/* Test Button (Development Only) */}
+                        {process.env.NODE_ENV === 'development' && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const success = CollaborativeEditingTests.runAllTests();
+                              console.log(success ? '✅ All tests passed!' : '❌ Some tests failed!');
+                            }}
+                            className="bg-yellow-50 border-yellow-200 text-yellow-800 hover:bg-yellow-100"
+                          >
+                            <Zap className="h-4 w-4 mr-2" />
+                            Run Tests
+                          </Button>
+                        )}
+
+                        {/* Notifications */}
+                        <NotificationSystem
+                          notifications={notifications}
+                          unreadCount={getUnreadNotificationCount()}
+                          onMarkAsRead={markNotificationAsRead}
+                          onNotificationClick={(notification) => {
+                            if (notification.actionUrl) {
+                              // In a real app, this would navigate to the section
+                              const sectionId = notification.actionUrl.split('#')[1];
+                              if (sectionId) {
+                                scrollToSection(sectionId);
+                              }
+                            }
+                          }}
+                        />
+                      </ErrorBoundary>
                       
                       <Button variant="outline" size="sm">
                         <Download className="h-4 w-4 mr-2" />
@@ -424,24 +806,123 @@ export default function ParentingPlan3() {
                   </div>
                 </div>
 
+                {/* Demo Instructions */}
+                {(getUnreadNotificationCount() > 0 || changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0) && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <HelpCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium text-amber-900 mb-1">Try the Collaborative Features!</h3>
+                        <div className="text-sm text-amber-800 space-y-1">
+                          {getUnreadNotificationCount() > 0 && (
+                            <p>• You have {getUnreadNotificationCount()} unread notification{getUnreadNotificationCount() !== 1 ? 's' : ''} - click the bell icon to view them</p>
+                          )}
+                          {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0 && (
+                            <p>• You have pending change requests to review - click the "Requests" button to respond</p>
+                          )}
+                          <p>• Try requesting changes to any section by clicking "Request Changes"</p>
+                          <p>• Switch between Eric and Michelle's perspectives to see different views</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Document Content Container */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6">
                   <div className="max-w-none space-y-6">
-                    {sectionsState.map((section, index) => (
+                    {sectionsState.map((section, index) => {
+                      const sectionState = getSectionDisplayState(section.id);
+                      const sectionStateData = sectionStates[section.id];
+                      
+                      return (
                   <section
                     key={section.id}
                     id={section.id}
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className={cn(
-                      "scroll-mt-6",
-                      index > 0 && "border-t border-gray-200 pt-6"
+                      "scroll-mt-6 relative transition-all duration-300 ease-in-out",
+                      index > 0 && "border-t border-gray-200 pt-6",
+                      sectionState === 'pending' && "border-l-4 border-orange-400 pl-4 bg-orange-50/30 rounded-r-lg",
+                      sectionState === 'modified' && "border-l-4 border-green-400 pl-4 bg-green-50/30 rounded-r-lg",
+                      sectionState === 'original' && "hover:bg-gray-50/50 rounded-lg transition-colors duration-200"
                     )}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-lg font-semibold text-gray-900">
-                        {section.title}
-                      </h2>
+                      <div className="flex items-center gap-3">
+                        <h2 className="text-lg font-semibold text-gray-900">
+                          {section.title}
+                        </h2>
+                        
+                        {/* Status indicators */}
+                        {sectionState === 'pending' && (
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-orange-100 text-orange-800 border-orange-200 animate-pulse"
+                            id={`${section.id}-pending-status`}
+                            aria-label={`${sectionStateData?.pendingRequestCount} pending change requests for this section`}
+                          >
+                            <Clock className="h-3 w-3 mr-1" />
+                            {sectionStateData?.pendingRequestCount} Pending
+                          </Badge>
+                        )}
+                        
+                        {sectionState === 'modified' && (
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-green-100 text-green-800 border-green-200"
+                            aria-label="This section has been modified from the original"
+                          >
+                            <GitBranch className="h-3 w-3 mr-1" />
+                            Modified
+                          </Badge>
+                        )}
+                      </div>
                       
+                      <div className="flex items-center gap-2">
+                        {/* History button for modified sections */}
+                        {sectionState === 'modified' && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleViewSectionHistory(section.id, section.title)}
+                              >
+                                <History className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              View section history
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        
+                        {/* Request changes button */}
+                        {section.isEditable && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleRequestChanges(section.id, section.title)}
+                                disabled={sectionState === 'pending'}
+                                aria-label={`Request changes to ${section.title} section`}
+                                aria-describedby={sectionState === 'pending' ? `${section.id}-pending-status` : undefined}
+                              >
+                                <Edit3 className="h-4 w-4 mr-2" />
+                                Request Changes
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {sectionState === 'pending' 
+                                ? 'Changes already pending for this section'
+                                : 'Request changes to this section'
+                              }
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      </div>
                     </div>
                     
                     {viewMode === "edit" && section.isEditable ? (
@@ -490,7 +971,8 @@ export default function ParentingPlan3() {
                       </div>
                     )}
                   </section>
-                ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -526,6 +1008,56 @@ export default function ParentingPlan3() {
             </div>
           </div>
       </div>
+
+      {/* Change Request Modal */}
+      <ChangeRequestModal
+        isOpen={isChangeRequestModalOpen}
+        sectionTitle={selectedSectionForChange?.title || ''}
+        sectionContent={selectedSectionForChange ? sectionsState.find(s => s.id === selectedSectionForChange.id)?.content : ''}
+        onSubmit={handleSubmitChangeRequest}
+        onClose={() => setIsChangeRequestModalOpen(false)}
+      />
+
+      {/* Change Request Dashboard */}
+      <ChangeRequestDashboard
+        isOpen={isChangeRequestDashboardOpen}
+        onClose={() => setIsChangeRequestDashboardOpen(false)}
+        changeRequests={changeRequests}
+        currentUser={currentUser}
+        onApprove={handleApproveRequest}
+        onReject={handleRejectRequest}
+        onApproveLegalLanguage={handleApproveLegalLanguage}
+        onRejectLegalLanguage={handleRejectLegalLanguage}
+      />
+
+      {/* Section History Modal */}
+      <SectionHistoryModal
+        isOpen={isSectionHistoryModalOpen}
+        onClose={() => {
+          setIsSectionHistoryModalOpen(false);
+          setSelectedSectionForHistory(null);
+        }}
+        sectionId={selectedSectionForHistory?.id || ''}
+        sectionTitle={selectedSectionForHistory?.title || ''}
+        history={selectedSectionForHistory ? mockDataService.getSectionHistory(selectedSectionForHistory.id) : []}
+      />
+
+      {/* Email Preview Modal */}
+      <EmailPreviewModal
+        isOpen={isEmailPreviewModalOpen}
+        onClose={() => setIsEmailPreviewModalOpen(false)}
+        emails={mockDataService.getEmailQueue()}
+      />
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 shadow-xl flex items-center gap-3">
+            <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-300 border-t-blue-600" />
+            <span className="text-gray-700">Processing request...</span>
+          </div>
+        </div>
+      )}
     </>
   );
 }
