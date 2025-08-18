@@ -472,6 +472,16 @@ export default function ParentingPlan3() {
       }
       
       mockDataService.updateChangeRequestStatus(requestId, 'approved', currentUser);
+      
+      // Update the section content with the new legal language immediately
+      if (request.legalLanguage) {
+        setSectionsState(prev => prev.map(section => 
+          section.id === request.sectionId 
+            ? { ...section, content: request.legalLanguage! }
+            : section
+        ));
+      }
+      
       initializeCollaborativeData(); // Refresh data
     } catch (error) {
       console.error('Error approving request:', error);
@@ -505,39 +515,7 @@ export default function ParentingPlan3() {
     }
   };
 
-  const handleApproveLegalLanguage = (requestId: string) => {
-    try {
-      mockDataService.approveLegalLanguage(requestId, currentUser);
-      
-      // Check if the request is now completed
-      const updatedRequests = mockDataService.getChangeRequests();
-      const completedRequest = updatedRequests.find(r => r.id === requestId && r.status === 'completed');
-      
-      if (completedRequest && completedRequest.legalLanguage) {
-        // Update the section content with the new legal language
-        setSectionsState(prev => prev.map(section => 
-          section.id === completedRequest.sectionId 
-            ? { ...section, content: completedRequest.legalLanguage! }
-            : section
-        ));
-      }
-      
-      initializeCollaborativeData(); // Refresh data
-    } catch (error) {
-      console.error('Error approving legal language:', error);
-      // In a real app, show error toast
-    }
-  };
 
-  const handleRejectLegalLanguage = (requestId: string) => {
-    try {
-      mockDataService.rejectLegalLanguage(requestId, currentUser);
-      initializeCollaborativeData(); // Refresh data
-    } catch (error) {
-      console.error('Error rejecting legal language:', error);
-      // In a real app, show error toast
-    }
-  };
 
   const markNotificationAsRead = (notificationId: string) => {
     mockDataService.markNotificationAsRead(notificationId);
@@ -1026,8 +1004,6 @@ export default function ParentingPlan3() {
         currentUser={currentUser}
         onApprove={handleApproveRequest}
         onReject={handleRejectRequest}
-        onApproveLegalLanguage={handleApproveLegalLanguage}
-        onRejectLegalLanguage={handleRejectLegalLanguage}
       />
 
       {/* Section History Modal */}

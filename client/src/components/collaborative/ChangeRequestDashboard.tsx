@@ -8,11 +8,9 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { ChangeRequestList } from './ChangeRequestList';
-import { LegalLanguageReview } from './LegalLanguageReview';
 import { ChangeRequest, UserRole } from '@/types/collaborative-editing';
 import { 
   FileText, 
-  Scale, 
   Clock, 
   CheckCircle,
   AlertCircle 
@@ -25,8 +23,6 @@ interface ChangeRequestDashboardProps {
   currentUser: UserRole;
   onApprove: (requestId: string) => void;
   onReject: (requestId: string) => void;
-  onApproveLegalLanguage: (requestId: string) => void;
-  onRejectLegalLanguage: (requestId: string) => void;
 }
 
 export function ChangeRequestDashboard({
@@ -35,21 +31,13 @@ export function ChangeRequestDashboard({
   changeRequests,
   currentUser,
   onApprove,
-  onReject,
-  onApproveLegalLanguage,
-  onRejectLegalLanguage
+  onReject
 }: ChangeRequestDashboardProps) {
   const [activeTab, setActiveTab] = useState('requests');
 
   // Calculate counts for each tab
   const pendingRequests = changeRequests.filter(r => 
     r.status === 'pending' && r.requestingParent !== currentUser
-  ).length;
-
-  const legalReviewRequests = changeRequests.filter(r => 
-    r.status === 'approved' && 
-    r.legalLanguage && 
-    r.legalLanguageApprovals?.[currentUser] === null
   ).length;
 
   const myRequests = changeRequests.filter(r => 
@@ -62,12 +50,10 @@ export function ChangeRequestDashboard({
 
   // Auto-switch to tabs with pending actions
   React.useEffect(() => {
-    if (legalReviewRequests > 0) {
-      setActiveTab('legal-review');
-    } else if (pendingRequests > 0) {
+    if (pendingRequests > 0) {
       setActiveTab('requests');
     }
-  }, [legalReviewRequests, pendingRequests]);
+  }, [pendingRequests]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -90,7 +76,7 @@ export function ChangeRequestDashboard({
                   <Clock className="h-4 w-4" />
                   <div className="text-left">
                     <div className="font-medium">Pending Requests</div>
-                    <div className="text-xs text-gray-500">Need your response</div>
+                    <div className="text-xs text-gray-500">Review & approve changes</div>
                   </div>
                 </div>
                 {pendingRequests > 0 && (
@@ -99,29 +85,6 @@ export function ChangeRequestDashboard({
                     className="h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                   >
                     {pendingRequests}
-                  </Badge>
-                )}
-              </div>
-            </TabsTrigger>
-            
-            <TabsTrigger 
-              value="legal-review" 
-              className="relative w-full justify-start p-3 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-            >
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-3">
-                  <Scale className="h-4 w-4" />
-                  <div className="text-left">
-                    <div className="font-medium">Legal Review</div>
-                    <div className="text-xs text-gray-500">Approve legal language</div>
-                  </div>
-                </div>
-                {legalReviewRequests > 0 && (
-                  <Badge 
-                    variant="destructive" 
-                    className="h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                  >
-                    {legalReviewRequests}
                   </Badge>
                 )}
               </div>
@@ -166,7 +129,7 @@ export function ChangeRequestDashboard({
                       </h3>
                     </div>
                     <p className="text-sm text-orange-800">
-                      Your co-parent has submitted change requests that need your review and approval.
+                      Your co-parent has submitted change requests with proposed legal language. Review both the changes and legal text before approving.
                     </p>
                   </div>
                 ) : (
@@ -185,37 +148,6 @@ export function ChangeRequestDashboard({
                   onApprove={onApprove}
                   onReject={onReject}
                   showOnlyPending={true}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="legal-review" className="m-0 flex-1">
-              <div className="space-y-4 h-full">
-                {legalReviewRequests > 0 ? (
-                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Scale className="h-5 w-5 text-purple-600" />
-                      <h3 className="font-medium text-purple-900">
-                        Legal Language Review Required: {legalReviewRequests} Item{legalReviewRequests !== 1 ? 's' : ''}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-purple-800">
-                      Legal language has been generated for approved change requests and needs your final approval.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Scale className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Legal Reviews Pending</h3>
-                    <p>There are no legal language reviews waiting for your approval.</p>
-                  </div>
-                )}
-                
-                <LegalLanguageReview
-                  changeRequests={changeRequests}
-                  currentUser={currentUser}
-                  onApproveLegalLanguage={onApproveLegalLanguage}
-                  onRejectLegalLanguage={onRejectLegalLanguage}
                 />
               </div>
             </TabsContent>

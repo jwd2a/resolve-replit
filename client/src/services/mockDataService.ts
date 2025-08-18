@@ -30,6 +30,11 @@ class MockDataService {
         description: 'I would like to modify the Christmas schedule to allow for alternating Christmas Eve and Christmas Day, rather than the full day alternating. This would give both parents time with the children during the Christmas period each year.',
         status: 'pending',
         createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+        legalLanguage: 'Christmas Eve and Christmas Day will be alternated separately, with Christmas Eve (6:00 PM December 24 - 6:00 AM December 25) and Christmas Day (6:00 AM December 25 - 6:00 AM December 26) alternating between parents annually. The child(ren)\'s birthday celebrations may be shared or alternated as agreed upon by both parents, with both parents having the right to celebrate with the child(ren).',
+        legalLanguageApprovals: {
+          parentA: null,
+          parentB: null
+        }
       },
       {
         id: 'req-002',
@@ -37,13 +42,13 @@ class MockDataService {
         sectionTitle: 'Weekday and Weekend Schedule',
         requestingParent: 'parentB',
         description: 'Can we adjust the Sunday exchange time from 6:00 PM to 7:00 PM? This would give us more time for Sunday activities and reduce the rush.',
-        status: 'approved',
+        status: 'completed',
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
         respondedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
         legalLanguage: 'During the school year, exchanges will occur on Sunday evenings at 7:00 PM. The receiving parent will pick up the child(ren) from the other parent\'s residence. Weekend activities and commitments should be coordinated between both parents to ensure consistency for the child(ren).',
         legalLanguageApprovals: {
           parentA: true,
-          parentB: null
+          parentB: true
         }
       },
       {
@@ -55,6 +60,11 @@ class MockDataService {
         status: 'rejected',
         createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
         respondedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
+        legalLanguage: 'Neither parent may travel with the child(ren) outside of the state of Florida without written consent from the other parent at least 14 days in advance, except for medical emergencies. For any travel exceeding 100 miles from the child(ren)\'s primary residence, 48-hour advance notice is required. Work-related travel that interferes with scheduled timesharing should be discussed and arrangements made for alternative care or schedule adjustments.',
+        legalLanguageApprovals: {
+          parentA: null,
+          parentB: null
+        }
       }
     ];
 
@@ -63,8 +73,8 @@ class MockDataService {
       {
         id: 'notif-001',
         type: 'change_request',
-        title: 'New Change Request',
-        message: 'Eric has requested changes to the Holiday Schedule section',
+        title: 'New Change Request with Legal Language',
+        message: 'Eric has requested changes to the Holiday Schedule section with proposed legal language',
         actionUrl: '/parenting-plan3#11',
         isRead: false,
         createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
@@ -73,9 +83,9 @@ class MockDataService {
       },
       {
         id: 'notif-002',
-        type: 'approval_needed',
-        title: 'Legal Language Ready for Review',
-        message: 'Please review the legal language for the Weekday Schedule changes',
+        type: 'modification_complete',
+        title: 'Plan Updated',
+        message: 'Weekday and Weekend Schedule has been successfully updated with your approved changes',
         actionUrl: '/parenting-plan3#10',
         isRead: false,
         createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
@@ -129,6 +139,9 @@ class MockDataService {
 
   // Change Request Methods
   createChangeRequest(sectionId: string, sectionTitle: string, description: string, requestingParent: UserRole): ChangeRequest {
+    // Generate legal language immediately
+    const legalLanguage = this.generateLegalLanguage(description, sectionId);
+    
     const request: ChangeRequest = {
       id: `req-${Date.now()}`,
       sectionId,
@@ -136,7 +149,12 @@ class MockDataService {
       requestingParent,
       description,
       status: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
+      legalLanguage,
+      legalLanguageApprovals: {
+        parentA: null,
+        parentB: null
+      }
     };
 
     this.changeRequests.push(request);
@@ -146,19 +164,19 @@ class MockDataService {
     setTimeout(() => {
       this.createNotification(
         'change_request',
-        'New Change Request',
-        `${this.getParentName(requestingParent)} has requested changes to the ${sectionTitle} section`,
+        'New Change Request with Legal Language',
+        `${this.getParentName(requestingParent)} has requested changes to the ${sectionTitle} section with proposed legal language`,
         targetUser,
         request.id
       );
     }, 500);
 
-    // Simulate email with realistic delay
+    // Simulate email with realistic delay - now includes legal language
     setTimeout(() => {
       this.sendEmail(
         this.getParentEmail(targetUser),
-        'Change Request: ' + sectionTitle,
-        this.generateChangeRequestEmail(this.getParentName(requestingParent), sectionTitle, description),
+        'Change Request with Legal Language: ' + sectionTitle,
+        this.generateChangeRequestWithLegalEmail(this.getParentName(requestingParent), sectionTitle, description, legalLanguage),
         'change_request',
         request.id
       );
@@ -171,53 +189,10 @@ class MockDataService {
     const request = this.changeRequests.find(r => r.id === requestId);
     if (!request) return;
 
-    request.status = status;
-    request.respondedAt = new Date();
-
     if (status === 'approved') {
-      // Generate legal language
-      request.legalLanguage = this.generateLegalLanguage(request.description, request.sectionId);
-      request.legalLanguageApprovals = {
-        parentA: null,
-        parentB: null
-      };
-
-      // Notify both parents for legal review
-      this.createNotification(
-        'approval_needed',
-        'Legal Language Ready for Review',
-        `Please review the legal language for ${request.sectionTitle} changes`,
-        'parentA',
-        request.id
-      );
-      this.createNotification(
-        'approval_needed',
-        'Legal Language Ready for Review',
-        `Please review the legal language for ${request.sectionTitle} changes`,
-        'parentB',
-        request.id
-      );
-    } else if (status === 'rejected') {
-      // Notify requesting parent
-      this.createNotification(
-        'request_rejected',
-        'Change Request Declined',
-        `Your request to modify ${request.sectionTitle} was declined`,
-        request.requestingParent,
-        request.id
-      );
-    }
-  }
-
-  approveLegalLanguage(requestId: string, approvingParent: UserRole): void {
-    const request = this.changeRequests.find(r => r.id === requestId);
-    if (!request || !request.legalLanguageApprovals) return;
-
-    request.legalLanguageApprovals[approvingParent] = true;
-
-    // Check if both parents have approved
-    if (request.legalLanguageApprovals.parentA && request.legalLanguageApprovals.parentB) {
+      // Since legal language is already generated, mark as completed immediately
       request.status = 'completed';
+      request.respondedAt = new Date();
       
       // Add to section history
       this.addSectionVersion(
@@ -228,46 +203,62 @@ class MockDataService {
         request.id
       );
 
-      // Notify both parents
+      // Notify both parents of completion
       this.createNotification(
         'modification_complete',
         'Plan Updated',
-        `${request.sectionTitle} has been successfully updated`,
+        `${request.sectionTitle} has been successfully updated with your approved changes`,
         'parentA',
         request.id
       );
       this.createNotification(
         'modification_complete',
         'Plan Updated',
-        `${request.sectionTitle} has been successfully updated`,
+        `${request.sectionTitle} has been successfully updated with your approved changes`,
         'parentB',
+        request.id
+      );
+
+      // Send completion emails
+      this.sendEmail(
+        this.getParentEmail('parentA'),
+        'Parenting Plan Updated: ' + request.sectionTitle,
+        this.generateCompletionEmail(request.sectionTitle, request.description, request.legalLanguage!),
+        'modification_complete',
+        request.id
+      );
+      this.sendEmail(
+        this.getParentEmail('parentB'),
+        'Parenting Plan Updated: ' + request.sectionTitle,
+        this.generateCompletionEmail(request.sectionTitle, request.description, request.legalLanguage!),
+        'modification_complete',
+        request.id
+      );
+    } else if (status === 'rejected') {
+      request.status = status;
+      request.respondedAt = new Date();
+      
+      // Notify requesting parent
+      this.createNotification(
+        'request_rejected',
+        'Change Request Declined',
+        `Your request to modify ${request.sectionTitle} was declined`,
+        request.requestingParent,
+        request.id
+      );
+
+      // Send rejection email
+      this.sendEmail(
+        this.getParentEmail(request.requestingParent),
+        'Change Request Declined: ' + request.sectionTitle,
+        this.generateRejectionEmail(request.sectionTitle, request.description),
+        'approval_response',
         request.id
       );
     }
   }
 
-  rejectLegalLanguage(requestId: string, rejectingParent: UserRole): void {
-    const request = this.changeRequests.find(r => r.id === requestId);
-    if (!request) return;
 
-    request.status = 'discarded';
-
-    // Notify both parents
-    this.createNotification(
-      'request_rejected',
-      'Legal Language Rejected',
-      `The legal language for ${request.sectionTitle} changes was rejected`,
-      request.requestingParent === 'parentA' ? 'parentB' : 'parentA',
-      request.id
-    );
-    this.createNotification(
-      'request_rejected',
-      'Legal Language Rejected',
-      `The legal language for ${request.sectionTitle} changes was rejected`,
-      request.requestingParent,
-      request.id
-    );
-  }
 
   // Notification Methods
   createNotification(type: NotificationType, title: string, message: string, targetUser: UserRole, relatedRequestId?: string): void {
@@ -403,6 +394,80 @@ ${description}
 Please log into your account to review this request and provide your response. You can approve or decline this request, and if approved, you'll have the opportunity to review the specific legal language before it's added to your agreement.
 
 To review this request, please visit: [Your Parenting Plan Dashboard]
+
+Best regards,
+The Parenting Plan Team
+
+---
+This is an automated message. Please do not reply to this email.
+    `.trim();
+  }
+
+  private generateChangeRequestWithLegalEmail(fromParent: string, sectionTitle: string, description: string, legalLanguage: string): string {
+    return `
+Dear Co-Parent,
+
+${fromParent} has submitted a request to modify the "${sectionTitle}" section of your Parenting Partnership Agreement.
+
+REQUESTED CHANGES:
+${description}
+
+PROPOSED LEGAL LANGUAGE:
+The following legal language has been generated based on the requested changes:
+
+"${legalLanguage}"
+
+NEXT STEPS:
+Please log into your account to review both the requested changes and the proposed legal language. You can:
+- Approve both the changes and legal language (this will add it to your agreement)
+- Reject the request (this will decline the entire proposal)
+
+If you approve, the legal language shown above will be added to your parenting plan immediately.
+
+To review this request, please visit: [Your Parenting Plan Dashboard]
+
+Best regards,
+The Parenting Plan Team
+
+---
+This is an automated message. Please do not reply to this email.
+    `.trim();
+  }
+
+  private generateCompletionEmail(sectionTitle: string, description: string, legalLanguage: string): string {
+    return `
+Dear Co-Parent,
+
+Great news! Your parenting plan has been successfully updated.
+
+SECTION MODIFIED: ${sectionTitle}
+
+ORIGINAL REQUEST: ${description}
+
+NEW LEGAL LANGUAGE ADDED:
+"${legalLanguage}"
+
+This change is now active in your Parenting Partnership Agreement. You can view the updated plan and its complete history at any time through your dashboard.
+
+Best regards,
+The Parenting Plan Team
+
+---
+This is an automated message. Please do not reply to this email.
+    `.trim();
+  }
+
+  private generateRejectionEmail(sectionTitle: string, description: string): string {
+    return `
+Dear Co-Parent,
+
+Your change request for the "${sectionTitle}" section has been declined by your co-parent.
+
+ORIGINAL REQUEST: ${description}
+
+No changes have been made to your parenting plan. If you'd like to discuss this further with your co-parent, you may want to have a conversation outside of the system before submitting a new request.
+
+You can always submit a new change request with different details if you reach an agreement.
 
 Best regards,
 The Parenting Plan Team

@@ -270,10 +270,22 @@ export function ChangeRequestList({
                   {getStatusBadge(request.status)}
                 </div>
 
-                <div className="mb-4">
-                  <p className="text-sm text-gray-700 bg-white p-3 rounded border">
-                    {request.description}
-                  </p>
+                <div className="mb-4 space-y-3">
+                  <div>
+                    <h5 className="text-xs font-medium text-gray-600 mb-2">Requested Changes:</h5>
+                    <p className="text-sm text-gray-700 bg-white p-3 rounded border">
+                      {request.description}
+                    </p>
+                  </div>
+                  
+                  {request.legalLanguage && (
+                    <div>
+                      <h5 className="text-xs font-medium text-gray-600 mb-2">Proposed Legal Language:</h5>
+                      <div className="text-sm text-gray-800 bg-purple-50 p-3 rounded border border-purple-200">
+                        "{request.legalLanguage}"
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {canTakeAction && (
