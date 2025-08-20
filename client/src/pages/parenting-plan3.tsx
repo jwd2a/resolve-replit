@@ -57,6 +57,7 @@ import { ChangeRequestDashboard } from "@/components/collaborative/ChangeRequest
 import { SectionHistoryModal } from "@/components/collaborative/SectionHistoryModal";
 import { EmailPreviewModal } from "@/components/collaborative/EmailPreviewModal";
 import { ErrorBoundary } from "@/components/collaborative/ErrorBoundary";
+import { ChangeRequestPopover } from "@/components/collaborative/ChangeRequestPopover";
 import { CollaborativeEditingTests } from "@/utils/collaborativeEditingTests";
 
 type ViewMode = "view" | "edit";
@@ -575,35 +576,67 @@ export default function ParentingPlan3() {
                         {mainSection.title}
                       </h4>
                       <ul className="space-y-1">
-                        {mainSection.subsections.map((subsection) => (
+                        {mainSection.subsections.map((subsection) => {
+                          const sectionRequests = changeRequests.filter(r => r.sectionId === subsection.id);
+                          const hasPendingRequest = sectionRequests.some(r => r.status === 'pending');
+                          const hasCompletedRequest = sectionRequests.some(r => r.status === 'completed');
+                          
+                          return (
                           <li key={subsection.id}>
                             <button
                               onClick={() => scrollToSection(subsection.id)}
                               className={cn(
-                                "w-full text-left text-sm transition-colors duration-200 hover:text-[#2e1a87]",
+                                "w-full text-left text-sm transition-colors duration-200 hover:text-[#2e1a87] relative",
                                 activeSection === subsection.id
                                   ? "text-[#2e1a87] font-medium"
                                   : "text-gray-600"
                               )}
                             >
-                              <span className="inline-flex items-center">
-                                {subsection.title}
-                                {subsection.isIncomplete && (
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <span className="ml-2 inline-flex items-center align-middle cursor-help" aria-label="Unfinished">
-                                        <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
-                                      </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="right" className="text-xs">
-                                      This section is incomplete
-                                    </TooltipContent>
-                                  </Tooltip>
-                                )}
+                              <span className="inline-flex items-center justify-between w-full">
+                                <span className="inline-flex items-center">
+                                  {subsection.title}
+                                  {subsection.isIncomplete && (
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <span className="ml-2 inline-flex items-center align-middle cursor-help" aria-label="Unfinished">
+                                          <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+                                        </span>
+                                      </TooltipTrigger>
+                                      <TooltipContent side="right" className="text-xs">
+                                        This section is incomplete
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )}
+                                </span>
+                                
+                                {/* Change request indicators */}
+                                <span className="flex items-center gap-1">
+                                  {hasPendingRequest && (
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                                      </TooltipTrigger>
+                                      <TooltipContent side="right" className="text-xs">
+                                        Pending change request
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )}
+                                  {hasCompletedRequest && !hasPendingRequest && (
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <span className="w-2 h-2 bg-green-500 rounded-full" />
+                                      </TooltipTrigger>
+                                      <TooltipContent side="right" className="text-xs">
+                                        Recently modified
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  )}
+                                </span>
                               </span>
                             </button>
                           </li>
-                        ))}
+                          );
+                        })}
                       </ul>
                     </div>
                   ))}
@@ -693,51 +726,6 @@ export default function ParentingPlan3() {
                       </Button>
 
                       <ErrorBoundary>
-                        {/* Change Requests Dashboard */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setIsChangeRequestDashboardOpen(true)}
-                          className="relative"
-                        >
-                          <FileText className="h-4 w-4 mr-2" />
-                          Requests
-                          {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0 && (
-                            <Badge 
-                              variant="destructive" 
-                              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                            >
-                              {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length}
-                            </Badge>
-                          )}
-                        </Button>
-
-                        {/* Email Preview */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setIsEmailPreviewModalOpen(true)}
-                        >
-                          <Mail className="h-4 w-4 mr-2" />
-                          Emails ({mockDataService.getEmailQueue().length})
-                        </Button>
-
-                        {/* Test Button (Development Only) */}
-                        {process.env.NODE_ENV === 'development' && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              const success = CollaborativeEditingTests.runAllTests();
-                              console.log(success ? '✅ All tests passed!' : '❌ Some tests failed!');
-                            }}
-                            className="bg-yellow-50 border-yellow-200 text-yellow-800 hover:bg-yellow-100"
-                          >
-                            <Zap className="h-4 w-4 mr-2" />
-                            Run Tests
-                          </Button>
-                        )}
-
                         {/* Notifications */}
                         <NotificationSystem
                           notifications={notifications}
@@ -778,28 +766,59 @@ export default function ParentingPlan3() {
                             <History className="h-4 w-4 mr-2" />
                             View History
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setIsChangeRequestDashboardOpen(true)}>
+                            <FileText className="h-4 w-4 mr-2" />
+                            All Requests
+                          </DropdownMenuItem>
+                          {process.env.NODE_ENV === 'development' && (
+                            <>
+                              <DropdownMenuItem onClick={() => setIsEmailPreviewModalOpen(true)}>
+                                <Mail className="h-4 w-4 mr-2" />
+                                View Emails ({mockDataService.getEmailQueue().length})
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => {
+                                const success = CollaborativeEditingTests.runAllTests();
+                                console.log(success ? '✅ All tests passed!' : '❌ Some tests failed!');
+                              }}>
+                                <Zap className="h-4 w-4 mr-2" />
+                                Run Tests
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   </div>
                 </div>
 
-                {/* Demo Instructions */}
-                {(getUnreadNotificationCount() > 0 || changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0) && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+                {/* Change Request Banner */}
+                {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0 && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-4">
                     <div className="flex items-start gap-3">
-                      <HelpCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+                      <AlertCircle className="h-5 w-5 text-orange-600 mt-0.5" />
                       <div>
-                        <h3 className="font-medium text-amber-900 mb-1">Try the Collaborative Features!</h3>
-                        <div className="text-sm text-amber-800 space-y-1">
-                          {getUnreadNotificationCount() > 0 && (
-                            <p>• You have {getUnreadNotificationCount()} unread notification{getUnreadNotificationCount() !== 1 ? 's' : ''} - click the bell icon to view them</p>
-                          )}
-                          {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length > 0 && (
-                            <p>• You have pending change requests to review - click the "Requests" button to respond</p>
-                          )}
+                        <h3 className="font-medium text-orange-900 mb-1">
+                          {changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length} Change Request{changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length !== 1 ? 's' : ''} Need{changeRequests.filter(r => r.status === 'pending' && r.requestingParent !== currentUser).length === 1 ? 's' : ''} Your Review
+                        </h3>
+                        <p className="text-sm text-orange-800">
+                          Your co-parent has requested changes to sections of your parenting plan. Look for the indicator icon next to section titles to review proposed changes and legal language.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Demo Instructions */}
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <HelpCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium text-blue-900 mb-1">Demo Mode</h3>
+                        <div className="text-sm text-blue-800 space-y-1">
                           <p>• Try requesting changes to any section by clicking "Request Changes"</p>
-                          <p>• Switch between Eric and Michelle's perspectives to see different views</p>
+                          <p>• Switch between Eric and Michelle's perspectives using the toggle</p>
+                          <p>• Change requests appear directly on the sections they affect</p>
                         </div>
                       </div>
                     </div>
@@ -819,17 +838,24 @@ export default function ParentingPlan3() {
                     id={section.id}
                     ref={(el) => (sectionRefs.current[section.id] = el)}
                     className={cn(
-                      "scroll-mt-6 relative transition-all duration-300 ease-in-out",
-                      index > 0 && "border-t border-gray-200 pt-6",
-                      sectionState === 'pending' && "border-l-4 border-orange-400 pl-4 bg-orange-50/30 rounded-r-lg",
-                      sectionState === 'modified' && "border-l-4 border-green-400 pl-4 bg-green-50/30 rounded-r-lg",
-                      sectionState === 'original' && "hover:bg-gray-50/50 rounded-lg transition-colors duration-200"
+                      "scroll-mt-6 relative transition-all duration-300 ease-in-out hover:bg-gray-50/50 rounded-lg",
+                      index > 0 && "border-t border-gray-200 pt-6"
                     )}
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <h2 className="text-lg font-semibold text-gray-900">
+                        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                           {section.title}
+                          
+                          {/* Subtle Change Request Indicator */}
+                          {changeRequests.filter(r => r.sectionId === section.id).length > 0 && (
+                            <ChangeRequestPopover
+                              requests={changeRequests.filter(r => r.sectionId === section.id)}
+                              currentUser={currentUser}
+                              onApprove={handleApproveRequest}
+                              onReject={handleRejectRequest}
+                            />
+                          )}
                         </h2>
                         
                         {/* Status indicators */}
